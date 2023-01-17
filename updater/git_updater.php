@@ -17,7 +17,7 @@ include_once __LAYOUT_HEADER__;
 
 ?>
 
-<H1 align="center">Test for Manuel Lemos' PHP Git client class</H1>
+<H1 align="center">Updating Media Source files</H1>
 
 <?php
 
@@ -90,8 +90,6 @@ if ($form->submitted()) {
 
 	if(key_exists('update',$_POST)){
 	?>
-
-<H1 align="center">Test for Manuel Lemos' PHP Git client class</H1>
 
 <div class="progress">
     <div id="theBar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
