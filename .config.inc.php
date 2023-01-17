@@ -1,6 +1,7 @@
-<?php
-
+<?php 
 function debug(...$var)
+
+
 {
     echo "<pre>" . var_export($var, 1) . "</pre>";
 }

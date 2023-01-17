@@ -18,7 +18,7 @@
 <HR>
 <UL>
 <?php
-	require('http.php');
+	require('git_http.php');
 	require('git_client.php');
 
 $base_dir = __DIR__."\\tmp";
@@ -105,20 +105,51 @@ $base_dir = __DIR__."\\tmp";
 				'GetFileModes'=>false,
 				'hash'=>true
 			);
+
+			$it = new RecursiveDirectoryIterator($base_dir, RecursiveDirectoryIterator::SKIP_DOTS);
+			$dfiles = new RecursiveIteratorIterator($it,
+						 RecursiveIteratorIterator::CHILD_FIRST);
+			foreach($dfiles as $d_file) {
+				if ($d_file->isDir()){
+					$dirname = str_replacE($base_dir."\\", "", $d_file->getPathname());
+					if ($dirname != 'updater') {
+						echo '<pre>', HtmlSpecialChars($d_file->getPathname()), '</pre>';
+						if (is_dir($d_file->getRealPath())) {
+							rmdir($d_file->getRealPath());
+						}
+					}
+					
+				} else {
+					if (file_exists($d_file->getRealPath())) {
+					$filename = basename($d_file->getRealPath());
+					if (
+						$filename == "git_updater.php" ||
+						$filename == "git_http.php" ||
+						$filename == "git_client.php"
+					) {
+						echo '<pre>', HtmlSpecialChars($filename), '</pre>';
+					} else {
+						unlink($d_file->getRealPath());
+					}
+					}
+				}
+			}
+
 			for($files = 0;; ++$files)
 			{
+			
+
 				if(!$git->GetNextFile($arguments, $file, $no_more_files)
 				|| $no_more_files)
-					break;
-				
+					break;			
 					if(!is_dir($base_dir."\\".dirname($file['File'])))
 					{
 						mkdir($base_dir."\\".dirname($file['File']), 0777, 1);
 					}
 					file_put_contents($base_dir."\\".$file['File'], $file['Data']);
-				$file['Data'] = '';
+
+					$file['Data'] = '';
 					echo '<pre>', HtmlSpecialChars(print_r($file)),'</pre>';
-					
 					flush();
 			}
 			echo '<pre>Total of '.$files.' files</pre>',"\n";
