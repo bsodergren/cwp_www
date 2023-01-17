@@ -1,7 +1,5 @@
 <?php 
 function debug(...$var)
-
-
 {
     echo "<pre>" . var_export($var, 1) . "</pre>";
 }
@@ -39,7 +37,7 @@ define('__ERROR_LOG_DIRECTORY__', __WEB_ROOT__ . '/logs');
 
 define('__TEMP_DIR__', sys_get_temp_dir());
 
-define('__SQLITE_DIR__', __PROJECT_ROOT__ . '/public/.database');
+define('__SQLITE_DIR__', __PROJECT_ROOT__ . '/public/www/.database');
 define('__SQLITE_DATABASE__', __SQLITE_DIR__ . '/cwp_sqlite.db');
 define('__DATABASE_DSN__', 'sqlite:' . __SQLITE_DATABASE__);
 

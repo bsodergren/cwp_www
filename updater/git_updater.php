@@ -24,9 +24,6 @@
 		require('git_client.php');
 
 		$base_dir = __DIR__ . "\\..\\";
-
-echo '<pre>', HtmlSpecialChars($base_dir), '</pre>';
-	//	exit; 
 		set_time_limit(0);
 		$git = new git_client_class;
 
