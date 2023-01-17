@@ -271,7 +271,7 @@ $rendererOptions = [
 							mkdir($base_dir . "\\" . dirname($file['File']), 0777, 1);
 						}
 						if (!MediaSettings::isTrue('__SHOW_TRACY__')) {
-							//file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
+							file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
 						}
 						echo 'Updating file ', HtmlSpecialChars($file['File']), "<br>\n";
 						$update_file = false;
