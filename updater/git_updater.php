@@ -23,9 +23,10 @@
 		require('git_http.php');
 		require('git_client.php');
 
-		$base_dir = __DIR__ . "\\tmp";
+		$base_dir = __DIR__ . "\\..\\";
 
-
+echo '<pre>', HtmlSpecialChars($base_dir), '</pre>';
+	//	exit; 
 		set_time_limit(0);
 		$git = new git_client_class;
 
@@ -122,8 +123,8 @@
 							) {
 							} else {
 
-								echo '<pre>', HtmlSpecialChars($dirname), '</pre>';
-								//	rmdir($d_file->getRealPath());
+								//echo '<pre>', HtmlSpecialChars($dirname), '</pre>';
+								rmdir($d_file->getRealPath());
 							}
 						}
 					} else {
@@ -137,8 +138,8 @@
 							) {
 							} else {
 
-								echo '<pre>', HtmlSpecialChars($filename), '</pre>';
-								//	unlink($d_file->getRealPath());
+								//echo '<pre>', HtmlSpecialChars($filename), '</pre>';
+								unlink($d_file->getRealPath());
 							}
 						}
 					}
@@ -157,8 +158,8 @@
 					}
 					file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
 
-					$file['Data'] = '';
-					echo '<pre>', HtmlSpecialChars(print_r($file)), '</pre>';
+					//$file['Data'] = '';
+					//echo '<pre>', HtmlSpecialChars(print_r($file)), '</pre>';
 					flush();
 				}
 				echo '<pre>Total of ' . $files . ' files</pre>', "\n";
