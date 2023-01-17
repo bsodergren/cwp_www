@@ -1,6 +1,26 @@
 <?php
 require '../.config.inc.php';
 
+
+$form = new Formr\Formr('bootstrap');
+
+
+if ($form->submitted()) {
+
+	if (key_exists('cancel', $_POST)) {
+		header("Location: /index.php");
+		exit();
+	}
+}
+
+include_once __LAYOUT_HEADER__;
+
+?>
+
+<H1 align="center">Test for Manuel Lemos' PHP Git client class</H1>
+
+<?php
+
 use Jfcherng\Diff\Differ;
 use Jfcherng\Diff\DiffHelper;
 use Jfcherng\Diff\Factory\RendererFactory;
@@ -65,53 +85,41 @@ $rendererOptions = [
 ];
 
 
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
 
-<HEAD>
-	<TITLE>Test for Manuel Lemos' PHP Git client class</TITLE>
-	
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>    
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+if ($form->submitted()) {
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	if(key_exists('update',$_POST)){
+	?>
 
- 
-</HEAD>
+<H1 align="center">Test for Manuel Lemos' PHP Git client class</H1>
 
-<BODY>
-	<H1 align="center">Test for Manuel Lemos' PHP Git client class</H1>
-	
-			<div class="progress">
+<div class="progress">
     <div id="theBar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-        
     </div>
 </div>
 
 <script>
-    var i = 100;
+var i = 100;
 
-    var counterBack = setInterval(function () {
-        i--;
-        if (i > 0) {
-            document.getElementById("theBar").style.width = i + 1 + "%";
-            document.getElementById("theBar").innerHTML = i + 1 + "%";
-        } else {
-            clearTimeout(counterBack);
-        }
+var counterBack = setInterval(function() {
+    i--;
+    if (i > 0) {
+        document.getElementById("theBar").style.width = i + 1 + "%";
+        document.getElementById("theBar").innerHTML = i + 1 + "%";
+    } else {
+        clearTimeout(counterBack);
+    }
 
-    }, 600);
-
+}, 600);
 </script>
-	<HR>
-	<UL>
-		<?php
+<HR>
+<UL>
+    <?php
 		require('git_http.php');
 		require('git_client.php');
 
-		$base_dir =realpath( __DIR__ . "\\..\\");
+		$base_dir = realpath(__DIR__ . "\\..\\");
 		set_time_limit(0);
 		$git = new git_client_class;
 
@@ -133,7 +141,7 @@ $rendererOptions = [
 		$repository = 'https://github.com/bsodergren/cwp_www.git';
 		$module = '';
 		//    $log_file = 'composer.json';
-
+	
 		echo '<li><h2>Validating the Git repository</h2>', "\n", '<p>Repository: ', $repository, '</p>', "\n", '<p>Module: ', $module, '</p>', "\n";
 		flush();
 		$arguments = array(
@@ -188,77 +196,25 @@ $rendererOptions = [
 				$arguments = array(
 					'GetFileData' => true,
 					'GetFileModes' => false,
-					'hash' => true
 				);
 
-				$it = new RecursiveDirectoryIterator($base_dir, RecursiveDirectoryIterator::SKIP_DOTS);
-				$dfiles = new RecursiveIteratorIterator(
-					$it,
-					RecursiveIteratorIterator::CHILD_FIRST
-				);
-
-				/*
-				foreach ($dfiles as $d_file) {
-					if ($d_file->isDir()) {
-						$dirname = str_replacE($base_dir . "\\", "", $d_file->getPathname());
-
-						if (is_dir($d_file->getRealPath())) {
-
-							if (
-								$dirname == 'updater' ||
-								$dirname == '.database' ||
-								$dirname == '.git'
-								
-							) {
-							} else {
-
-								//echo '<pre>', HtmlSpecialChars($dirname), '</pre>';
-								if (!MediaSettings::isTrue('__SHOW_TRACY__')) {
-
-									rmdir($d_file->getRealPath());
-								}
-							}
-						}
-					} else {
-						if (file_exists($d_file->getRealPath())) {
-							
-							if(stripos($d_file->getRealPath(),".git") )
-							{
-								continue;
-							}
-
-							$filename = basename($d_file->getRealPath());
-							if (
-								$filename == "git_updater.php" ||
-								$filename == "git_http.php" ||
-								$filename == "git_client.php" ||
-								$filename == "cwp_sqlite.db" 
-
-							) {
-							} else {
-						
-								//echo '<pre>', HtmlSpecialChars($filename), '</pre>';
-								if (!MediaSettings::isTrue('__SHOW_TRACY__')) {
-									unlink($d_file->getRealPath());
-								}
-							}
-						}
-					}
-				}
-*/
-				for ($files = 0;; ++$files) {
+				for ($files = 0; ; ++$files) {
 					if (
 						!$git->GetNextFile($arguments, $file, $no_more_files)
 						|| $no_more_files
 					)
 						break;
-				
+
 
 					$update_file = false;
-					if(file_exists($base_dir . "\\" . $file['File'])){
+					if (file_exists($base_dir . "\\" . $file['File'])) {
 						$original_file = file_get_contents($base_dir . "\\" . $file['File']);
-						$result = DiffHelper::calculate($original_file, $file['Data'],
-						 $rendererName, $differOptions, $rendererOptions);
+						$result = DiffHelper::calculate(
+							$original_file, $file['Data'],
+							$rendererName,
+							$differOptions,
+							$rendererOptions
+						);
 						if ($result != null) {
 							$update_file = true;
 						}
@@ -274,11 +230,9 @@ $rendererOptions = [
 							file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
 						}
 						echo 'Updating file ', HtmlSpecialChars($file['File']), "<br>\n";
+						flush();
 						$update_file = false;
 					}
-					//$file['Data'] = '';
-				//	
-				//	flush();
 				}
 				echo '<pre>Total of ' . $files . ' files</pre>', "\n";
 				flush();
@@ -298,10 +252,27 @@ $rendererOptions = [
 		}
 		if (strlen($git->error))
 			echo '<H2 align="center">Error: ', HtmlSpecialChars($git->error), '</H2>', "\n";
-?>
-	</UL>
-	<HR>
 
+?>
+
+
+</UL>
+
+<HR>
+
+
+<?php
+	}
+} else {
+?>
+Are you sure you want to update?
+<?php
+$form->open('MyForm');
+		$form->input_submit('update', '', 'Update');
+		$form->input_submit('cancel', '', 'Cancel');
+		$form->close();
+}
+?>
 </BODY>
 
 </HTML>
