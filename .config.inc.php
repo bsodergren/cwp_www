@@ -18,7 +18,7 @@ define('APP_DESCRIPTION', 'Embeddable PHP Login System');
 define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 
 define('__WEB_ROOT__', $_SERVER['SERVER_ROOT']);
-define('__PROJECT_ROOT__', $_SERVER['SERVER_ROOT'] . "/..");
+define('__PROJECT_ROOT__', $_SERVER['SERVER_ROOT'] . "/../..");
 //define('__WEB_ROOT__', ".");
 
 define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/bin");
@@ -31,8 +31,6 @@ define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/bin");
 define('__ASSETS_DIR__', __WEB_ROOT__ . '/assets');
 define('__INC_CLASS_DIR__', __ASSETS_DIR__ . '/class');
 define('__INC_CORE_DIR__', __ASSETS_DIR__ . '/core');
-define('__INC_PDF_DIR__', __INC_CORE_DIR__ . '/pdf_parser');
-define('__INC_XLSX_DIR__', __INC_CORE_DIR__ . '/xlsx_parser');
 define('__PROCESS_DIR__', __INC_CORE_DIR__ . '/form_processor');
 define('__UPDATES_DIR__', __ASSETS_DIR__ . "/updates");
 define('__COMPOSER_DIR__', __WEB_ROOT__ . '/library/vendor');
@@ -40,7 +38,7 @@ define('__ERROR_LOG_DIRECTORY__', __WEB_ROOT__ . '/logs');
 
 define('__TEMP_DIR__', sys_get_temp_dir());
 
-define('__SQLITE_DIR__', __PROJECT_ROOT__ . '/.database');
+define('__SQLITE_DIR__', __PROJECT_ROOT__ . '/public/.database');
 define('__SQLITE_DATABASE__', __SQLITE_DIR__ . '/cwp_sqlite.db');
 define('__DATABASE_DSN__', 'sqlite:' . __SQLITE_DATABASE__);
 
