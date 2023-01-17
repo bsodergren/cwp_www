@@ -16,7 +16,7 @@ return array(
     'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
-    'Jfcherng\\Utility\\' => array($vendorDir . '/jfcherng/php-mb-string/src', $vendorDir . '/jfcherng/php-color-output/src'),
-    'Jfcherng\\Diff\\' => array($vendorDir . '/jfcherng/php-sequence-matcher/src', $vendorDir . '/jfcherng/php-diff/src'),
+    'Jfcherng\\Utility\\' => array($vendorDir . '/jfcherng/php-color-output/src', $vendorDir . '/jfcherng/php-mb-string/src'),
+    'Jfcherng\\Diff\\' => array($vendorDir . '/jfcherng/php-diff/src', $vendorDir . '/jfcherng/php-sequence-matcher/src'),
     'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
 );
