@@ -2,7 +2,7 @@
 require_once ".config.inc.php";
 
 define('TITLE', APP_NAME);
-define('__CUSTOM_JS__', Template::GetHTML("index/javascript"));
+//define('__CUSTOM_JS__', Template::GetHTML("index/javascript"));
 
 
 $template = new Template();

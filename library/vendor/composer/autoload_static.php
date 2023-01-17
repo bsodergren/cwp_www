@@ -36,6 +36,11 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
             'Monolog\\' => 8,
             'Matrix\\' => 7,
         ),
+        'J' => 
+        array (
+            'Jfcherng\\Utility\\' => 17,
+            'Jfcherng\\Diff\\' => 14,
+        ),
         'C' => 
         array (
             'Complex\\' => 8,
@@ -61,8 +66,8 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -83,6 +88,16 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'Jfcherng\\Utility\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jfcherng/php-mb-string/src',
+            1 => __DIR__ . '/..' . '/jfcherng/php-color-output/src',
+        ),
+        'Jfcherng\\Diff\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jfcherng/php-sequence-matcher/src',
+            1 => __DIR__ . '/..' . '/jfcherng/php-diff/src',
         ),
         'Complex\\' => 
         array (

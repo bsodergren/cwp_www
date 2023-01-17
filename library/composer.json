@@ -7,6 +7,7 @@
         "nette/utils": "^3.2",
         "nette/database": "^3.1",
         "nette/robot-loader": "^3.4",
-        "tracy/tracy": "^2.9"
+        "tracy/tracy": "^2.9",
+        "jfcherng/php-diff": "^6.12"
     }
 }

@@ -1,2 +1,3 @@
 updater/tmp/**
 .database/cwp_sqlite.db
+php_errors.log

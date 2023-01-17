@@ -1,3 +1,71 @@
+<?php
+require '../.config.inc.php';
+
+use Jfcherng\Diff\Differ;
+use Jfcherng\Diff\DiffHelper;
+use Jfcherng\Diff\Factory\RendererFactory;
+use Jfcherng\Diff\Renderer\RendererConstant;
+$rendererName = 'Unified';
+
+// the Diff class options
+$differOptions = [
+    // show how many neighbor lines
+    // Differ::CONTEXT_ALL can be used to show the whole file
+    'context' => 3,
+    // ignore case difference
+    'ignoreCase' => false,
+    // ignore whitespace difference
+    'ignoreWhitespace' => false,
+];
+
+// the renderer class options
+$rendererOptions = [
+    // how detailed the rendered HTML in-line diff is? (none, line, word, char)
+    'detailLevel' => 'line',
+    // renderer language: eng, cht, chs, jpn, ...
+    // or an array which has the same keys with a language file
+    'language' => 'eng',
+    // show line numbers in HTML renderers
+    'lineNumbers' => true,
+    // show a separator between different diff hunks in HTML renderers
+    'separateBlock' => true,
+    // show the (table) header
+    'showHeader' => true,
+    // the frontend HTML could use CSS "white-space: pre;" to visualize consecutive whitespaces
+    // but if you want to visualize them in the backend with "&nbsp;", you can set this to true
+    'spacesToNbsp' => false,
+    // HTML renderer tab width (negative = do not convert into spaces)
+    'tabSize' => 4,
+    // this option is currently only for the Combined renderer.
+    // it determines whether a replace-type block should be merged or not
+    // depending on the content changed ratio, which values between 0 and 1.
+    'mergeThreshold' => 0.8,
+    // this option is currently only for the Unified and the Context renderers.
+    // RendererConstant::CLI_COLOR_AUTO = colorize the output if possible (default)
+    // RendererConstant::CLI_COLOR_ENABLE = force to colorize the output
+    // RendererConstant::CLI_COLOR_DISABLE = force not to colorize the output
+    'cliColorization' => RendererConstant::CLI_COLOR_AUTO,
+    // this option is currently only for the Json renderer.
+    // internally, ops (tags) are all int type but this is not good for human reading.
+    // set this to "true" to convert them into string form before outputting.
+    'outputTagAsString' => false,
+    // this option is currently only for the Json renderer.
+    // it controls how the output JSON is formatted.
+    // see available options on https://www.php.net/manual/en/function.json-encode.php
+    'jsonEncodeFlags' => \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE,
+    // this option is currently effective when the "detailLevel" is "word"
+    // characters listed in this array can be used to make diff segments into a whole
+    // for example, making "<del>good</del>-<del>looking</del>" into "<del>good-looking</del>"
+    // this should bring better readability but set this to empty array if you do not want it
+    'wordGlues' => [' ', '-'],
+    // change this value to a string as the returned diff if the two input strings are identical
+    'resultForIdenticals' => null,
+    // extra HTML classes added to the DOM of the diff container
+    'wrapperClasses' => ['diff-wrapper'],
+];
+
+
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 
@@ -43,7 +111,7 @@
 		require('git_http.php');
 		require('git_client.php');
 
-		$base_dir = __DIR__ . "\\..\\";
+		$base_dir =realpath( __DIR__ . "\\..\\");
 		set_time_limit(0);
 		$git = new git_client_class;
 
@@ -128,6 +196,8 @@
 					$it,
 					RecursiveIteratorIterator::CHILD_FIRST
 				);
+
+				/*
 				foreach ($dfiles as $d_file) {
 					if ($d_file->isDir()) {
 						$dirname = str_replacE($base_dir . "\\", "", $d_file->getPathname());
@@ -136,52 +206,89 @@
 
 							if (
 								$dirname == 'updater' ||
-								$dirname == '.database'
+								$dirname == '.database' ||
+								$dirname == '.git'
+								
 							) {
 							} else {
 
 								//echo '<pre>', HtmlSpecialChars($dirname), '</pre>';
-								rmdir($d_file->getRealPath());
+								if (!MediaSettings::isTrue('__SHOW_TRACY__')) {
+
+									rmdir($d_file->getRealPath());
+								}
 							}
 						}
 					} else {
 						if (file_exists($d_file->getRealPath())) {
+							
+							if(stripos($d_file->getRealPath(),".git") )
+							{
+								continue;
+							}
+
 							$filename = basename($d_file->getRealPath());
 							if (
 								$filename == "git_updater.php" ||
 								$filename == "git_http.php" ||
 								$filename == "git_client.php" ||
-								$filename == "cwp_sqlite.db"
+								$filename == "cwp_sqlite.db" 
+
 							) {
 							} else {
-
+						
 								//echo '<pre>', HtmlSpecialChars($filename), '</pre>';
-								unlink($d_file->getRealPath());
+								if (!MediaSettings::isTrue('__SHOW_TRACY__')) {
+									unlink($d_file->getRealPath());
+								}
 							}
 						}
 					}
 				}
-
+*/
 				for ($files = 0;; ++$files) {
 					if (
 						!$git->GetNextFile($arguments, $file, $no_more_files)
 						|| $no_more_files
 					)
 						break;
-					if (!is_dir($base_dir . "\\" . dirname($file['File']))) {
-						mkdir($base_dir . "\\" . dirname($file['File']), 0777, 1);
-					}
-					file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
+				
 
+					$update_file = false;
+					if(file_exists($base_dir . "\\" . $file['File'])){
+						$original_file = file_get_contents($base_dir . "\\" . $file['File']);
+						$result = DiffHelper::calculate($original_file, $file['Data'],
+						 $rendererName, $differOptions, $rendererOptions);
+						if ($result != null) {
+							$update_file = true;
+						}
+					} else {
+						$update_file = true;
+					}
+
+					if ($update_file == true) {
+						if (!is_dir($base_dir . "\\" . dirname($file['File']))) {
+							mkdir($base_dir . "\\" . dirname($file['File']), 0777, 1);
+						}
+						if (!MediaSettings::isTrue('__SHOW_TRACY__')) {
+							//file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
+						}
+						echo 'Updating file ', HtmlSpecialChars($file['File']), "<br>\n";
+						$update_file = false;
+					}
 					//$file['Data'] = '';
-				//	echo 'Updating file ', HtmlSpecialChars($file['File']), "<br>\n";
+				//	
 				//	flush();
 				}
 				echo '<pre>Total of ' . $files . ' files</pre>', "\n";
 				flush();
-				echo '<script>';
-				echo "setTimeout(function () { window.location.href = '/index.php'; }, 6000);";
-				echo "</script>";
+
+				if (!MediaSettings::isTrue('__SHOW_TRACY__')) {
+
+					echo '<script> ';
+					echo "setTimeout(function () { window.location.href = '/index.php'; }, 3000);";
+					echo "</script>";
+				}
 				flush();
 
 
@@ -191,7 +298,7 @@
 		}
 		if (strlen($git->error))
 			echo '<H2 align="center">Error: ', HtmlSpecialChars($git->error), '</H2>', "\n";
-		?>
+?>
 	</UL>
 	<HR>
 
