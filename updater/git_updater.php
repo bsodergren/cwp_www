@@ -3,10 +3,40 @@
 
 <HEAD>
 	<TITLE>Test for Manuel Lemos' PHP Git client class</TITLE>
+	
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>    
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+ 
 </HEAD>
 
 <BODY>
 	<H1 align="center">Test for Manuel Lemos' PHP Git client class</H1>
+	
+			<div class="progress">
+    <div id="theBar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        
+    </div>
+</div>
+
+<script>
+    var i = 100;
+
+    var counterBack = setInterval(function () {
+        i--;
+        if (i > 0) {
+            document.getElementById("theBar").style.width = i + 1 + "%";
+            document.getElementById("theBar").innerHTML = i + 1 + "%";
+        } else {
+            clearTimeout(counterBack);
+        }
+
+    }, 600);
+
+</script>
 	<HR>
 	<UL>
 		<?php
@@ -144,8 +174,8 @@
 					file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
 
 					//$file['Data'] = '';
-					echo 'Updating file ', HtmlSpecialChars($file), '';
-					flush();
+				//	echo 'Updating file ', HtmlSpecialChars($file['File']), "<br>\n";
+				//	flush();
 				}
 				echo '<pre>Total of ' . $files . ' files</pre>', "\n";
 				flush();
@@ -153,14 +183,7 @@
 				echo "setTimeout(function () { window.location.href = '/index.php'; }, 6000);";
 				echo "</script>";
 				flush();
-				?>
-			<div class="progress">
-    <div id="theBar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
-        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-        
-    </div>
-</div>
-<?php
+
 
 			}
 
@@ -174,19 +197,4 @@
 
 </BODY>
 
-<script>
-    var i = 100;
-
-    var counterBack = setInterval(function () {
-        i--;
-        if (i > 0) {
-            document.getElementById("theBar").style.width = i + 1 + "%";
-            document.getElementById("theBar").innerHTML = i + 1 + "%";
-        } else {
-            clearTimeout(counterBack);
-        }
-
-    }, 600);
-
-</script>
 </HTML>
