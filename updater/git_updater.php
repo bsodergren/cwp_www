@@ -1,13 +1,3 @@
-<?php //$Id$
-/*
- * test_git_client.php
- *
- * @(#) $Id$
- *
- */
-
-
-?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 
@@ -143,8 +133,6 @@
 				}
 
 				for ($files = 0;; ++$files) {
-
-
 					if (
 						!$git->GetNextFile($arguments, $file, $no_more_files)
 						|| $no_more_files
@@ -156,32 +144,26 @@
 					file_put_contents($base_dir . "\\" . $file['File'], $file['Data']);
 
 					//$file['Data'] = '';
-					//echo '<pre>', HtmlSpecialChars(print_r($file)), '</pre>';
+					echo 'Updating file ', HtmlSpecialChars($file), '';
 					flush();
 				}
 				echo '<pre>Total of ' . $files . ' files</pre>', "\n";
+				flush();
+				echo '<script>';
+				echo "setTimeout(function () { window.location.href = '/index.php'; }, 6000);";
+				echo "</script>";
+				flush();
+				?>
+			<div class="progress">
+    <div id="theBar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        
+    </div>
+</div>
+<?php
+
 			}
 
-			/*		echo '<li><h2>Getting the log of changes of file '.$log_file.'</h2>', "\n";
-        flush();
-		$arguments = array(
-			'Module'=>$module,
-			'File'=>$log_file,
-//			'Revision' => 'a47e98393a5740d68ff78c34d29f68e22d38b2d0',
-//			'NewerThan' => '2013-11-28 15:59:46 +0000'
-		);
-		if($git->Log($arguments))
-		{
-			for(;;)
-			{
-				$arguments = array();
-				if(!$git->GetNextLogFile($arguments, $file, $no_more_files)
-				|| $no_more_files)
-					break;
-				//echo '<pre>'.$file. '</pre>';
-			}
-		}
-		*/
 			$git->Disconnect();
 		}
 		if (strlen($git->error))
@@ -189,6 +171,22 @@
 		?>
 	</UL>
 	<HR>
+
 </BODY>
 
+<script>
+    var i = 100;
+
+    var counterBack = setInterval(function () {
+        i--;
+        if (i > 0) {
+            document.getElementById("theBar").style.width = i + 1 + "%";
+            document.getElementById("theBar").innerHTML = i + 1 + "%";
+        } else {
+            clearTimeout(counterBack);
+        }
+
+    }, 600);
+
+</script>
 </HTML>

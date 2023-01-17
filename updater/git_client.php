@@ -2,7 +2,7 @@
 /*
  * git_client.php
  *
- * @(#) $Id: git_client.php,v 1.51 2019/09/20 05:24:34 mlemos Exp $
+ * @(#) $Id$
  *
  */
 
@@ -12,7 +12,7 @@
 
 	<package>net.manuellemos.gitclient</package>
 
-	<version>@(#) $Id: git_client.php,v 1.51 2019/09/20 05:24:34 mlemos Exp $</version>
+	<version>@(#) $Id$</version>
 	<copyright>Copyright � (C) Manuel Lemos 2011</copyright>
 	<title>Git client</title>
 	<author>Manuel Lemos</author>
