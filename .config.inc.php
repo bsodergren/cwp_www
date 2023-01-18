@@ -16,11 +16,14 @@ define('APP_DESCRIPTION', 'Embeddable PHP Login System');
  */
 define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 
+
+
 define('__WEB_ROOT__', $_SERVER['SERVER_ROOT']);
-define('__PROJECT_ROOT__', $_SERVER['SERVER_ROOT'] . "/../..");
+define('__PROJECT_ROOT__', realpath($_SERVER['SERVER_ROOT'] . "/../.."));
 //define('__WEB_ROOT__', ".");
 
-define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/bin");
+define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/.bin");
+
 
 
 /*
@@ -37,10 +40,9 @@ define('__ERROR_LOG_DIRECTORY__', __WEB_ROOT__ . '/logs');
 
 define('__TEMP_DIR__', sys_get_temp_dir());
 
-define('__SQLITE_DIR__', __PROJECT_ROOT__ . '/public/www/.database');
+define('__SQLITE_DIR__', __WEB_ROOT__ . '/.database');
 define('__SQLITE_DATABASE__', __SQLITE_DIR__ . '/cwp_sqlite.db');
 define('__DATABASE_DSN__', 'sqlite:' . __SQLITE_DATABASE__);
-
 
 /*
  * Layout path structure in assets directory.
