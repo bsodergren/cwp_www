@@ -5,8 +5,8 @@ use Nette\Utils\FileSystem;
 $refresh = false;
 if (!file_exists(__SQLITE_DATABASE__)) {
    $connection = new Nette\Database\Connection(__DATABASE_DSN__);
-    $_default_sql_dir = FileSystem::normalizePath(__SQLITE_DIR__ . "/default");
-    $file_tableArray = MediaUpdate::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql', 0);
+    $_default_sql_dir = FileSystem::normalizePath(__INC_CORE_DIR__ . "/db_config/sqllite");
+    $file_tableArray = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql', 0);
 
 
     foreach ($file_tableArray as $k => $sql_file) {
@@ -33,9 +33,9 @@ if (!file_exists(__SQLITE_DATABASE__)) {
     $version_updates_skipSkipFile = 1;
 }
 
-$tmpU = new MediaUpdate($connection);
+$UpdaterObj = new MediaUpdate($connection);
 
-if ($tmpU->check_tableExists('updates')) {
+if ($UpdaterObj->check_tableExists('updates')) {
     $skip_file_array = [];
     $rows = $connection->fetchAll('SELECT * FROM updates');
     foreach ($rows as $k => $arr) {
@@ -44,7 +44,7 @@ if ($tmpU->check_tableExists('updates')) {
     $version_updates_skipSkipFile = 0;
 }
 
-$updates_array = MediaUpdate::get_filelist(__UPDATES_DIR__, 'php', $version_updates_skipSkipFile);
+$updates_array = Utils::get_filelist(__UPDATES_DIR__, 'php', $version_updates_skipSkipFile);
 if (count($updates_array) >= 1) {
 
     $update = new MediaUpdate($connection);

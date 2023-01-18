@@ -6,49 +6,11 @@ use Nette\Utils\FileSystem;
 
 class MediaUpdate
 {
+ 
     public $table_name;
     public $refresh = false;
     protected $conn;
-
-    public function __construct($db_conn)
-    {
-        $this->conn = $db_conn;
-    }
-
-    public static function get_filelist($directory, $ext = 'log', $skip_files = 0)
-    {
-        $files_array = [];
-
-        if (is_dir($directory)) {
-            $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
-            foreach ($rii as $file) {
-                if ($file->isDir()) {
-                    continue;
-                }
-                $filename = $file->getPathname();
-                if (preg_match('/(' . $ext . ')$/', $filename)) {
-                    if ($skip_files == 1) {
-                        if (!self::skipFile($filename)) {
-                            $files_array[] = $filename;
-                        }
-                    } else {
-                        $files_array[] = $filename;
-                    }
-                }
-            }
-        }
-
-        return $files_array;
-    }
-
-    public static function skipFile($filename)
-    {
-        $f = fopen($filename, 'r');
-        $line = fgets($f);
-        fclose($f);
-        return strpos($line, '#skip');
-    }
-
+    
     public function versionUpdate($file)
     {
         include_once($file);
@@ -68,16 +30,7 @@ class MediaUpdate
         }
     }
 
-    public function check_tableExists($table_name = '')
-    {
-        if ($table_name != '') {
-            $this->table_name = $table_name;
-        }
 
-        $query = "SELECT name FROM sqlite_master WHERE type='table' AND name='" . $this->table_name . "'";
-        $result = $this->conn->fetchField($query);
-        return $result;
-    }
 
     public function newData($new_data)
     {
@@ -90,19 +43,21 @@ class MediaUpdate
             }
         }
     }
-
-    public static function setSkipFile($filename)
+    public function __construct($db_conn)
     {
-
-        if (!self::skipFile($filename)) {
-            $replacement = '<?php';
-            $replacement .= ' #skip';
-            $__db_string = FileSystem::read($filename);
-            $__db_write = str_replace('<?php', $replacement, $__db_string);
-            FileSystem::write($filename, $__db_write);
-        }
+        $this->conn = $db_conn;
     }
 
+    public function check_tableExists($table_name = '')
+    {
+        if ($table_name != '') {
+            $this->table_name = $table_name;
+        }
+
+        $query = "SELECT name FROM sqlite_master WHERE type='table' AND name='" . $this->table_name . "'";
+        $result = $this->conn->fetchField($query);
+        return $result;
+    }
     public function newTable($new_table)
     {
 

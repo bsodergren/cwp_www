@@ -33,7 +33,6 @@ define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/.bin");
 define('__ASSETS_DIR__', __WEB_ROOT__ . '/assets');
 define('__INC_CLASS_DIR__', __ASSETS_DIR__ . '/class');
 define('__INC_CORE_DIR__', __ASSETS_DIR__ . '/core');
-define('__PROCESS_DIR__', __INC_CORE_DIR__ . '/form_processor');
 define('__UPDATES_DIR__', __ASSETS_DIR__ . "/updates");
 define('__COMPOSER_DIR__', __WEB_ROOT__ . '/library/vendor');
 define('__ERROR_LOG_DIRECTORY__', __WEB_ROOT__ . '/logs');
@@ -43,6 +42,8 @@ define('__TEMP_DIR__', sys_get_temp_dir());
 define('__SQLITE_DIR__', __WEB_ROOT__ . '/.database');
 define('__SQLITE_DATABASE__', __SQLITE_DIR__ . '/cwp_sqlite.db');
 define('__DATABASE_DSN__', 'sqlite:' . __SQLITE_DATABASE__);
+
+
 
 /*
  * Layout path structure in assets directory.
