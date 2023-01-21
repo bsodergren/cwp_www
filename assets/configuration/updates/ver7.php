@@ -11,8 +11,6 @@ $new_data = [
             "definedName" => '__LANG_BINDERY',
             'setting_value' => 'Trim in Bindery',
             'setting_type' => 'text',
-            'setting_name' => 'Bindery',
-            'setting_description' => 'Default Text',
             'setting_cat'=>'lang',
         ],
         [

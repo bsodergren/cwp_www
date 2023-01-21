@@ -24,8 +24,6 @@ define('__PROJECT_ROOT__', realpath($_SERVER['DOCUMENT_ROOT'] . "/../.."));
 
 define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/.bin");
 
-
-
 /*
  * Default constants for include path structure.
  *
