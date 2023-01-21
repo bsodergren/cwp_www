@@ -19,9 +19,6 @@ $update_data = [
             "__USE_LOCAL_XLSX__" => [
                 'setting_name'=>'Use Custom Media Dir',
                 'setting_description' => 'User Media Directory'],
-            "__SHOW_TRACY__" => [
-                'setting_name'=>'Debugging',
-                'setting_description' => 'Show Debugging panel']
         
         ],
     ],            

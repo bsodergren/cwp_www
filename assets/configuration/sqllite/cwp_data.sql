@@ -79,4 +79,3 @@ INSERT INTO `paper_type` VALUES(12, 50, 'large', 8);
 
 INSERT INTO "settings" VALUES (1,'__USER_XLSX_DIR__','','text');
 INSERT INTO "settings" VALUES (2,'__USE_LOCAL_XLSX__','0','bool');
-INSERT INTO "settings" VALUES (3,'__SHOW_TRACY__','0','bool');

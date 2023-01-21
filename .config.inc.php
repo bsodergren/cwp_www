@@ -82,35 +82,6 @@ require_once __ASSETS_DIR__ . "/configure.inc.php";
 // Get settings from DB.
 require_once __ASSETS_DIR__ . "/settings.inc.php";
 
-if (MediaSettings::isTrue('__SHOW_TRACY__')) {
-
-
-    Debugger::enable();
-    Debugger::$dumpTheme    = 'dark';
-    //        Debugger::$editor = null;.
-    //        Debugger::$strictMode =  ~E_DEPRECATED | E_WARNING;
-    Debugger::$showLocation = (Tracy\Dumper::LOCATION_CLASS | Tracy\Dumper::LOCATION_LINK);
-
-    Debugger::$showBar = 1;
-    
-}
-
-
-
-if (!function_exists('dump')) {
-    function dump($var)
-    {
-        return 0;
-    }
-}
-
-if (!function_exists('bdump')) {
-    function bdump($bdump)
-    {
-        return 0;
-    }
-}
-
 define("__MEDIA_FILES_DIR__", "/Media Load Flags");
 
 if (MediaSettings::isTrue('__USE_LOCAL_XLSX__')) {
@@ -125,12 +96,6 @@ if (!MediaSettings::isSet('__FILES_DIR__')) {
     define("__FILES_DIR__", __PROJECT_ROOT__ . __MEDIA_FILES_DIR__);
 }
 
-
-
-define("__XLSX_EXTRAS__", 0);
-
 define("__PDF_UPLOAD_DIR__", "/pdf");
 define("__ZIP_FILE_DIR__", "/zip");
 define("__XLSX_DIRECTORY__", "/xlsx");
-
-define('__lang_bindery', "Bindery");

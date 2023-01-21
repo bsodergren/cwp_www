@@ -121,8 +121,8 @@ class MediaXLSX extends Media
 
 		if ($delivery  == "back" || $this->form_details['face_trim'] == 1) {
 			if ($this->form_details['no_bindery'] != 1) {
-				$this->form_details['market'] = __lang_bindery;
-				$ship_value = __lang_bindery;
+				$this->form_details['market'] = __LANG_BINDERY;
+				$ship_value = __LANG_BINDERY;
 				$bindery_trim = true;
 			}
 		}
@@ -133,7 +133,7 @@ class MediaXLSX extends Media
 		$this->spreadsheet->addSheet($myWorkSheet, $sheet_index);
 		$sheet = $this->spreadsheet->getSheet($sheet_index);
 
-		$sheet->getHeaderFooter()->setOddHeader('&36&B Media Load Flag');
+		$sheet->getHeaderFooter()->setOddHeader('&36&B ' . __LANG_MEDIA_LOAD_FLAG);
 
 		$styles = new MediaXLSX_Styles($sheet);
 		$styles->setColWidths();
@@ -159,8 +159,8 @@ class MediaXLSX extends Media
 		$labels = array();
 
 		$sheet_labels = array(
-			'13' => array($lift_size, "Lift Size"),
-			'21' => array($count, "Total Count")
+			'13' => array($lift_size, __LANG_LIFT_SIZE),
+			'21' => array($count, __LANG_TOTAL_COUNT )
 		);
 
 
@@ -170,41 +170,41 @@ class MediaXLSX extends Media
 		{
 			$sheet->setCellValue('B10', $packaging);
 
-			$labels['14'] = "Lifts per Carton";
-			$sheet_labels['15'] = array($layers_last_box, "Pcs Per Carton");
+			$labels['14'] = __LANG_LIFTS_PER_CARTON;
+			$sheet_labels['15'] = array($layers_last_box, __LANG_PCS_PER_CARTON);
 
-			$sheet_labels['17'] = array($full_boxes, "Full Cartons");
+			$sheet_labels['17'] = array($full_boxes, __LANG_FULL_CARTON);
 			$total_boxes = $full_boxes;
 
 			if ($lifts_last_layer > 0) {
 
-				$sheet_labels['18'] = array($lifts_last_layer, "Count in last Carton");
+				$sheet_labels['18'] = array($lifts_last_layer, __LANG_CNT_LAST_CARTON);
 				$total_boxes = $full_boxes + 1;
 			} else {
-				$sheet_labels['18'] = array("0", "Count in last Carton");
+				$sheet_labels['18'] = array("0", __LANG_CNT_LAST_CARTON);
 			}
 
-			$sheet_labels['19'] = array($total_boxes, "Total Cartons");
+			$sheet_labels['19'] = array($total_boxes, __LANG_TOTAL_CARTONS);
 		} else {
 			//Skid packaging: half/full
 			$sheet->setCellValue('B10', $packaging . " skid");
 			$labels['14'] = "Lifts per Layer";
-			$sheet_labels['15'] = array($layers_per_skid, "layers per skid");
+			$sheet_labels['15'] = array($layers_per_skid, __LANG_LAYERS_PER_SKID);
 
 
 			// Lifts per Carton
 			// Number of Layers
 			if ($full_boxes > 0) {
-				$sheet_labels['17'] = array($full_boxes, "Number of full boxes");
+				$sheet_labels['17'] = array($full_boxes, __LANG_NUMBER_OF_FULL_BOXES);
 			}
 
 			if (isset($skid_count)) {
 				$sheet->setCellValue('D8', $skid_count);
 			}
 
-			$sheet_labels['18'] = array($layers_last_box, "Number of Full Layers");
+			$sheet_labels['18'] = array($layers_last_box,__LANG_NUMBER_OF_FULL_LAYERS );
 			if ($lifts_last_layer > 0) {
-				$sheet_labels['19'] = array($lifts_last_layer, "Lifts last layer");
+				$sheet_labels['19'] = array($lifts_last_layer, __LANG_LIFTS_LAST_LAYER);
 			}
 		}
 
@@ -237,9 +237,9 @@ class MediaXLSX extends Media
 	}
 	*/
 		if ($bindery_trim == true) {
-			$sheet->setCellValue('A24', __lang_bindery);
-			$sheet->setCellValue('A25', __lang_bindery);
-			$sheet->setCellValue('A26', __lang_bindery);
+			$sheet->setCellValue('A24', __LANG_BINDERY);
+			$sheet->setCellValue('A25', __LANG_BINDERY);
+			$sheet->setCellValue('A26', __LANG_BINDERY);
 		}
 	}
 
@@ -286,7 +286,6 @@ class MediaXLSX extends Media
 
 
 		if ($pcs <= $max_carton && $face_trim != 1) {
-			MediaLogger("max_carton pcs", $max_carton);
 			$package = "carton";
 		} elseif (($pcs > $max_carton || $face_trim == 1)  && $pcs <= $max_half_skid) {
 			$package = "half";
