@@ -3,6 +3,7 @@
 use Nette\Utils\FileSystem;
 
 $refresh = false;
+
 if (!file_exists(__SQLITE_DATABASE__)) {
    $connection = new Nette\Database\Connection(__DATABASE_DSN__);
     $_default_sql_dir = FileSystem::normalizePath(__SQLLITE_DEFAULT_TABLES_DIR__);
@@ -58,9 +59,14 @@ if (count($updates_array) >= 1) {
     }
 
     $refresh = $update->refresh;
-}
 
+}
+    unset($file);
+    unset($file_array);
+    unset($include_array);
+    unset($update);
 if ($refresh == true) {
-    HTMLDisplay::javaRefresh("index.php", 0);
-    ob_flush();
+    
+    header("Location: /index.php");
+    exit(); 
 }

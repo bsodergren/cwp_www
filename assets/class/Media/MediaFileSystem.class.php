@@ -18,6 +18,7 @@ class MediaFileSystem
 
     private function __filename($type = '', $form_number = '', $create_dir = false)
     {
+        $directory = '';
         $file = basename($this->pdf_file, ".pdf");
         $filename = $this->job_number . '_' . $file;
 
