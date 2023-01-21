@@ -3,33 +3,25 @@
 use Nette\Utils\FileSystem;
 
 define("REFRESH_TIMEOUT", 0);
-define("REFRESH_URL", 'index.php');
-
-
-
-//echo $_REQUEST[''];
 $form = new Formr\Formr('bootstrap4');
-
 
 if ($form->submitted()) {
 
-
     if (key_exists('delete_logs', $_POST)) {
-
         $errorArray = getErrorLogs();
 
         foreach ($errorArray as $k => $file) {
             FileSystem::delete($file);
         }
+        define("REFRESH_URL", 'index.php');
 
         echo JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT);
         exit;
     } else {
+        define("REFRESH_URL", '/settings/settings.php?cat='.$_REQUEST['cat']);
 
         // get our form values and assign them to a variable
         foreach ($_POST as $key => $value) {
-
-
 
             if ($key == 'submit') {
                 continue;
@@ -62,16 +54,8 @@ if ($form->submitted()) {
                 $key = $pcs[0];
                 $field = "setting_value";
                 $value = trim($value);
-                if ($value != '') {
-                    $arr = explode("\n", $value);
-                    $arr2 = [];
-                    foreach ($arr as $k => $string) {
-                        if ($string) {
-                            list($v_key, $value) = explode("=>", $string);
-                            $arr2[trim($v_key)] = trim($value);
-                        }
-                    }
-                    $value = json_encode($arr2);
+                if ($value != '') {               
+                    $value =  MediaSettings::save_post_asJson($value);
                 }
             }
 

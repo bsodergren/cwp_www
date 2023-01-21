@@ -24,6 +24,8 @@ class Header
             $params['__NAVBAR__'] = Navbar::Display();
         }
 
+        $params['BOOTSTRAP'] = Template::GetHTML("base/header/bootstrap_5");
+
         $templateObj = new template();
         echo $templateObj->template("base/header/header", $params);
     }

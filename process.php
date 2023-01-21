@@ -22,7 +22,6 @@ if (isset($_POST['FORM_PROCESS'])) {
 }
 
 
-
 switch (__FORM_POST__) {
 
     case "settings":

@@ -1,4 +1,5 @@
 <?php
+use Sinergi\BrowserDetector\Browser;
 
 class Footer
 {
@@ -7,6 +8,14 @@ class Footer
     public static function display($template = '', $params = [])
     {
         $templateObj = new template();
+        
+        if(MediaSettings::isSet('__FOOTER_NAV_HTML__'))
+        {
+            $params['FOOT_NAV_PANEL'] = $templateObj->template("base/footer/settings_nav",
+            ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__]);
+        }
+
+  
         if (MediaSettings::isTrue('__SHOW_DEBUG_PANEL__')) {
             $errorArray = getErrorLogs();
             $debug_nav_link_html = '';

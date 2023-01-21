@@ -20,6 +20,7 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Sinergi\\BrowserDetector\\' => 24,
         ),
         'P' => 
         array (
@@ -53,14 +54,18 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
+        'Sinergi\\BrowserDetector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sinergi/browser-detector/src',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (

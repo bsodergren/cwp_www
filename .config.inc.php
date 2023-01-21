@@ -18,8 +18,8 @@ define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 
 
 
-define('__WEB_ROOT__', $_SERVER['SERVER_ROOT']);
-define('__PROJECT_ROOT__', realpath($_SERVER['SERVER_ROOT'] . "/../.."));
+define('__WEB_ROOT__', $_SERVER['DOCUMENT_ROOT']);
+define('__PROJECT_ROOT__', realpath($_SERVER['DOCUMENT_ROOT'] . "/../.."));
 //define('__WEB_ROOT__', ".");
 
 define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/.bin");

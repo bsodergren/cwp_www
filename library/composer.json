@@ -5,6 +5,7 @@
         "formr/formr": "^1.4",
         "smalot/pdfparser": "^2.3",
         "jfcherng/php-diff": "^6.12",
-        "phpoffice/phpspreadsheet": "^1.26"
+        "phpoffice/phpspreadsheet": "^1.26",
+        "sinergi/browser-detector": "^6.1"
     }
 }

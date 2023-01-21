@@ -1,46 +1,15 @@
 <form action="/process.php" name="MyForm" id="MyForm" method="post" accept-charset="utf-8">
     <input type="hidden" name="FORM_PROCESS" value="Updating user settings">
+    <input type="hidden" name="cat" value="%%CATEGORY%%">
 
 
-    <div class="row mw-100">
-        <div class="col-2">
-            on/off
-        </div>
-        <div class="col-4">
-            name
-        </div>
-        <div class="col-4">
-            description
-        </div>
-    </div>
-    <div class="container mw-100  form-check form-switch">
-        %%CHECKBOX_HTML%%
-    </div>
+%%CHECKBOX_HTML%%
 
-    <hr class="border-4 border-top border-success">
+%%TEXTBOX_HTML%%
 
-    <div class="row mw-100">
-        <div class="col-2">
-            Setting
-        </div>
-        <div class="col-4">
-            Value
-        </div>
-        <div class="col-4">
-            description
-        </div>
-    </div>
-    <div class="container mw-100 form-group">
-        %%TEXTBOX_HTML%%
-    </div>
 
-    <hr class="border-4 border-top border-success">
+%%ARRAY_HTML%%
 
-    <div class="container mw-100 form-group">
-        %%ARRAY_HTML%%
-    </div>
-
-    <hr class="border-4 border-top border-success">
     %%SETTINGS_HTML%%
     <div id="_submit" class="form-group">
         <label class="sr-only" for="submit"></label>

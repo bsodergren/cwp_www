@@ -13,6 +13,7 @@ class Utils
                     continue;
                 }
                 $filename = $file->getPathname();
+                $filename = \Nette\Utils\FileSystem::normalizePath($filename);
                 if (preg_match('/(' . $ext . ')$/', $filename)) {
                     if ($skip_files == 1) {
                         if (!self::skipFile($filename)) {

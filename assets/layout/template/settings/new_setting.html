@@ -11,29 +11,30 @@
 <div class="row">
 <div class="col-sm-3 ">Constant Value</div>
     <div class="col-sm-5">
-        <input type="text" name="setting_value" class="form-control" placeholder="default value" aria-label="Default value">
+        <textarea rows="5" cols="60"  class="form-control"
+          name="setting_value" placeholder="default value" aria-label="Default value"></textarea>
     </div>
 </div>
 <div class="row">
-<div class="col-sm-3 ">Descriptive Name</div>
+<div class="col-sm-3 ">Setting Name</div>
     <div class="col-sm-5">
-        <input type="text" name="setting_name" class="form-control" placeholder="Descriptive Label" aria-label="Descriptive Label">
+        <input type="text" name="setting_name" class="form-control" placeholder="Setting Name" aria-label="Setting Label">
     </div>
 </div>
 <div class="row">
 <div class="col-sm-3 ">Description</div>
     <div class="col-sm-5">
-
         <input type="text" name="setting_description" class="form-control" placeholder="setting description" aria-label="setting description">
     </div>
 </div>
 <div class="row">
-<div class="col-sm-3 ">Constant Type</div>
+<div class="col-sm-3 ">Setting Type</div>
     <div class="col-sm-3 ">
-        <select name="setting_type" class="form-select" size="2" aria-label="Setting Type">
+        <select name="setting_type" class="form-select" size="3" aria-label="Setting Type">
             <option value="bool">Boolean</option>
             <option value="text">Text</option>
             <option value="array">List</option>
         </select>
     </div>
 </div>
+<input type="hidden" name="setting_cat" class="form-control" value="%%CATEGORY%%" aria-label="New Setting">
