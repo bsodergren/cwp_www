@@ -10,6 +10,7 @@ define('APP_NAME', 'Media');
 define('APP_ORGANIZATION', 'cwp');
 define('APP_OWNER', 'bjorn');
 define('APP_DESCRIPTION', 'Embeddable PHP Login System');
+define('__APP_INSTALL_DIR__','' );
 
 /*
  * base directory and script name.
@@ -18,7 +19,7 @@ define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 
 
 
-define('__WEB_ROOT__', $_SERVER['DOCUMENT_ROOT']);
+define('__WEB_ROOT__', $_SERVER['DOCUMENT_ROOT'].__APP_INSTALL_DIR__);
 define('__PROJECT_ROOT__', realpath($_SERVER['DOCUMENT_ROOT'] . "/../.."));
 //define('__WEB_ROOT__', ".");
 
@@ -62,7 +63,7 @@ define('__LAYOUT_FOOTER__', __LAYOUT_ROOT__ . '/footer.php');
 /*
  * URL defaults.
  */
-define('__URL_PATH__', '');
+define('__URL_PATH__', __APP_INSTALL_DIR__);
 define('__URL_HOME__', 'http://' . $_SERVER['HTTP_HOST'] . __URL_PATH__);
 define('__URL_LAYOUT__', __URL_HOME__ . __LAYOUT_DIR__);
 

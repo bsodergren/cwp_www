@@ -21,7 +21,7 @@ if ($cnt > 0) {
 		$media = new Media($row);
 		$mediaDir = new MediaFileSystem($media->pdf_file, $media->job_number);
 
-		$url = __URL_HOME__ . "/form.php?job_id=" . $row['job_id'];
+		$url = __URL_PATH__ . "/form.php?job_id=" . $row['job_id'];
 
 		$text_close = basename($row['pdf_file'], ".pdf");
 
@@ -30,7 +30,7 @@ if ($cnt > 0) {
 
 		$hidden = ["job_id" => $row['job_id']];
 
-		$replacement['FORM_OPEN_HTML'] = $form->open("", '', __URL_HOME__ . "/process.php", 'post', '', $hidden);
+		$replacement['FORM_OPEN_HTML'] = $form->open("", '', __URL_PATH__ . "/process.php", 'post', '', $hidden);
 
 		$class_create = 'class="btn btn-success"';
 		$class_delete = 'class="btn btn-danger"';

@@ -8,7 +8,7 @@ $job  = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
 
 $media = new Media($job);
 
-$form_edit['url'] = __URL_HOME__ . "/form_edit.php?job_id=" . $job_id .  "&form_number=" . $form_number;
+$form_edit['url'] = __URL_PATH__ . "/form_edit.php?job_id=" . $job_id .  "&form_number=" . $form_number;
 $form_edit['timeout'] = 1;
 
 if (key_exists("Return", $_REQUEST))

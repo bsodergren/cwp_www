@@ -20,8 +20,7 @@ $new_data = [
 ];
 
 
-if (__PROJECT_ROOT__ == "D:\development\cwp_app") {
-
+if (__PROJECT_ROOT__ == "D:\development\cwp_app" || $_SERVER['HTTP_HOST'] == 'plexmedia') {
     $update_data = [
         "settings" => [
             "definedName" => [

@@ -77,7 +77,7 @@ foreach ($_REQUEST as $key => $value) {
             $media->delete_zip();
             break;
         case  "delete_job":
-            define('REFRESH_URL', __URL_PATH__ . "/delete_job.php?job_id=" . $job_id);
+            define('REFRESH_URL', "/delete_job.php?job_id=" . $job_id);
             break;
     }
 }

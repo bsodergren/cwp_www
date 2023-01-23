@@ -8,6 +8,10 @@ class HTMLDisplay
     public static function javaRefresh($url, $timeout = 0)
     {
 
+        $url = str_replace(__URL_PATH__,'', $url);
+        $url = __URL_PATH__ . '/' . $url;
+        $url = str_replace("//", "/", $url);
+        
         if ($timeout > 0) {
             $timeout = $timeout * 1000;
             $update_inv =  $timeout / 100;

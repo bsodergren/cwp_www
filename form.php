@@ -4,7 +4,7 @@ require_once(".config.inc.php");
 define('TITLE', "Form Editor");
 $display = new MediaDisplay();
 $media = new Media();
-$template = new TEmplate();
+$template = new Template();
 
 include_once __LAYOUT_HEADER__;
 
@@ -67,7 +67,7 @@ foreach ($new_forms as $form_number => $parts) {
 
 
     $next_button = "Next Form";
-    $form_url = __URL_HOME__ . "/process.php";
+    $form_url = __URL_PATH__ . "/process.php";
     $previous_form_html = '';
     if ($current_form_number != $first_form) {
         $previous_form_html = '<input type="submit" name="submit_back" value="previous form">';
@@ -76,14 +76,14 @@ foreach ($new_forms as $form_number => $parts) {
     if ($next_form_number > $max_forms) {
         $next_view = "save";
         $next_button = "Save Form";
-        $form_url = __URL_HOME__ . "/process.php";
+        $form_url = __URL_PATH__ . "/process.php";
         //$previous_form_html =' ';
         $next_form_number = $current_form_number;
     }
 
     $form_html['FORM_URL'] = $form_url;
 
-    $edit_url = "/form_edit.php?job_id=". $media->job_id."&form_number=".$current_form_number;
+    $edit_url = __URL_PATH__ . "/form_edit.php?job_id=". $media->job_id."&form_number=".$current_form_number;
 
     $edit_button = '<input type="button" name="btnOpenPopup" onClick="OpenNewWindow(\''.$edit_url.'\')" value="Edit">';
 
