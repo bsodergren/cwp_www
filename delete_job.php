@@ -20,7 +20,7 @@ if(key_exists("actSubmit",$_REQUEST))
 
 	}
 
-	echo   JavaRefresh(__URL_PATH__."/index.php");
+	echo   JavaRefresh("/index.php");
 	exit;
 }
 

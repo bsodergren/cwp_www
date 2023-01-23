@@ -5,7 +5,7 @@ if ($_POST["submit"] == "Edit")
 {
   //  require_once(__PROCESS_DIR__ . "/form_edit.php");
 
-    define("REFRESH_URL", __URL_HOME__ . "/form_edit.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $_REQUEST['form_number'] . "");
+    define("REFRESH_URL", "/form_edit.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $_REQUEST['form_number'] . "");
     define("REFRESH_TIMEOUT", 0);
     $break = true;
 
@@ -57,6 +57,6 @@ if ($_POST["submit"] == "Edit")
                 $next_form_number = 1;
             }
         }
-        define("REFRESH_URL", __URL_HOME__ . "/form.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $next_form_number . "");
+        define("REFRESH_URL",  "/form.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $next_form_number . "");
     }
 }
