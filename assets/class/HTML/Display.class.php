@@ -11,14 +11,15 @@ class HTMLDisplay
         $url = str_replace(__URL_PATH__,'', $url);
         $url = __URL_PATH__ . '/' . $url;
         $url = str_replace("//", "/", $url);
-        
+     
         if ($timeout > 0) {
             $timeout = $timeout * 1000;
             $update_inv =  $timeout / 100;
             Template::echo("progress_bar", ['SPEED' => $update_inv]);
         }
-
+ 
         Template::echo('js_refresh_window', ['REFRESH_URL' => $url, 'MS_SECONDS' => $timeout]);
+     
     }
 
     public static function echo($value, $exit = 0)

@@ -2,7 +2,7 @@
 
 use Nette\Utils\Strings;
 
-class PDFImport extends MediaImport
+class PDFImport
 {
 
 	public $form =  array();

@@ -10,7 +10,15 @@ define('APP_NAME', 'Media');
 define('APP_ORGANIZATION', 'cwp');
 define('APP_OWNER', 'bjorn');
 define('APP_DESCRIPTION', 'Embeddable PHP Login System');
-define('__APP_INSTALL_DIR__','' );
+
+if(file_exists($_SERVER['DOCUMENT_ROOT'].'/cwp/.site_settings.inc.php')){
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/cwp/.site_settings.inc.php');
+}
+
+if(!defined('__APP_INSTALL_DIR__'))  define('__APP_INSTALL_DIR__','' );
+if(!defined('__PROJECT_ROOT__')) define('__PROJECT_ROOT__', realpath($_SERVER['DOCUMENT_ROOT'] . "/../.."));
+if(!defined('__ROOT_BIN_DIR__')) define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/.bin");
+
 
 /*
  * base directory and script name.
@@ -20,10 +28,6 @@ define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 
 
 define('__WEB_ROOT__', $_SERVER['DOCUMENT_ROOT'].__APP_INSTALL_DIR__);
-define('__PROJECT_ROOT__', realpath($_SERVER['DOCUMENT_ROOT'] . "/../.."));
-//define('__WEB_ROOT__', ".");
-
-define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/.bin");
 
 /*
  * Default constants for include path structure.

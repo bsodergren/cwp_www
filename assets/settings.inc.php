@@ -40,6 +40,7 @@ function getErrorLogs()
 
 function JavaRefresh($url, $timeout = 0)
 {
+    
     HTMLDisplay::JavaRefresh($url, $timeout);
 }
 

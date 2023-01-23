@@ -40,7 +40,7 @@ if ($cnt > 0) {
 
 		if ($num_of_forms == 0) {
 			$pdisabled = ' disabled';
-			$num_of_forms = '<input type="submit" name="actSubmit" value="Run Refresh Import" id="actSubmit" class="btn btn-danger">';
+			$num_of_forms = '<input type="submit" name="refresh_import" value="Run Refresh Import" id="refresh_import" class="btn btn-danger">';
 		} else {
 			$pdisabled = '';
 			$num_of_forms = "Number of Forms: " . $num_of_forms;

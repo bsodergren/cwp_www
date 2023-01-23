@@ -62,6 +62,7 @@ foreach ($_REQUEST as $key => $value) {
         case  "refresh_import":
             define('REFRESH_TIMEOUT', 3);
 
+    
             $media->delete_xlsx();
             $media->delete_zip();
             $media->delete_form();

@@ -8,6 +8,7 @@ class Header
     public static function display($template = "", $params = [])
     {
 
+
         $path = "/" . __SCRIPT_NAME__;
         if (MediaSettings::isTrue('__FORM_POST__')) {
             $path = "/" . __FORM_POST__;

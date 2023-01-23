@@ -4,7 +4,11 @@ ob_implicit_flush(true);
 require('.config.inc.php');
 $template = new Template();
 
-define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), '.php'));
+if (key_exists('HTTP_REFERER', $_SERVER)) {
+    define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), '.php'));
+} else {
+    define('__FORM_POST__','');
+}
 
 define('TITLE', '');
 

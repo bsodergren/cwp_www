@@ -1,1 +1,4 @@
 .database/cwp_sqlite.db
+.site_settings.inc.php
+Media Load Flags
+.database

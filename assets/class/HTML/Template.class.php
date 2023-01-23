@@ -25,6 +25,7 @@ class Template
     public static function echo($template = '', $array = [])
     {
         $template_obj = new Template();
+   
         $template_obj->template($template, $array);
         echo $template_obj->html;
     }
@@ -85,19 +86,25 @@ class Template
 
         preg_match_all('/%%([A-Z_]+)%%/m', $text, $output_array);
         $params = [];
+       
 
         foreach ($output_array[1] as $n => $def) {
             if (MediaSettings::isSet($def)) {
                 $params[$def] = constant($def);
             }
         }
-        $this->default_params = $params;
+
+    
+        return $params;
     }
 
     private function parse($text, $params = [])
     {
-        $this->defaults($text);
-        $params = array_merge($params, $this->default_params);
+
+        $default_params = $this->defaults($text);       
+       // var_dump( $default_params);
+        $params = array_merge( $default_params,$params);
+      //  var_dump( $params);
         if (is_array($params)) {
             foreach ($params as $key => $value) {
                 $key = "%%" . strtoupper($key) . "%%";
@@ -112,6 +119,8 @@ class Template
     public function template($template, $params = [])
     {
         $template_text = $this->loadTemplate($template);
+       
+
         $html = $this->parse($template_text, $params);
 
         //$html = "\n<!-- start $template -->\n" . $html . "\n";

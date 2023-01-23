@@ -1,5 +1,6 @@
 <?php
 require_once '.config.inc.php';
+
 define('TITLE', 'Import new Media drop');
 $template = new Template();
 
