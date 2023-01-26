@@ -21,7 +21,7 @@ class PDFImport extends MediaImport
 			$pages  = $pdf->getPages();
 
 
-	
+
 			if ($form_number != '') {
 				$form_number--;
 				$page_text = [];
@@ -97,6 +97,21 @@ class PDFImport extends MediaImport
 				$stop = $letter_array[$letter]['stop'];
 
 				$form_rows[$letter] = $this->row_data($start, $stop, $page_text);
+				if ($letter == 'ABCD' && MediaSettings::IsTrue('__HALF_FORM_CNT__')) {
+					$half_count = $form_rows[$letter][0]['count'] / 2;
+					$tmp_row1_array = [
+						'original' => $form_rows[$letter][0]['original'],
+						'market' => $form_rows[$letter][0]['market'],
+						'pub' => $form_rows[$letter][0]['pub'],
+						'count' => $half_count,
+						'ship' => $form_rows[$letter][0]['ship'],
+						'tip' => $form_rows[$letter][0]['tip'],
+					];
+					$form_rows[$letter][0]['count'] = $half_count;
+					$form_rows[$letter][] = $tmp_row1_array;
+					unset($tmp_row1_array);
+					unset($half_count);
+				}
 			}
 
 			$this->form[$form_number]['forms'] = $form_rows;

@@ -12,7 +12,7 @@ use Nette\Utils\FileSystem;
  */
 class Media
 {
- 
+
     protected $exp;
     protected $conn;
     private $mediaLoc;
@@ -172,11 +172,16 @@ class Media
 
     public function number_of_forms()
     {
-
         return $this->exp->table("media_forms")->where("job_id", $this->job_id)->count('*');
     }
 
+    public function get_form_list()
+    {
 
+        $sql = "SELECT form_number FROM media_forms WHERE `job_id` = " . $this->job_id;
+        $result = $this->conn->fetchAll($sql);
+        return $result;
+    }
 
     public function get_max_drop_forms()
     {
@@ -348,23 +353,22 @@ class Media
         }
     }
 
-    public function delete_form($form_number='')
+    public function delete_form($form_number = '')
     {
-        $this->deleteFromDatabase('form_data',$form_number);
-        if($form_number == '')
-        {
+        $this->deleteFromDatabase('form_data', $form_number);
+        if ($form_number == '') {
             $this->deleteFromDatabase('media_forms');
         }
     }
 
-    private function deleteFromDatabase($table,$form_number='')
+    private function deleteFromDatabase($table, $form_number = '')
     {
 
         $table_obj = $this->exp->table($table);
-            if($form_number != ''){
-                $table_obj->where('form_number', $form_number);
-            }
-            $table_obj->where('job_id', $this->job_id)->delete();
+        if ($form_number != '') {
+            $table_obj->where('form_number', $form_number);
+        }
+        $table_obj->where('job_id', $this->job_id)->delete();
     }
 
     public function delete_xlsx()
@@ -468,7 +472,7 @@ class MediaImport extends Media
     protected $conn;
     protected $exp;
 
-    public function __construct($pdf_uploaded_file = "", $job_number = 110011,$update_form='')
+    public function __construct($pdf_uploaded_file = "", $job_number = 110011, $update_form = '')
     {
 
         global $connection;
@@ -502,7 +506,7 @@ class MediaImport extends Media
         //$pdf = process_pdf($pdf_uploaded_file, $this->job_id);
 
 
-        $pdfObj = new PDFImport($pdf_uploaded_file, $this->job_id,$update_form);
+        $pdfObj = new PDFImport($pdf_uploaded_file, $this->job_id, $update_form);
         $pdf = $pdfObj->form;
         if (count($pdf) < 1) {
             return 0;
@@ -520,6 +524,4 @@ class MediaImport extends Media
 
         $this->status = 1;
     }
-
-
 }
