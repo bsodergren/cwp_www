@@ -89,7 +89,7 @@ class Media
                         "config" => $vars["config"],
                         "job_number" => $form_row["job_number"],
                         "pdf_file" => $form_row["pdf_file"],
-                        "job_id" => $media->job_id
+                        "job_id" => $this->job_id
                     );
                 }
 

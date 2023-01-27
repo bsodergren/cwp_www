@@ -18,7 +18,8 @@ use Noodlehaus\Config;
 use Noodlehaus\Parser\ini;
 use Nette\Utils\FileSystem;
 
-$config_file = ".config/config.ini";
+$config_file = $_SERVER['DOCUMENT_ROOT']."/.config/config.ini";
+
 $conf = new Config($config_file);
 
 /**

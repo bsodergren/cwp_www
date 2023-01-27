@@ -16,8 +16,9 @@ if ($results) {
             'description' => $u['setting_description'],
             'category' => $u['setting_cat'],
     ];
-
-        define($u['definedName'] ,$u['setting_value']);
+        if (!defined($u['definedName'])) {
+            define($u['definedName'], $u['setting_value']);
+        }
 
     }
 

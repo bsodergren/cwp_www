@@ -15,7 +15,7 @@ use Noodlehaus\Writer\ini;
 use Nette\Utils\FileSystem;
 
 
-$config_file = "config.ini";
+$config_file = $_SERVER['DOCUMENT_ROOT']."/.config/config.ini";
 if (!file_exists($config_file))
 {
     $config_default = "[application]\nname=cwp";

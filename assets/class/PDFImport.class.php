@@ -131,9 +131,12 @@ class PDFImport extends MediaImport
 				$item = trim(str_replace(',', '', $item));
 				if ($value == 'letter') {
 					preg_match('/[ABCD,]+\b/', $item, $matches);
-
+					if(count($matches) > 0 ) {
 					if ($matches[0] == trim($needle)) {
 						$search = true;
+						} else {
+							$search = false;
+						}
 					} else {
 						$search = false;
 					}
@@ -218,14 +221,15 @@ class PDFImport extends MediaImport
 
 		$key = $this->find_key('#' . $form_number, $array, 'key');
 
-		$peices = explode("#" . $form_number, $array[$key]);
+		if ($key != null) {
+			$peices = explode("#" . $form_number, $array[$key]);
 
-		$t_letter = str_replace(',', '', $peices[1]);
-		if ($t_letter != null) {
-			$stop_key = $this->find_key($t_letter, $array, 'letter', true);
-			$start_array[$letter]['stop'] = $stop_key - 1;
+			$t_letter = str_replace(',', '', $peices[1]);
+			if ($t_letter != null) {
+				$stop_key = $this->find_key($t_letter, $array, 'letter', true);
+				$start_array[$letter]['stop'] = $stop_key - 1;
+			}
 		}
-
 		return $start_array;
 	}
 

@@ -28,9 +28,6 @@ class MediaXLSX extends Media
 		$this->pdf_file = $this->xlsx_array[$keyidx]["pdf_file"];
 		$this->job_id = $this->xlsx_array[$keyidx]["job_id"];
 
-
-		$ms_idx = 1;
-		$list_idx = 1;
 		foreach ($this->xlsx_array as $form_number => $data) {
 			$this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 			$s_idx = 0;
@@ -39,12 +36,8 @@ class MediaXLSX extends Media
 
 			foreach ($data as $former => $result_array) {
 				if ($former == "Front" || $former == "Back") {
-
 					foreach ($result_array as $form_letter => $form_details_array) {
-
-
 						foreach ($form_details_array as $key => $this->form_details) {
-							$ms_idx = $ms_idx + 1;
 
 							$this->calculateBox();
 
@@ -64,7 +57,7 @@ class MediaXLSX extends Media
 										$this->box['layers_last_box'] = $this->box['layers_per_skid'];
 										$this->box['skid_count'] = "$sk of " . $max_boxes + 1;
 										$this->form_details['count'] = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box["lift_size"];
-										$this->createWorksheet($s_idx, $form_number, $form_letter);
+										$this->createWorksheet($this->spreadsheet,$s_idx, $form_number, $form_letter);
 
 										$full_boxes = $full_boxes - 1;
 										$s_idx = $s_idx + 1;
@@ -79,19 +72,13 @@ class MediaXLSX extends Media
 							}
 
 
-							$this->createWorksheet($s_idx, $form_number, $form_letter);
+							$this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
 							$this->form_details = '';
 							$s_idx = $s_idx + 1;
-							$list_idx++;
 						}
 					}
 				}
 			}
-
-
-			$sheetIndex = $this->spreadsheet->getIndex($this->spreadsheet->getSheetByName('Worksheet'));
-
-			$this->spreadsheet->removeSheetByIndex($sheetIndex);
 
 			$this->spreadsheet->setActiveSheetIndex(0);
 			$writer = new Xlsx($this->spreadsheet);
@@ -101,13 +88,12 @@ class MediaXLSX extends Media
 			ob_flush();
 			$this->spreadsheet->disconnectWorksheets();
 			unset($this->spreadsheet);
-			$ms_idx = $ms_idx + 1;
 		}
 
 		$this->exp->table('media_job')->where('job_id', $media->job_id)->update(['xlsx_exists' => 1]);
 	}
 
-	public function createWorksheet($sheet_index, $form_number, $form_letter)
+	public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
 	{
 		$bindery_trim = false;
 
@@ -129,9 +115,9 @@ class MediaXLSX extends Media
 
 		$worksheet_title = $form_number . $form_letter . "_" . $delivery;
 
-		$myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($this->spreadsheet,  $worksheet_title);
-		$this->spreadsheet->addSheet($myWorkSheet, $sheet_index);
-		$sheet = $this->spreadsheet->getSheet($sheet_index);
+		$myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($sheetObj,  $worksheet_title);
+		$sheetObj->addSheet($myWorkSheet, $sheet_index);
+		$sheet = $sheetObj->getSheet($sheet_index);
 
 		$sheet->getHeaderFooter()->setOddHeader('&36&B ' . __LANG_MEDIA_LOAD_FLAG);
 
