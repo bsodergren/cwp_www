@@ -4,3 +4,6 @@ library/composer.lock
 library/vendor/composer/autoload_psr4.php
 library/vendor/composer/autoload_static.php
 library/composer.lock
+.config/config.ini
+.gitignore
+library/vendor/composer/autoload_psr4.php

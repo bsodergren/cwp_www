@@ -29,6 +29,10 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
             'Psr\\Http\\Client\\' => 16,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
+        'N' => 
+        array (
+            'Noodlehaus\\' => 11,
+        ),
         'M' => 
         array (
             'MyCLabs\\Enum\\' => 13,
@@ -74,6 +78,10 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
+        ),
+        'Noodlehaus\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/hassankhan/config/src',
         ),
         'MyCLabs\\Enum\\' => 
         array (
