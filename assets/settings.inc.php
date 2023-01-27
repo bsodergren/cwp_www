@@ -28,21 +28,34 @@ $const = get_defined_constants(true);
 unset($setting);
 
 
-function MediaLogger($text, $var = '', $logfile = 'default.log', $html = true)
-{
-    MediaLogger::log($text, $var, $logfile, $html);
+define("__MEDIA_FILES_DIR__", "/Media Load Flags");
+
+if (MediaSettings::isTrue('__USE_LOCAL_XLSX__')) {
+    if (
+        MediaSettings::isTrue('__USER_XLSX_DIR__')
+    ) {
+        define("__FILES_DIR__", __USER_XLSX_DIR__);
+        FileSystem::createDir(__FILES_DIR__);
+    }
 }
 
-function getErrorLogs()
-{
-    return MediaLogger::getErrorLogs();
+if (!MediaSettings::isSet('__FILES_DIR__')) {
+    define("__FILES_DIR__", __PROJECT_ROOT__ . __MEDIA_FILES_DIR__);
 }
 
+define("__PDF_UPLOAD_DIR__", "/pdf");
+define("__ZIP_FILE_DIR__", "/zip");
+define("__XLSX_DIRECTORY__", "/xlsx");
 
-function JavaRefresh($url, $timeout = 0)
-{
-    HTMLDisplay::JavaRefresh($url, $timeout);
+$template = new Template();
+
+
+if (key_exists('job_id', $_REQUEST)) {
+    $job_id = $_REQUEST['job_id'];
+    $job = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
+    $media = new Media($job);
 }
+
 
 
 ?>

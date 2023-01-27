@@ -2,7 +2,6 @@
 ob_start();
 ob_implicit_flush(true);
 require('.config.inc.php');
-$template = new Template();
 
 define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), '.php'));
 
@@ -47,8 +46,7 @@ switch (__FORM_POST__) {
         exit;
         break;
     default:
-        dump(__FORM_POST__);
-        dump($_POST);
+
         exit;
         break;
 }
@@ -57,7 +55,7 @@ if (defined('REFRESH_URL')) {
     if (!defined('REFRESH_TIMEOUT')) {
         define('REFRESH_TIMEOUT', 0);
     }
-    echo JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT);
+    echo HTMLDisplay::JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT);
     ob_flush();
 }
 

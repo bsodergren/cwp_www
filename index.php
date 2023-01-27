@@ -2,10 +2,9 @@
 require_once ".config.inc.php";
 
 define('TITLE', APP_NAME);
-//define('__CUSTOM_JS__', Template::GetHTML("index/javascript"));
 
 
-$template = new Template();
+//$template = new Template();
 
 include_once __LAYOUT_HEADER__;
 
@@ -13,7 +12,6 @@ $table = $explorer->table("media_job");
 $results = $table->fetchAssoc('job_id');
 $cnt = $table->count('*');
 
-MediaLogger("Test Message");
 
 if ($cnt > 0) {
 	foreach ($results as $k => $row) {
@@ -97,7 +95,7 @@ if ($cnt > 0) {
 
 	$template->render();
 } else {
-	echo JavaRefresh('/import.php', 0);
+	echo HTMLDisplay::JavaRefresh('/import.php', 0);
 }
 
 

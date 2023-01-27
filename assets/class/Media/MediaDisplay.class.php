@@ -10,7 +10,7 @@ class MediaDisplay extends HTMLDisplay
         $html = '';
         $start = '';
         $end = '';
-        $row_template = new template();
+        $row_template = new Template();
 
         foreach ($array as $part) {
             if ($start == '') {

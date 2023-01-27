@@ -6,15 +6,15 @@ define('NO_NAV',true);
 
 include_once __LAYOUT_HEADER__;
 
-$media = new media();
-$template = new TEmplate();
+//$media = new Media();
+//$template = new Template();
 
 $deleted_id = 0;
 
-$job_id=$_REQUEST['job_id'];
+//$job_id=$_REQUEST['job_id'];
 $form_number=$_REQUEST['form_number'];
 
-$media->job_id = $job_id;
+//$media->job_id = $job_id;
 
 function toArray($obj) {
     $vars = get_object_vars ( $obj );

@@ -15,7 +15,7 @@ if ($form->submitted()) {
         }
         define("REFRESH_URL", 'index.php');
 
-        echo JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT);
+        echo HTMLDisplay::JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT);
         exit;
     } else {
         define("REFRESH_URL", '/settings/settings.php?cat='.$_REQUEST['cat']);

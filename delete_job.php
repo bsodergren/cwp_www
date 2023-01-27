@@ -1,26 +1,19 @@
 <?php
 require_once(".config.inc.php");
 define('TITLE', "Media Job editor");
-$template = new Template();
 
 
-$job_id=$_REQUEST['job_id'];
-
-$job  = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
-$media = new Media($job);
 
 if(key_exists("actSubmit",$_REQUEST))
 {
 	if($_REQUEST['actSubmit'] == "confirm")
 	{
-
 		$media->delete_zip();
 		$media->delete_xlsx();   		
 		$media->delete_job();
-
 	}
 
-	echo   JavaRefresh("/index.php");
+	echo   HTMLDisplay::JavaRefresh("/index.php");
 	exit;
 }
 

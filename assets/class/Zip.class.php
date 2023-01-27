@@ -40,7 +40,7 @@ class AdvancedFilesystemIterator extends ArrayIterator
 }
 
 
-class zip_Workbooks
+class Zip
 {
     public function __construct($xlsx_directory, $job_id, $zip_file)
     {

@@ -9,7 +9,7 @@ class Navbar
 
     public static function display($template = '', $params = [])
     {
-        $templateObj = new template();
+        $templateObj = new Template();
 
         $nav_link_html = '';
         $dropddown_menu_text = '';

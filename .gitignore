@@ -1,9 +1,8 @@
 .database/cwp_sqlite.db
-library/vendor/*
-library/composer.lock
-library/vendor/composer/autoload_psr4.php
-library/vendor/composer/autoload_static.php
-library/composer.lock
+**/library/vendor/**
 .config/config.ini
 .gitignore
-library/vendor/composer/autoload_psr4.php
+.config/configure.php.ran
+library/vendor/jfcherng/php-diff/example/demo_web.php
+Media Load Flags/
+library/vendor

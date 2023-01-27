@@ -41,6 +41,21 @@ define('__WEB_ROOT__',      FileSystem::normalizePath($conf['server']['web_root'
 define('__PROJECT_ROOT__',  FileSystem::normalizePath($conf['server']['root_dir']));
 define('__ROOT_BIN_DIR__',  FileSystem::normalizePath($conf['server']['bin_dir']));
 define('__SQLITE_DIR__',    FileSystem::normalizePath($conf['server']['db_dir']));
+define('__URL_PATH__', __APP_INSTALL_DIR__);
+
+
+list($__filename) = explode("?", $_SERVER['REQUEST_URI']);
+$__request_name = basename($__filename,'.php');
+$__script_name = basename($_SERVER['SCRIPT_NAME'], '.php');
+
+if (  $__request_name != $__script_name )
+{
+ //   echo " $__request_name and $__script_name  dont match";
+
+    
+    header("Location:  ".__URL_PATH__ . "/index.php");
+    exit;
+}
 
 
 define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
@@ -81,13 +96,10 @@ define('__LAYOUT_FOOTER__', __LAYOUT_ROOT__ . '/footer.php');
 /*
  * URL defaults.
  */
-define('__URL_PATH__', __APP_INSTALL_DIR__);
 define('__URL_HOME__', 'http://' . $_SERVER['HTTP_HOST'] . __URL_PATH__);
 define('__URL_LAYOUT__', __URL_HOME__ . __LAYOUT_DIR__);
 
 
-
-use Tracy\Debugger;
 //Include all necessary files.
 require_once __ASSETS_DIR__ . "/includes.inc.php";
 
@@ -97,21 +109,3 @@ require_once __ASSETS_DIR__ . "/configure.inc.php";
 // Get settings from DB.
 require_once __ASSETS_DIR__ . "/settings.inc.php";
 
-define("__MEDIA_FILES_DIR__", "/Media Load Flags");
-
-if (MediaSettings::isTrue('__USE_LOCAL_XLSX__')) {
-    if (
-        MediaSettings::isTrue('__USER_XLSX_DIR__')
-    ) {
-        define("__FILES_DIR__", __USER_XLSX_DIR__);
-        FileSystem::createDir(__FILES_DIR__);
-    }
-}
-
-if (!MediaSettings::isSet('__FILES_DIR__')) {
-    define("__FILES_DIR__", __PROJECT_ROOT__ . __MEDIA_FILES_DIR__);
-}
-
-define("__PDF_UPLOAD_DIR__", "/pdf");
-define("__ZIP_FILE_DIR__", "/zip");
-define("__XLSX_DIRECTORY__", "/xlsx");

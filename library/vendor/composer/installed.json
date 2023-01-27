@@ -243,17 +243,17 @@
         },
         {
             "name": "jfcherng/php-diff",
-            "version": "6.12.1",
-            "version_normalized": "6.12.1.0",
+            "version": "6.13.0",
+            "version_normalized": "6.13.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jfcherng/php-diff.git",
-                "reference": "b2e3ffb0dfd33ba0e38fa52d2d1c0977621c6940"
+                "reference": "f6ac9425e391cc1a834d473545fe1a55b98e53f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jfcherng/php-diff/zipball/b2e3ffb0dfd33ba0e38fa52d2d1c0977621c6940",
-                "reference": "b2e3ffb0dfd33ba0e38fa52d2d1c0977621c6940",
+                "url": "https://api.github.com/repos/jfcherng/php-diff/zipball/f6ac9425e391cc1a834d473545fe1a55b98e53f3",
+                "reference": "f6ac9425e391cc1a834d473545fe1a55b98e53f3",
                 "shasum": ""
             },
             "require": {
@@ -269,7 +269,7 @@
                 "phpunit/phpunit": "^9",
                 "squizlabs/php_codesniffer": "^3.6"
             },
-            "time": "2022-09-26T14:37:49+00:00",
+            "time": "2023-01-18T16:32:08+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -300,7 +300,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jfcherng/php-diff/issues",
-                "source": "https://github.com/jfcherng/php-diff/tree/6.12.1"
+                "source": "https://github.com/jfcherng/php-diff/tree/6.13.0"
             },
             "funding": [
                 {
@@ -687,17 +687,17 @@
         },
         {
             "name": "nette/caching",
-            "version": "v3.2.1",
-            "version_normalized": "3.2.1.0",
+            "version": "v3.2.2",
+            "version_normalized": "3.2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/caching.git",
-                "reference": "291cfd1b972f24e5a9c33b75b55209846a038c77"
+                "reference": "6d94aca2017e83e95cec7d57cc3211c82cee6987"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/caching/zipball/291cfd1b972f24e5a9c33b75b55209846a038c77",
-                "reference": "291cfd1b972f24e5a9c33b75b55209846a038c77",
+                "url": "https://api.github.com/repos/nette/caching/zipball/6d94aca2017e83e95cec7d57cc3211c82cee6987",
+                "reference": "6d94aca2017e83e95cec7d57cc3211c82cee6987",
                 "shasum": ""
             },
             "require": {
@@ -715,7 +715,7 @@
             "suggest": {
                 "ext-pdo_sqlite": "to use SQLiteStorage or SQLiteJournal"
             },
-            "time": "2023-01-15T23:48:52+00:00",
+            "time": "2023-01-21T19:59:02+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -755,7 +755,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/caching/issues",
-                "source": "https://github.com/nette/caching/tree/v3.2.1"
+                "source": "https://github.com/nette/caching/tree/v3.2.2"
             },
             "install-path": "../nette/caching"
         },
@@ -1000,17 +1000,17 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.26.0",
-            "version_normalized": "1.26.0.0",
+            "version": "1.27.0",
+            "version_normalized": "1.27.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "5b6ceea9705b068f993e268e4debc566c2637063"
+                "reference": "eeb8582f9cabf5a7f4ef78015691163233a1834f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/5b6ceea9705b068f993e268e4debc566c2637063",
-                "reference": "5b6ceea9705b068f993e268e4debc566c2637063",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/eeb8582f9cabf5a7f4ef78015691163233a1834f",
+                "reference": "eeb8582f9cabf5a7f4ef78015691163233a1834f",
                 "shasum": ""
             },
             "require": {
@@ -1056,7 +1056,7 @@
                 "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
                 "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer"
             },
-            "time": "2022-12-21T12:22:06+00:00",
+            "time": "2023-01-24T20:07:45+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1102,7 +1102,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.26.0"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.27.0"
             },
             "install-path": "../phpoffice/phpspreadsheet"
         },

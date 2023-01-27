@@ -1,13 +1,13 @@
 <?php
 define('NO_NAV',true);
-//define('__SKIP_JS__',true);
 
+/*
 $job_id = $_REQUEST['job_id'];
-$form_number = $_REQUEST['form_number'];
 $job  = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
-
 $media = new Media($job);
+*/
 
+$form_number = $_REQUEST['form_number'];
 $form_edit['url'] = __URL_PATH__ . "/form_edit.php?job_id=" . $job_id .  "&form_number=" . $form_number;
 $form_edit['timeout'] = 1;
 

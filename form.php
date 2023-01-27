@@ -3,8 +3,8 @@ require_once(".config.inc.php");
 
 define('TITLE', "Form Editor");
 $display = new MediaDisplay();
-$media = new Media();
-$template = new Template();
+//$media = new Media();
+//$template = new Template();
 
 include_once __LAYOUT_HEADER__;
 
@@ -12,7 +12,7 @@ $row_html = '';
 $letter_html = '';
 $page_form_html = '';
 $next_view = "job";
-$media->job_id = $_REQUEST['job_id'];
+//$media->job_id = $_REQUEST['job_id'];
 
 $max_forms =  $media->get_max_drop_forms();
 $first_form = $media->get_first_form();

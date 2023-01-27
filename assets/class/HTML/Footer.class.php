@@ -7,7 +7,7 @@ class Footer
 
     public static function display($template = '', $params = [])
     {
-        $templateObj = new template();
+        $templateObj = new Template();
         
         if(MediaSettings::isSet('__FOOTER_NAV_HTML__'))
         {

@@ -33,7 +33,7 @@ if (key_exists('update_job', $_REQUEST)) {
 
     if ($msg == '') {
         $media->update_job_number($job_number);
-        echo JavaRefresh("/index.php", 0);
+        echo HTMLDisplay::HTMLDisplay::JavaRefresh("/index.php", 0);
     } else {
         MediaError::msg("warning","There was a problem <br> " . $msg,15);
     }
@@ -56,7 +56,7 @@ foreach ($_REQUEST as $key => $value) {
         case  "create_zip":
             $xlsx_dir = $media->xlsx_directory;
             $zip_file =  $media->zip_file;
-            new zip_Workbooks($xlsx_dir, $job_id, $zip_file);
+            new Zip($xlsx_dir, $job_id, $zip_file);
             break;
 
         case  "refresh_import":

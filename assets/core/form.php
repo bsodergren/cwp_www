@@ -1,10 +1,8 @@
 <?php
-require_once(".config.inc.php");
+//require_once(".config.inc.php");
 $break = false;
 if ($_POST["submit"] == "Edit")
 {
-  //  require_once(__PROCESS_DIR__ . "/form_edit.php");
-
     define("REFRESH_URL", "/form_edit.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $_REQUEST['form_number'] . "");
     define("REFRESH_TIMEOUT", 0);
     $break = true;

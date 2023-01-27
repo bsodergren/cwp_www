@@ -17,8 +17,7 @@ class HTMLDisplay
             $update_inv =  $timeout / 100;
             Template::echo("progress_bar", ['SPEED' => $update_inv]);
         }
-
-        Template::echo('js_refresh_window', ['REFRESH_URL' => $url, 'MS_SECONDS' => $timeout]);
+        echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
     }
 
     public static function echo($value, $exit = 0)

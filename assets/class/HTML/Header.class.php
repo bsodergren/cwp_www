@@ -26,7 +26,7 @@ class Header
 
         $params['BOOTSTRAP'] = Template::GetHTML("base/header/bootstrap_5");
 
-        $templateObj = new template();
+        $templateObj = new Template();
         echo $templateObj->template("base/header/header", $params);
     }
 }

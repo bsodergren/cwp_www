@@ -160,4 +160,29 @@ class MediaUpdate
             }
         }
     }
+
+    public static function createDatabase()
+    {
+
+        if (!file_exists(__SQLITE_DATABASE__)) {
+            $connection = new Nette\Database\Connection(__DATABASE_DSN__);
+            $_default_sql_dir = FileSystem::normalizePath(__SQLLITE_DEFAULT_TABLES_DIR__);
+            $file_tableArray = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql', 0);
+        
+        
+            foreach ($file_tableArray as $k => $sql_file) {
+                $table_name = str_replace("cwp_table_", "", basename($sql_file, ".sql"));
+                $connection->query("drop table if exists " . $table_name);
+                Nette\Database\Helpers::loadFromFile($connection, $sql_file);
+            }
+        
+            Nette\Database\Helpers::loadFromFile($connection, $_default_sql_dir . '/cwp_data.sql');
+        
+            return true;
+            
+        } 
+
+        return false;
+
+    }
 }

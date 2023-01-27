@@ -1,7 +1,7 @@
 <?php
 require_once("../.config.inc.php");
 define('TITLE', "Media Settings");
-$template = new Template();
+//$template = new Template();
 require __LAYOUT_HEADER__;
 
 $settings_array = [];
