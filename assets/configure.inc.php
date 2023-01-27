@@ -5,7 +5,7 @@ use Nette\Utils\FileSystem;
 $refresh = false;
 
 if (!file_exists(__SQLITE_DATABASE__)) {
-   $connection = new Nette\Database\Connection(__DATABASE_DSN__);
+    $connection = new Nette\Database\Connection(__DATABASE_DSN__);
     $_default_sql_dir = FileSystem::normalizePath(__SQLLITE_DEFAULT_TABLES_DIR__);
     $file_tableArray = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql', 0);
 
@@ -46,6 +46,7 @@ if ($UpdaterObj->check_tableExists('updates')) {
 }
 
 $updates_array = Utils::get_filelist(__UPDATES_DIR__, 'php', $version_updates_skipSkipFile);
+
 if (count($updates_array) >= 1) {
 
     $update = new MediaUpdate($connection);
@@ -59,14 +60,13 @@ if (count($updates_array) >= 1) {
     }
 
     $refresh = $update->refresh;
-
 }
-    unset($file);
-    unset($file_array);
-    unset($include_array);
-    unset($update);
+unset($file);
+unset($file_array);
+unset($include_array);
+unset($update);
 if ($refresh == true) {
-    
+
     header("Location: /index.php");
-    exit(); 
+    exit();
 }

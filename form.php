@@ -10,15 +10,19 @@ include_once __LAYOUT_HEADER__;
 
 $row_html = '';
 $letter_html = '';
+$page_form_html = '';
 $next_view = "job";
 $media->job_id = $_REQUEST['job_id'];
 
 $max_forms =  $media->get_max_drop_forms();
 $first_form = $media->get_first_form();
+$form_list = $media->get_form_list();
+
+
 
 if (array_key_exists("form_number", $_REQUEST)) {
     $prev_form_number = $_REQUEST['form_number'] - 1;
-    $current_form_number = $_REQUEST['form_number'] + 1;
+    $current_form_number = $_REQUEST['form_number'];
 } else {
     $prev_form_number = 0;
     $current_form_number = $first_form;
@@ -66,47 +70,85 @@ foreach ($result as $idx => $form_array) {
 foreach ($new_forms as $form_number => $parts) {
 
 
-    $next_button = "Next Form";
-    $form_url = __URL_PATH__ . "/process.php";
-    $previous_form_html = '';
+    $next_button = "Next";
+
     if ($current_form_number != $first_form) {
-        $previous_form_html = '<input type="submit" name="submit_back" value="previous form">';
+        $page_form_html .= template::GetHTML('/form/page_links', [
+            'PAGE_CLASS' => ' btn-secondary',
+            'PAGE_FORM_URL' => __URL_PATH__ . "/form.php?job_id=" . $media->job_id . "&form_number=" . $prev_form_number,
+            'PAGE_FORM_NUMBER' => 'Previous'
+        ]);
     }
 
+
+    $form_part = '';
+    foreach ($form_list as $n => $list_form_number) {
+        $url_form_number = $list_form_number->form_number;
+        $page_html_params = [];
+        if ($n != 0) {
+            $form_part = "&form_number=" . $url_form_number;
+        }
+
+        $page_form_number = $list_form_number->form_number;
+        if ($current_form_number == $page_form_number) {
+
+            $edit_url = __URL_PATH__ . "/form_edit.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number;
+            $page_html_params = [
+                'PAGE_CLASS' => ' btn-warning',
+                'PAGE_JS' => ' onClick="OpenNewWindow(\'' . $edit_url . '\')" ',
+                'PAGE_FORM_URL' => '#',
+                'PAGE_FORM_NUMBER' => 'Edit'
+            ];
+        } else {
+
+            $page_html_params = [
+                'PAGE_CLASS' => ' btn-secondary',
+                'PAGE_FORM_URL' => __URL_PATH__ . "/form.php?job_id=" . $media->job_id . $form_part,
+                'PAGE_FORM_NUMBER' => $page_form_number
+            ];
+        }
+
+        $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
+    }
+
+    $form_btn_class = ' btn-info';
     if ($next_form_number > $max_forms) {
         $next_view = "save";
         $next_button = "Save Form";
-        $form_url = __URL_PATH__ . "/process.php";
+        $form_btn_class = ' btn-success';
         //$previous_form_html =' ';
         $next_form_number = $current_form_number;
     }
 
-    $form_html['FORM_URL'] = $form_url;
+    $page_form_html .= template::GetHTML('/form/page_form_submit', [
+        'PAGE_CLASS' => $form_btn_class,
+        'BUTTON_VALUE' =>  $next_button
+    ]);
 
-    $edit_url = __URL_PATH__ . "/form_edit.php?job_id=". $media->job_id."&form_number=".$current_form_number;
 
-    $edit_button = '<input type="button" name="btnOpenPopup" onClick="OpenNewWindow(\''.$edit_url.'\')" value="Edit">';
 
+
+
+
+    $form_html['FORM_URL'] = __URL_PATH__ . "/process.php";
     $form_html["NAME"] = $form_array['job_number'] . " - Form Number " . $form_number . " of " . $max_forms . ' - ' . $config[$form_number]["config"] . ' - ' . $config[$form_number]["bind"];
-    $form_html["EDIT"] = $edit_button;
-    $form_html["PREVIOUS"] = $previous_form_html;
-    $form_html["NEXT"] =  ' <input type="submit" name="submit" value="' . $next_button . '">';
 
     foreach ($parts as $form_letter => $form_data) {
 
         $row_html = $display->display_table_rows($form_data, $form_letter);
         $template->template("form/header", array("NUMBER" => $form_number, "LETTER" => $form_letter, "ROWS" => $row_html));
-        
-       // $template->clear();
+
+        // $template->clear();
     }
     $letter_html .= $template->return();
     $template->clear();
 }
 
-$form_html["CURRENT_FORM_NUMBER"] = $current_form_number;
+$form_html["NEXT_FORM_NUMBER"] = $next_form_number;
 $form_html["JOB_ID"] = $media->job_id;
 $form_html["NEXT_VIEW"] = $next_view;
 $form_html['FORM_BODY_HTML'] = $letter_html;
+$form_html['FORM_LIST_HTML'] = $page_form_html;
 $template->clear();
 
 $template->template("form/main", $form_html);

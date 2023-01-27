@@ -28,7 +28,7 @@ function toArray($obj) {
 
 $var = $media->get_drop_form_data($form_number,["SORT_FORMER"=>1,"SORT_LETTER"=>1]);
 
-$display = new HTMLDisplay();
+//$display = new HTMLDisplay();
 
 foreach($var as $obj){
     $form_row[] =  toArray($obj);
