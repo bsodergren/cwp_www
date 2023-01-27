@@ -1,29 +1,48 @@
-<?php 
+<?php
+if(file_exists(".config/configure.php"))
+{
+    header("Location:  .config/configure.php ");
+    exit; 
+}
+
 function debug(...$var)
 {
     echo "<pre>" . var_export($var, 1) . "</pre>";
 }
+
+define('__COMPOSER_DIR__', __DIR__ . '/library/vendor');
+set_include_path(get_include_path() . PATH_SEPARATOR . __COMPOSER_DIR__);
+require __COMPOSER_DIR__ . '/autoload.php';
+
+use Noodlehaus\Config;
+use Noodlehaus\Parser\ini;
+use Nette\Utils\FileSystem;
+
+$config_file = ".config/config.ini";
+$conf = new Config($config_file);
+
 /**
  *  Basic constants for application that are displayed in the output
  */
-define('APP_NAME', 'Media');
+
+define('APP_NAME', $conf['application']['name']);
 define('APP_ORGANIZATION', 'cwp');
 define('APP_OWNER', 'bjorn');
 define('APP_DESCRIPTION', 'Embeddable PHP Login System');
-define('__APP_INSTALL_DIR__','' );
 
 /*
  * base directory and script name.
  */
+
+
+define('__APP_INSTALL_DIR__', rtrim($conf['server']['url_root'], '/'));
+define('__WEB_ROOT__',      FileSystem::normalizePath($conf['server']['web_root'] . __APP_INSTALL_DIR__));
+define('__PROJECT_ROOT__',  FileSystem::normalizePath($conf['server']['root_dir']));
+define('__ROOT_BIN_DIR__',  FileSystem::normalizePath($conf['server']['bin_dir']));
+define('__SQLITE_DIR__',    FileSystem::normalizePath($conf['server']['db_dir']));
+
+
 define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
-
-
-
-define('__WEB_ROOT__', $_SERVER['DOCUMENT_ROOT'].__APP_INSTALL_DIR__);
-define('__PROJECT_ROOT__', realpath($_SERVER['DOCUMENT_ROOT'] . "/../.."));
-//define('__WEB_ROOT__', ".");
-
-define('__ROOT_BIN_DIR__', __PROJECT_ROOT__ . "/.bin");
 
 /*
  * Default constants for include path structure.
@@ -34,13 +53,11 @@ define('__INC_CLASS_DIR__', __ASSETS_DIR__ . '/class');
 define('__INC_CORE_DIR__', __ASSETS_DIR__ . '/core');
 define('__CONFIG_DIR__', __ASSETS_DIR__ . '/configuration');
 define('__UPDATES_DIR__', __CONFIG_DIR__ . "/updates");
-define('__COMPOSER_DIR__', __WEB_ROOT__ . '/library/vendor');
 define('__ERROR_LOG_DIRECTORY__', __WEB_ROOT__ . '/logs');
 
 define('__TEMP_DIR__', sys_get_temp_dir());
 
 define('__SQLLITE_DEFAULT_TABLES_DIR__', __CONFIG_DIR__ . '/sqllite');
-define('__SQLITE_DIR__', __WEB_ROOT__ . '/.database');
 define('__SQLITE_DATABASE__', __SQLITE_DIR__ . '/cwp_sqlite.db');
 define('__DATABASE_DSN__', 'sqlite:' . __SQLITE_DATABASE__);
 
@@ -67,11 +84,9 @@ define('__URL_PATH__', __APP_INSTALL_DIR__);
 define('__URL_HOME__', 'http://' . $_SERVER['HTTP_HOST'] . __URL_PATH__);
 define('__URL_LAYOUT__', __URL_HOME__ . __LAYOUT_DIR__);
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __COMPOSER_DIR__);
-require __COMPOSER_DIR__ . '/autoload.php';
+
 
 use Tracy\Debugger;
-use Nette\Utils\FileSystem;
 //Include all necessary files.
 require_once __ASSETS_DIR__ . "/includes.inc.php";
 
@@ -85,7 +100,8 @@ define("__MEDIA_FILES_DIR__", "/Media Load Flags");
 
 if (MediaSettings::isTrue('__USE_LOCAL_XLSX__')) {
     if (
-        MediaSettings::isTrue('__USER_XLSX_DIR__')  ) {
+        MediaSettings::isTrue('__USER_XLSX_DIR__')
+    ) {
         define("__FILES_DIR__", __USER_XLSX_DIR__);
         FileSystem::createDir(__FILES_DIR__);
     }
