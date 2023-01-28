@@ -98,8 +98,8 @@ class ComposerStaticInit21750b9745226a432e87e1a740b35014
         ),
         'Jfcherng\\Diff\\' => 
         array (
-            0 => __DIR__ . '/..' . '/jfcherng/php-sequence-matcher/src',
-            1 => __DIR__ . '/..' . '/jfcherng/php-diff/src',
+            0 => __DIR__ . '/..' . '/jfcherng/php-diff/src',
+            1 => __DIR__ . '/..' . '/jfcherng/php-sequence-matcher/src',
         ),
         'Complex\\' => 
         array (

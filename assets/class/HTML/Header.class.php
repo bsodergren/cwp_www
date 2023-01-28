@@ -2,12 +2,18 @@
 
 
 
-class Header
+class Header extends Template
 {
+
+    public static $theme = '';
 
     public static function display($template = "", $params = [])
     {
 
+        if (self::$theme != ''){
+            Navbar::$theme = self::$theme;
+            $theme_path = self::$theme . "/";
+        }
         $path = "/" . __SCRIPT_NAME__;
         if (MediaSettings::isTrue('__FORM_POST__')) {
             $path = "/" . __FORM_POST__;
@@ -24,9 +30,12 @@ class Header
             $params['__NAVBAR__'] = Navbar::Display();
         }
 
-        $params['BOOTSTRAP'] = Template::GetHTML("base/header/bootstrap_5");
+      
+
+        //$params['BOOTSTRAP'] = Template::GetHTML("base/header/theme");
+        $params['BOOTSTRAP'] = Template::GetHTML("base/".$theme_path ."header/bootstrap_5");
 
         $templateObj = new Template();
-        echo $templateObj->template("base/header/header", $params);
+        echo $templateObj->template("base/".$theme_path ."header/header", $params);
     }
 }

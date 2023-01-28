@@ -1,8 +1,8 @@
 <?php
 if(file_exists(".config/configure.php"))
 {
-    header("Location:  .config/configure.php ");
-    exit; 
+//    header("Location:  .config/configure.php ");
+ //   exit; 
 }
 
 function debug(...$var)
@@ -100,6 +100,7 @@ define('__URL_HOME__', 'http://' . $_SERVER['HTTP_HOST'] . __URL_PATH__);
 define('__URL_LAYOUT__', __URL_HOME__ . __LAYOUT_DIR__);
 
 
+
 //Include all necessary files.
 require_once __ASSETS_DIR__ . "/includes.inc.php";
 
@@ -109,3 +110,5 @@ require_once __ASSETS_DIR__ . "/configure.inc.php";
 // Get settings from DB.
 require_once __ASSETS_DIR__ . "/settings.inc.php";
 
+//Footer::$theme = 'theme';
+//Header::$theme = 'theme';

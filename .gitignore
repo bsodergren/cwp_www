@@ -6,3 +6,6 @@
 library/vendor/jfcherng/php-diff/example/demo_web.php
 Media Load Flags/
 library/vendor
+library/vendor/autoload.php
+library/vendor/autoload.php
+library/vendor/composer/autoload_classmap.php
