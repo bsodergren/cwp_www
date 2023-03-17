@@ -1,5 +1,2 @@
 vendor/*
-.database/cwp_sqlite.db
-cwp_sqlite.db
-.database/cwp_sqlite.db
-.database/cwp_sqlite.db
+*/.database/*
