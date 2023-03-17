@@ -47,6 +47,12 @@ if ($cnt > 0) {
 		$replacement['TEXT_JOB'] = $text_job;
 		$replacement['JOB_ID'] = $row['job_id'];
 
+		$replacement['HIDDEN_CLASS'] = "collapse.show";
+
+		if($row['hidden'] == 1 ){
+			$replacement['HIDDEN_CLASS'] = "collapse";
+		}
+
 		$replacement['TEXT_CLOSE'] = $text_close;
 		$replacement['NUM_OF_FORMS'] = $num_of_forms;
 

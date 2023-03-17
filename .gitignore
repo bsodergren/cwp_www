@@ -1,8 +1,8 @@
 .database/cwp_sqlite.db
-**/library/vendor/**
+**/vendor/**
 .config/config.ini
 .gitignore
 .config/configure.php.ran
 
 Media Load Flags/
-library/vendor
+vendor
