@@ -1,0 +1,12 @@
+{
+    "require": {
+        "nette/utils": "^3.2",
+        "nette/database": "^3.1",
+        "formr/formr": "^1.4",
+        "smalot/pdfparser": "^2.3",
+        "jfcherng/php-diff": "^6.12",
+        "phpoffice/phpspreadsheet": "^1.26",
+        "sinergi/browser-detector": "^6.1",
+        "hassankhan/config": "^3.1"
+    }
+}
