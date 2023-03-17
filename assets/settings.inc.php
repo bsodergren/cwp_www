@@ -40,7 +40,7 @@ if (MediaSettings::isTrue('__USE_LOCAL_XLSX__')) {
 }
 
 if (!MediaSettings::isSet('__FILES_DIR__')) {
-    define("__FILES_DIR__", __PROJECT_ROOT__ . __MEDIA_FILES_DIR__);
+    define("__FILES_DIR__", __APP_ROOT__ . __MEDIA_FILES_DIR__);
 }
 
 define("__PDF_UPLOAD_DIR__", "/pdf");
