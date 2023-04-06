@@ -32,12 +32,11 @@ define('APP_DESCRIPTION', 'Embeddable PHP Login System');
  * base directory and script name.
  */
 
-
+ define('__APP_ROOT__',    FileSystem::normalizePath($conf['server']['root_dir']));
 define('__APP_INSTALL_DIR__', rtrim($conf['server']['url_root'], '/'));
-define('__WEB_ROOT__',      FileSystem::normalizePath($conf['server']['web_root'] . __APP_INSTALL_DIR__));
-define('__ROOT_BIN_DIR__',  FileSystem::normalizePath($conf['server']['bin_dir']));
-define('__SQLITE_DIR__',    FileSystem::normalizePath($conf['server']['db_dir']));
-define('__APP_ROOT__',    FileSystem::normalizePath($conf['server']['root_dir']));
+define('__WEB_ROOT__',     __APP_ROOT__ . FileSystem::normalizePath($conf['server']['web_root'] . __APP_INSTALL_DIR__));
+define('__ROOT_BIN_DIR__',  __APP_ROOT__ .FileSystem::normalizePath($conf['server']['bin_dir']));
+define('__SQLITE_DIR__',    __APP_ROOT__ .FileSystem::normalizePath($conf['server']['db_dir']));
 
 define('__URL_PATH__', __APP_INSTALL_DIR__);
 
