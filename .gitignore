@@ -2,3 +2,4 @@ vendor/*
 */.database/*
 config.ini
 composer.lock
+.database/cwp_sqlite.db

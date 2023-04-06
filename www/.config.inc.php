@@ -33,12 +33,13 @@ define('APP_DESCRIPTION', 'Embeddable PHP Login System');
  */
 
  define('__APP_ROOT__',    FileSystem::normalizePath($conf['server']['root_dir']));
-define('__APP_INSTALL_DIR__', rtrim($conf['server']['url_root'], '/'));
+define('__APP_INSTALL_DIR__', $conf['server']['url_root']);
 define('__WEB_ROOT__',     __APP_ROOT__ . FileSystem::normalizePath($conf['server']['web_root'] . __APP_INSTALL_DIR__));
 define('__ROOT_BIN_DIR__',  __APP_ROOT__ .FileSystem::normalizePath($conf['server']['bin_dir']));
 define('__SQLITE_DIR__',    __APP_ROOT__ .FileSystem::normalizePath($conf['server']['db_dir']));
 
 define('__URL_PATH__', __APP_INSTALL_DIR__);
+
 
 
 list($__filename) = explode("?", $_SERVER['REQUEST_URI']);
@@ -61,7 +62,7 @@ define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
  * Default constants for include path structure.
  *
  */
-define('__ASSETS_DIR__', __PROJECT_ROOT__ . '/assets');
+define('__ASSETS_DIR__', __WEB_ROOT__ . '/assets');
 define('__INC_CLASS_DIR__', __ASSETS_DIR__ . '/class');
 define('__INC_CORE_DIR__', __ASSETS_DIR__ . '/core');
 define('__CONFIG_DIR__', __ASSETS_DIR__ . '/configuration');
@@ -81,7 +82,7 @@ define('__DATABASE_DSN__', 'sqlite:' . __SQLITE_DATABASE__);
  */
 
 define('__LAYOUT_DIR__', '/assets/layout');
-define('__LAYOUT_ROOT__', __PROJECT_ROOT__ . __LAYOUT_DIR__);
+define('__LAYOUT_ROOT__', __WEB_ROOT__ . __LAYOUT_DIR__);
 define('__TEMPLATE_DIR__', __LAYOUT_ROOT__ . '/template');
 define('__LATTE_TEMPLATE__', __TEMPLATE_DIR__ . '/latte');
 
@@ -94,7 +95,7 @@ define('__LAYOUT_FOOTER__', __LAYOUT_ROOT__ . '/footer.php');
  * URL defaults.
  */
 define('__URL_HOME__', 'http://' . $_SERVER['HTTP_HOST'] . __URL_PATH__);
-define('__URL_LAYOUT__', __URL_HOME__ . "/assets/");
+define('__URL_LAYOUT__', __URL_HOME__ . "/assets/layout/");
 
 
 
