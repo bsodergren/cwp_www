@@ -1,2 +1,4 @@
 vendor/*
 */.database/*
+config.ini
+composer.lock
