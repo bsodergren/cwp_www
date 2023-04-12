@@ -2,6 +2,7 @@
 function debug(...$var)
 {
     echo "<pre>" . var_export($var, 1) . "</pre>";
+	die();
 }
 
 define('__PROJECT_ROOT__',dirname(__FILE__,2));
@@ -16,6 +17,7 @@ use Noodlehaus\Parser\ini;
 use Nette\Utils\FileSystem;
 
 $config_file = __PROJECT_ROOT__."/config.ini";
+
 
 $conf = new Config($config_file);
 
@@ -46,14 +48,6 @@ list($__filename) = explode("?", $_SERVER['REQUEST_URI']);
 $__request_name = basename($__filename,'.php');
 $__script_name = basename($_SERVER['SCRIPT_NAME'], '.php');
 
-if (  $__request_name != $__script_name )
-{
- //   echo " $__request_name and $__script_name  dont match";
-
-    
-    header("Location:  ".__URL_PATH__ . "/index.php");
-    exit;
-}
 
 
 define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
@@ -96,7 +90,6 @@ define('__LAYOUT_FOOTER__', __LAYOUT_ROOT__ . '/footer.php');
  */
 define('__URL_HOME__', 'http://' . $_SERVER['HTTP_HOST'] . __URL_PATH__);
 define('__URL_LAYOUT__', __URL_HOME__ . "/assets/layout/");
-
 
 
 //Include all necessary files.
