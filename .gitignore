@@ -4,6 +4,4 @@ config.ini
 composer.lock
 .database/cwp_sqlite.db
 config.ini
-www/php_errors.log
-config.ini
-config.ini
+.database/cwp_sqlite.db
