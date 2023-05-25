@@ -165,6 +165,8 @@ class MediaUpdate
     {
 
         if (!file_exists(__SQLITE_DATABASE__)) {
+            FileSystem::createDir(__SQLITE_DIR__);
+            
             $connection = new Nette\Database\Connection(__DATABASE_DSN__);
             $_default_sql_dir = FileSystem::normalizePath(__SQLLITE_DEFAULT_TABLES_DIR__);
             $file_tableArray = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql', 0);
