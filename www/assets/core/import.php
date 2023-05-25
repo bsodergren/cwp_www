@@ -4,6 +4,8 @@ require_once('.config.inc.php');
 use Nette\Utils\FileSystem;
 
 define("REFRESH_TIMEOUT", 10);
+define("REFRESH_URL", 'import.php');
+
 $error = false;
 // Store errors here
 $fileExtensionsAllowed = ['pdf'];
@@ -41,7 +43,6 @@ if (isset($_POST['submit'])) {
         $fileTmpName   = $_FILES['the_file']['tmp_name'];
     }
 
-    define("REFRESH_URL", 'import.php');
 
     if ($fileName == '') {
         HTMLDisplay::output("<span class='p-3 text-danger'> no File selected </span> <br>");
@@ -66,6 +67,7 @@ if (isset($_POST['submit'])) {
         HTMLDisplay::output("<span class='p-3 text-danger'>No Job Number </span> <br>");
         $error = true;
     }
+    define("REFRESH_URL", 'import.php');
 
     if ($error == false) {
 

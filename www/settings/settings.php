@@ -139,6 +139,7 @@ $delete_log = Template::GetHTML("settings/delete_log");
 $template->template("settings/new_setting", ['CATEGORY' => $cat]);
 
 $settings_html = $template->return();
+
 $template->clear();
 
 $template->template("settings/main", [
