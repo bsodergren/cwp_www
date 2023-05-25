@@ -21,6 +21,7 @@ if ($form->submitted()) {
         define("REFRESH_URL", '/settings/settings.php?cat='.$_REQUEST['cat']);
 
         // get our form values and assign them to a variable
+ 
         foreach ($_POST as $key => $value) {
 
             if ($key == 'submit') {
@@ -57,6 +58,8 @@ if ($form->submitted()) {
                 if ($value != '') {               
                     $value =  MediaSettings::save_post_asJson($value);
                 }
+                
+             
             }
 
 

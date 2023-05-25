@@ -43,6 +43,8 @@ class MediaDisplay extends HTMLDisplay
             }
 
 
+            $facetrim = MediaSettings::isFacetrim($part);
+            $nobindery = MediaSettings::skipTrimmers($part);
 
             $array = array(
                 "MARKET" => $part["market"],
@@ -50,8 +52,8 @@ class MediaDisplay extends HTMLDisplay
                 "COUNT" => $part["count"],
                 "SHIP" => $part["ship"],
                 "RADIO_BTNS" => $radio_check,
-                "FACE_TRIM" => $this->draw_checkbox("facetrim_" . $part["id"], $part["facetrim"], 'Face Trim'),
-                "NO_TRIM" => $this->draw_checkbox("nobindery_" . $part["id"], $part["nobindery"], 'No Trimmers')
+                "FACE_TRIM" => $this->draw_checkbox("facetrim_" . $part["id"], $facetrim , 'Face Trim'),
+                "NO_TRIM" => $this->draw_checkbox("nobindery_" . $part["id"], $nobindery, 'No Trimmers')
             );
 
             $row_template->template("form/row", $array);

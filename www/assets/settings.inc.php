@@ -25,10 +25,10 @@ if ($results) {
     define("__SETTINGS__", $setting);
 }
 $const = get_defined_constants(true);
+
 unset($setting);
 
-
-define("__MEDIA_FILES_DIR__", "/Media Load Flags");
+define("__MEDIA_FILES_DIR__", DIRECTORY_SEPARATOR . "Media Load Flags");
 
 if (MediaSettings::isTrue('__USE_LOCAL_XLSX__')) {
     if (
@@ -43,9 +43,10 @@ if (!MediaSettings::isSet('__FILES_DIR__')) {
     define("__FILES_DIR__", __APP_ROOT__ . __MEDIA_FILES_DIR__);
 }
 
-define("__PDF_UPLOAD_DIR__", "/pdf");
-define("__ZIP_FILE_DIR__", "/zip");
-define("__XLSX_DIRECTORY__", "/xlsx");
+define("__EMAIL_PDF_UPLOAD_DIR__", DIRECTORY_SEPARATOR . "uploads");
+define("__PDF_UPLOAD_DIR__", DIRECTORY_SEPARATOR . "pdf");
+define("__ZIP_FILE_DIR__", DIRECTORY_SEPARATOR . "zip");
+define("__XLSX_DIRECTORY__", DIRECTORY_SEPARATOR . "xlsx");
 
 $template = new Template();
 

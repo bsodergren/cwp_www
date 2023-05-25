@@ -4,8 +4,10 @@ use Nette\Utils\FileSystem;
 class MediaFileSystem
 {
     public $directory;
+    public $job_number;
+    public $pdf_file;
 
-    public function __construct($pdf_file, $job_number)
+    public function __construct($pdf_file=null, $job_number=null)
     {
         $this->job_number = $job_number;
         $this->pdf_file = $pdf_file;
@@ -19,6 +21,11 @@ class MediaFileSystem
     private function __filename($type = '', $form_number = '', $create_dir = false)
     {
         $directory = '';
+
+        if(!isset($this->pdf_file)) {
+            return false;
+        }
+
         $file = basename($this->pdf_file, ".pdf");
         $filename = $this->job_number . '_' . $file;
 
@@ -47,27 +54,37 @@ class MediaFileSystem
         }
 
 
-        $filename = $directory . '/' . $filename;
+        $filename = $directory . DIRECTORY_SEPARATOR  . $filename;
         $filename = FileSystem::normalizePath($filename);
         return $filename;
     }
 
     private function __directory($type = '', $create_dir = false)
     {
-        $output_filename = "/" . $this->__filename();
+        $output_filename = '';
+
+        if($this->__filename() !== false)
+        {
+            $output_filename = DIRECTORY_SEPARATOR  . $this->__filename();
+        }
+
         $directory = '';
 
         if (strtolower($type) == 'xlsx') {
-            $directory = __XLSX_DIRECTORY__;
+            $directory =  $output_filename . __XLSX_DIRECTORY__;
         }
         if (strtolower($type) == 'pdf') {
-            $directory = __PDF_UPLOAD_DIR__;
+            $directory =  $output_filename . __PDF_UPLOAD_DIR__;
         }
         if (strtolower($type) == 'zip') {
-            $directory = __ZIP_FILE_DIR__;
+            $directory =  $output_filename .  __ZIP_FILE_DIR__;
         }
-
-        $directory = __FILES_DIR__ . $output_filename . $directory;
+        
+        if (strtolower($type) == 'upload') {
+            $directory = __EMAIL_PDF_UPLOAD_DIR__;
+        }
+        
+        $directory = __FILES_DIR__ . $directory;
 
         $this->directory = FileSystem::normalizePath($directory);
 
@@ -82,6 +99,8 @@ class MediaFileSystem
     {
         return $this->__directory($type, $create_dir);
     }
+
+
 }
 
 

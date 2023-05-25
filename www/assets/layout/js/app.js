@@ -3,7 +3,10 @@ function importValidation()
   // Make quick references to our fields.
   var jobNumber = document.getElementById("jobNumber");
   var pdffile = document.getElementById("fileToUpload");
+  var importfile = document.getElementById("fileToImport");
+  
 
+  if (validateFileType(importfile, "* Please select a pdf file *")) {
   if (validateFileType(pdffile, "* Please select a pdf file *")) {
     if (textNumeric(jobNumber, "* Please enter a valid job Number *")) {
       if (lengthDefine(jobNumber, 6, 6)) {

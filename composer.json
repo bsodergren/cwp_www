@@ -8,6 +8,10 @@
         "phpoffice/phpspreadsheet": "^1.26",
         "sinergi/browser-detector": "^6.1",
         "hassankhan/config": "^3.1",
-        "twbs/bootstrap": "^5.2"
+        "twbs/bootstrap": "^5.2",
+        "tracy/tracy": "^2.10",
+        "phpmailer/phpmailer": "^6.8"    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.2"
     }
 }
