@@ -43,6 +43,9 @@ if (key_exists('update_job', $_REQUEST)) {
 foreach ($_REQUEST as $key => $value) {
 
     switch ($key) {
+        case  "email_zip":
+            define('REFRESH_URL', '/mail.php?job_id=' . $job_id);
+            break;
         case  "process":
             define('REFRESH_URL', '/form.php?job_id=' . $job_id);
             break;

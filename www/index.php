@@ -86,7 +86,9 @@ if ($cnt > 0) {
 
 			$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_zip', '', 'create zip', '', $class_create . $zdisabled . $tooltip . 'create_zip"');
 		}
-
+		if (is_file($zip_file)) {
+		$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('email_zip', '', 'email_zip email_zip', '', $class_create . $tooltip . 'email_zip"');
+		}
 		$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('refresh_import', '', 'refresh import', '', $class_create . $tooltip . 'refresh_import"');
 		$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_job', '', 'delete job', '', $class_delete . $tooltip . 'delete_job"');
 		$replacement['FORM_CLOSE'] = $form->close();

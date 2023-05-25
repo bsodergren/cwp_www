@@ -38,7 +38,6 @@ if (isset($_POST['divClass'])) {
         ]);
     exit;
 }
-
 switch (__FORM_POST__) {
 
     case "settings":

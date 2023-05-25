@@ -1,15 +1,18 @@
 <tr>
   <td colspan="4" class=" text-end">All Parts&nbsp;&nbsp;&nbsp;</td>
   <td class=" text-start">
-    <input type="radio" onclick="checkAll%%LETTER%%($(this));" name="All%%LETTER%%" class="%%ALLCHECKBOXFRONT%%" />
-    Front
+    
+    <input type="radio" name="All%%LETTER%%" class="%%ALLCHECKBOXFRONT%% btn-check"  autocomplete="off" id="Front-%%LETTER%%-outlined"/>
+    <label name="All%%LETTER%%" class="btn btn-outline-success %%ALLCHECKBOXFRONT%% " for="Front-%%LETTER%%-outlined"  onclick="checkAll%%LETTER%%($(this));">Front</label>
 
-    <input type="radio" onclick="checkAll%%LETTER%%($(this));" name="All%%LETTER%%" class="%%ALLCHECKBOXBACK%%" />
-    Back
 
+    <input type="radio" name="All%%LETTER%%" class="%%ALLCHECKBOXBACK%% btn-check"  autocomplete="off" id="Back-%%LETTER%%-outlined" />
+    <label name="All%%LETTER%%" class="btn btn-outline-success %%ALLCHECKBOXBACK%% " for="Back-%%LETTER%%-outlined"  onclick="checkAll%%LETTER%%($(this));">Back</label>
+    
     <script type="text/javascript">
       function checkAll%%LETTER%% (e) {
 
+        console.log(e);
         if (e.hasClass('%%ALLCHECKBOXFRONT%%')) {
 
           $('.%%CLASSFRONT%%').attr('checked', 'checked');

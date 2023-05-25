@@ -52,9 +52,15 @@ class HTMLDisplay
             $checked = "checked";
         }
 
-        $html = '';
-        $html .= '<input type="checkbox" name="' . $name . '" value="1" ' . $checked . '>' . $text;
-        return $html;
+        $params = [
+            "NAME" => $name,
+            "TEXT" =>  $text,
+            "CHECKED" =>  $checked,
+        ];
+
+        
+        return Template::GetHTML('elements/checkbox',$params);
+
     }
 
     public function draw_radio($name, $value)
@@ -62,7 +68,22 @@ class HTMLDisplay
         $html = '';
 
         foreach ($value as $option) {
-            $html .= '<input type="radio" class="' . $option["class"] . '" name="' . $name . '" value="' . $option["value"] . '" ' . $option['checked'] . '>' . $option['text'] . '&nbsp;';
+
+
+            $params = [
+                "NAME" => $name,
+                "VALUE" =>  $option["value"],
+                "TEXT" =>  $option['text'],
+                "CLASS" =>$option["class"], 
+                "CHECKED" =>  $option['checked'],
+            ];
+
+
+
+            $html .= Template::GetHTML('elements/radio_button',$params);
+           // $html .= '<input type="radio" class="' . $option["class"] . '" name="' . $name . '" value="' . $option["value"] . '" ' . $option['checked'] . '>' . $option['text'] . ' '.PHP_EOL;
+        
+
         }
         // $html = $html . "<br>"."\n";
         return $html;
