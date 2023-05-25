@@ -1,4 +1,4 @@
-<?php #skip
+<?php
 $new_table = ['updates'];
 $update_data = [];
 $new_data = [];

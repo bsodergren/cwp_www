@@ -29,7 +29,6 @@ if($conf['application']['debug'] == 1)
 }
 
 
-
 /**
  *  Basic constants for application that are displayed in the output
  */

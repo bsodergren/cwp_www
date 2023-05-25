@@ -27,10 +27,12 @@ $updates_array = Utils::get_filelist(__UPDATES_DIR__, 'php', $version_updates_sk
 if (count($updates_array) >= 1) {
     $update = new MediaUpdate($connection);
     $update->refresh = $refresh;
+    sort($updates_array);
     foreach ($updates_array as $k => $file) {
         $filename = basename($file);
         if (!in_array($filename, $skip_file_array)) {
             $update->versionUpdate($file);
+   
         }
     }
 

@@ -18,12 +18,13 @@ class MediaUpdate
         $updates = ['newTable' => $new_table, 'updateColumns' => $rename_column, 'newColumn' => $new_column, 'newData' => $new_data, 'updateData' => $update_data,];
 
         foreach ($updates as $classmethod => $data_array) {
+
             $this->$classmethod($data_array);
         }
-
         $filename = basename($file);
 
         if ($this->check_tableExists('updates')) {
+
             $this->newData(["updates" => ["update_filename" => $filename]]);
         } else {
             $this->setSkipFile($file);
@@ -37,8 +38,9 @@ class MediaUpdate
         if (is_array($new_data)) {
 
             foreach ($new_data as $table => $new_data_vals) {
+              
 
-                $this->conn->query('INSERT INTO ' . $table . ' ?', $new_data_vals);
+                $u = $this->conn->query('INSERT INTO ' . $table . ' ?', $new_data_vals);
                 $this->refresh = true;
             }
         }

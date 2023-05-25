@@ -6,12 +6,11 @@ function importValidation()
   var importfile = document.getElementById("fileToImport");
   
 
-  if (validateFileType(importfile, "* Please select a pdf file *")) {
   if (validateFileType(pdffile, "* Please select a pdf file *")) {
     if (textNumeric(jobNumber, "* Please enter a valid job Number *")) {
       if (lengthDefine(jobNumber, 6, 6)) {
         return true;
-      }
+      
     }
   }
   return false;

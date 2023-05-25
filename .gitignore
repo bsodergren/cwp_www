@@ -5,3 +5,4 @@ composer.lock
 .database/cwp_sqlite.db
 config.ini
 .database/cwp_sqlite.db
+database/cwp_sqlite.db
