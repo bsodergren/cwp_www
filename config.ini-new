@@ -1,0 +1,13 @@
+[application]
+name=cwp
+debug=false
+[gmail]
+name=
+password=
+[server]
+root_dir=D:\development\cwp_app
+bin_dir=\.bin
+#project_root=\.public
+web_root=\.public\www
+url_root=
+db_dir=\.public\.database
