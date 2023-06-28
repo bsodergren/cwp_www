@@ -20,17 +20,13 @@ class PDFImport extends MediaImport
 			$pdf    = $parser->parseFile($pdf_file);
 			$pages  = $pdf->getPages();
 
-
-
 			if ($form_number != '') {
 				$form_number--;
 				$page_text = [];
 
 				$text = $pages[$form_number]->getDataTm();
+				$page_text = $this->cleanPdfText($text);
 
-				foreach ($text as $n => $row) {
-					$page_text[$n] = $row[1];
-				}
 				$this->parse_page($page_text);
 			} else {
 
@@ -40,16 +36,24 @@ class PDFImport extends MediaImport
 
 					$text = $page->getDataTm();
 
-					foreach ($text as $n => $row) {
-						$page_text[$n] = $row[1];
-					}
+					$page_text = $this->cleanPdfText($text);
 
+					
 					$this->parse_page($page_text);
 				}
 			}
 		}
 	}
+	public function cleanPdfText($text)
+	{
+		foreach ($text as $n => $row) {
+			//$page_text[$n] = trim(str_replace("&","and", $row[1]));
+			$page_text[$n] = trim($row[1]);
 
+		}
+
+		return $page_text;
+	}
 
 
 	public function parse_page($page_text)
@@ -97,6 +101,7 @@ class PDFImport extends MediaImport
 				$stop = $letter_array[$letter]['stop'];
 
 				$form_rows[$letter] = $this->row_data($start, $stop, $page_text);
+
 				if ($letter == 'ABCD' && MediaSettings::IsTrue('__HALF_FORM_CNT__')) {
 					$half_count = $form_rows[$letter][0]['count'] / 2;
 					$tmp_row1_array = [
@@ -106,7 +111,10 @@ class PDFImport extends MediaImport
 						'count' => $half_count,
 						'ship' => $form_rows[$letter][0]['ship'],
 						'tip' => $form_rows[$letter][0]['tip'],
+
+
 					];
+
 					$form_rows[$letter][0]['count'] = $half_count;
 					$form_rows[$letter][] = $tmp_row1_array;
 					unset($tmp_row1_array);
@@ -130,7 +138,7 @@ class PDFImport extends MediaImport
 			if ($strict == true) {
 				$item = trim(str_replace(',', '', $item));
 				if ($value == 'letter') {
-					preg_match('/[ABCD,]+\b/', $item, $matches);
+					preg_match('/^[ABCD,]+\b/', $item, $matches);
 					if(count($matches) > 0 ) {
 					if ($matches[0] == trim($needle)) {
 						$search = true;
@@ -316,4 +324,8 @@ class PDFImport extends MediaImport
 				return "sheeter";
 		}
 	}
+
+
+
+
 }

@@ -34,12 +34,13 @@ class MediaSettings
             return 1;
         }
        // foreach()
-      if(str_contains( __PUB_FACETRIM__, $publication) ) {
-       return 1;
-      }
-      return 0;
-
-
+       if($facetrim === null)
+       {
+            if(str_contains( __PUB_FACETRIM__, $publication) ) {
+                return 1;
+            }
+        }
+        return 0;
     }
 
     public static function isTrue($define_name)

@@ -1,13 +1,14 @@
-<main role="main" class="container">
-    <table class="blueTable"> 
-       
-        <form action="<?php echo __FORM_URL__;?>" method="post">
-        <input type="hidden" name="job_id" value="<? echo $_REQUEST['job_id'];?>">   
-        Email Address to send file <input type="text" name="mailto" > <br>
-        Name of Recpt <input type="text" name="rcpt_name" > 
-    
-        <input type="submit" name="submit" value="Send">
-        </form>
-    
-            </table>
-            </main>
+
+    <form action="%%__FORM_URL__%%" method="post" class="w-50  rounded bg-success" style="--bs-bg-opacity: .5;">
+        <input type="hidden" name="job_id" value="%%JOB_ID%%">
+        <input type="hidden" name="send_mail" value="send">
+        <div class="mb-3">
+          <label for="InputEmail" class="form-label p-2">Email address</label>
+          <input type="email" class="form-control mx-2 w-75" id="InputEmail" aria-describedby="emailHelp" name="mailto">
+        </div>
+        <div class="mb-3">
+            <label for="InputName" class="form-label p-2">Name of Recpt</label>
+            <input type="text" class="form-control mx-2 w-75" id="InputName" aria-describedby="nameHelp" name="rcpt_name">
+          </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>

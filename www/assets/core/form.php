@@ -1,5 +1,5 @@
 <?php
-//require_once(".config.inc.php");
+require_once('.config.inc.php');
 $break = false;
 if ($_POST["submit"] == "Edit") {
     define("REFRESH_URL", "/form_edit.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $_REQUEST['form_number'] . "");
@@ -27,8 +27,11 @@ if ($_POST["submit"] == "Edit") {
 
     if (array_key_exists("view", $_REQUEST) == TRUE) {
         if ($_REQUEST['view'] == "save") {
-
             define("REFRESH_URL", "/index.php");
+            define('REFRESH_MSG', 'Form finished');
+
+            $media->excelArray();
+            $excel = new MediaXLSX($media,true);
             $break = true;
         }
     }

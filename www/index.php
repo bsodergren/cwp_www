@@ -72,6 +72,7 @@ if ($cnt > 0) {
 		//$form->input_submit('actSubmit', '', 'View Forms', '', class_normal.$rowdisabled);
 
 		if (Media::get_exists("xlsx", $row['job_id']) == true) {
+			$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('view_xlsx', '', 'view xlsx', '', $class_create . $tooltip . 'view_xlsx"');
 			$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_xlsx', '', 'delete xlsx', '', $class_delete . $tooltip . 'delete_xlsx"');
 		} else {
 			$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_xlsx', '', 'create xlsx', '', $class_create . $pdisabled . $tooltip . 'create_xlsx"');
@@ -87,7 +88,7 @@ if ($cnt > 0) {
 			$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_zip', '', 'create zip', '', $class_create . $zdisabled . $tooltip . 'create_zip"');
 		}
 		if (is_file($zip_file)) {
-		$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('email_zip', '', 'email_zip email_zip', '', $class_create . $tooltip . 'email_zip"');
+		$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('email_zip', '', 'email zip', '', $class_create . $tooltip . 'email_zip"');
 		}
 		$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('refresh_import', '', 'refresh import', '', $class_create . $tooltip . 'refresh_import"');
 		$replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_job', '', 'delete job', '', $class_delete . $tooltip . 'delete_job"');

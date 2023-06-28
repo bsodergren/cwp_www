@@ -77,7 +77,7 @@ class Template
 
             $template_text = file_get_contents($template_file);
         }
-        return $template_text;
+        return $template_text .PHP_EOL;
     }
 
     private function defaults($text)

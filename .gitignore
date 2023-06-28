@@ -7,3 +7,4 @@ config.ini
 .database/cwp_sqlite.db
 database/cwp_sqlite.db
 www/php_errors.log
+tools/*

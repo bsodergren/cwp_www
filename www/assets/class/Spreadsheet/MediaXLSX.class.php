@@ -15,7 +15,7 @@ class MediaXLSX extends Media
 	protected object $spreadsheet;
 	protected object $media;
 
-	public function __construct($media)
+	public function __construct($media, $quiet = false)
 	{
 		$this->media = $media;
 		$this->exp = $media->exp;
@@ -84,8 +84,10 @@ class MediaXLSX extends Media
 			$writer = new Xlsx($this->spreadsheet);
 			$new_xlsx_file = $media->getfilename('xlsx', $form_number, true);
 			$writer->save($new_xlsx_file);
-			HTMLDisplay::output("Writing " . $new_xlsx_file, "<br>");
-			ob_flush();
+			if( $quiet === false) {
+				HTMLDisplay::output("Writing " . basename($new_xlsx_file), "<br>");
+				ob_flush();
+			}
 			$this->spreadsheet->disconnectWorksheets();
 			unset($this->spreadsheet);
 		}

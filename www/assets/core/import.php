@@ -11,7 +11,6 @@ $error = false;
 $fileExtensionsAllowed = ['pdf'];
 // These will be the only file extensions allowed
 
-
 if (isset($_POST['submit'])) {
 
 

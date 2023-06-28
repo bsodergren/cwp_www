@@ -7,7 +7,6 @@ define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PAT
 
 define('TITLE', '');
 
-
 if (
     __FORM_POST__ == __SCRIPT_NAME__ ||
     __FORM_POST__ == ''
@@ -20,7 +19,6 @@ if (isset($_POST['FORM_PROCESS'])) {
     $FORM_PROCESS =  $_POST['FORM_PROCESS'];
     unset($_POST['FORM_PROCESS']);
 }
-
 if (isset($_POST['divClass'])) {
 
     list($k, $id) = explode("_", $_POST['row_id']);
@@ -38,6 +36,7 @@ if (isset($_POST['divClass'])) {
         ]);
     exit;
 }
+
 switch (__FORM_POST__) {
 
     case "settings":
@@ -62,17 +61,25 @@ switch (__FORM_POST__) {
         require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
         exit;
         break;
+        case "mail":
+            require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
+            exit;
+            break;
     default:
 
         exit;
         break;
 }
 
+if (!defined("REFRESH_MSG")) {
+    define('REFRESH_MSG', '');
+}
+
 if (defined('REFRESH_URL')) {
     if (!defined('REFRESH_TIMEOUT')) {
         define('REFRESH_TIMEOUT', 0);
     }
-    echo HTMLDisplay::JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT);
+    echo HTMLDisplay::JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT,REFRESH_MSG);
     ob_flush();
 }
 

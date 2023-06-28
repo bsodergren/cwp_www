@@ -5,13 +5,24 @@
 class HTMLDisplay
 {
 
-    public static function javaRefresh($url, $timeout = 0)
+    public static function javaRefresh($url, $timeout = 0, $msg ='' )
     {
 
         $url = str_replace(__URL_PATH__,'', $url);
         $url = __URL_PATH__ . '/' . $url;
         $url = str_replace("//", "/", $url);
-        
+
+        if($msg != '')
+        {
+            $sep = '?';
+            $msg = urlencode($msg);
+            if(str_contains($url,"?")){
+                $sep = '&';
+            }
+            
+            $url = $url . $sep."msg=" . $msg;
+        }
+
         if ($timeout > 0) {
             $timeout = $timeout * 1000;
             $update_inv =  $timeout / 100;
@@ -88,6 +99,9 @@ class HTMLDisplay
         // $html = $html . "<br>"."\n";
         return $html;
     }
-
+    public function draw_hidden($name, $value)
+    {
+        return '<input type="hidden" name="' . $name . '" value="' . $value. '">'.PHP_EOL;
+    }
     
 }

@@ -28,7 +28,7 @@ function toArray($obj) {
 
 $var = $media->get_drop_form_data($form_number,["SORT_FORMER"=>1,"SORT_LETTER"=>1]);
 
-//$display = new HTMLDisplay();
+$display = new HTMLDisplay();
 
 foreach($var as $obj){
     $form_row[] =  toArray($obj);
@@ -46,11 +46,36 @@ foreach ($form_row as $idx => $row)
 	$params['ROW_ID'] =  $row['id'];
 	$params['ROW_DESC'] = $row['market']." ".$row['pub']." ".$row['ship'];
 	$params['PCS_COUNT'] = $row['count'];
-		
-		if ( $row["former"] == "Back" ) {$params['CHECK_BACK'] = "checked"; }
-		if ( $row["former"] == "Front" ) {$params['CHECK_FRONT'] = "checked"; }
+	$params['DELETE_CHECKBOX'] = $display->draw_checkbox($row['id']."_delete", "",'delete');
+	$params['SPLIT_CHECKBOX'] = $display->draw_checkbox($row['id']."_split", "",'split');
 
-		$params['FT_VALUE'] = $row['face_trim'];
+
+
+		$classFront = "Front" . $letter;
+		$classBack = "Back" . $letter;
+
+
+		if ($row["former"] == "Back") {
+			$check_back = "checked";
+		}		
+		
+		if ($row["former"] == "Front") {
+			$check_front = "checked";
+		}
+		$radio_check = '';
+
+			$value = array(
+				"Front" => array("value" => "Front", "checked" => $check_front, "text" => "Front", "class" => $classFront),
+				"Back" => array("value" => "Back", "checked" => $check_back, "text" => "Back", "class" => $classBack)
+			);
+			$radio_check = $display->draw_radio( $row["id"]."_former", $value);
+
+	
+					$params['RADIO_BTNS'] = $radio_check;
+
+
+
+		$params['FT_VALUE'] = $display->draw_checkbox($row['id']."_facetrim", $row['face_trim'],'Face Trim');
 	
 		$rows_html .= $template->return("form_edit/row",$params);
 }

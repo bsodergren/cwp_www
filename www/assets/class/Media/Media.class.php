@@ -52,12 +52,12 @@ class Media
     }
 
 
-    public function excelArray()
+    public function excelArray($form_number = null)
     {
         //global $explorer;
 
 
-        $form_config = $this->get_drop_details();
+        $form_config = $this->get_drop_details($form_number);
 
         foreach ($form_config as $form_number => $vars) {
 
@@ -453,9 +453,6 @@ class Media
                 $individual_part['job_id'] = $this->job_id;
                 $individual_part['form_letter'] = $letter;
                 $individual_part['form_number'] = $form_number;
-
-                // dump($individual_part);
-
                 $this->exp->table("form_data")->insert($individual_part);
             }
         }

@@ -27,10 +27,29 @@ class Header extends Template
 
       
 
-        //$params['BOOTSTRAP'] = Template::GetHTML("base/header/theme");
-        $params['BOOTSTRAP'] = Template::GetHTML("base/" ."header/bootstrap_5");
+        $params['BOOTSTRAP'] = Template::GetHTML("base/header/bootstrap_5");
+        if(!key_exists("CUSTOM_CSS",$params)){
+        $params['DEFAULT_CSS'] = Template::GetHTML("base/" ."header/css");
+        }
 
         $templateObj = new Template();
+        $params['__MSG__'] = self::displayMsg();
         echo $templateObj->template("base/" ."header/header", $params);
     }
+
+
+    public static function displayMsg()
+    {
+        
+        if(key_exists('msg',$GLOBALS['_REQUEST']))
+        {
+          
+            return Template::GetHTML("base/" ."header/return_msg",['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])]);
+          
+        }
+        return "";
+
+    }
+
+
 }

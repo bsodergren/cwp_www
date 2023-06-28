@@ -1,11 +1,6 @@
 <?php
-function debug(...$var)
-{
-    echo "<pre>" . var_export($var, 1) . "</pre>";
-}
 
 define('__PROJECT_ROOT__',dirname(__FILE__,2));
-
 
 define('__COMPOSER_DIR__', __PROJECT_ROOT__ .  DIRECTORY_SEPARATOR .'vendor');
 set_include_path(get_include_path() . PATH_SEPARATOR . __COMPOSER_DIR__);

@@ -10,7 +10,7 @@ include_once __LAYOUT_HEADER__;
 
 $row_html = '';
 $letter_html = '';
-$page_form_html = '';
+//$page_form_html = '';
 $next_view = "job";
 //$media->job_id = $_REQUEST['job_id'];
 
@@ -40,7 +40,6 @@ $results = $form_data->fetch();
 if (empty($results)) {
     $current_form_number = $current_form_number + 1;
 }
-
 $sort = array("SORT_FORMER" => 1, "SORT_LETTER" => 1);
 
 $result = $media->get_drop_form_data($current_form_number, $sort);
@@ -67,14 +66,15 @@ foreach ($result as $idx => $form_array) {
     );
 }
 
+
 foreach ($new_forms as $form_number => $parts) {
 
-
+  
     $next_button = "Next";
 
     if ($current_form_number != $first_form) {
         $page_form_html .= template::GetHTML('/form/page_links', [
-            'PAGE_CLASS' => ' btn-secondary',
+            'PAGE_CLASS' => ' btn-info',
             'PAGE_FORM_URL' => __URL_PATH__ . "/form.php?job_id=" . $media->job_id . "&form_number=" . $prev_form_number,
             'PAGE_FORM_NUMBER' => 'Previous'
         ]);
@@ -85,20 +85,34 @@ foreach ($new_forms as $form_number => $parts) {
     foreach ($form_list as $n => $list_form_number) {
         $url_form_number = $list_form_number->form_number;
         $page_html_params = [];
-        if ($n != 0) {
+        //if ($n != 0) {
             $form_part = "&form_number=" . $url_form_number;
-        }
+        //}
 
         $page_form_number = $list_form_number->form_number;
         if ($current_form_number == $page_form_number) {
 
+            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
+                'PAGE_CLASS' => ' btn-success',
+                'PAGE_FORM_URL' => __URL_PATH__ . "/view.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number,
+                'PAGE_FORM_NUMBER' => 'View'
+            ]);
+
             $edit_url = __URL_PATH__ . "/form_edit.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number;
-            $page_html_params = [
-                'PAGE_CLASS' => ' btn-warning',
+            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link',[
+                'PAGE_CLASS' => ' btn-danger',
                 'PAGE_JS' => ' onClick="OpenNewWindow(\'' . $edit_url . '\')" ',
-                'PAGE_FORM_URL' => '#',
+               // 'PAGE_FORM_URL' => $edit_url,
                 'PAGE_FORM_NUMBER' => 'Edit'
-            ];
+            ]);
+            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link',[
+                'PAGE_CLASS' => ' btn-warning',
+                'PAGE_FORM_URL' => __URL_PATH__ . "/update.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number,
+                'PAGE_FORM_NUMBER' => 'Update'
+            ]);
+
+            $page_form_html .= template::GetHTML('/form/dropdown/dropdown',['DROPDOWN_LINKS'=>$dropdown_links,
+            'DROPDOWN_TEXT_FORM' => $page_form_number ]);
         } else {
 
             $page_html_params = [
@@ -106,9 +120,10 @@ foreach ($new_forms as $form_number => $parts) {
                 'PAGE_FORM_URL' => __URL_PATH__ . "/form.php?job_id=" . $media->job_id . $form_part,
                 'PAGE_FORM_NUMBER' => $page_form_number
             ];
+        $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
+
         }
 
-        $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
     }
 
     $form_btn_class = ' btn-info';
@@ -118,17 +133,17 @@ foreach ($new_forms as $form_number => $parts) {
         $form_btn_class = ' btn-success';
         //$previous_form_html =' ';
         $next_form_number = $current_form_number;
-    }
-
+    } else {
+    $page_form_html .= template::GetHTML('/form/page_links',[
+        'PAGE_CLASS' => ' btn-warning',
+        'PAGE_FORM_URL' => __URL_PATH__ . "/update.php?job_id=" . $media->job_id,
+        'PAGE_FORM_NUMBER' => 'Update'
+    ]);
+}
     $page_form_html .= template::GetHTML('/form/page_form_submit', [
         'PAGE_CLASS' => $form_btn_class,
         'BUTTON_VALUE' =>  $next_button
     ]);
-
-
-
-
-
 
     $form_html['FORM_URL'] = __URL_PATH__ . "/process.php";
     $form_html["NAME"] = $form_array['job_number'] . " - Form Number " . $form_number . " of " . $max_forms . ' - ' . $config[$form_number]["config"] . ' - ' . $config[$form_number]["bind"];

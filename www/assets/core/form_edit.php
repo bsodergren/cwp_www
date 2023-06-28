@@ -1,11 +1,7 @@
 <?php
-define('NO_NAV',true);
+//require_once('.config.inc.php');
 
-/*
-$job_id = $_REQUEST['job_id'];
-$job  = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
-$media = new Media($job);
-*/
+define('NO_NAV',true);
 
 $form_number = $_REQUEST['form_number'];
 $form_edit['url'] = __URL_PATH__ . "/form_edit.php?job_id=" . $job_id .  "&form_number=" . $form_number;
@@ -28,7 +24,6 @@ if (key_exists("Reset", $_REQUEST))
 
 if (key_exists("submit", $_REQUEST)) {
 
-	
 	foreach ($_REQUEST as $key => $value) {
 
 		if ($key == "job_id") {
@@ -54,18 +49,22 @@ if (key_exists("submit", $_REQUEST)) {
 		if ($value != '') {
 			switch ($action) {
 				case "delete":
-
-					$media->deleteFormRow($id);
-					MediaError::msg("info","Deleting row",$form_edit);
+					if ($value == 1) {
+						$media->deleteFormRow($id);
+						$deleted_id = $id;
+					}
+				//	MediaError::msg("info","Deleting row",$form_edit);
 					break;
 
 				case "split":
-					$form_data =  $media->getFormRow($id);
-					$form_data['count'] = ($form_data['count'] / 2);
-					$media->updateFormRow($id, $form_data);
-					unset($form_data['id']);
-					$media->addFormRow($form_data);
-					MediaError::msg("info","Splitting Form",$form_edit);
+					if ($value == 1) {
+						$form_data =  $media->getFormRow($id);
+						$form_data['count'] = ($form_data['count'] / 2);
+						$media->updateFormRow($id, $form_data);
+						unset($form_data['id']);
+						$media->addFormRow($form_data);
+					}
+				//	MediaError::msg("info","Splitting Form",$form_edit);
 					break;
 
 				case "formletter":
@@ -96,10 +95,12 @@ if (key_exists("submit", $_REQUEST)) {
 			}
 
 			if (isset($data)) {
-				$msg .= var_export($data,1)."<br>";
+			//	$msg .= var_export($data,1)."<br>";
+
 				$media->updateFormRow($id, $data);
 			}
 		}
 	}
 }
+
 MediaError::msg("warning","Updated form <br> " .$msg ,$form_edit);
