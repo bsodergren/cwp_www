@@ -80,8 +80,8 @@ define('__LAYOUT_FOOTER__', __LAYOUT_ROOT__.DIRECTORY_SEPARATOR.'footer.php');
 define('__URL_HOME__', 'http://'.$_SERVER['HTTP_HOST'].__URL_PATH__);
 define('__URL_LAYOUT__', __URL_HOME__.'/assets/layout/');
 
-$__conf_pathCheck = __APP_ROOT__.'/configCheck.php';
-$__conf_checked = __APP_ROOT__.'/.config.true';
+$__conf_pathCheck = __PROJECT_ROOT__.'/configCheck.php';
+$__conf_checked = __PROJECT_ROOT__.'/.config.true';
 
 $includes[] = __ASSETS_DIR__.DIRECTORY_SEPARATOR.'includes.inc.php';
 $includes[] = __ASSETS_DIR__.DIRECTORY_SEPARATOR.'configure.inc.php';
