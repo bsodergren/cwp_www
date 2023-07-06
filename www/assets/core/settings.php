@@ -2,7 +2,7 @@
 
 use Nette\Utils\FileSystem;
 
-define("REFRESH_TIMEOUT", 0);
+HTMLDisplay::$timeout =  0;
 $form = new Formr\Formr('bootstrap4');
 
 if ($form->submitted()) {
@@ -13,15 +13,15 @@ if ($form->submitted()) {
         foreach ($errorArray as $k => $file) {
             FileSystem::delete($file);
         }
-        define("REFRESH_URL", 'index.php');
+        HTMLDisplay::$url =  'index.php';
 
-        echo HTMLDisplay::JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT);
+        echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout);
         exit;
     } else {
-        define("REFRESH_URL", '/settings/settings.php?cat='.$_REQUEST['cat']);
+        HTMLDisplay::$url =  '/settings/settings.php?cat='.$_REQUEST['cat'];
 
         // get our form values and assign them to a variable
- 
+
         foreach ($_POST as $key => $value) {
 
             if ($key == 'submit') {
@@ -55,11 +55,11 @@ if ($form->submitted()) {
                 $key = $pcs[0];
                 $field = "setting_value";
                 $value = trim($value);
-                if ($value != '') {               
+                if ($value != '') {
                     $value =  MediaSettings::save_post_asJson($value);
                 }
-                
-             
+
+
             }
 
 
@@ -74,7 +74,7 @@ if ($form->submitted()) {
             unset($new_settiings['setting_definedName']);
             if ($new_settiings['setting_value'] == '') {
 
-                $new_settiings['setting_value'] = NULL;
+                $new_settiings['setting_value'] = null;
             }
 
             $explorer->table("settings")->insert($new_settiings);

@@ -82,32 +82,50 @@ if ($emails) {
                     $filename = $upload_directory . DIRECTORY_SEPARATOR . $attachment_name;
                     file_put_contents($filename, $attachment['attachment']);
 
-                    $upload_params['EMAIL_IMPORT_ROWS'] .=  template::GetHTML('/import/email_import_row', [
-                        'MAIL_PDF_FILE' => $filename . "|" . $m,
-                        'MAIL_PDF_FILENAME' => $attachment_name,
+                    $pdf_select_options['SELECT_OPTIONS'] .=  template::GetHTML('/import/form_option', [
+                        'OPTION_VALUE' => $filename . "|" . $m,
+                        'OPTION_NAME' => $attachment_name,
                     ]);
 
                 }
             }
         }
-        if ($matched == true) {
+        $pdf_select_options['SELECT_NAME'] = 'mail_file';
+        $pdf_select_options['SELECT_DESC'] =  'Job Name';
+        $mail_import_card['FIRST_FORM'] =  template::GetHTML('/import/form_select', $pdf_select_options);
 
+
+        if ($matched == true) {
             foreach (array_unique($output_array[0]) as $v => $job_number) {
-                $params['EMAIL_JOB_NUMBER_ROWS'] .=  template::GetHTML('/import/email_job_number_row', [
-                    'MAIL_JOB_NUMBER' => $job_number,
+                $jn_select_options['SELECT_OPTIONS'] .=  template::GetHTML('/import/form_option', [
+                    'OPTION_VALUE' => $job_number,
+                    'OPTION_NAME' => $job_number,
                 ]);
             }
-        }
-    }
+            $jn_select_options['SELECT_NAME'] = 'mail_job_number';
+            $jn_select_options['SELECT_DESC'] =  'Job Number';
+            $mail_import_card['SECOND_FORM'] =  template::GetHTML('/import/form_select', $jn_select_options);
 
-    $params['EMAIL_IMPORT_HTML'] =  template::GetHTML('/import/email_import', $upload_params);
+        } else {
+            $mail_import_card['SECOND_FORM'] =  template::GetHTML('/import/form_text', ['JN_NAME' => 'mail_job_number']);
+        }
+
+
+
+    }
+    $mail_import_card['CARD_HEADER'] = "Import from Gmail";
+    $params['EMAIL_IMPORT_HTML'] =  template::GetHTML('/import/form_card', $mail_import_card);
     imap_close($imap);
 }
 
 //	echo $output;
 
 /* close the connection */
-
+$import_card['CARD_HEADER'] = "Import from Computer";
+$import_card['FIRST_FORM'] =  template::GetHTML('/import/form_text', ['JN_NAME' => 'job_number']);
+$import_card['SECOND_FORM'] =  template::GetHTML('/import/form_upload', []);
+$import_card['BUTTON_SUBMIT'] =  template::GetHTML('/import/form_submit', []);
+$params['UPLOAD_IMPORT_HTML'] =  template::GetHTML('/import/form_card', $import_card);
 
 $template->render('import/main', $params);
 

@@ -1,4 +1,5 @@
 <?php
+
 ob_start();
 ob_implicit_flush(true);
 require('.config.inc.php');
@@ -61,10 +62,10 @@ switch (__FORM_POST__) {
         require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
         exit;
         break;
-        case "mail":
-            require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
-            exit;
-            break;
+    case "mail":
+        require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
+        exit;
+        break;
     default:
 
         exit;
@@ -75,11 +76,8 @@ if (!defined("REFRESH_MSG")) {
     define('REFRESH_MSG', '');
 }
 
-if (defined('REFRESH_URL')) {
-    if (!defined('REFRESH_TIMEOUT')) {
-        define('REFRESH_TIMEOUT', 0);
-    }
-    echo HTMLDisplay::JavaRefresh(REFRESH_URL, REFRESH_TIMEOUT,REFRESH_MSG);
+if (HTMLDisplay::$url !== false) {
+    echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, REFRESH_MSG);
     ob_flush();
 }
 

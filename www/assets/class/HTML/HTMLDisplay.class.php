@@ -4,22 +4,24 @@
 
 class HTMLDisplay
 {
+    public static $url = false;
+    public static $timeout = 0;
+    public static $msg = '';
 
-    public static function javaRefresh($url, $timeout = 0, $msg ='' )
+    public static function javaRefresh($url, $timeout = 0, $msg ='')
     {
 
-        $url = str_replace(__URL_PATH__,'', $url);
+        $url = str_replace(__URL_PATH__, '', $url);
         $url = __URL_PATH__ . '/' . $url;
         $url = str_replace("//", "/", $url);
 
-        if($msg != '')
-        {
+        if($msg != '') {
             $sep = '?';
             $msg = urlencode($msg);
-            if(str_contains($url,"?")){
+            if(str_contains($url, "?")) {
                 $sep = '&';
             }
-            
+
             $url = $url . $sep."msg=" . $msg;
         }
 
@@ -28,6 +30,7 @@ class HTMLDisplay
             $update_inv =  $timeout / 100;
             Template::echo("progress_bar", ['SPEED' => $update_inv]);
         }
+
         echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
     }
 
@@ -40,8 +43,8 @@ class HTMLDisplay
             exit;
         }
     }
-    
-    public static function output($var,$nl="")
+
+    public static function output($var, $nl="")
     {
         echo $var . $nl."\n";
         ob_flush();
@@ -69,8 +72,8 @@ class HTMLDisplay
             "CHECKED" =>  $checked,
         ];
 
-        
-        return Template::GetHTML('elements/checkbox',$params);
+
+        return Template::GetHTML('elements/checkbox', $params);
 
     }
 
@@ -85,15 +88,15 @@ class HTMLDisplay
                 "NAME" => $name,
                 "VALUE" =>  $option["value"],
                 "TEXT" =>  $option['text'],
-                "CLASS" =>$option["class"], 
+                "CLASS" =>$option["class"],
                 "CHECKED" =>  $option['checked'],
             ];
 
 
 
-            $html .= Template::GetHTML('elements/radio_button',$params);
-           // $html .= '<input type="radio" class="' . $option["class"] . '" name="' . $name . '" value="' . $option["value"] . '" ' . $option['checked'] . '>' . $option['text'] . ' '.PHP_EOL;
-        
+            $html .= Template::GetHTML('elements/radio_button', $params);
+            // $html .= '<input type="radio" class="' . $option["class"] . '" name="' . $name . '" value="' . $option["value"] . '" ' . $option['checked'] . '>' . $option['text'] . ' '.PHP_EOL;
+
 
         }
         // $html = $html . "<br>"."\n";
@@ -103,5 +106,5 @@ class HTMLDisplay
     {
         return '<input type="hidden" name="' . $name . '" value="' . $value. '">'.PHP_EOL;
     }
-    
+
 }

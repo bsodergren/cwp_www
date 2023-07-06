@@ -1,12 +1,13 @@
 <?php
+
 require_once('.config.inc.php');
 $break = false;
 if ($_POST["submit"] == "Edit") {
-    define("REFRESH_URL", "/form_edit.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $_REQUEST['form_number'] . "");
-    define("REFRESH_TIMEOUT", 0);
+    HTMLDisplay::$url =  "/form_edit.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $_REQUEST['form_number'] . "";
+    HTMLDisplay::$timeout =  0;
     $break = true;
 } else {
-    define("REFRESH_TIMEOUT", 0);
+    HTMLDisplay::$timeout =  0;
     foreach ($_REQUEST as $key => $value) {
         $break = false;
         if (str_starts_with($key, "former")) {
@@ -25,13 +26,13 @@ if ($_POST["submit"] == "Edit") {
         }
     }
 
-    if (array_key_exists("view", $_REQUEST) == TRUE) {
+    if (array_key_exists("view", $_REQUEST) == true) {
         if ($_REQUEST['view'] == "save") {
-            define("REFRESH_URL", "/index.php");
+            HTMLDisplay::$url =  "/index.php";
             define('REFRESH_MSG', 'Form finished');
 
             $media->excelArray();
-            $excel = new MediaXLSX($media,true);
+            $excel = new MediaXLSX($media, true);
             $break = true;
         }
     }
@@ -64,5 +65,5 @@ if ($_POST["submit"] == "Edit") {
             $next_form_number = 1;
         }
     }
-    define("REFRESH_URL",  "/form.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $next_form_number . "");
+    HTMLDisplay::$url =   "/form.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $next_form_number . "";
 }

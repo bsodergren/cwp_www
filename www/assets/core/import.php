@@ -4,8 +4,8 @@ require_once '.config.inc.php';
 
 use Nette\Utils\FileSystem;
 
-define('REFRESH_TIMEOUT', 10);
-define('REFRESH_URL', 'import.php');
+HTMLDisplay::$timeout=10;
+HTMLDisplay::$url ='import.php';
 
 $error = false;
 // Store errors here
@@ -62,11 +62,11 @@ if (isset($_POST['submit'])) {
         HTMLDisplay::output("<span class='p-3 text-danger'>No Job Number </span> <br>");
         $error = true;
     }
-    define('REFRESH_URL', 'import.php');
+    HTMLDisplay::$url ='import.php';
 
     if ($error == false) {
-        define('REFRESH_URL', 'index.php');
-        define('REFRESH_TIMEOUT', 5);
+        HTMLDisplay::$url ='index.php';
+        HTMLDisplay::$timeout=5;
 
         $media_closing = '/'.basename($fileName, '.pdf');
         $locations = new MediaFileSystem($fileName, $job_number);

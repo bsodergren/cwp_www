@@ -1,17 +1,16 @@
 <?php
+
 require_once('.config.inc.php');
 
 use Nette\Utils\FileSystem;
-
 
 if (key_exists('update_job', $_REQUEST)) {
 
 
     $job_number = $_REQUEST['job_number'];
 
-    if (strlen($job_number) != 6)
-    {
-        MediaError::msg("warning","There was a problem <br> the job number was incorrect");
+    if (strlen($job_number) != 6) {
+        MediaError::msg("warning", "There was a problem <br> the job number was incorrect");
     }
 
     $media->delete_xlsx();
@@ -23,7 +22,7 @@ if (key_exists('update_job', $_REQUEST)) {
 
     try {
         if (filesystem::rename($media->base_dir, $mediaLoc->directory) == false) {
-            throw new Nette\IOException;
+            throw new Nette\IOException();
         }
     } catch (Nette\IOException $e) {
         $msg = $e->getMessage();
@@ -33,7 +32,7 @@ if (key_exists('update_job', $_REQUEST)) {
         $media->update_job_number($job_number);
         echo HTMLDisplay::JavaRefresh("/index.php", 0);
     } else {
-        MediaError::msg("warning","There was a problem <br> " . $msg,15);
+        MediaError::msg("warning", "There was a problem <br> " . $msg, 15);
     }
     exit;
 }
@@ -42,16 +41,16 @@ foreach ($_REQUEST as $key => $value) {
 
     switch ($key) {
         case  "email_zip":
-            define('REFRESH_URL', '/mail.php?job_id=' . $job_id);
+            HTMLDisplay::$url = '/mail.php?job_id=' . $job_id;
             break;
         case  "process":
-            define('REFRESH_URL', '/form.php?job_id=' . $job_id);
+            HTMLDisplay::$url = '/form.php?job_id=' . $job_id;
             break;
-            case  "view_xlsx":
-            define('REFRESH_URL', '/view.php?job_id=' . $job_id);
+        case  "view_xlsx":
+            HTMLDisplay::$url = '/view.php?job_id=' . $job_id;
             break;
         case  "create_xlsx":
-            define('REFRESH_TIMEOUT', 3);
+            HTMLDisplay::$timeout = 3;
             include_once __LAYOUT_HEADER__;
             $media->excelArray();
             $excel = new MediaXLSX($media);
@@ -67,7 +66,7 @@ foreach ($_REQUEST as $key => $value) {
             break;
 
         case  "refresh_import":
-            define('REFRESH_TIMEOUT', 3);
+            HTMLDisplay::$timeout = 3;
             $media->delete_xlsx();
             $media->delete_zip();
             $media->delete_form();
@@ -88,13 +87,12 @@ foreach ($_REQUEST as $key => $value) {
             define('REFRESH_MSG', 'XLSX and Zip Deleted');
             break;
         case  "delete_job":
-            define('REFRESH_URL', "/delete_job.php?job_id=" . $job_id);
-            
+            HTMLDisplay::$url = "/delete_job.php?job_id=" . $job_id;
+
             break;
     }
 }
 
-
-if (!defined("REFRESH_URL")) {
-    define('REFRESH_URL', '/index.php');
+if (HTMLDisplay::$url === false) {
+    HTMLDisplay::$url = '/index.php';
 }
