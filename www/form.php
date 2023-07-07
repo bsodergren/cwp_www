@@ -1,4 +1,5 @@
 <?php
+
 require_once(".config.inc.php");
 
 define('TITLE', "Form Editor");
@@ -21,6 +22,7 @@ $form_list = $media->get_form_list();
 
 
 if (array_key_exists("form_number", $_REQUEST)) {
+
     $prev_form_number = $_REQUEST['form_number'] - 1;
     $current_form_number = $_REQUEST['form_number'];
 } else {
@@ -69,7 +71,7 @@ foreach ($result as $idx => $form_array) {
 
 foreach ($new_forms as $form_number => $parts) {
 
-  
+
     $next_button = "Next";
 
     if ($current_form_number != $first_form) {
@@ -86,7 +88,7 @@ foreach ($new_forms as $form_number => $parts) {
         $url_form_number = $list_form_number->form_number;
         $page_html_params = [];
         //if ($n != 0) {
-            $form_part = "&form_number=" . $url_form_number;
+        $form_part = "&form_number=" . $url_form_number;
         //}
 
         $page_form_number = $list_form_number->form_number;
@@ -99,19 +101,19 @@ foreach ($new_forms as $form_number => $parts) {
             ]);
 
             $edit_url = __URL_PATH__ . "/form_edit.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number;
-            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link',[
+            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
                 'PAGE_CLASS' => ' btn-danger',
                 'PAGE_JS' => ' onClick="OpenNewWindow(\'' . $edit_url . '\')" ',
                // 'PAGE_FORM_URL' => $edit_url,
                 'PAGE_FORM_NUMBER' => 'Edit'
             ]);
-            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link',[
+            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
                 'PAGE_CLASS' => ' btn-warning',
                 'PAGE_FORM_URL' => __URL_PATH__ . "/update.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number,
                 'PAGE_FORM_NUMBER' => 'Update'
             ]);
 
-            $page_form_html .= template::GetHTML('/form/dropdown/dropdown',['DROPDOWN_LINKS'=>$dropdown_links,
+            $page_form_html .= template::GetHTML('/form/dropdown/dropdown', ['DROPDOWN_LINKS'=>$dropdown_links,
             'DROPDOWN_TEXT_FORM' => $page_form_number ]);
         } else {
 
@@ -120,7 +122,7 @@ foreach ($new_forms as $form_number => $parts) {
                 'PAGE_FORM_URL' => __URL_PATH__ . "/form.php?job_id=" . $media->job_id . $form_part,
                 'PAGE_FORM_NUMBER' => $page_form_number
             ];
-        $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
+            $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
 
         }
 
@@ -134,12 +136,12 @@ foreach ($new_forms as $form_number => $parts) {
         //$previous_form_html =' ';
         $next_form_number = $current_form_number;
     } else {
-    $page_form_html .= template::GetHTML('/form/page_links',[
-        'PAGE_CLASS' => ' btn-warning',
-        'PAGE_FORM_URL' => __URL_PATH__ . "/update.php?job_id=" . $media->job_id,
-        'PAGE_FORM_NUMBER' => 'Update'
-    ]);
-}
+        $page_form_html .= template::GetHTML('/form/page_links', [
+            'PAGE_CLASS' => ' btn-warning',
+            'PAGE_FORM_URL' => __URL_PATH__ . "/update.php?job_id=" . $media->job_id,
+            'PAGE_FORM_NUMBER' => 'Update'
+        ]);
+    }
     $page_form_html .= template::GetHTML('/form/page_form_submit', [
         'PAGE_CLASS' => $form_btn_class,
         'BUTTON_VALUE' =>  $next_button

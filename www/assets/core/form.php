@@ -64,6 +64,7 @@ if ($_POST["submit"] == "Edit") {
         if ($next_form_number < 0) {
             $next_form_number = 1;
         }
+        HTMLDisplay::$url =   "/form.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $next_form_number . "";
     }
-    HTMLDisplay::$url =   "/form.php?job_id=" . $_REQUEST['job_id'] . "&form_number=" . $next_form_number . "";
+
 }
