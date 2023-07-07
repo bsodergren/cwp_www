@@ -3,19 +3,30 @@
 
 use Nette\Utils\FileSystem;
 
-
 class MediaUpdate
 {
- 
     public $table_name;
     public $refresh = false;
     protected $conn;
-    
+
     public function versionUpdate($file)
     {
+
+        $new_table = [];
+        $update_data = [];
+        $new_data = [];
+        $rename_column = [];
+        $new_column = [];
+
         include_once($file);
 
-        $updates = ['newTable' => $new_table, 'updateColumns' => $rename_column, 'newColumn' => $new_column, 'newData' => $new_data, 'updateData' => $update_data,];
+        $updates = [
+            'newTable' => $new_table,
+            'updateColumns' => $rename_column,
+            'newColumn' => $new_column,
+            'newData' => $new_data,
+            'updateData' => $update_data,
+        ];
 
         foreach ($updates as $classmethod => $data_array) {
 
@@ -38,7 +49,7 @@ class MediaUpdate
         if (is_array($new_data)) {
 
             foreach ($new_data as $table => $new_data_vals) {
-              
+
 
                 $u = $this->conn->query('INSERT INTO ' . $table . ' ?', $new_data_vals);
                 $this->refresh = true;
@@ -168,23 +179,23 @@ class MediaUpdate
 
         if (!file_exists(__SQLITE_DATABASE__)) {
             FileSystem::createDir(__SQLITE_DIR__);
-            
+
             $connection = new Nette\Database\Connection(__DATABASE_DSN__);
             $_default_sql_dir = FileSystem::normalizePath(__SQLLITE_DEFAULT_TABLES_DIR__);
             $file_tableArray = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql', 0);
-        
-        
+
+
             foreach ($file_tableArray as $k => $sql_file) {
                 $table_name = str_replace("cwp_table_", "", basename($sql_file, ".sql"));
                 $connection->query("drop table if exists " . $table_name);
                 Nette\Database\Helpers::loadFromFile($connection, $sql_file);
             }
-        
+
             Nette\Database\Helpers::loadFromFile($connection, $_default_sql_dir . '/cwp_data.sql');
-        
+
             return true;
-            
-        } 
+
+        }
 
         return false;
 

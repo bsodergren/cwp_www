@@ -12,7 +12,6 @@ use Nette\Utils\FileSystem;
  */
 class Media
 {
-
     protected $exp;
     protected $conn;
     private $mediaLoc;
@@ -71,7 +70,6 @@ class Media
             $result = $this->get_drop_form_data($form_number, $sort);
 
             foreach ($result as $row_id => $form_row) {
-
                 $current_form_letter = $form_row["form_letter"];
 
                 if ($prev_form_letter != $current_form_letter) {
@@ -97,6 +95,9 @@ class Media
                 if ($form_row["former"] == "Back") {
                     $total_back_peices = $total_back_peices + $form_row["count"];
                     $this->MediaArray[$form_number][$form_row["former"]][$form_row["form_letter"]][99] = array(
+                        "form_id" => $form_row["id"],
+                        "job_id" => $this->job_id,
+                        "form_number" => $form_row["form_number"].$form_row["form_letter"],
                         "market" => $form_row["market"],
                         "pub" => $form_row["pub"],
                         "count" => $total_back_peices,
@@ -108,6 +109,9 @@ class Media
                     );
                 } else {
                     $this->MediaArray[$form_number][$form_row["former"]][$form_row["form_letter"]][] = array(
+                        "form_id" => $form_row["id"],
+                        "form_number" => $form_row["form_number"].$form_row["form_letter"],
+                        "job_id" => $this->job_id,
                         "market" => $form_row["market"],
                         "pub" => $form_row["pub"],
                         "count" => $form_row["count"],
@@ -201,7 +205,7 @@ class Media
 
 
 
-    public  function get_drop_details($form_number = '')
+    public function get_drop_details($form_number = '')
     {
 
         $form = '';
@@ -224,7 +228,7 @@ class Media
         return $form_config;
     }
 
-    public  function get_drop_form_data($form_number = '', $sort = array())
+    public function get_drop_form_data($form_number = '', $sort = array())
     {
         $add = '';
 
@@ -275,13 +279,13 @@ class Media
     }
 
 
-    public  function get_Job($job_id)
+    public function get_Job($job_id)
     {
         $table = $this->exp->table("media_job");
         return $table->get($job_id);
     }
 
-    public  function get_form_configuration($data)
+    public function get_form_configuration($data)
     {
         $config = $data["config"];
         list($bind_type, $jog, $carton_code) = str_split($data['bind']);
@@ -434,9 +438,14 @@ class Media
         $this->conn->query('DELETE FROM  form_data WHERE id = ?', $id);
     }
 
+    public function deleteSlipSheets()
+    {
+        $this->exp->table("form_data_count")->where('job_id', $this->job_id)->delete();
+    }
 
     public function add_form_details($form_array)
     {
+
         $this->exp->table("media_forms")->insert($form_array);
     }
 
@@ -458,5 +467,3 @@ class Media
         }
     }
 }
-
-

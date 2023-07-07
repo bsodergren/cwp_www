@@ -57,6 +57,12 @@ foreach ($_REQUEST as $key => $value) {
             ob_flush();
             define('REFRESH_MSG', 'XLSX Files Created');
             break;
+        case  "create_slip":
+            include_once __LAYOUT_HEADER__;
+            $slipsheets = new SlipSheetXLSX($media);
+            ob_flush();
+            define('REFRESH_MSG', 'Slip file Created');
+            break;
         case  "create_zip":
             $xlsx_dir = $media->xlsx_directory;
             $zip_file =  $media->zip_file;
@@ -68,6 +74,7 @@ foreach ($_REQUEST as $key => $value) {
         case  "refresh_import":
             HTMLDisplay::$timeout = 3;
             $media->delete_xlsx();
+            $media->deleteSlipSheets();
             $media->delete_zip();
             $media->delete_form();
             include_once __LAYOUT_HEADER__;
@@ -83,6 +90,7 @@ foreach ($_REQUEST as $key => $value) {
             break;
         case  "delete_xlsx":
             $media->delete_xlsx();
+            $media->deleteSlipSheets();
             $media->delete_zip();
             define('REFRESH_MSG', 'XLSX and Zip Deleted');
             break;

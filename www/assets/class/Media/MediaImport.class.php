@@ -2,7 +2,6 @@
 
 class MediaImport extends Media
 {
-
     public $job_id = '';
     public $status = '';
     protected $conn;
@@ -61,4 +60,3 @@ class MediaImport extends Media
         $this->status = 1;
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 use Sinergi\BrowserDetector\Browser;
 
 class Footer extends Template
@@ -8,14 +9,15 @@ class Footer extends Template
     public static function display($template = '', $params = [])
     {
         $templateObj = new Template();
-        
-        if(MediaSettings::isSet('__FOOTER_NAV_HTML__'))
-        {
-            $params['FOOT_NAV_PANEL'] = $templateObj->template("base/" ."footer/settings_nav",
-            ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__]);
+
+        if(MediaSettings::isSet('__FOOTER_NAV_HTML__')) {
+            $params['FOOT_NAV_PANEL'] = $templateObj->template(
+                "base/" ."footer/settings_nav",
+                ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__]
+            );
         }
 
-  
+
         if (MediaSettings::isTrue('__SHOW_DEBUG_PANEL__')) {
             $errorArray = getErrorLogs();
             $debug_nav_link_html = '';
@@ -33,7 +35,7 @@ class Footer extends Template
 
             $params['DEBUG_PANEL_HTML'] = $templateObj->template("base/"."footer/debug_panel", $debug_panel_params);
         }
-        
+
         $params['END_JAVASCRIPT'] = Template::GetHTML("base/" ."footer/javascript");
 
         echo $templateObj->template("base/" ."footer/footer", $params);

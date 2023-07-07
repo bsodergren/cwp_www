@@ -3,8 +3,6 @@
 
 class MediaDisplay extends HTMLDisplay
 {
-
-
     public function display_table_rows($array, $letter)
     {
         $html = '';
@@ -52,7 +50,7 @@ class MediaDisplay extends HTMLDisplay
                 "COUNT" => $part["count"],
                 "SHIP" => $part["ship"],
                 "RADIO_BTNS" => $radio_check,
-                "FACE_TRIM" => $this->draw_checkbox("facetrim_" . $part["id"], $facetrim , 'Face Trim'),
+                "FACE_TRIM" => $this->draw_checkbox("facetrim_" . $part["id"], $facetrim, 'Face Trim'),
                 "NO_TRIM" => $this->draw_checkbox("nobindery_" . $part["id"], $nobindery, 'No Trimmers')
             );
 

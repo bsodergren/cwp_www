@@ -3,11 +3,8 @@
 
 use Sinergi\BrowserDetector\Browser;
 
-
 class Navbar extends Template
 {
-
-
     public static function display($template = '', $params = [])
     {
         $templateObj = new Template();
@@ -39,13 +36,13 @@ class Navbar extends Template
 
                 continue;
             }
-            
-            
+
+
             $nav_link_html .= $templateObj->template("base/" ."navbar/navbar_item_link", ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text]);
         }
-        
+
         if ($browser->getVersion() == '57.0.2987.98') {
-            define('__FOOTER_NAV_HTML__',$dropdown_link_html);
+            define('__FOOTER_NAV_HTML__', $dropdown_link_html);
         }
 
 

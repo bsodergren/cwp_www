@@ -2,22 +2,18 @@
 
 class MediaError
 {
-
     public static function msg($severity, $msg = "", $refresh = 5)
     {
         $url = "/index.php";
         $timeout = $refresh;
 
-        if(is_array($refresh))
-        {
+        if(is_array($refresh)) {
             $timeout = 0;
-            if(key_exists('url',$refresh))
-            {
+            if(key_exists('url', $refresh)) {
                 $url = $refresh['url'];
             }
 
-            if(key_exists('timeout',$refresh))
-            {
+            if(key_exists('timeout', $refresh)) {
                 $timeout = $refresh['timeout'];
             }
         }
@@ -27,8 +23,7 @@ class MediaError
             Template::echo("error/" . $severity, ['MSG' => $msg]);
         }
 
-        HTMLDisplay::javaRefresh($url,$timeout);
+        HTMLDisplay::javaRefresh($url, $timeout);
         exit;
     }
 }
-?>

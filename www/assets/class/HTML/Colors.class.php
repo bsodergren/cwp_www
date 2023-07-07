@@ -1,7 +1,7 @@
 <?php
+
 class Colors
 {
-
     private $foreground_colors = [];
 
     private $background_colors = [];
@@ -59,7 +59,8 @@ class Colors
     public function getColoredSpan($string, $foreground_color = null, $background_color = null)
     {
         $this->fg_color = $foreground_color;
-        $colored_string = '<span style="' . $this->getClassColor() . '">' . $string . '</span>';;
+        $colored_string = '<span style="' . $this->getClassColor() . '">' . $string . '</span>';
+        ;
         return $colored_string;
     } //end getColoredHTML()
 

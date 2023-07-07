@@ -1,4 +1,5 @@
 <?php
+
 use Nette\Utils\FileSystem;
 
 class MediaFileSystem
@@ -34,7 +35,10 @@ class MediaFileSystem
 
             $filename = $filename . "_FM" . $form_number . '.xlsx';
         }
+        if (strtolower($type) == 'slips') {
 
+            $filename =  $filename . '_CountSlips.xlsx';
+        }
         if (strtolower($type) == 'zip') {
 
             if ($form_number != '') {
@@ -42,15 +46,14 @@ class MediaFileSystem
             } else {
                 $filename =  $filename . ".zip";
             }
-       }
+        }
         if (strtolower($type) == 'pdf') {
             $filename =  $this->pdf_file;
 
         }
 
-        if($type != '')
-        {
-             $directory = $this->__directory($type, $create_dir);
+        if($type != '') {
+            $directory = $this->__directory($type, $create_dir);
         }
 
 
@@ -63,8 +66,7 @@ class MediaFileSystem
     {
         $output_filename = '';
 
-        if($this->__filename() !== false)
-        {
+        if($this->__filename() !== false) {
             $output_filename = DIRECTORY_SEPARATOR  . $this->__filename();
         }
 
@@ -73,17 +75,22 @@ class MediaFileSystem
         if (strtolower($type) == 'xlsx') {
             $directory =  $output_filename . __XLSX_DIRECTORY__;
         }
+
+        if (strtolower($type) == 'slips') {
+            $directory =  $output_filename . __XLSX_DIRECTORY__;
+        }
+
         if (strtolower($type) == 'pdf') {
             $directory =  $output_filename . __PDF_UPLOAD_DIR__;
         }
         if (strtolower($type) == 'zip') {
             $directory =  $output_filename .  __ZIP_FILE_DIR__;
         }
-        
+
         if (strtolower($type) == 'upload') {
             $directory = __EMAIL_PDF_UPLOAD_DIR__;
         }
-        
+
         $directory = __FILES_DIR__ . $directory;
 
         $this->directory = FileSystem::normalizePath($directory);
@@ -102,5 +109,3 @@ class MediaFileSystem
 
 
 }
-
-

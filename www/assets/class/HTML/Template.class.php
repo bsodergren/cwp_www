@@ -2,7 +2,6 @@
 
 class Template
 {
-
     public static $static_html;
     public $html = '';
     public $header_html = '';

@@ -2,9 +2,9 @@
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\DateTime;
+
 class log
 {
-
     public static function append(string $file, string $content, ?int $mode = 0666): void
     {
 
@@ -21,7 +21,6 @@ class log
 
 class MediaLogger
 {
-
     public static function getErrorLogs()
     {
         $err_array = [];
@@ -33,7 +32,7 @@ class MediaLogger
                         $err_array[] = filesystem::normalizePath(__ERROR_LOG_DIRECTORY__ . '/' . $file);
                     } //end if
                 } //end if
-            } //end while    
+            } //end while
             closedir($all);
         } //end if
 
@@ -126,7 +125,7 @@ class MediaLogger
         }
     }
 
-    public static function echo ($msg, $var = '', $indent = 0)
+    public static function echo($msg, $var = '', $indent = 0)
     {
 
         $color = new Colors();
@@ -147,12 +146,12 @@ class MediaLogger
     }
 
 
-    public static function printCode($array, $path = FALSE, $top = TRUE)
+    public static function printCode($array, $path = false, $top = true)
     {
         $data = "";
         $delimiter = "~~|~~";
 
-        $p = NULL;
+        $p = null;
         if (is_array($array)) {
             foreach ($array as $key => $a) {
                 if (!is_array($a) || empty($a)) {
@@ -162,7 +161,7 @@ class MediaLogger
                         $data .= $path . "['{$key}'] = \"" . htmlentities(addslashes($a)) . "\";" . $delimiter;
                     }
                 } else {
-                    $data .= self::printCode($a, $path . "['{$key}']", FALSE);
+                    $data .= self::printCode($a, $path . "['{$key}']", false);
                 }
             }
         }

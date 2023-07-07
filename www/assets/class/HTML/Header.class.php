@@ -4,8 +4,6 @@
 
 class Header extends Template
 {
-
-
     public static function display($template = "", $params = [])
     {
 
@@ -14,22 +12,22 @@ class Header extends Template
             $path = "/" . __FORM_POST__;
         }
 
-            if (file_exists(__TEMPLATE_DIR__ . $path . "/javascript.html")) {
-                define('__CUSTOM_JS__', Template::GetHTML($path . "/javascript"));
-            }
+        if (file_exists(__TEMPLATE_DIR__ . $path . "/javascript.html")) {
+            define('__CUSTOM_JS__', Template::GetHTML($path . "/javascript"));
+        }
 
-            if (file_exists(__TEMPLATE_DIR__ . $path . "/onload.html")) {
-                define('__ONLOAD__', Template::GetHTML($path . "/onload"));
-            }
+        if (file_exists(__TEMPLATE_DIR__ . $path . "/onload.html")) {
+            define('__ONLOAD__', Template::GetHTML($path . "/onload"));
+        }
         if (!MediaSettings::isTrue('NO_NAV')) {
             $params['__NAVBAR__'] = Navbar::Display();
         }
 
-      
+
 
         $params['BOOTSTRAP'] = Template::GetHTML("base/header/bootstrap_5");
-        if(!key_exists("CUSTOM_CSS",$params)){
-        $params['DEFAULT_CSS'] = Template::GetHTML("base/" ."header/css");
+        if(!key_exists("CUSTOM_CSS", $params)) {
+            $params['DEFAULT_CSS'] = Template::GetHTML("base/" ."header/css");
         }
 
         $templateObj = new Template();
@@ -40,12 +38,11 @@ class Header extends Template
 
     public static function displayMsg()
     {
-        
-        if(key_exists('msg',$GLOBALS['_REQUEST']))
-        {
-          
-            return Template::GetHTML("base/" ."header/return_msg",['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])]);
-          
+
+        if(key_exists('msg', $GLOBALS['_REQUEST'])) {
+
+            return Template::GetHTML("base/" ."header/return_msg", ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])]);
+
         }
         return "";
 
