@@ -47,6 +47,8 @@ define("__EMAIL_PDF_UPLOAD_DIR__", DIRECTORY_SEPARATOR . "uploads");
 define("__PDF_UPLOAD_DIR__", DIRECTORY_SEPARATOR . "pdf");
 define("__ZIP_FILE_DIR__", DIRECTORY_SEPARATOR . "zip");
 define("__XLSX_DIRECTORY__", DIRECTORY_SEPARATOR . "xlsx");
+define("__XLSX_SLIPS_DIRECTORY__", DIRECTORY_SEPARATOR . __XLSX_DIRECTORY__ . DIRECTORY_SEPARATOR . "slipsheets");
+
 
 $template = new Template();
 

@@ -1,22 +1,27 @@
 <?php
 
 
-class SlipSheetXLSX_Styles extends SlipSheetXLSX
+class SlipSheetXLSX_Styles extends Styles
 {
     public $colWidth = 0.875;
+    public $colWidthUnits = 'in';
     public $totalPages;
 
-    public function __construct(&$object)
-    {
-        $this->obj = $object;
-    }
+    public $obj;
+    public $totalRows;
+
+
+    public $Columns = ['A','B','C','D','E','F','G','H'];
+    public $rowHeight = [5,30,30,25,25,30,30,30,5];
+
+
+   
 
 
     public function sheetCommon()
     {
         global $connection;
-        $w = 40;
-        $w2 = 10;
+      
 
         $this->obj->getPageSetup()->setHorizontalCentered(true);
         $this->obj->getPageSetup()->setVerticalCentered(false);
@@ -25,22 +30,22 @@ class SlipSheetXLSX_Styles extends SlipSheetXLSX
         $this->obj->getPageMargins()->setLeft(0.25);
         $this->obj->getPageMargins()->setBottom(0.25);
 
-        $this->totalRows = $this->totalPages * 21;
 
-        $PageBreak = 21;
-        $pageBreakIdx = 1;
+        $row_height = $this->rowHeight;
+        $SlipSheetBreak = count($row_height);
+        $PageBreak = $SlipSheetBreak;
+        $this->totalRows = $this->totalPages * ($SlipSheetBreak * 3);
 
-        $SlipSheetBreak = 7;
-        $SlipSheetidx = 1;
 
-        $row_height = array($w,$w,$w,$w,$w,$w,$w2);
         $rowHeightIdx = 0;
-
+        $pageBreakIdx = 1;
+        $SlipSheetidx = 1;
         $mergeidx = 1;
+
 
         for($row=1; $row <= $this->totalRows; $row++) {
 
-            if($rowHeightIdx == count($row_height)) {
+            if($rowHeightIdx == $SlipSheetBreak ) {
                 $rowHeightIdx = 0;
             }
 
@@ -70,36 +75,47 @@ class SlipSheetXLSX_Styles extends SlipSheetXLSX
                 $pageBreakIdx = 0;
             }
 
-            if($mergeidx >= 1 && $mergeidx <= 2) {
+            switch($mergeidx) {
+                
+                case 1:
+                    $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
+                    break;
+                case 2:
 
-                $styleProps['setFont'][] = ['cell' => 'A'.$row, 'size' => 32];
-                $styleProps['setBold'][] = 'A'.$row;
-                $styleProps['setAlign'][] = 'A'.$row;
-                $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
+                    case 3:
+                    $styleProps['setSize'][] = ['cell' => 'A'.$row, 'size' => 32];
+                    $styleProps['setBold'][] = 'A'.$row;
+                    $styleProps['setAlign'][] = 'A'.$row;
+                    $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
+                    break;
 
+                
+                case 4:
+                    case 5:
+                    $styleProps['setSize'][] = ['cell' => 'A'.$row, 'size' => 16];
+                    $styleProps['setBold'][] = 'A'.$row;
+                    $styleProps['setAlign'][] = 'A'.$row;
+                    $styleProps['setAlign'][] = 'A'.$row;
+                    $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
+                    break;
+
+                case 6: 
+                    case 7:
+                         case 8:
+                    $styleProps['setSize'][] = ['cell' => 'A'.$row, 'size' => 26];
+                    $styleProps['setSize'][] = ['cell' => 'C'.$row, 'size' => 26];
+                    $styleProps['setAlign'][] = 'C'.$row;
+                    $styleProps['setBold'][] = 'A'.$row;
+                    $styleProps['setMerge'][] = 'A'.$row.":".'B'.$row;
+                    $styleProps['setMerge'][] = 'C'.$row.":".'D'.$row;
+                    break;
+
+                default:
+                    $mergeidx = 0;
+                    break;
             }
 
-            if($mergeidx == 3) {
-                $styleProps['setFont'][] = ['cell' => 'A'.$row, 'size' => 16];
-                $styleProps['setBold'][] = 'A'.$row;
-                $styleProps['setAlign'][] = 'A'.$row;
-                $styleProps['setAlign'][] = 'A'.$row;
-                $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
-            }
 
-            if($mergeidx >= 4 && $mergeidx <= 6) {
-                $styleProps['setFont'][] = ['cell' => 'A'.$row, 'size' => 26];
-                $styleProps['setFont'][] = ['cell' => 'C'.$row, 'size' => 26];
-                $styleProps['setAlign'][] = 'C'.$row;
-                $styleProps['setBold'][] = 'A'.$row;
-                $styleProps['setMerge'][] = 'A'.$row.":".'B'.$row;
-                $styleProps['setMerge'][] = 'C'.$row.":".'D'.$row;
-
-            }
-
-            if($mergeidx == 7) {
-                $mergeidx = 0;
-            }
             $mergeidx++;
 
 
@@ -117,48 +133,9 @@ class SlipSheetXLSX_Styles extends SlipSheetXLSX
 
     }
 
-    public function setPageBreak($cell)
-    {
-        $this->obj->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
-    }
-    public function setHeight($array)
-    {
-        $this->obj->getRowDimension($array['cell'])->setRowHeight($array['height']);
-    }
-    public function setBorder($cell)
-    {
-        $this->cellBorder($cell, "outline");
-    }
+ 
 
 
-    public function setFont($array)
-    {
-        $this->obj->getStyle($array['cell'])->getFont()->setSize($array['size']);
-        $this->obj->getStyle($this->RightBlock($array['cell']))->getFont()->setSize($array['size']);
-    }
-
-    public function setBold($cell)
-    {
-        $this->obj->getStyle($cell)->getFont()->setBold(1);
-        $this->obj->getStyle($this->RightBlock($cell))->getFont()->setBold(1);
-
-
-
-    }
-    public function setAlign($cell)
-    {
-        $this->obj->getStyle($cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $this->obj->getStyle($this->RightBlock($cell))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-    }
-
-    public function setMerge($cell)
-    {
-        $this->obj->mergeCells($cell);
-        $this->obj->mergeCells($this->RightBlock($cell));
-
-
-    }
 
     public function RightBlock($cell)
     {
@@ -170,53 +147,12 @@ class SlipSheetXLSX_Styles extends SlipSheetXLSX
 
     }
 
-    /*
-            $this->obj->mergeCells('B6:C6');
-            $this->obj->mergeCells('B7:C7');
-
-            $this->obj->setCellValue($col, $text);
-
-            $this->obj->getStyle($col)->getFont()->setBold($bold);
-            $this->obj->getStyle($col)->getFont()->setSize($font_size);
-
-
-            $this->obj->getStyle($col)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $this->obj->getStyle($col)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-    */
-
-
-
-
-
-
-
-    public function cellBorder($cell, $border = "outline")
-    {
-        $styleArray = [
-            'borders' => [
-                $border => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
-                    'color' => ['argb' => '00000000'],
-                ],
-
-            ],
-        ];
-
-        $this->obj->getStyle($cell)->applyFromArray($styleArray);
-    }
-
-
     public function addSheetData($text, $cell)
     {
-        $this->obj->setCellValue($cell, $text);
+        $this->setCellText($cell, $text);
     }
 
-    public function setColWidths()
-    {
-        $cols = ['A','B','C','D','E','F','G','H'];
-        foreach($cols as $id) {
-            $this->obj->getColumnDimension($id)->setWidth($this->colWidth, 'in');
-        }
 
-    }
+ 
+
 }

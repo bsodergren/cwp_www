@@ -13,12 +13,15 @@ class MediaXLSX extends Media
 {
     protected object $spreadsheet;
     protected object $media;
+    public $xlsx_array;
 
     public function __construct($media, $quiet = false)
     {
 
         $this->media = $media;
         $this->exp = $media->exp;
+        $this->conn = $media->conn;
+
 
         $this->xlsx_array = $media->MediaArray;
 
@@ -27,9 +30,13 @@ class MediaXLSX extends Media
         $this->job_number = $this->xlsx_array[$keyidx]["job_number"];
         $this->pdf_file = $this->xlsx_array[$keyidx]["pdf_file"];
         $this->job_id = $this->xlsx_array[$keyidx]["job_id"];
+    }
+    public function writeWorkbooks()
+    {
 
         foreach ($this->xlsx_array as $form_number => $data) {
             $this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $slipSheet = new SlipSheetXLSX($this->media);
             $s_idx = 0;
 
             $this->media->get_form_configuration($data);
@@ -80,9 +87,16 @@ class MediaXLSX extends Media
                 }
             }
 
+
+            $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
+
+            $sheetIndex = $this->spreadsheet->getIndex(
+                $this->spreadsheet->getSheetByName('Worksheet')
+            );
+            $this->spreadsheet->removeSheetByIndex($sheetIndex);
             $this->spreadsheet->setActiveSheetIndex(0);
             $writer = new Xlsx($this->spreadsheet);
-            $new_xlsx_file = $media->getfilename('xlsx', $form_number, true);
+            $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
             $writer->save($new_xlsx_file);
             if($quiet === false) {
                 HTMLDisplay::output("Writing " . basename($new_xlsx_file), "<br>");
@@ -92,7 +106,7 @@ class MediaXLSX extends Media
             unset($this->spreadsheet);
         }
 
-        $this->exp->table('media_job')->where('job_id', $media->job_id)->update(['xlsx_exists' => 1]);
+        $this->exp->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
     }
 
     public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
@@ -109,8 +123,12 @@ class MediaXLSX extends Media
 
         if ($delivery  == "back" || $this->form_details['face_trim'] == 1) {
             if ($this->form_details['no_bindery'] != 1) {
-                $this->form_details['market'] = __LANG_BINDERY;
+                $this->form_details['market'] = "";
                 $ship_value = __LANG_BINDERY;
+                if($this->form_details['face_trim'] == 1) {
+                    $ship_value = __LANG_BINDERY_FACETRIM;
+                }
+
                 $bindery_trim = true;
             }
         }
@@ -122,112 +140,74 @@ class MediaXLSX extends Media
         $sheet = $sheetObj->getSheet($sheet_index);
 
         $sheet->getHeaderFooter()->setOddHeader('&36&B ' . __LANG_MEDIA_LOAD_FLAG);
+        $sheet->getHeaderFooter()->setOddFooter('&L&B' . __LANG_MEDIA_LOAD_FLAG . '&RPage &P of &N');
+
+        $form['job_number'] =  $this->form_details['job_number'];
+        $form['market'] =  $this->form_details['market'];
+        $form['pub_value'] =  $pub_value;
+        $form['ship_value'] =  $ship_value;
+        $form['form_number'] =  $form_number;
+        $form['form_letter'] =  $form_letter;
+        $form['bindery_trim'] = $bindery_trim;
+
+        $form['page_conf'] = $this->media->form_configuration['configuration'] . " " . $this->media->form_configuration['paper_wieght'] . "#";
+
 
         $styles = new MediaXLSX_Styles($sheet);
-        $styles->setColWidths();
-        $styles->setRowHeights();
-        $styles->sheetCommon();
-
-
-        $sheet->setCellValue('B6', $this->form_details['job_number']);
-        $sheet->setCellValue('B7', $this->form_details['market']);
-        $sheet->setCellValue('B8', $pub_value);
-        $sheet->setCellValue('B9', $ship_value);
-        $sheet->getStyle('B7')->getAlignment()->setShrinkToFit(true);
-
-        $sheet->setCellValue('D6', $form_number . "" . $form_letter);
-
-        $styles->cellBorder("A6:C10", "allBorders");
-        $styles->cellBorder("D6", "outline");
-
-        $sheet->setCellValue('D7', $this->media->form_configuration['configuration'] . " " . $this->media->form_configuration['paper_wieght'] . "#");
 
         $count = str_replace(",", "", $this->form_details['count']);
+        $sheet_labels = [
+            '13' => [$lift_size, __LANG_LIFT_SIZE],
+            '21' => [$count, __LANG_TOTAL_COUNT]
+        ];
 
-        $labels = array();
-
-        $sheet_labels = array(
-            '13' => array($lift_size, __LANG_LIFT_SIZE),
-            '21' => array($count, __LANG_TOTAL_COUNT )
-        );
-
-
-        $sheet->getStyle('B21')->getNumberFormat()->setFormatCode('#,##0');
 
         if (($packaging == "small cartons" || $packaging == "large cartons")) { // $delivery == "front" )
-            $sheet->setCellValue('B10', $packaging);
+            $form['packaging'] = $packaging;
 
             $labels['14'] = __LANG_LIFTS_PER_CARTON;
-            $sheet_labels['15'] = array($layers_last_box, __LANG_PCS_PER_CARTON);
+            $sheet_labels['15'] = [$layers_last_box, __LANG_PCS_PER_CARTON];
 
-            $sheet_labels['17'] = array($full_boxes, __LANG_FULL_CARTON);
+            $sheet_labels['17'] = [$full_boxes, __LANG_FULL_CARTON];
             $total_boxes = $full_boxes;
 
             if ($lifts_last_layer > 0) {
 
-                $sheet_labels['18'] = array($lifts_last_layer, __LANG_CNT_LAST_CARTON);
+                $sheet_labels['18'] = [$lifts_last_layer, __LANG_CNT_LAST_CARTON];
                 $total_boxes = $full_boxes + 1;
             } else {
-                $sheet_labels['18'] = array("0", __LANG_CNT_LAST_CARTON);
+                $sheet_labels['18'] = ["0", __LANG_CNT_LAST_CARTON];
             }
 
-            $sheet_labels['19'] = array($total_boxes, __LANG_TOTAL_CARTONS);
+            $sheet_labels['19'] = [$total_boxes, __LANG_TOTAL_CARTONS];
         } else {
+            $form['packaging'] = $packaging . " skid";
             //Skid packaging: half/full
-            $sheet->setCellValue('B10', $packaging . " skid");
             $labels['14'] = "Lifts per Layer";
-            $sheet_labels['15'] = array($layers_per_skid, __LANG_LAYERS_PER_SKID);
+            $sheet_labels['15'] = [$layers_per_skid, __LANG_LAYERS_PER_SKID];
 
 
             // Lifts per Carton
             // Number of Layers
             if ($full_boxes > 0) {
-                $sheet_labels['17'] = array($full_boxes, __LANG_NUMBER_OF_FULL_BOXES);
+                $sheet_labels['17'] = [$full_boxes, __LANG_NUMBER_OF_FULL_BOXES];
             }
 
             if (isset($skid_count)) {
-                $sheet->setCellValue('D8', $skid_count);
+                $form['slid_count'] = $skid_count;
+
+
             }
 
-            $sheet_labels['18'] = array($layers_last_box,__LANG_NUMBER_OF_FULL_LAYERS );
+            $sheet_labels['18'] = [$layers_last_box,__LANG_NUMBER_OF_FULL_LAYERS ];
             if ($lifts_last_layer > 0) {
-                $sheet_labels['19'] = array($lifts_last_layer, __LANG_LIFTS_LAST_LAYER);
+                $sheet_labels['19'] = [$lifts_last_layer, __LANG_LIFTS_LAST_LAYER];
             }
         }
+        $sheet_labels['14'] = [$lifts_per_layer, $labels['14']];
 
+        $styles->createPage($form, $sheet_labels, 3);
 
-        $sheet_labels['14'] = array($lifts_per_layer, $labels['14']);
-
-        foreach ($sheet_labels as $key => $val) {
-            $styles->addSheetData($val[0], $val[1], "A" . $key, "B" . $key);
-        }
-
-
-
-        $styles->cellBorder("A10", "bottom");
-        $styles->cellBorder("A10", "right");
-        $styles->cellBorder("B10", "bottom");
-        /*
-    if ($full_boxes == 0 )
-    {
-        $sheet->setCellValue('B16', $layers_last_box);
-        // lifts last layer
-        $sheet->setCellValue('B17', $lifts_last_layer);
-    } else {
-        $sheet->setCellValue('B15', $layers_last_box);
-        $sheet->setCellValue('B16', $full_boxes);
-
-    }
-
-    if ($lifts_last_layer > 0 ) {
-        $sheet->setCellValue('B17', $lifts_last_layer);
-    }
-    */
-        if ($bindery_trim == true) {
-            $sheet->setCellValue('A24', __LANG_BINDERY);
-            $sheet->setCellValue('A25', __LANG_BINDERY);
-            $sheet->setCellValue('A26', __LANG_BINDERY);
-        }
     }
 
 
@@ -251,8 +231,6 @@ class MediaXLSX extends Media
 
     public function calculateBox()
     {
-
-
 
         $face_trim = $this->form_details["face_trim"];
 
@@ -349,9 +327,12 @@ class MediaXLSX extends Media
 
         $form_box_data = $this->box;
         $form_box_data['form_number'] = $this->form_details['form_number'];
+        $form_box_data['form_letter'] = $this->form_details['form_letter'];
         $form_box_data['count'] = $this->form_details['count'];
         $form_box_data['job_id'] = $this->form_details['job_id'];
         $form_box_data['market'] = $this->form_details['market'];
+        $form_box_data['pub'] = $this->form_details['pub'];
+
         $form_box_data['former'] = $this->form_details['former'];
         $count = $this->exp->table('form_data_count')
             ->where('form_id', $this->form_details['form_id'])
@@ -361,7 +342,5 @@ class MediaXLSX extends Media
             $count = 	$this->exp->table("form_data_count")->insert($form_box_data);
         }
     }
-
-
 
 }

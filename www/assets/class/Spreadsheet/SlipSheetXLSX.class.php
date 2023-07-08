@@ -1,5 +1,6 @@
 <?php
 
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -13,6 +14,9 @@ class SlipSheetXLSX extends Media
 {
     protected object $spreadsheet;
     protected object $media;
+    private object $SlipData;
+    private object $styles;
+
 
     public $slipSheetArray;
 
@@ -21,44 +25,56 @@ class SlipSheetXLSX extends Media
         $this->media = $media;
         $this->exp = $media->exp;
         $this->conn = $media->conn;
-
-        $result = $this->conn->fetchAll("SELECT * FROM form_data_count WHERE job_id = " . $media->job_id ." order by form_id ASC");
-        foreach ($result as $id => $row) {
-            $this->slipSheetArray[] = $row;
-        }
-
-        $sheets = array_chunk($this->slipSheetArray, 6);
-
-
-        $this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $this->createSlipSheet($this->spreadsheet, $sheets);
-
-
-        $this->spreadsheet->setActiveSheetIndex(0);
-        $writer = new Xlsx($this->spreadsheet);
-        $new_xlsx_file = $media->getfilename('slips', null, true);
-        $writer->save($new_xlsx_file);
-        $this->spreadsheet->disconnectWorksheets();
-        unset($this->spreadsheet);
-
-
     }
 
-    public function createslipsheet($sheetObj, $sheets)
+
+    public function CreateSlips()
     {
+        $result = $this->conn->fetchAll("SELECT form_number FROM media_forms WHERE job_id = " . $this->media->job_id ."");
+
+
+        foreach($result as $data) {
+            $form_number = $data->form_number;
+            $this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
+            $this->createSlipSheet($this->spreadsheet, $form_number, 0);
+
+
+            $this->spreadsheet->setActiveSheetIndex(0);
+            $writer = new Xlsx($this->spreadsheet);
+            $new_xlsx_file = $this->media->getfilename('slips', $form_number, true);
+            $writer->save($new_xlsx_file);
+            $this->spreadsheet->disconnectWorksheets();
+            unset($this->spreadsheet);
+        }
+    }
+
+
+    public function createslipsheet($sheetObj, $form_number, $sheetIndex)
+    {
+
+        $result = $this->conn->fetchAll("SELECT * FROM form_data_count WHERE job_id = " . $this->media->job_id ." AND form_number = ".$form_number ." order by form_id ASC");
+
+        foreach ($result as $id => $row) {
+            $slipSheetArray[] = $row;
+        }
+
+        $sheets = array_chunk($slipSheetArray, 6);
+
         $worksheet_title = "Quick Sheet";
 
         $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($sheetObj, $worksheet_title);
-        $sheetObj->addSheet($myWorkSheet, 0);
-        $SlipSheet = $sheetObj->getSheet(0);
+        $sheetObj->addSheet($myWorkSheet, $sheetIndex);
+        $SlipSheet = $sheetObj->getSheet($sheetIndex);
 
 
-        $styles = new SlipSheetXLSX_Styles($SlipSheet);
-        $styles->totalPages = count($sheets);
+        $this->styles = new SlipSheetXLSX_Styles($SlipSheet);
+        $this->styles->totalPages = count($sheets);
 
-        $styles->sheetCommon();
-        $styles->setColWidths();
-
+        $this->styles->sheetCommon();
+        $this->styles->setColWidths($this->styles->Columns);
+        $SlipSheetSize = count($this->styles->rowHeight);
+        $rowOffset = $SlipSheetSize * 3;
         $row = 1;
         $lineIdx = 1;
         foreach($sheets as $pageNo => $page) {
@@ -66,68 +82,43 @@ class SlipSheetXLSX extends Media
             $col_A = "A";
             $col_B = "C";
 
-            $row = 21 * $pageNo;
+            $row = $rowOffset * $pageNo;
             $row++;
 
             foreach($page as $k => $v) {
-                for($lineIdx = 1;$lineIdx <= 7; $lineIdx++) {
+                $this->SlipData = $v;
+                for($lineIdx = 1;$lineIdx <= $SlipSheetSize; $lineIdx++) {
                     switch($lineIdx) {
                         case 1:
-                            $styles->addSheetData($v->form_number, $col_A . $row);
                             break;
                         case 2:
-                            if($v->packaging == "half") {
-                                $text = "Half Skid";
-                                $box = "Boxes";
-                            }
-                            if($v->packaging == "full") {
-                                $text = "Full Skid";
-                                $box = "Boxes";
-                            }
-                            if(str_contains($v->packaging, "cartons")) {
-                                $text = $v->packaging;
-                                $box = "Cartons";
-                            }
-
-                            $styles->addSheetData($text, $col_A .$row);
+                            $this->setForm($col_A, $row);
                             break;
                         case 3:
-                            $styles->addSheetData($v->former ." ".$v->count." pcs", $col_A .$row);
+                            $box = $this->setPackaging($col_A, $row);
                             break;
-                        case 4:
-                            $packageRow=$row;
-                            if(str_contains($box, "Cartons")) {
-
-                                $packageRow++;
-                            }
-
-                            if($v->full_boxes > 0) {
-                                $styles->addSheetData($box, $col_A .$packageRow);
-                                $styles->addSheetData($v->full_boxes, $col_B .$packageRow);
-                            }
+                        case  4:
+                            $this->setFormLocation($col_A, $row);
                             break;
                         case 5:
-                            if($box !=  "Crtons") {
-                                $styles->addSheetData("Layers", $col_A .$row);
-                                $styles->addSheetData($v->layers_last_box, $col_B .$row);
-                            }
+                            $this->setFormerInfo($col_A, $row);
                             break;
                         case 6:
-                            $text_6 = "Lifts";
-                            if($box ==  "Cartons") {
-                                $text_6 = "Last Carton";
-                            }
-                            $styles->addSheetData($text_6, $col_A .$row);
-                            $styles->addSheetData($v->lifts_last_layer, $col_B .$row);
+                            $this->boxDataBoxes($col_A, $col_B, $row, $box);
                             break;
-
+                        case 7:
+                            $this->boxDataLayers($col_A, $col_B, $row, $box);
+                            break;
+                        case 8:
+                            $this->boxDataLifts($col_A, $col_B, $row, $box);
+                            break;
                     }
                     $row++;
                 }
 
                 if($k == 2) {
 
-                    $row = 21 * $pageNo;
+                    $row = $rowOffset * $pageNo;
                     $row++;
                     $col_A = "E";
                     $col_B = "G";
@@ -140,11 +131,74 @@ class SlipSheetXLSX extends Media
                 }
             }
         }
-
     }
 
 
+    private function setForm($column, $row)
+    {
+        $text = $this->SlipData->form_number.$this->SlipData->form_letter;
+        $this->styles->addSheetData($text, $column . $row);
+    }
 
+    private function setPackaging($column, $row)
+    {
+        if($this->SlipData->packaging == "half") {
+            $text = "Half Skid";
+            $box = "Box";
+        }
+        if($this->SlipData->packaging == "full") {
+            $text = "Full Skid";
+            $box = "Box";
+        }
+        if(str_contains($this->SlipData->packaging, "cartons")) {
+            $text = $this->SlipData->packaging;
+            $box = "Cartons";
+        }
 
+        $this->styles->addSheetData($text, $column .$row);
+        return $box;
+    }
+
+    private function setFormLocation($column, $row)
+    {
+        $text = $this->SlipData->pub ." ".$this->SlipData->market;
+        $this->styles->addSheetData($text, $column .$row);
+    }
+
+    private function setFormerInfo($column, $row)
+    {
+        $text = $this->SlipData->former ." ".$this->SlipData->count." pcs";
+        $this->styles->addSheetData($text, $column .$row);
+    }
+
+    private function boxDataBoxes($col_A, $col_B, $row, $box)
+    {
+        $packageRow=$row;
+        if(str_contains($box, "Cartons")) {
+            $packageRow++;
+        }
+
+        if($this->SlipData->full_boxes > 0) {
+            $this->styles->addSheetData($box, $col_A .$packageRow);
+            $this->styles->addSheetData($this->SlipData->full_boxes, $col_B .$packageRow);
+        }
+    }
+    private function boxDataLayers($col_A, $col_B, $row, $box)
+    {
+        if($box !=  "Cartons") {
+            $this->styles->addSheetData("Layers", $col_A .$row);
+            $this->styles->addSheetData($this->SlipData->layers_last_box, $col_B .$row);
+        }
+    }
+
+    private function boxDataLifts($col_A, $col_B, $row, $box)
+    {
+        $text = "Lifts";
+        if($box ==  "Cartons") {
+            $text = "Last Carton";
+        }
+        $this->styles->addSheetData($text, $col_A .$row);
+        $this->styles->addSheetData($this->SlipData->lifts_last_layer, $col_B .$row);
+    }
 
 }

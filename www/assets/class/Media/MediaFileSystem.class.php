@@ -37,7 +37,7 @@ class MediaFileSystem
         }
         if (strtolower($type) == 'slips') {
 
-            $filename =  $filename . '_CountSlips.xlsx';
+            $filename =  $filename . "_CountSlips_FM" . $form_number .'.xlsx';
         }
         if (strtolower($type) == 'zip') {
 
@@ -77,7 +77,7 @@ class MediaFileSystem
         }
 
         if (strtolower($type) == 'slips') {
-            $directory =  $output_filename . __XLSX_DIRECTORY__;
+            $directory =  $output_filename . __XLSX_SLIPS_DIRECTORY__;
         }
 
         if (strtolower($type) == 'pdf') {

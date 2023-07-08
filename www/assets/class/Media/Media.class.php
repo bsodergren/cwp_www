@@ -94,34 +94,40 @@ class Media
 
                 if ($form_row["former"] == "Back") {
                     $total_back_peices = $total_back_peices + $form_row["count"];
+                    /*
                     $this->MediaArray[$form_number][$form_row["former"]][$form_row["form_letter"]][99] = array(
-                        "form_id" => $form_row["id"],
-                        "job_id" => $this->job_id,
-                        "form_number" => $form_row["form_number"].$form_row["form_letter"],
-                        "market" => $form_row["market"],
-                        "pub" => $form_row["pub"],
-                        "count" => $total_back_peices,
-                        "ship" => $form_row["ship"],
-                        "job_number" => $form_row["job_number"],
-                        "former" => $form_row["former"],
-                        "face_trim" => $form_row["face_trim"],
-                        "no_bindery" => $form_row["no_bindery"]
+                    "form_id" => $form_row["id"],
+                    "job_id" => $this->job_id,
+                    "form_number" => $form_row["form_number"],
+                    "form_letter" =>$form_row["form_letter"],
+                    "market" => $form_row["market"],
+                    "pub" => $form_row["pub"],
+                    "count" => $total_back_peices,
+                    "ship" => $form_row["ship"],
+                    "job_number" => $form_row["job_number"],
+                    "former" => $form_row["former"],
+                    "face_trim" => $form_row["face_trim"],
+                    "no_bindery" => $form_row["no_bindery"]
                     );
+                    */
                 } else {
-                    $this->MediaArray[$form_number][$form_row["former"]][$form_row["form_letter"]][] = array(
-                        "form_id" => $form_row["id"],
-                        "form_number" => $form_row["form_number"].$form_row["form_letter"],
-                        "job_id" => $this->job_id,
-                        "market" => $form_row["market"],
-                        "pub" => $form_row["pub"],
-                        "count" => $form_row["count"],
-                        "ship" => $form_row["ship"],
-                        "job_number" => $form_row["job_number"],
-                        "former" => $form_row["former"],
-                        "face_trim" => $form_row["face_trim"],
-                        "no_bindery" => $form_row["no_bindery"]
-                    );
+                    $total_back_peices = $form_row["count"];
                 }
+                $this->MediaArray[$form_number][$form_row["former"]][$form_row["form_letter"]][] = array(
+                    "form_id" => $form_row["id"],
+                    "form_number" => $form_row["form_number"],
+                    "form_letter" =>$form_row["form_letter"],
+                    "job_id" => $this->job_id,
+                    "market" => $form_row["market"],
+                    "pub" => $form_row["pub"],
+                    "count" => $total_back_peices,
+                    "ship" => $form_row["ship"],
+                    "job_number" => $form_row["job_number"],
+                    "former" => $form_row["former"],
+                    "face_trim" => $form_row["face_trim"],
+                    "no_bindery" => $form_row["no_bindery"]
+                );
+
             }
         }
 

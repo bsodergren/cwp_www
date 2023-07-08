@@ -54,12 +54,14 @@ foreach ($_REQUEST as $key => $value) {
             include_once __LAYOUT_HEADER__;
             $media->excelArray();
             $excel = new MediaXLSX($media);
+            $excel->writeWorkbooks();
             ob_flush();
             define('REFRESH_MSG', 'XLSX Files Created');
             break;
         case  "create_slip":
             include_once __LAYOUT_HEADER__;
             $slipsheets = new SlipSheetXLSX($media);
+            $slipsheets->CreateSlips();
             ob_flush();
             define('REFRESH_MSG', 'Slip file Created');
             break;
