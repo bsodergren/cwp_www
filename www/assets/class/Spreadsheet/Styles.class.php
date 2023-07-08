@@ -1,11 +1,34 @@
 <?php
 
 
+
+
 class styles
 {
+    public static $offset;
+    public static function row($letter, $row)
+    {
+        $offset = self::$offset - 1;
+        $offset = $offset * 27;
+        $row = $offset + (int)$row;
+        return $letter.(string) $row;
+    }
+
     public function __construct(&$object)
     {
         $this->obj = $object;
+    }
+
+
+    public function createSlipPage()
+    {
+        $this->obj->getPageSetup()->setHorizontalCentered(true);
+        $this->obj->getPageSetup()->setVerticalCentered(false);
+        $this->obj->getPageMargins()->setTop(0.25);
+        $this->obj->getPageMargins()->setRight(0.25);
+        $this->obj->getPageMargins()->setLeft(0.25);
+        $this->obj->getPageMargins()->setBottom(0.25);
+
     }
 
     public function setNumberCode($cell, $code)
@@ -35,9 +58,20 @@ class styles
         $this->obj->getRowDimension($array['cell'])->setRowHeight($array['height']);
     }
 
-    public function setBorder($cell, $border = "outline")
+    public function setBorder($array)
     {
-        $this->cellBorder($cell, $border);
+        $cell = $array;
+        $border = "outline";
+        $style='BORDER_THIN';
+
+        if(is_array($array)) {
+            foreach($array as $k => $v) {
+                $$k = $v;
+            }
+
+        }
+
+        $this->cellBorder($cell, $border, $style);
     }
 
     public function setColWidths($columns=[], $width=12, $unit=null)
@@ -71,12 +105,11 @@ class styles
         $cellArray[] = $array;
 
 
-        if(method_exists(get_called_class(), 'RightBlock'))
-        {
+        if(method_exists(get_called_class(), 'RightBlock')) {
             $cell= $this->RightBlock($array['cell']);
             $cellArray[] = ['cell' => $cell, 'size'=> $array['size']];
         }
-        foreach($cellArray as $n => $cellData){
+        foreach($cellArray as $n => $cellData) {
             $this->obj->getStyle($cellData['cell'])->getFont()->setSize($cellData['size']);
         }
     }
@@ -84,12 +117,12 @@ class styles
     public function setBold($cell, $bold = 1)
     {
         $cellArray[] = $cell;
-        if(method_exists(get_called_class(), 'RightBlock')){
+        if(method_exists(get_called_class(), 'RightBlock')) {
             $cellArray[] = $this->RightBlock($cell);
         }
 
-        foreach($cellArray as $n => $cell){
-        $this->obj->getStyle($cell)->getFont()->setBold($bold);
+        foreach($cellArray as $n => $cell) {
+            $this->obj->getStyle($cell)->getFont()->setBold($bold);
         }
         //        $this->obj->getStyle($this->RightBlock($cell))->getFont()->setBold(1);
 
@@ -99,28 +132,28 @@ class styles
     public function setAlign($cell, $style = 'H')
     {
         $cellArray[] = $cell;
-        if(method_exists(get_called_class(), 'RightBlock')){
+        if(method_exists(get_called_class(), 'RightBlock')) {
             $cellArray[] = $this->RightBlock($cell);
         }
 
-        foreach($cellArray as $n => $cell){
-        if($style == 'H') {
-            $this->obj->getStyle($cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        foreach($cellArray as $n => $cell) {
+            if($style == 'H') {
+                $this->obj->getStyle($cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            }
+            if($style == 'V') {
+                $this->obj->getStyle($cell)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            }
         }
-        if($style == 'V') {
-            $this->obj->getStyle($cell)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-        }
-    }
     }
 
     public function setMerge($cell)
     {
         $cellArray[] = $cell;
-        if(method_exists(get_called_class(), 'RightBlock')){
+        if(method_exists(get_called_class(), 'RightBlock')) {
             $cellArray[] = $this->RightBlock($cell);
         }
 
-        foreach($cellArray as $n => $cell){
+        foreach($cellArray as $n => $cell) {
 
             $this->obj->mergeCells($cell);
         }
@@ -128,7 +161,6 @@ class styles
     }
 
 
-    
 
 
 
@@ -136,12 +168,17 @@ class styles
 
 
 
-    public function cellBorder($cell, $border = "outline")
+
+    public function cellBorder($cell, $border = "outline", $style = "BORDER_THICK")
     {
+
+
+
         $styleArray = [
             'borders' => [
                 $border => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                    'borderStyle' =>constant('\PhpOffice\PhpSpreadsheet\Style\Border::'. $style),
+                    //'borderStyle' => $style,
                     'color' => ['argb' => '00000000'],
                 ],
 

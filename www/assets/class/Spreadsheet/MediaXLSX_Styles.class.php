@@ -1,18 +1,6 @@
 <?php
 
 
-class set
-{
-    public static $offset;
-    public static function row($letter, $row)
-    {
-        $offset = self::$offset - 1;
-        $offset = $offset * 27;
-        $row = $offset + (int)$row;
-        return $letter.(string) $row;
-    }
-}
-
 class MediaXLSX_Styles extends Styles
 {
     public $obj;
@@ -54,14 +42,14 @@ class MediaXLSX_Styles extends Styles
         $merg_rows = [6,7,8,9,10];
 
         foreach($merg_rows as $row) {
-            $cell = Set::row('B', $row).':'.Set::row('C',$row);
+            $cell = Styles::row('B', $row).':'.Styles::row('C',$row);
             $this->setMerge($cell);
         }
         $merg_rows = [24,25,26];
 
         foreach($merg_rows as $row) {
 
-            $cell = Set::row('A', $row).':'.Set::row('D',$row);
+            $cell = Styles::row('A', $row).':'.Styles::row('D',$row);
             $this->setMerge($cell);
 
         }
@@ -71,7 +59,7 @@ class MediaXLSX_Styles extends Styles
         $result = $connection->fetchAll($sql);
         foreach ($result as $k => $val) {
 
-            $col = Set::row($val['ecol'], $val['erow']);
+            $col = Styles::row($val['ecol'], $val['erow']);
             $text = $val['text'];
             $bold = $val['bold'];
             $font_size = $val['font_size'];
@@ -95,17 +83,15 @@ class MediaXLSX_Styles extends Styles
             }
         }
 
-        #$this->obj->getStyle('A24')->getAlignment()->setShrinkToFit(true);
 
-        $this->setBorder(set::row("A", 10), "bottom");
-        $this->setBorder(set::row("A", 10), "right");
-        $this->setBorder(set::row("B", 10), "bottom");
+        $this->setBorder(['cell'=>Styles::row("A", 10), 'border'=>"bottom"]);
+        $this->setBorder(['cell'=>Styles::row("A", 10),  'border'=>"right"]);
+        $this->setBorder(['cell'=>Styles::row("B", 10),  'border'=>"bottom"]);
 
-        $this->setNumberCode(set::row('B', 21),'#,##0');
-        $this->setShrink(set::row('B', 7));
-        $this->setPageBreak(set::row('A', 27));
+        $this->setNumberCode(Styles::row('B', 21),'#,##0');
+        $this->setShrink(Styles::row('B', 7));
+        $this->setPageBreak(Styles::row('A', 27));
 
-        //	$this->obj->getStyle("B6:B10")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
     }
@@ -116,12 +102,12 @@ class MediaXLSX_Styles extends Styles
     public function addSheetData($value, $text, $row)
     {
 
-        $textCell = Set::row("A", $row);
+        $textCell = Styles::row("A", $row);
         $this->setCellText($textCell, $text);
         $this->setBorder($textCell);
 
 
-        $valCell = Set::row("B", $row);
+        $valCell = Styles::row("B", $row);
         $this->setCellText($valCell, $value);
         $this->setBorder($valCell);
     }
@@ -131,7 +117,7 @@ class MediaXLSX_Styles extends Styles
     {
         $hn = count($this->rowHeight);
         for ($i = 0; $i < $hn; $i++) {
-            $this->setHeight(['cell' => Set::row(null, $i+1), 'height' =>$this->rowHeight[$i]]);
+            $this->setHeight(['cell' => Styles::row(null, $i+1), 'height' =>$this->rowHeight[$i]]);
         }
     }
 
@@ -151,31 +137,34 @@ class MediaXLSX_Styles extends Styles
     public function addFormText($form)
     {
 
-        $this->setCellText(set::row('B', 6), $form['job_number']);
-        $this->setCellText(set::row('B', 7), $form['market']);
-        $this->setCellText(set::row('B', 8), $form['pub_value']);
-        $this->setCellText(set::row('B', 9), $form['ship_value']);
-        $this->setShrink(set::row('B', 7));
+        $this->setCellText(Styles::row('B', 6), $form['job_number']);
+        $this->setCellText(Styles::row('B', 7), $form['market']);
+        $this->setCellText(Styles::row('B', 8), $form['pub_value']);
+        $this->setCellText(Styles::row('B', 9), $form['ship_value']);
+        $this->setShrink(Styles::row('B', 7));
 
-        $this->setCellText(set::row('D', 6), $form['form_number'] . "" . $form['form_letter']);
+        $this->setCellText(Styles::row('D', 6), $form['form_number'] . "" . $form['form_letter']);
+        $this->setAlign(Styles::row('D', 6),'H');
+        $this->setAlign(Styles::row('D', 6),'V');
+        $this->setBorder( ['cell'=>Styles::row("A", 6) . ":" . Styles::row("C", 10),  'border'=>"allBorders"]);
+        $this->setBorder( ['cell'=>Styles::row("D", 6),  'border'=>"outline"]);
 
-        $this->setBorder(set::row("A", 6) . ":" . set::row("C", 10), "allBorders");
-        $this->setBorder(set::row("D", 6), "outline");
 
+        $this->setCellText(Styles::row('D', 7), $form['page_conf']);
 
-        $this->setCellText(set::row('D', 7), $form['page_conf']);
-
-        $this->setCellText(set::row('B', 10), $form['packaging']);
+        $this->setCellText(Styles::row('B', 10), $form['packaging']);
 
         if(key_exists("skid_count", $form)) {
-            $this->setCellText(set::row('D', 8), $form['skid_count']);
+            $this->setCellText(Styles::row('D', 8), $form['skid_count']);
         }
 
         if ($form['bindery_trim']  == true)
         {
-            $this->setCellText(set::row('A', 24), $form['ship_value']);
-            $this->setCellText(set::row('A', 25), $form['ship_value']);
-            $this->setCellText(set::row('A', 26), $form['ship_value']);
+            $this->setBorder( ['cell'=>Styles::row("A", 24) . ":" . Styles::row("D", 26),  'border'=>"outline"]);
+
+            $this->setCellText(Styles::row('A', 24), $form['ship_value']);
+            $this->setCellText(Styles::row('A', 25), $form['ship_value']);
+            $this->setCellText(Styles::row('A', 26), $form['ship_value']);
         }
 
 
@@ -189,7 +178,7 @@ class MediaXLSX_Styles extends Styles
         $this->setColWidth();
 
         for ($i = 1; $i <= $copies; $i++) {
-            set::$offset = $i;
+            Styles::$offset = $i;
             $this->setRowHeights();
             $this->sheetCommon();
             $this->addFormText($form);

@@ -155,13 +155,13 @@ class SlipSheetXLSX extends Media
             $box = "Cartons";
         }
 
-        $this->styles->addSheetData($text, $column .$row);
-        return $box;
+        $this->styles->addSheetData(ucwords($text), $column .$row);
+        return "Full ".$box;
     }
 
     private function setFormLocation($column, $row)
     {
-        $text = $this->SlipData->pub ." ".$this->SlipData->market;
+        $text = ucwords(strtolower($this->SlipData->pub ." ".$this->SlipData->market)," /");
         $this->styles->addSheetData($text, $column .$row);
     }
 
@@ -173,32 +173,37 @@ class SlipSheetXLSX extends Media
 
     private function boxDataBoxes($col_A, $col_B, $row, $box)
     {
-        $packageRow=$row;
         if(str_contains($box, "Cartons")) {
-            $packageRow++;
+            $row++;
         }
 
         if($this->SlipData->full_boxes > 0) {
-            $this->styles->addSheetData($box, $col_A .$packageRow);
-            $this->styles->addSheetData($this->SlipData->full_boxes, $col_B .$packageRow);
+            $this->styles->addSheetData($box, $col_A .$row);
+            $this->styles->addSheetData($this->SlipData->full_boxes, $col_B .$row);
         }
     }
     private function boxDataLayers($col_A, $col_B, $row, $box)
     {
-        if($box !=  "Cartons") {
-            $this->styles->addSheetData("Layers", $col_A .$row);
-            $this->styles->addSheetData($this->SlipData->layers_last_box, $col_B .$row);
+        if(!str_contains($box, "Cartons")) {
+            if($this->SlipData->layers_last_box != 0 )
+            {
+                $this->styles->addSheetData("Layers", $col_A .$row);
+                $this->styles->addSheetData($this->SlipData->layers_last_box, $col_B .$row);
+            }
         }
     }
 
     private function boxDataLifts($col_A, $col_B, $row, $box)
     {
         $text = "Lifts";
-        if($box ==  "Cartons") {
+        if(str_contains($box, "Cartons")) {
             $text = "Last Carton";
         }
-        $this->styles->addSheetData($text, $col_A .$row);
-        $this->styles->addSheetData($this->SlipData->lifts_last_layer, $col_B .$row);
+
+        if($this->SlipData->lifts_last_layer != 0 ) {
+            $this->styles->addSheetData($text, $col_A .$row);
+            $this->styles->addSheetData($this->SlipData->lifts_last_layer, $col_B .$row);
+        }
     }
 
 }

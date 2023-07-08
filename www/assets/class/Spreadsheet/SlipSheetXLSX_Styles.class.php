@@ -12,7 +12,7 @@ class SlipSheetXLSX_Styles extends Styles
 
 
     public $Columns = ['A','B','C','D','E','F','G','H'];
-    public $rowHeight = [5,30,30,25,25,30,30,30,5];
+    public $rowHeight = [10,30,30,25,25,30,30,30,10];
 
 
    
@@ -20,20 +20,13 @@ class SlipSheetXLSX_Styles extends Styles
 
     public function sheetCommon()
     {
-        global $connection;
-      
 
-        $this->obj->getPageSetup()->setHorizontalCentered(true);
-        $this->obj->getPageSetup()->setVerticalCentered(false);
-        $this->obj->getPageMargins()->setTop(0.25);
-        $this->obj->getPageMargins()->setRight(0.25);
-        $this->obj->getPageMargins()->setLeft(0.25);
-        $this->obj->getPageMargins()->setBottom(0.25);
 
+        $this->createSlipPage();
 
         $row_height = $this->rowHeight;
         $SlipSheetBreak = count($row_height);
-        $PageBreak = $SlipSheetBreak;
+        $PageBreak = $SlipSheetBreak * 3;
         $this->totalRows = $this->totalPages * ($SlipSheetBreak * 3);
 
 
@@ -63,9 +56,12 @@ class SlipSheetXLSX_Styles extends Styles
                 $leftboxEnd = 'D'.$row;
                 $rightboxEnd = 'H'.$row;
 
-                $styleProps['setBorder'][] = $leftboxStart.":".$leftboxEnd;
-                $styleProps['setBorder'][] = $rightboxStart.":".$rightboxEnd;
-
+                $styleProps['setBorder'][] = ['cell'=>$leftboxStart.":".$leftboxEnd,
+                    'border'=>'outline',
+                    'style'=>'BORDER_DOTTED'];
+                $styleProps['setBorder'][] = ['cell'=>$rightboxStart.":".$rightboxEnd,
+                'border'=>'outline',
+                'style'=>'BORDER_DOTTED'];
                 $SlipSheetidx = 0;
 
             }
@@ -128,7 +124,6 @@ class SlipSheetXLSX_Styles extends Styles
             foreach($row as $id => $value) {
                 $this->$method($value);
             }
-
         }
 
     }

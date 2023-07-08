@@ -31,6 +31,71 @@ class MediaXLSX extends Media
         $this->pdf_file = $this->xlsx_array[$keyidx]["pdf_file"];
         $this->job_id = $this->xlsx_array[$keyidx]["job_id"];
     }
+
+
+    public function writeMasterWorkbook()
+    {
+        $this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
+        foreach ($this->xlsx_array as $form_number => $data) {
+
+
+            $sql = "SELECT * FROM form_data_count  WHERE job_id = " . $this->media->job_id ." AND form_number = ".$form_number ." order by former DESC ,form_id ASC";
+
+            $result = $this->conn->fetchAll($sql);
+            foreach($result as $form_data) {
+                $trims  = $this->getTrimData($form_data->pub, $form_data->bind);
+                $MasterArray[$form_number][$form_data->former][$form_data->form_letter][] = [
+                    "pub" => $form_data->pub,
+                    "count" => $form_data->count,
+                    "face_trim" => $this->form_details['face_trim'],
+                    "no_bindery" => $this->form_details['no_bindery'],
+                    "bind" => $form_data->bind,
+                    "packaging" => $form_data->packaging,
+                    "full_boxes" => $form_data->full_boxes,
+                    "layers_last_box" => $form_data->layers_last_box,
+                    "lifts_last_layer" => $form_data->lifts_last_layer,
+                    "head_trim" => $trims['head_trim'],
+                    "foot_trim" => $trims['foot_trim'],
+
+                ];
+            }
+
+
+
+        }
+
+        $worksheet_title = "Master List" ;
+        $masterWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($this->spreadsheet, $worksheet_title);
+        $this->spreadsheet->addSheet($masterWorkSheet, 0);
+        $sheet = $this->spreadsheet->getSheet(0);
+        $sheet->getHeaderFooter()->setOddHeader('&36&B ' . __LANG_MEDIA_LOAD_FLAG);
+        $sheet->getHeaderFooter()->setOddFooter('&L&B' . __LANG_MEDIA_LOAD_FLAG . '&RPage &P of &N');
+
+        foreach($MasterArray as $form_number => $data)
+        {
+        
+            
+
+            foreach($data as $former => $formData)
+            {
+
+                foreach($formData as $letter => $parts){
+                    
+                    dd($letter,$parts);
+                }
+
+            }
+
+      
+           
+
+
+        }
+
+    }
+
+
     public function writeWorkbooks()
     {
 
@@ -47,6 +112,7 @@ class MediaXLSX extends Media
                         foreach ($form_details_array as $key => $this->form_details) {
 
                             $this->calculateBox();
+                            $this->addFormBoxData();
 
                             if ($this->box['packaging'] == "full" || $this->box['packaging'] == "half") {
                                 $tmp_box = $this->box;
@@ -117,6 +183,7 @@ class MediaXLSX extends Media
             $$var = $value;
         }
 
+
         $pub_value = $this->form_details["pub"];
         $ship_value = $this->form_details['ship'];
         $delivery =  strtolower($this->form_details['former']);
@@ -151,7 +218,6 @@ class MediaXLSX extends Media
         $form['bindery_trim'] = $bindery_trim;
 
         $form['page_conf'] = $this->media->form_configuration['configuration'] . " " . $this->media->form_configuration['paper_wieght'] . "#";
-
 
         $styles = new MediaXLSX_Styles($sheet);
 
@@ -193,10 +259,10 @@ class MediaXLSX extends Media
                 $sheet_labels['17'] = [$full_boxes, __LANG_NUMBER_OF_FULL_BOXES];
             }
 
+            unset($form['skid_count']);
+
             if (isset($skid_count)) {
-                $form['slid_count'] = $skid_count;
-
-
+                $form['skid_count'] = $skid_count;
             }
 
             $sheet_labels['18'] = [$layers_last_box,__LANG_NUMBER_OF_FULL_LAYERS ];
@@ -318,7 +384,6 @@ class MediaXLSX extends Media
 
         #return [ $package,$full_boxes,$layers_last_box,$lifts_last_layer,$$lift_size,$lifts_per_layer];
         $this->box = $result;
-        $this->addFormBoxData();
 
     }
 
@@ -332,6 +397,7 @@ class MediaXLSX extends Media
         $form_box_data['job_id'] = $this->form_details['job_id'];
         $form_box_data['market'] = $this->form_details['market'];
         $form_box_data['pub'] = $this->form_details['pub'];
+        $form_box_data['bind'] = $this->form_details['bind'];
 
         $form_box_data['former'] = $this->form_details['former'];
         $count = $this->exp->table('form_data_count')
@@ -341,6 +407,36 @@ class MediaXLSX extends Media
             $form_box_data['form_id'] = $this->form_details['form_id'];
             $count = 	$this->exp->table("form_data_count")->insert($form_box_data);
         }
+    }
+
+
+    public function getTrimData($publication, $bind)
+    {
+        $head = null;
+        $foot = null;
+        $pub = $this->cleanPub($publication);
+        $b = strtolower($bind);
+
+        $res = $this->exp->table("pub_trim")->select("head_trim,foot_trim")->where("pub_name = ?  AND bind = ? ", $pub, $b)->fetch();
+        if($res == null) {
+            $res =   $this->exp->table("pub_trim")->insert(["pub_name"=>$pub,"bind"=>$b]);
+        }
+
+        if(is_object($res)) {
+            $head = $res->head_trim;
+            $foot = $res->foot_trim;
+        }
+        return ['pub'=>$publication,'bind'=>$bind,'head_trim'=>$head,'foot_trim'=>$foot];
+    }
+
+
+    private function cleanPub($publication)
+    {
+        $pcs = [" ","+","'","&"];
+        $publication = strtolower($publication);
+        $publication = str_replace($pcs, "", $publication);
+        $publication = str_replace("É", "E", $publication);
+        return $publication;
     }
 
 }
