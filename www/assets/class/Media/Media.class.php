@@ -77,10 +77,6 @@ class Media
                     $prev_form_letter = $current_form_letter;
                 }
 
-                if ($form_row["former"] == "") {
-                    $form_row["former"] = "Front";
-                }
-
                 if (!isset($this->MediaArray[$form_number]["bind"])) {
                     $this->MediaArray[$form_number] = array(
                         "bind" => $vars["bind"],
@@ -92,10 +88,9 @@ class Media
                 }
 
 
-                if ($form_row["former"] == "Back")
-                {
+                if ($form_row["former"] == "Back") {
                     $total_back_peices = $total_back_peices + $form_row["count"];
-                    $this->MediaArray[$form_number][$form_row["former"]][$form_row["form_letter"]][0] = array(
+                    $this->MediaArray[$form_number]["Back"][$form_row["form_letter"]][0] = array(
                         "form_id" => $form_row["id"],
                         "form_number" => $form_row["form_number"],
                         "form_letter" =>$form_row["form_letter"],
@@ -105,14 +100,14 @@ class Media
                         "count" =>  $total_back_peices,
                         "ship" => $form_row["ship"],
                         "job_number" => $form_row["job_number"],
-                        "former" => $form_row["former"],
+                        "former" => "Back",
                         "face_trim" => $form_row["face_trim"],
                         "no_bindery" => $form_row["no_bindery"],
                         "bind" => $vars["bind"]
                     );
 
                 } else {
-                    $this->MediaArray[$form_number][$form_row["former"]][$form_row["form_letter"]][] = array(
+                    $this->MediaArray[$form_number]["Front"][$form_row["form_letter"]][] = array(
                         "form_id" => $form_row["id"],
                         "form_number" => $form_row["form_number"],
                         "form_letter" =>$form_row["form_letter"],
@@ -122,15 +117,16 @@ class Media
                         "count" =>  $form_row["count"],
                         "ship" => $form_row["ship"],
                         "job_number" => $form_row["job_number"],
-                        "former" => $form_row["former"],
+                        "former" => "Front",
                         "face_trim" => $form_row["face_trim"],
                         "no_bindery" => $form_row["no_bindery"],
                         "bind" => $vars["bind"]
                     );
                 }
-            
+
 
             }
+            krsort($this->MediaArray[$form_number]);
         }
 
         $this->MediaArray;
@@ -269,7 +265,7 @@ class Media
             if (isset($sort_query)) {
                 $add = $sort_query . ", ";
             }
-            $sort_query = $add . " `f`.`former` DESC ";
+            $sort_query = $add . " `f`.`former` ASC ";
         }
 
         if (isset($sort_query)) {

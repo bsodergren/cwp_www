@@ -14,7 +14,7 @@ class MediaXLSX extends Media
     protected object $spreadsheet;
     protected object $media;
     public $xlsx_array;
-
+    public $trim_details = [];
     public function __construct($media, $quiet = false)
     {
 
@@ -72,23 +72,21 @@ class MediaXLSX extends Media
         $sheet->getHeaderFooter()->setOddHeader('&36&B ' . __LANG_MEDIA_LOAD_FLAG);
         $sheet->getHeaderFooter()->setOddFooter('&L&B' . __LANG_MEDIA_LOAD_FLAG . '&RPage &P of &N');
 
-        foreach($MasterArray as $form_number => $data)
-        {
-        
-            
+        foreach($MasterArray as $form_number => $data) {
 
-            foreach($data as $former => $formData)
-            {
 
-                foreach($formData as $letter => $parts){
-                    
-                    dd($letter,$parts);
+
+            foreach($data as $former => $formData) {
+
+                foreach($formData as $letter => $parts) {
+
+                    dd($letter, $parts);
                 }
 
             }
 
-      
-           
+
+
 
 
         }
@@ -118,29 +116,33 @@ class MediaXLSX extends Media
                                 $tmp_box = $this->box;
                                 $full_boxes = $this->box['full_boxes'];
                                 $max_boxes = $this->box['full_boxes'];
+
                                 if ($this->box['full_boxes'] >= 1) {
+                                    if($this->box["layers_last_box"] != 0 && $this->box["lifts_last_layer"] !=  0) {
 
+                                        $this->box["layers_last_box"] = 0;
+                                        $this->box["lifts_last_layer"] = 0;
+                                        $this->box['full_boxes'] = '';
+                                        $sk = 0;
 
-                                    $this->box["layers_last_box"] = 0;
-                                    $this->box["lifts_last_layer"] = 0;
-                                    $this->box['full_boxes'] = '';
-                                    $sk = 0;
-                                    while ($full_boxes > 0) {
+                                        while ($full_boxes > 0) {
+                                            $sk++;
+                                            $this->box['layers_last_box'] = $this->box['layers_per_skid'];
+                                            $this->box['skid_count'] = "$sk of " . $max_boxes + 1;
+                                            $this->form_details['count'] = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box["lift_size"];
+                                            $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
+
+                                            $full_boxes = $full_boxes - 1;
+                                            $s_idx = $s_idx + 1;
+                                        }
+                                        //$s_idx=$s_idx+1;
                                         $sk++;
-                                        $this->box['layers_last_box'] = $this->box['layers_per_skid'];
                                         $this->box['skid_count'] = "$sk of " . $max_boxes + 1;
-                                        $this->form_details['count'] = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box["lift_size"];
-                                        $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
-
-                                        $full_boxes = $full_boxes - 1;
-                                        $s_idx = $s_idx + 1;
+                                        $this->box["layers_last_box"] = $tmp_box["layers_last_box"];
+                                        $this->box["lifts_last_layer"] = $tmp_box["lifts_last_layer"];
+                                        $this->form_details['count'] = (($this->box['layers_last_box'] * $this->box['lifts_per_layer']) + $this->box["lifts_last_layer"]) * $this->box["lift_size"];
                                     }
-                                    //$s_idx=$s_idx+1;
-                                    $sk++;
-                                    $this->box['skid_count'] = "$sk of " . $max_boxes + 1;
-                                    $this->box["layers_last_box"] = $tmp_box["layers_last_box"];
-                                    $this->box["lifts_last_layer"] = $tmp_box["lifts_last_layer"];
-                                    $this->form_details['count'] = (($this->box['layers_last_box'] * $this->box['lifts_per_layer']) + $this->box["lifts_last_layer"]) * $this->box["lift_size"];
+
                                 }
                             }
 
@@ -183,8 +185,14 @@ class MediaXLSX extends Media
             $$var = $value;
         }
 
-
         $pub_value = $this->form_details["pub"];
+
+
+        $this->getTrimData($pub_value, $this->form_details['bind']);
+        $head_trim = $this->trim_details['head_trim'];
+        $foot_trim = $this->trim_details['foot_trim'];
+        $del_size = $this->trim_details['size'];
+
         $ship_value = $this->form_details['ship'];
         $delivery =  strtolower($this->form_details['former']);
 
@@ -195,7 +203,8 @@ class MediaXLSX extends Media
                 if($this->form_details['face_trim'] == 1) {
                     $ship_value = __LANG_BINDERY_FACETRIM;
                 }
-
+                $head_trim = 0;
+                $foot_trim = 0;
                 $bindery_trim = true;
             }
         }
@@ -216,6 +225,9 @@ class MediaXLSX extends Media
         $form['form_number'] =  $form_number;
         $form['form_letter'] =  $form_letter;
         $form['bindery_trim'] = $bindery_trim;
+        $form['head_trim'] = $head_trim;
+        $form['foot_trim'] = $foot_trim;
+        $form['del_size'] = $del_size;
 
         $form['page_conf'] = $this->media->form_configuration['configuration'] . " " . $this->media->form_configuration['paper_wieght'] . "#";
 
@@ -265,11 +277,15 @@ class MediaXLSX extends Media
                 $form['skid_count'] = $skid_count;
             }
 
-            $sheet_labels['18'] = [$layers_last_box,__LANG_NUMBER_OF_FULL_LAYERS ];
+            if ($layers_last_box > 0) {
+                $sheet_labels['18'] = [$layers_last_box, __LANG_NUMBER_OF_FULL_LAYERS];
+            }
+
             if ($lifts_last_layer > 0) {
                 $sheet_labels['19'] = [$lifts_last_layer, __LANG_LIFTS_LAST_LAYER];
             }
         }
+
         $sheet_labels['14'] = [$lifts_per_layer, $labels['14']];
 
         $styles->createPage($form, $sheet_labels, 3);
@@ -414,27 +430,50 @@ class MediaXLSX extends Media
     {
         $head = null;
         $foot = null;
+        $get = false;
+        $insert = false;
         $pub = $this->cleanPub($publication);
         $b = strtolower($bind);
 
-        $res = $this->exp->table("pub_trim")->select("head_trim,foot_trim")->where("pub_name = ?  AND bind = ? ", $pub, $b)->fetch();
-        if($res == null) {
-            $res =   $this->exp->table("pub_trim")->insert(["pub_name"=>$pub,"bind"=>$b]);
+        if(!key_exists("pub", $this->trim_details)) {
+            $get = true;
+        } elseif($this->trim_details["pub"] != $pub) {
+            $get = true;
         }
 
-        if(is_object($res)) {
-            $head = $res->head_trim;
-            $foot = $res->foot_trim;
+        if($get === true) {
+            $res = $this->exp->table("pub_trim")->select("head_trim,foot_trim,delivered_size")->where("pub_name = ?  AND bind = ? ", $pub, $b)->fetch();
+            if($res == null) {
+                $insert = true;
+                $res = $this->exp->table("pub_trim")->insert(["pub_name"=>$pub,"bind"=>$b]);
+            }
+
+            if(is_object($res)) {
+                $head = $res->head_trim;
+                $foot = $res->foot_trim;
+                $size = $res->delivered_size;
+                $this->trim_details = ['pub'=>$publication,'bind'=>$bind,'head_trim'=>$head,'foot_trim'=>$foot,'size'=>$size];
+            }
+
+            if($insert === true) {
+                $this->getTrimData($publication, $bind);
+
+            }
+
         }
-        return ['pub'=>$publication,'bind'=>$bind,'head_trim'=>$head,'foot_trim'=>$foot];
+
+        // $this->trim_details = ['pub'=>$publication,'bind'=>$bind,'head_trim'=>$head,'foot_trim'=>$foot,'size'=>$size];
+        // return  $this->trim_details;
     }
 
 
     private function cleanPub($publication)
     {
-        $pcs = [" ","+","'","&"];
+        $pcs = ["+","'","&"];
         $publication = strtolower($publication);
+        $publication = str_replace(" ", "_", $publication);
         $publication = str_replace($pcs, "", $publication);
+        $publication = str_replace("__", "_", $publication);
         $publication = str_replace("É", "E", $publication);
         return $publication;
     }

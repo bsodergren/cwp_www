@@ -13,17 +13,17 @@ class MediaXLSX_Styles extends Styles
         30, //10 Packaging,
         10, //11 Blank
         15, //12 Blank
-        
+
         // 13-15, packing info
         20, 20, 20,
         // 16-21  box info
-        20, 20, 20, 20, 20, 20, 
+        20, 20, 20, 20, 20, 20,
 
         20, 20, // 22,23 blank
-        
+
         // 24,25,26 //Bindery notes
         50, 50, 50,
-        
+
         // 27 new page break
         10
     ];
@@ -42,17 +42,10 @@ class MediaXLSX_Styles extends Styles
         $merg_rows = [6,7,8,9,10];
 
         foreach($merg_rows as $row) {
-            $cell = Styles::row('B', $row).':'.Styles::row('C',$row);
+            $cell = Styles::row('B', $row).':'.Styles::row('C', $row);
             $this->setMerge($cell);
         }
-        $merg_rows = [24,25,26];
 
-        foreach($merg_rows as $row) {
-
-            $cell = Styles::row('A', $row).':'.Styles::row('D',$row);
-            $this->setMerge($cell);
-
-        }
 
         $sql = "SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;";
 
@@ -71,15 +64,15 @@ class MediaXLSX_Styles extends Styles
                 $this->setCellText($col, $text);
             }
 
-            $this->setBold($col,$bold);
+            $this->setBold($col, $bold);
             $this->setSize(['cell'=>$col,'size'=>$font_size]);
 
             if ($h_align == 1) {
-                $this->setAlign($col,'H');
+                $this->setAlign($col, 'H');
             }
 
             if ($v_align == 1) {
-                $this->setAlign($col,'V');
+                $this->setAlign($col, 'V');
             }
         }
 
@@ -88,7 +81,7 @@ class MediaXLSX_Styles extends Styles
         $this->setBorder(['cell'=>Styles::row("A", 10),  'border'=>"right"]);
         $this->setBorder(['cell'=>Styles::row("B", 10),  'border'=>"bottom"]);
 
-        $this->setNumberCode(Styles::row('B', 21),'#,##0');
+        $this->setNumberCode(Styles::row('B', 21), '#,##0');
         $this->setShrink(Styles::row('B', 7));
         $this->setPageBreak(Styles::row('A', 27));
 
@@ -144,10 +137,10 @@ class MediaXLSX_Styles extends Styles
         $this->setShrink(Styles::row('B', 7));
 
         $this->setCellText(Styles::row('D', 6), $form['form_number'] . "" . $form['form_letter']);
-        $this->setAlign(Styles::row('D', 6),'H');
-        $this->setAlign(Styles::row('D', 6),'V');
-        $this->setBorder( ['cell'=>Styles::row("A", 6) . ":" . Styles::row("C", 10),  'border'=>"allBorders"]);
-        $this->setBorder( ['cell'=>Styles::row("D", 6),  'border'=>"outline"]);
+        $this->setAlign(Styles::row('D', 6), 'HV');
+
+        $this->setBorder(['cell'=>Styles::row("A", 6) . ":" . Styles::row("C", 10),  'border'=>"allBorders"]);
+        $this->setBorder(['cell'=>Styles::row("D", 6),  'border'=>"outline"]);
 
 
         $this->setCellText(Styles::row('D', 7), $form['page_conf']);
@@ -158,9 +151,19 @@ class MediaXLSX_Styles extends Styles
             $this->setCellText(Styles::row('D', 8), $form['skid_count']);
         }
 
-        if ($form['bindery_trim']  == true)
-        {
-            $this->setBorder( ['cell'=>Styles::row("A", 24) . ":" . Styles::row("D", 26),  'border'=>"outline"]);
+        if ($form['bindery_trim']  == true) {
+
+
+            $merg_rows = [24,25,26];
+
+            foreach($merg_rows as $row) {
+
+                $cell = Styles::row('A', $row).':'.Styles::row('D', $row);
+                $this->setMerge($cell);
+
+            }
+
+            $this->setBorder(['cell'=>Styles::row("A", 24) . ":" . Styles::row("D", 26),  'border'=>"outline"]);
 
             $this->setCellText(Styles::row('A', 24), $form['ship_value']);
             $this->setCellText(Styles::row('A', 25), $form['ship_value']);
@@ -168,7 +171,37 @@ class MediaXLSX_Styles extends Styles
         }
 
 
+        if ($form['head_trim']  != 0) {
 
+            $deliveryInst[24] = ["text" => "Head Trim", "value" => $form['head_trim']];
+        }
+
+        if ($form['foot_trim']  != 0) {
+            $deliveryInst[25] = ["text" => "Foot Trim", "value" => $form['foot_trim']];
+        }
+
+        if ($form['del_size']  != 0) {
+            $deliveryInst[26] = ["text" => "Delivered Size", "value" => $form['del_size']];
+        }
+
+
+        if(is_array($deliveryInst)) {
+
+            $this->setBorder(['cell'=>Styles::row("A", 24) . ":" . Styles::row("D", 26),  'border'=>"outline"]);
+            foreach($deliveryInst as $row => $data) {
+
+                $this->setSize(['cell'=>Styles::row('A', $row),'size'=>12]);
+                $this->setCellText(Styles::row('A', $row), $data['text']);
+                $this->setAlign(Styles::row('A', $row), 'HV');
+
+                $this->setSize(['cell'=>Styles::row('B', $row),'size'=>12]);
+                $this->setCellText(Styles::row('B', $row), $data['value']);
+                $this->setAlign(Styles::row('B', $row), 'HV');
+
+            }
+
+
+        }
 
     }
 
@@ -188,6 +221,6 @@ class MediaXLSX_Styles extends Styles
             }
         }
     }
- 
+
 
 }

@@ -66,8 +66,11 @@ switch (__FORM_POST__) {
         require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
         exit;
         break;
-    default:
+    case "trim":
+        require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
+        break;
 
+    default:
         exit;
         break;
 }
