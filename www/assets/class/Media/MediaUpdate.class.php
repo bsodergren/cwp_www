@@ -17,10 +17,12 @@ class MediaUpdate
         $new_data = [];
         $rename_column = [];
         $new_column = [];
+        $reset_table = [];
 
         include_once($file);
 
         $updates = [
+            'resetTable' => $reset_table,
             'newTable' => $new_table,
             'updateColumns' => $rename_column,
             'newColumn' => $new_column,
@@ -29,7 +31,6 @@ class MediaUpdate
         ];
 
         foreach ($updates as $classmethod => $data_array) {
-
             $this->$classmethod($data_array);
         }
         $filename = basename($file);
@@ -42,7 +43,18 @@ class MediaUpdate
         }
     }
 
-
+    public function resettable($reset_table)
+    {
+        if (is_array($reset_table)) {
+            foreach ($reset_table as $table_name) {
+                $this->set($table_name);
+                if ($this->check_tableExists()) {
+                    $this->reset_table($table_name);
+                    $this->refresh = true;
+                }
+            }
+        }
+    }
 
     public function newData($new_data)
     {
@@ -96,6 +108,15 @@ class MediaUpdate
         if (file_exists($sql_file)) {
             Nette\Database\Helpers::loadFromFile($this->conn, $sql_file);
         }
+    }
+
+    public function reset_table($table_name)
+    {
+
+        $query = "DELETE FROM " . $this->table_name;
+        $this->conn->query($query);
+        $query = 'UPDATE sqlite_sequence SET seq = 0 WHERE name="'.$this->table_name.'"';
+        $this->conn->query($query);
     }
 
     public function updateColumns($rename_column)

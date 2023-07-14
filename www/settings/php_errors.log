@@ -1,0 +1,8 @@
+[13-Jul-2023 23:41:11 America/Chicago] PHP Parse error:  syntax error, unexpected token "%", expecting end of file in D:\development\cwp_app\.public\www\settings\trim.php on line 72
+[14-Jul-2023 00:08:36 America/Chicago] PHP Parse error:  syntax error, unexpected token "=" in D:\development\cwp_app\.public\www\settings\trim.php on line 103
+[14-Jul-2023 00:28:41 America/Chicago] PHP Fatal error:  Cannot make non static method HTMLDisplay::draw_checkbox() static in class HTMLForms in D:\development\cwp_app\.public\www\assets\class\HTML\HTMLForms.class.php on line 29
+[14-Jul-2023 00:38:18 America/Chicago] PHP Fatal error:  Uncaught Error: Call to undefined function keys() in D:\development\cwp_app\.public\www\assets\class\HTML\HTMLForms.class.php:88
+Stack trace:
+#0 D:\development\cwp_app\.public\www\settings\trim.php(52): HTMLForms::draw_text('trim_6_head', Array)
+#1 {main}
+  thrown in D:\development\cwp_app\.public\www\assets\class\HTML\HTMLForms.class.php on line 88

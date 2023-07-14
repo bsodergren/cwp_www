@@ -15,7 +15,7 @@ class MediaXLSX extends Media
     protected object $media;
     public $xlsx_array;
     public $trim_details = [];
-    public function __construct($media, $quiet = false)
+    public function __construct($media= false, $quiet = false)
     {
 
         $this->media = $media;
@@ -467,15 +467,20 @@ class MediaXLSX extends Media
     }
 
 
-    private function cleanPub($publication)
+    public function cleanPub($publication)
     {
-        $pcs = ["+","'","&"];
-        $publication = strtolower($publication);
-        $publication = str_replace(" ", "_", $publication);
-        $publication = str_replace($pcs, "", $publication);
-        $publication = str_replace("__", "_", $publication);
-        $publication = str_replace("É", "E", $publication);
-        return $publication;
+        return self::CleanPublication($publication);
     }
 
+    public static function CleanPublication($publication)
+    {
+
+        $pcs = ["+","'","&"];
+        $publication = str_replace($pcs, "", $publication);
+        $publication = str_replace("É", "E", $publication);
+        $publication = str_replace("  ", " ", $publication);
+        $publication = str_replace(" ", "_", $publication);
+        $publication = strtolower($publication);
+        return $publication;
+    }
 }

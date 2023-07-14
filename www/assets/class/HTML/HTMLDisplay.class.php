@@ -54,57 +54,17 @@ class HTMLDisplay
 
     public function draw_checkbox($name, $value, $text = 'Face Trim')
     {
-        global $pub_keywords;
-
-        $checked = "";
-
-
-        $current_value = $value;
-
-
-        if ($current_value == 1) {
-            $checked = "checked";
-        }
-
-        $params = [
-            "NAME" => $name,
-            "TEXT" =>  $text,
-            "CHECKED" =>  $checked,
-        ];
-
-
-        return Template::GetHTML('elements/checkbox', $params);
+        return HTMLForms::draw_checkbox($name, $value, $text);
 
     }
 
     public function draw_radio($name, $value)
     {
-        $html = '';
-
-        foreach ($value as $option) {
-
-
-            $params = [
-                "NAME" => $name,
-                "VALUE" =>  $option["value"],
-                "TEXT" =>  $option['text'],
-                "CLASS" =>$option["class"],
-                "CHECKED" =>  $option['checked'],
-            ];
-
-
-
-            $html .= Template::GetHTML('elements/radio_button', $params);
-            // $html .= '<input type="radio" class="' . $option["class"] . '" name="' . $name . '" value="' . $option["value"] . '" ' . $option['checked'] . '>' . $option['text'] . ' '.PHP_EOL;
-
-
-        }
-        // $html = $html . "<br>"."\n";
-        return $html;
+        return HTMLForms::draw_radio($name, $value);
     }
-    public function draw_hidden($name, $value)
+    public static function draw_hidden($name, $value)
     {
-        return '<input type="hidden" name="' . $name . '" value="' . $value. '">'.PHP_EOL;
+        return HTMLForms::draw_hidden($name, $value);
     }
 
 }

@@ -78,7 +78,8 @@ if ($emails) {
             if ($attachment['is_attachment'] === true) {
                 $attachment_name = str_replace(",", "_", $attachment['name']);
                 $attachment_name = str_replace(" ", "_", $attachment_name);
-                if (str_contains($attachment_name, "RunSheets") == true) {
+                if (str_contains($attachment_name, "RunSheets") == true ||
+                str_contains($attachment_name, "Run_Sheets") == true) {
                     $filename = $upload_directory . DIRECTORY_SEPARATOR . $attachment_name;
                     file_put_contents($filename, $attachment['attachment']);
 
