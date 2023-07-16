@@ -1,11 +1,44 @@
 <?php
 
+
+
 require_once("../.config.inc.php");
+use Symfony\Component\Finder\Finder;
 
 define('TITLE', "Test Page");
 //$template = new Template();
 require __LAYOUT_HEADER__;
 
+
+$rootPath = $conf['server']['root_dir'].$conf['server']['web_root'];
+$searchDir = $rootPath . $conf['server']['file_root'];
+
+$finder = new Finder();
+$finder->files()->in($searchDir)->name('*.xlsx')->notName('~*')->sortByName(true);
+
+foreach ($finder as $file) {
+
+    // Skip directories (they would be added automatically)
+    // if (!$file->isDir()) {
+
+    // Get real and relative path for current file
+    $filePath = $file->getRealPath();
+
+    //}
+}
+
+?>
+<pre><?php //print_r();?></pre>
+
+<?php
+
+
+
+
+
+
+
+die();
 $table = "flag_style";
 $key_column = "id";
 $res = $explorer->table($table)->fetchall();
@@ -19,9 +52,9 @@ foreach($res as $k => $data) {
 
     // echo "<br>" . PHP_EOL;
     foreach($data as $k => $v) {
-       // if($k == "id") {
-       //     continue;
-       // }
+        // if($k == "id") {
+        //     continue;
+        // }
         if($k == $key_column) {
             echo "\t"."\t"."\t"."'".$v."'  => [".PHP_EOL;
             continue;

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 $table = $explorer->table("settings");
 $table->order("setting_type ASC");
@@ -8,7 +9,7 @@ if ($results) {
 
     foreach ($results as $k => $u) {
 
-        $setting[$u['setting_cat']][$u['definedName']] =  [ 
+        $setting[$u['setting_cat']][$u['definedName']] =  [
             'id' => $u['id'],
             'type' => $u['setting_type'],
             'value' => $u['setting_value'],
@@ -28,20 +29,10 @@ $const = get_defined_constants(true);
 
 unset($setting);
 
-define("__MEDIA_FILES_DIR__", DIRECTORY_SEPARATOR . "Media Load Flags");
 
-if (MediaSettings::isTrue('__USE_LOCAL_XLSX__')) {
-    if (
-        MediaSettings::isTrue('__USER_XLSX_DIR__')
-    ) {
-        define("__FILES_DIR__", __USER_XLSX_DIR__);
-        FileSystem::createDir(__FILES_DIR__);
-    }
-}
 
-if (!MediaSettings::isSet('__FILES_DIR__')) {
-    define("__FILES_DIR__", __APP_ROOT__ . __MEDIA_FILES_DIR__);
-}
+define("__FILES_DIR__", $conf['server']['root_dir']. $conf['server']['web_root']. $conf['server']['file_root']);
+
 
 define("__EMAIL_PDF_UPLOAD_DIR__", DIRECTORY_SEPARATOR . "uploads");
 define("__PDF_UPLOAD_DIR__", DIRECTORY_SEPARATOR . "pdf");
@@ -58,7 +49,3 @@ if (key_exists('job_id', $_REQUEST)) {
     $job = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
     $media = new Media($job);
 }
-
-
-
-?>

@@ -2,13 +2,38 @@
     <div class="row">
         %%FORM_LIST_HTML%%
     </div>
-    <div class="p-2"></div>
+    <div class="row">
+        <p></p>
+    </div>
 
+    <div class="row">
+        %%EXCEL_LINK%%
+    </div>
+    <div class="row">
+        <p></p>
+    </div>
+
+<!--    <div class="p-2">
+        <input type="button" onclick="printDiv('printableArea')" value="print a div!" />
+
+    </div>
+-->
     <div class="row">
         %%SHEET_LIST_HTML%%
     </div>
-
-    <div class="row border border-3 border-dark">
+    <div class="row">
+        <p></p>
+    </div>
+    <div class="row">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" aria-label="group">
+        %%SHEET_LINKS%%
+        </div></div>
+    </div>
+    <div class="row">
+        <p></p>
+    </div>
+    <div class="row" id="printableArea">
         %%MESSAGE%%
     </div>
 </div>

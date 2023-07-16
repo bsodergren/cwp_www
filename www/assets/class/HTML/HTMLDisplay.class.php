@@ -67,4 +67,17 @@ class HTMLDisplay
         return HTMLForms::draw_hidden($name, $value);
     }
 
+    public static function draw_excelLink($excel_file)
+    {
+        global $conf;
+
+        $rootPath = $conf['server']['root_dir'].$conf['server']['web_root'];
+        $filename = basename($excel_file, ".xlsx");
+        $relativePath = substr($excel_file, strlen($rootPath) + 1);
+        // Add current file to archive
+        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+        return "ms-excel:ofe|u|".$url;
+
+    }
+
 }

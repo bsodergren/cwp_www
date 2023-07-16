@@ -2,7 +2,6 @@
 
 use Nette\Utils\FileSystem;
 
-
 // The Class
 class AdvancedFilesystemIterator extends ArrayIterator
 {
@@ -13,13 +12,17 @@ class AdvancedFilesystemIterator extends ArrayIterator
 
     public function __call(string $name, array $arguments)
     {
-        if (preg_match('/^sortBy(.*)/', $name, $m)) return $this->sort('get' . $m[1]);
+        if (preg_match('/^sortBy(.*)/', $name, $m)) {
+            return $this->sort('get' . $m[1]);
+        }
         throw new MemberAccessException('Method ' . $methodName . ' not exists');
     }
 
     public function sort($method)
     {
-        if (!method_exists('SplFileInfo', $method)) throw new InvalidArgumentException(sprintf('Method "%s" does not exist in SplFileInfo', $method));
+        if (!method_exists('SplFileInfo', $method)) {
+            throw new InvalidArgumentException(sprintf('Method "%s" does not exist in SplFileInfo', $method));
+        }
 
         $this->uasort(function (SplFileInfo $a, SplFileInfo $b) use ($method) {
             return (is_string($a->$method()) ? strnatcmp($a->$method(), $b->$method()) : $b->$method() - $a->$method());
@@ -42,7 +45,11 @@ class AdvancedFilesystemIterator extends ArrayIterator
 
 class Zip
 {
-    public function __construct($xlsx_directory, $job_id, $zip_file)
+    public function __construct()
+    {
+    }
+
+    public function zip($xlsx_directory, $job_id, $zip_file)
     {
         global $explorer;
 
@@ -65,14 +72,19 @@ class Zip
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
                 // Add current file to archive
                 $zip->addFile($filePath, $relativePath);
+
             }
         }
+
+
         // Zip archive will be created only after closing object
-        $zip->close();
+        $d = $zip->close();
+        if($d === true) {
+            $explorer->table('media_job')->where('job_id', $job_id)->update(['zip_exists' => '1']);
+            return "Zip file created";
+        }
+        return "zip file not created, probably a file open";
 
-        $explorer->table('media_job')->where('job_id', $job_id)->update(['zip_exists' => '1']);
-
-
-        //myHeader($_SERVER['REQUEST_URI']);
     }
+
 }

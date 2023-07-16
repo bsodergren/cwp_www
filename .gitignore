@@ -11,3 +11,5 @@ tools/*
 .config.true
 Media Load Flags/*
 cwp/*
+www/.files
+www/test/php_errors.log

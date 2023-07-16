@@ -18,6 +18,7 @@ class MediaUpdate
         $rename_column = [];
         $new_column = [];
         $reset_table = [];
+        $delete_data = [];
 
         include_once($file);
 
@@ -28,11 +29,13 @@ class MediaUpdate
             'newColumn' => $new_column,
             'newData' => $new_data,
             'updateData' => $update_data,
+            'deleteData' => $delete_data,
         ];
 
         foreach ($updates as $classmethod => $data_array) {
             $this->$classmethod($data_array);
         }
+
         $filename = basename($file);
 
         if ($this->check_tableExists('updates')) {
@@ -194,6 +197,56 @@ class MediaUpdate
             }
         }
     }
+    public function deleteData($delete_data)
+    {
+        if (is_array($delete_data)) {
+            foreach ($delete_data as $table => $updates) {
+                foreach ($updates as $data => $val) {
+                    $queryArr=[];
+
+                    if(is_array($val)) {
+                        if(!is_int($data)) {
+                            $where = $data;
+                        } else {
+                            $where = $val[0];
+                        }
+                        $data = $val;
+                    }
+
+                    $pre_query = "DELETE FROM " . $table . " WHERE ";
+                    foreach ($data as $field => $value) {
+                        if(!is_int($field)) {
+                            if(!isset($where)) {
+                                $where = $field;
+                            }
+                            if($field != $where) {
+                                $where = $field;
+                            }
+                            $queryArr[] =  $where . " = '" . $value . "' ";
+                        } else {
+                            $query .= $pre_query .  $where . " = '" . $value . "'; ";
+                        }
+
+
+                    }
+                    unset($where);
+                    if(count($queryArr) > 0) {
+                        $query = $pre_query .  implode(" AND ", $queryArr);
+                    }
+                    $queryArr=[];
+                    $queries = explode(";", $query);
+
+                    foreach($queries as $q) {
+                        $result = $this->conn->query($q);
+                    }
+                    $this->refresh = true;
+                }
+            }
+        }
+    }
+
+
+
 
     public static function createDatabase()
     {

@@ -107,5 +107,35 @@ class MediaFileSystem
         return $this->__directory($type, $create_dir);
     }
 
+    public static function rename($old, $new)
+    {
+        $msg = null;
+        try {
+            if (filesystem::rename($old, $new) == false) {
+                throw new Nette\IOException();
+            }
+        } catch (Nette\IOException $e) {
+            $msg = $e->getMessage();
+        }
+
+        return $msg;
+    }
+
+    public static function delete($file)
+    {
+        $msg = null;
+        if(file_exists($file) || is_dir($file)) {
+            try {
+                FileSystem::delete($file);
+            } catch (Nette\IOException $e) {
+                $msg = $e->getMessage();
+
+            }
+        } else {
+            $msg = $file . " not found";
+        }
+
+        return $msg;
+    }
 
 }

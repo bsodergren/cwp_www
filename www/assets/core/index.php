@@ -2,7 +2,6 @@
 
 require_once('.config.inc.php');
 
-use Nette\Utils\FileSystem;
 
 if (key_exists('update_job', $_REQUEST)) {
 
@@ -13,27 +12,19 @@ if (key_exists('update_job', $_REQUEST)) {
         MediaError::msg("warning", "There was a problem <br> the job number was incorrect");
     }
 
-    $media->delete_xlsx();
-    $media->delete_zip();
+    if($msg = $media->delete_xlsx() === null) {
+        if($msg = $media->delete_zip() === null) {
 
+            $mediaLoc = new MediaFileSystem($media->pdf_file, $job_number);
+            $mediaLoc->getDirectory();
 
-    $mediaLoc = new MediaFileSystem($media->pdf_file, $job_number);
-    $mediaLoc->getDirectory();
-
-    try {
-        if (filesystem::rename($media->base_dir, $mediaLoc->directory) == false) {
-            throw new Nette\IOException();
+            if($msg = MediaFileSystem::rename($media->base_dir, $mediaLoc->directory) === null) {
+                $media->update_job_number($job_number);
+                echo HTMLDisplay::JavaRefresh("/index.php", 0);
+            }
         }
-    } catch (Nette\IOException $e) {
-        $msg = $e->getMessage();
     }
-
-    if ($msg == '') {
-        $media->update_job_number($job_number);
-        echo HTMLDisplay::JavaRefresh("/index.php", 0);
-    } else {
-        MediaError::msg("warning", "There was a problem <br> " . $msg, 15);
-    }
+    MediaError::msg("warning", "There was a problem <br> " . $msg, 15);
     exit;
 }
 
@@ -50,15 +41,16 @@ foreach ($_REQUEST as $key => $value) {
             HTMLDisplay::$url = '/view.php?job_id=' . $job_id;
             break;
         case  "create_xlsx":
-            HTMLDisplay::$timeout = 3;
-            include_once __LAYOUT_HEADER__;
+
+            //            HTMLDisplay::$timeout = 3;
+            //            include_once __LAYOUT_HEADER__;
             $media->excelArray();
             $excel = new MediaXLSX($media);
-            
             $excel->writeWorkbooks();
             ob_flush();
-            define('REFRESH_MSG', 'XLSX Files Created');
+            $msg = 'XLSX Files Created';
             break;
+
         case  "create_slip":
             include_once __LAYOUT_HEADER__;
             $media->excelArray();
@@ -68,38 +60,45 @@ foreach ($_REQUEST as $key => $value) {
             //$slipsheets = new SlipSheetXLSX($media);
             //$slipsheets->CreateSlips();
             ob_flush();
-            define('REFRESH_MSG', 'Slip file Created');
+            $msg = 'Slip file Created';
             break;
+
         case  "create_zip":
             $xlsx_dir = $media->xlsx_directory;
             $zip_file =  $media->zip_file;
-            new Zip($xlsx_dir, $job_id, $zip_file);
-            define('REFRESH_MSG', 'ZIP File Created');
+            $zip = new Zip();
+            $msg = $zip->zip($xlsx_dir, $job_id, $zip_file);
+            //$msg ='ZIP File Created';
 
             break;
 
         case  "refresh_import":
             HTMLDisplay::$timeout = 3;
-            $media->delete_xlsx();
-            $media->deleteSlipSheets();
-            $media->delete_zip();
-            $media->delete_form();
-            include_once __LAYOUT_HEADER__;
+            if($msg = $media->delete_xlsx() === null) {
+                if($msg = $media->delete_zip() === null) {
+                    $media->delete_form();
+                    include_once __LAYOUT_HEADER__;
 
-            new MediaImport($media->pdf_fullname, $media->job_number);
-            define('REFRESH_MSG', 'PDF Reimported');
+                    new MediaImport($media->pdf_fullname, $media->job_number);
+                    $msg = 'PDF Reimported';
+                }
+            }
 
             break;
         case  "delete_zip":
-            $media->delete_zip();
-            define('REFRESH_MSG', 'Zip Deleted');
+            if($msg = $media->delete_zip() === null) {
+                $msg ='Zip Deleted';
+            }
 
             break;
         case  "delete_xlsx":
-            $media->delete_xlsx();
-            $media->deleteSlipSheets();
-            $media->delete_zip();
-            define('REFRESH_MSG', 'XLSX and Zip Deleted');
+            if($msg = $media->delete_xlsx() === null) {
+                //                $media->deleteSlipSheets();
+                if($msg = $media->delete_zip() === null) {
+                    $msg = 'Zip and excel files removed';
+                }
+            }
+
             break;
         case  "delete_job":
             HTMLDisplay::$url = "/delete_job.php?job_id=" . $job_id;
@@ -107,6 +106,8 @@ foreach ($_REQUEST as $key => $value) {
             break;
     }
 }
+
+define('REFRESH_MSG', $msg);
 
 if (HTMLDisplay::$url === false) {
     HTMLDisplay::$url = '/index.php';

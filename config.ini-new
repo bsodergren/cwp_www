@@ -11,3 +11,4 @@ bin_dir=\.bin
 web_root=\.public\www
 url_root=
 db_dir=\.public\.database
+file_root=\.files\media

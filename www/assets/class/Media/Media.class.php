@@ -348,17 +348,9 @@ class Media
         $this->delete_form();
         $this->deleteFromDatabase('media_job');
 
-        if (file_exists($this->pdf_file)) {
-            FileSystem::delete($this->pdf_file);
-        }
-
-        if (file_exists($this->pdf_tmp_file)) {
-            FileSystem::delete($this->pdf_tmp_file);
-        }
-
-        if (is_dir($this->base_dir)) {
-            FileSystem::delete($this->base_dir);
-        }
+        MediaFileSystem::delete($this->pdf_file);
+        MediaFileSystem::delete($this->pdf_tmp_file);
+        MediaFileSystem::delete($this->base_dir);
     }
 
     public function delete_form($form_number = '')
@@ -381,27 +373,29 @@ class Media
 
     public function delete_xlsx()
     {
-
-
+        $msg = null;
         if ($this->xlsx == true) {
-            if (is_dir($this->xlsx_directory)) {
-                FileSystem::delete($this->xlsx_directory);
+            $msg = MediaFileSystem::delete($this->xlsx_directory);
+            if($msg === null) {
+                Media::set_exists(0, "xlsx", $this->job_id);
+                $this->xlsx = false;
             }
         }
-        Media::set_exists(0, "xlsx", $this->job_id);
-        $this->xlsx = false;
+
+        return $msg;
     }
 
     public function delete_zip()
     {
-
+        $msg = null;
         if ($this->zip == true) {
-            if (is_dir($this->zip_directory)) {
-                FileSystem::delete($this->zip_directory);
+            $msg = MediaFileSystem::delete($this->zip_directory);
+            if($msg === null) {
+                Media::set_exists(0, "zip", $this->job_id);
+                $this->zip = false;
             }
         }
-        Media::set_exists(0, "zip", $this->job_id);
-        $this->zip = false;
+        return $msg;
     }
 
 

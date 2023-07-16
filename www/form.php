@@ -94,12 +94,13 @@ foreach ($new_forms as $form_number => $parts) {
         $page_form_number = $list_form_number->form_number;
         if ($current_form_number == $page_form_number) {
 
-            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
-                'PAGE_CLASS' => ' btn-success',
-                'PAGE_FORM_URL' => __URL_PATH__ . "/view.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number,
-                'PAGE_FORM_NUMBER' => 'View'
-            ]);
-
+            if (Media::get_exists("xlsx", $row['job_id']) == true) {
+                $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
+                    'PAGE_CLASS' => ' btn-success',
+                    'PAGE_FORM_URL' => __URL_PATH__ . "/view.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number,
+                    'PAGE_FORM_NUMBER' => 'View'
+                ]);
+            }
             $edit_url = __URL_PATH__ . "/form_edit.php?job_id=" . $media->job_id . "&form_number=" . $page_form_number;
             $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
                 'PAGE_CLASS' => ' btn-danger',
@@ -113,8 +114,12 @@ foreach ($new_forms as $form_number => $parts) {
                 'PAGE_FORM_NUMBER' => 'Update'
             ]);
 
-            $page_form_html .= template::GetHTML('/form/dropdown/dropdown', ['DROPDOWN_LINKS'=>$dropdown_links,
-            'DROPDOWN_TEXT_FORM' => $page_form_number ]);
+            //  $page_form_html .= template::GetHTML('/form/dropdown/dropdown', ['DROPDOWN_LINKS'=>$dropdown_links,'DROPDOWN_TEXT_FORM' => $page_form_number ]);
+            $page_html_params = [
+              'PAGE_CLASS' => ' btn-primary',
+              'PAGE_FORM_URL' => __URL_PATH__ . "/form.php?job_id=" . $media->job_id . $form_part,
+              'PAGE_FORM_NUMBER' => $page_form_number
+        ];
         } else {
 
             $page_html_params = [
@@ -122,9 +127,10 @@ foreach ($new_forms as $form_number => $parts) {
                 'PAGE_FORM_URL' => __URL_PATH__ . "/form.php?job_id=" . $media->job_id . $form_part,
                 'PAGE_FORM_NUMBER' => $page_form_number
             ];
-            $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
+
 
         }
+        $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
 
     }
 
@@ -165,7 +171,9 @@ $form_html["NEXT_FORM_NUMBER"] = $next_form_number;
 $form_html["JOB_ID"] = $media->job_id;
 $form_html["NEXT_VIEW"] = $next_view;
 $form_html['FORM_BODY_HTML'] = $letter_html;
+$form_html['FORM_BUTTONS'] = $dropdown_links;
 $form_html['FORM_LIST_HTML'] = $page_form_html;
+
 $template->clear();
 
 $template->template("form/main", $form_html);

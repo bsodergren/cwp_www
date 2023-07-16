@@ -18,7 +18,7 @@ if ($form->submitted()) {
         echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout);
         exit;
     } else {
-        HTMLDisplay::$url =  '/settings/settings.php?cat='.$_REQUEST['cat'];
+        HTMLDisplay::$url =  '/index.php';
 
         // get our form values and assign them to a variable
 

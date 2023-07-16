@@ -288,7 +288,7 @@ class MediaXLSX extends Media
 
         $sheet_labels['14'] = [$lifts_per_layer, $labels['14']];
 
-        $styles->createPage($form, $sheet_labels, 3);
+        $styles->createPage($form, $sheet_labels, __PAGES_PER_XLSX__);
 
     }
 

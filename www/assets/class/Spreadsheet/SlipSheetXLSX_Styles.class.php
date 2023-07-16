@@ -12,10 +12,10 @@ class SlipSheetXLSX_Styles extends Styles
 
 
     public $Columns = ['A','B','C','D','E','F','G','H'];
-    public $rowHeight = [10,30,30,25,25,30,30,30,10];
+    public $rowHeight = [10,35,35,25,25,30,30,30,5];
 
 
-   
+
 
 
     public function sheetCommon()
@@ -38,7 +38,7 @@ class SlipSheetXLSX_Styles extends Styles
 
         for($row=1; $row <= $this->totalRows; $row++) {
 
-            if($rowHeightIdx == $SlipSheetBreak ) {
+            if($rowHeightIdx == $SlipSheetBreak) {
                 $rowHeightIdx = 0;
             }
 
@@ -72,22 +72,22 @@ class SlipSheetXLSX_Styles extends Styles
             }
 
             switch($mergeidx) {
-                
+
                 case 1:
                     $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
                     break;
                 case 2:
 
-                    case 3:
+                case 3:
                     $styleProps['setSize'][] = ['cell' => 'A'.$row, 'size' => 32];
                     $styleProps['setBold'][] = 'A'.$row;
                     $styleProps['setAlign'][] = 'A'.$row;
                     $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
                     break;
 
-                
+
                 case 4:
-                    case 5:
+                case 5:
                     $styleProps['setSize'][] = ['cell' => 'A'.$row, 'size' => 16];
                     $styleProps['setBold'][] = 'A'.$row;
                     $styleProps['setAlign'][] = 'A'.$row;
@@ -95,9 +95,9 @@ class SlipSheetXLSX_Styles extends Styles
                     $styleProps['setMerge'][] = 'A'.$row.":".'D'.$row;
                     break;
 
-                case 6: 
-                    case 7:
-                         case 8:
+                case 6:
+                case 7:
+                case 8:
                     $styleProps['setSize'][] = ['cell' => 'A'.$row, 'size' => 26];
                     $styleProps['setSize'][] = ['cell' => 'C'.$row, 'size' => 26];
                     $styleProps['setAlign'][] = 'C'.$row;
@@ -128,7 +128,7 @@ class SlipSheetXLSX_Styles extends Styles
 
     }
 
- 
+
 
 
 
@@ -148,6 +148,6 @@ class SlipSheetXLSX_Styles extends Styles
     }
 
 
- 
+
 
 }

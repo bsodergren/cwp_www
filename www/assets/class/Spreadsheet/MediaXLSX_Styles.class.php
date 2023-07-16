@@ -168,41 +168,43 @@ class MediaXLSX_Styles extends Styles
             $this->setCellText(Styles::row('A', 24), $form['ship_value']);
             $this->setCellText(Styles::row('A', 25), $form['ship_value']);
             $this->setCellText(Styles::row('A', 26), $form['ship_value']);
-        }
+        } else {
 
+            $trim_cell = 26;
+            if ($form['del_size']  != 0) {
+                $deliveryInst[$trim_cell] = ["text" => "Delivered Size", "value" => $form['del_size']];
+                $trim_cell = 25;
+            }
 
-        if ($form['head_trim']  != 0) {
-
-            $deliveryInst[24] = ["text" => "Head Trim", "value" => $form['head_trim']];
-        }
-
-        if ($form['foot_trim']  != 0) {
-            $deliveryInst[25] = ["text" => "Foot Trim", "value" => $form['foot_trim']];
-        }
-
-        if ($form['del_size']  != 0) {
-            $deliveryInst[26] = ["text" => "Delivered Size", "value" => $form['del_size']];
-        }
-
-
-        if(is_array($deliveryInst)) {
-
-            $this->setBorder(['cell'=>Styles::row("A", 24) . ":" . Styles::row("D", 26),  'border'=>"outline"]);
-            foreach($deliveryInst as $row => $data) {
-
-                $this->setSize(['cell'=>Styles::row('A', $row),'size'=>12]);
-                $this->setCellText(Styles::row('A', $row), $data['text']);
-                $this->setAlign(Styles::row('A', $row), 'HV');
-
-                $this->setSize(['cell'=>Styles::row('B', $row),'size'=>12]);
-                $this->setCellText(Styles::row('B', $row), $data['value']);
-                $this->setAlign(Styles::row('B', $row), 'HV');
-
+            if ($form['foot_trim']  != 0) {
+                $deliveryInst[$trim_cell] = ["text" => "Foot Trim", "value" => $form['foot_trim']];
+                $trim_cell = 24;
+            }
+            if ($form['head_trim']  != 0) {
+                $deliveryInst[$trim_cell] = ["text" => "Head Trim", "value" => $form['head_trim']];
             }
 
 
-        }
 
+
+
+            if(is_array($deliveryInst)) {
+
+                $this->setBorder(['cell'=>Styles::row("A", 24) . ":" . Styles::row("D", 26),  'border'=>"outline"]);
+
+                foreach($deliveryInst as $row => $data) {
+                    $this->setHeight(['cell' => Styles::row(null, $row), 'height' =>18]);
+
+                    $this->setSize(['cell'=>Styles::row('A', $row),'size'=>12]);
+                    $this->setCellText(Styles::row('A', $row), $data['text']);
+                    $this->setAlign(Styles::row('A', $row), 'V');
+
+                    $this->setSize(['cell'=>Styles::row('B', $row),'size'=>12]);
+                    $this->setCellText(Styles::row('B', $row), $data['value']);
+                    $this->setAlign(Styles::row('B', $row), 'HV');
+                }
+            }
+        }
     }
 
     public function createPage($form, $sheet_labels, $copies = 1)

@@ -40,38 +40,21 @@ if (isset($_POST['divClass'])) {
 
 switch (__FORM_POST__) {
 
-    case "settings":
-        require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
-        ob_flush();
-
-        break;
     case "import":
         include __LAYOUT_HEADER__;
-        require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
-        ob_flush();
-        break;
-
+        // no break
+    case "trim":
+    case "view":
+    case "settings":
     case "form":
-        require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
-        break;
     case "index":
         require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
         break;
-
     case "form_edit":
-        require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
-        exit;
-        break;
     case "mail":
         require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
         exit;
-        break;
-    case "trim":
-        require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
-        break;
-
     default:
-        exit;
         break;
 }
 
