@@ -1,6 +1,10 @@
 [application]
 name=cwp
 debug=false
+[db]
+type=sqlite
+username=
+password=
 [gmail]
 name=
 password=
