@@ -9,15 +9,10 @@ require __COMPOSER_DIR__.DIRECTORY_SEPARATOR.'autoload.php';
 use Nette\Utils\FileSystem;
 use Noodlehaus\Config;
 use Noodlehaus\Parser\ini;
-use Tracy\Debugger;
 
 $config_file = __PROJECT_ROOT__.DIRECTORY_SEPARATOR.'config.ini';
 
 $conf = new Config($config_file);
-
-if ($conf['application']['debug'] == 1) {
-    Debugger::enable();
-}
 
 /**
  *  Basic constants for application that are displayed in the output
@@ -33,9 +28,9 @@ define('APP_DESCRIPTION', 'Embeddable PHP Login System');
 
 define('__APP_ROOT__', FileSystem::normalizePath($conf['server']['root_dir']));
 define('__APP_INSTALL_DIR__', $conf['server']['url_root']);
-define('__WEB_ROOT__', __APP_ROOT__.FileSystem::normalizePath($conf['server']['web_root'].__APP_INSTALL_DIR__));
+define('__WEB_ROOT__', __APP_ROOT__.FileSystem::normalizePath($conf['server']['web_root']));
 define('__ROOT_BIN_DIR__', FileSystem::normalizePath($conf['server']['bin_dir']));
-define('__SQLITE_DIR__', __APP_ROOT__.FileSystem::normalizePath($conf['server']['db_dir']));
+define('__SQLITE_DIR__', __APP_ROOT__.FileSystem::normalizePath($conf['db']['db_dir']));
 define('__URL_PATH__', __APP_INSTALL_DIR__);
 
 list($__filename) = explode('?', $_SERVER['REQUEST_URI']);
@@ -57,9 +52,22 @@ define('__ERROR_LOG_DIRECTORY__', __PROJECT_ROOT__.DIRECTORY_SEPARATOR.'logs');
 
 define('__TEMP_DIR__', sys_get_temp_dir());
 
-define('__SQLLITE_DEFAULT_TABLES_DIR__', __CONFIG_DIR__.DIRECTORY_SEPARATOR.'sqllite');
-define('__SQLITE_DATABASE__', __SQLITE_DIR__.DIRECTORY_SEPARATOR.'cwp_sqlite.db');
-define('__DATABASE_DSN__', 'sqlite:'.__SQLITE_DATABASE__);
+if ($conf['db']['type'] == 'mysql') {
+    define('__SQLITE_DATABASE__', __SQLITE_DIR__.DIRECTORY_SEPARATOR.'using_mysql.db');
+
+    define('DB_DATABASE', $conf['db']['dbname']);
+    define('DB_USERNAME', $conf['db']['username']);
+    define('DB_PASSWORD', $conf['db']['password']);
+
+    define('__DEFAULT_TABLES_DIR__', __CONFIG_DIR__.DIRECTORY_SEPARATOR.'mysql');
+    define('__DATABASE_DSN__', 'mysql:host='.$conf['db']['host'].';dbname='.$conf['db']['dbname']);
+} else {
+    define('__SQLITE_DATABASE__', __SQLITE_DIR__.DIRECTORY_SEPARATOR.'cwp_sqlite.db');
+    define('DB_USERNAME', null);
+    define('DB_PASSWORD', null);
+    define('__DEFAULT_TABLES_DIR__', __CONFIG_DIR__.DIRECTORY_SEPARATOR.'sqllite');
+    define('__DATABASE_DSN__', 'sqlite:'.__SQLITE_DATABASE__);
+}
 
 /*
  * Layout path structure in assets directory.

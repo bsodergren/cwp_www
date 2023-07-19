@@ -20,7 +20,7 @@ class Navbar extends Template
         if ($browser->getVersion() != '57.0.2987.98') {
             $nav_list_dir = "dropdown";
         }
-        $nav_links_array = json_decode(__NAVBAR_LINKS__, 1);
+        $nav_links_array = __NAVBAR_LINKS__;
         foreach ($nav_links_array as $text =>  $url) {
 
             if (is_array($url)) {

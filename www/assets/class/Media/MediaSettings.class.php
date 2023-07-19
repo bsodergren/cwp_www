@@ -12,6 +12,7 @@ class MediaSettings
         }
 
         // foreach()
+
         if(str_contains(__PDF_NOTRIM__, $publication)) {
             return 1;
         }

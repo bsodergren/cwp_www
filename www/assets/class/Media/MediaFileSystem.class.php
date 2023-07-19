@@ -5,10 +5,12 @@ use Nette\Utils\FileSystem;
 class MediaFileSystem
 {
     public $directory;
+
     public $job_number;
+
     public $pdf_file;
 
-    public function __construct($pdf_file=null, $job_number=null)
+    public function __construct($pdf_file = null, $job_number = null)
     {
         $this->job_number = $job_number;
         $this->pdf_file = $pdf_file;
@@ -23,42 +25,37 @@ class MediaFileSystem
     {
         $directory = '';
 
-        if(!isset($this->pdf_file)) {
+        if (! isset($this->pdf_file)) {
             return false;
         }
 
-        $file = basename($this->pdf_file, ".pdf");
-        $filename = $this->job_number . '_' . $file;
-
+        $file = basename($this->pdf_file, '.pdf');
+        $filename = $this->job_number.'_'.$file;
 
         if (strtolower($type) == 'xlsx') {
-
-            $filename = $filename . "_FM" . $form_number . '.xlsx';
+            $filename = $filename.'_FM'.$form_number.'.xlsx';
         }
         if (strtolower($type) == 'slips') {
-
-            $filename =  $filename . "_CountSlips_FM" . $form_number .'.xlsx';
+            $filename = $filename.'_CountSlips_FM'.$form_number.'.xlsx';
         }
         if (strtolower($type) == 'zip') {
-
             if ($form_number != '') {
-                $filename =  $filename . "_FM" . $form_number . '.zip';
+                $filename = $filename.'_FM'.$form_number.'.zip';
             } else {
-                $filename =  $filename . ".zip";
+                $filename = $filename.'.zip';
             }
         }
         if (strtolower($type) == 'pdf') {
-            $filename =  $this->pdf_file;
-
+            $filename = $this->pdf_file;
         }
 
-        if($type != '') {
+        if ($type != '') {
             $directory = $this->__directory($type, $create_dir);
         }
 
-
-        $filename = $directory . DIRECTORY_SEPARATOR  . $filename;
+        $filename = $directory.DIRECTORY_SEPARATOR.$filename;
         $filename = FileSystem::normalizePath($filename);
+
         return $filename;
     }
 
@@ -66,33 +63,32 @@ class MediaFileSystem
     {
         $output_filename = '';
 
-        if($this->__filename() !== false) {
-            $output_filename = DIRECTORY_SEPARATOR  . $this->__filename();
+        if ($this->__filename() !== false) {
+            $output_filename = DIRECTORY_SEPARATOR.$this->__filename();
         }
 
-        $directory = '';
+        $directory = $output_filename;
 
         if (strtolower($type) == 'xlsx') {
-            $directory =  $output_filename . __XLSX_DIRECTORY__;
+            $directory .= __XLSX_DIRECTORY__;
         }
 
         if (strtolower($type) == 'slips') {
-            $directory =  $output_filename . __XLSX_SLIPS_DIRECTORY__;
+            $directory .= __XLSX_SLIPS_DIRECTORY__;
         }
 
         if (strtolower($type) == 'pdf') {
-            $directory =  $output_filename . __PDF_UPLOAD_DIR__;
+            $directory .= __PDF_UPLOAD_DIR__;
         }
         if (strtolower($type) == 'zip') {
-            $directory =  $output_filename .  __ZIP_FILE_DIR__;
+            $directory .= __ZIP_FILE_DIR__;
         }
 
         if (strtolower($type) == 'upload') {
             $directory = __EMAIL_PDF_UPLOAD_DIR__;
         }
 
-        $directory = __FILES_DIR__ . $directory;
-
+        $directory = __FILES_DIR__.$directory;
         $this->directory = FileSystem::normalizePath($directory);
 
         if ($create_dir == true) {
@@ -124,18 +120,16 @@ class MediaFileSystem
     public static function delete($file)
     {
         $msg = null;
-        if(file_exists($file) || is_dir($file)) {
+        if (file_exists($file) || is_dir($file)) {
             try {
                 FileSystem::delete($file);
             } catch (Nette\IOException $e) {
                 $msg = $e->getMessage();
-
             }
         } else {
-            $msg = $file . " not found";
+            $msg = $file.' not found';
         }
 
         return $msg;
     }
-
 }

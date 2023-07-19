@@ -4,7 +4,7 @@ use Nette\Utils\FileSystem;
 
 $refresh = MediaUpdate::createDatabase();
 
-$connection = new Nette\Database\Connection(__DATABASE_DSN__);
+$connection = new Nette\Database\Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
 $storage = new Nette\Caching\Storages\DevNullStorage();
 $structure = new Nette\Database\Structure($connection, $storage);
 $conventions = new Nette\Database\Conventions\DiscoveredConventions($structure);
@@ -22,7 +22,7 @@ if ($UpdaterObj->check_tableExists('updates')) {
 }
 
 $updates_array = Utils::get_filelist(__UPDATES_DIR__, 'php', $version_updates_skipSkipFile);
-
+sort($updates_array);
 if (count($updates_array) >= 1) {
     $update = new MediaUpdate($connection);
     $update->refresh = $refresh;

@@ -12,4 +12,4 @@ tools/*
 Media Load Flags/*
 cwp/*
 www/.files
-www/test/php_errors.log
+**/php_errors.log

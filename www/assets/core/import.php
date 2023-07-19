@@ -4,8 +4,8 @@ require_once '.config.inc.php';
 
 use Nette\Utils\FileSystem;
 
-HTMLDisplay::$timeout=10;
-HTMLDisplay::$url ='import.php';
+HTMLDisplay::$timeout = 10;
+HTMLDisplay::$url = 'import.php';
 
 $error = false;
 // Store errors here
@@ -62,11 +62,11 @@ if (isset($_POST['submit'])) {
         HTMLDisplay::output("<span class='p-3 text-danger'>No Job Number </span> <br>");
         $error = true;
     }
-    HTMLDisplay::$url ='import.php';
+    HTMLDisplay::$url = 'import.php';
 
     if ($error == false) {
-        HTMLDisplay::$url ='index.php';
-        HTMLDisplay::$timeout=5;
+        HTMLDisplay::$url = 'index.php';
+        HTMLDisplay::$timeout = 5;
 
         $media_closing = '/'.basename($fileName, '.pdf');
         $locations = new MediaFileSystem($fileName, $job_number);
@@ -94,7 +94,6 @@ if (isset($_POST['submit'])) {
                 $qdf_cmd = FileSystem::normalizePath('"'.__ROOT_BIN_DIR__.'/qpdf" ');
                 $pdf_file = FileSystem::normalizePath($pdf_file);
                 $cmd = $qdf_cmd.'"'.$pdf_file.'" '.' --pages . 1-z -- --replace-input ';
-
                 $process = proc_open($cmd, $descriptorspec, $pipes);
 
                 HTMLDisplay::output('Waiting for PDF for finish <br>');
@@ -113,20 +112,12 @@ if (isset($_POST['submit'])) {
             HTMLDisplay::output("File already was uploaded<br>\n");
         } //end if
 
-        $val = $explorer->table('media_job')->where('pdf_file', $pdf_file)->select('job_id');
-        foreach ($val as $u) {
-            $job_id = $u->job_id;
-        }
+        $MediaImport = new MediaImport($pdf_file, $job_number);
 
-        $job_id = '';
-        if ($job_id == '') {
-            $MediaImport = new MediaImport($pdf_file, $job_number);
-
-            if ($MediaImport->status < 1) {
-                HTMLDisplay::output("<span class='p-3 text-danger'>File failed to process</span> <br>");
-                HTMLDisplay::output("<span class='p-3 text-danger'>Will have to run Refresh Import </span><br>");
-                HTMLDisplay::output(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue <br>');
-            }
+        if ($MediaImport->status < 1) {
+            HTMLDisplay::output("<span class='p-3 text-danger'>File failed to process</span> <br>");
+            HTMLDisplay::output("<span class='p-3 text-danger'>Will have to run Refresh Import </span><br>");
+            HTMLDisplay::output(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue <br>');
         }
     }
 }

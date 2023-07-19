@@ -3,6 +3,8 @@ name=cwp
 debug=false
 [db]
 type=sqlite
+dbname=cwp
+host=
 username=
 password=
 [gmail]
