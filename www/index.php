@@ -79,7 +79,7 @@ if ($cnt > 0) {
         }
 
         if (Media::get_exists('xlsx', $row['job_id']) == true) {
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_slip', '', 'create_slip', '', $class_create.$tooltip.'create_slip"');
+         //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_slip', '', 'create_slip', '', $class_create.$tooltip.'create_slip"');
         }
 
         if (is_file($zip_file)) {
