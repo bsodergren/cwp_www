@@ -23,7 +23,6 @@ if (array_key_exists('file_id', $_REQUEST)) {
 if (array_key_exists('sheet_id', $_REQUEST)) {
     $sheet_id = $_REQUEST['sheet_id'];
 }
-
 if (! is_dir($media->xlsx_directory)) {
     XLSXViewer::checkifexist($media);
 }
@@ -38,6 +37,7 @@ if (! $finder->hasResults()) {
 
 $idx = 0;
 $params['FORM_LIST_HTML'] = '';
+$params['EXCEL_DIRECTORY'] = $media->xlsx_directory;
 $excel_link = '';
 
 foreach ($finder as $file) {
