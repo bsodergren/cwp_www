@@ -1,6 +1,7 @@
 <?php
 
 use Nette\Utils\Strings;
+use coderofsalvation\BrowserStream;
 
 class PDFImport extends MediaImport
 {
@@ -28,6 +29,8 @@ class PDFImport extends MediaImport
 
                 $this->parse_page($page_text);
             } else {
+                $noPagess = count($pages);
+                BrowserStream::put("Importing ".$noPagess." pages<BR>");
                 foreach ($pages as $page) {
                     $page_text = [];
 

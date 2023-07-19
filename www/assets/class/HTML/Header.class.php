@@ -1,4 +1,5 @@
 <?php
+use coderofsalvation\BrowserStream;
 
 
 
@@ -32,6 +33,8 @@ class Header extends Template
 
         $templateObj = new Template();
         $params['__MSG__'] = self::displayMsg();
+
+
         echo $templateObj->template("base/" ."header/header", $params);
     }
 

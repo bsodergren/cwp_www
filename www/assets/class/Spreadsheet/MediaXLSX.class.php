@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Borders;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf;
+use coderofsalvation\BrowserStream;
 
 class MediaXLSX extends Media
 {
@@ -166,10 +167,8 @@ class MediaXLSX extends Media
             $writer = new Xlsx($this->spreadsheet);
             $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
             $writer->save($new_xlsx_file);
-            if($quiet === false) {
-                HTMLDisplay::output("Writing " . basename($new_xlsx_file), "<br>");
-                ob_flush();
-            }
+            HTMLDisplay::put("Writing " . basename($new_xlsx_file),"red");
+
             $this->spreadsheet->disconnectWorksheets();
             unset($this->spreadsheet);
         }
@@ -179,6 +178,7 @@ class MediaXLSX extends Media
 
     public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
     {
+
         $bindery_trim = false;
 
         foreach ($this->box as $var => $value) {

@@ -40,11 +40,13 @@ if (array_key_exists('job_id', $_REQUEST)) {
     $job = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
     $media = new Media($job);
 }
-define('__NAVBAR_LINKS__',
-    ['Home' => '/index.php',
+define('__NAVBAR_LINKS__',[
+        'Home' => '/index.php',
+        'Test' => '/test/test.php',
         'Import' => '/import.php',
+        'Trim Sizes' => '/settings/trim.php',
         'Settings' => [
-            'Trim Sizes' => '/settings/trim.php',
+
             'Language' => '/settings/language.php',
             'Local Settings' => '/settings/local.php',
 //            'Server Settings' => '/settings/settings.php',

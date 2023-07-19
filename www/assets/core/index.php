@@ -1,6 +1,8 @@
 <?php
-
 require_once '.config.inc.php';
+
+use coderofsalvation\BrowserStream;
+
 
 if (array_key_exists('update_job', $_REQUEST)) {
     $job_number = $_REQUEST['job_number'];
@@ -36,18 +38,25 @@ foreach ($_REQUEST as $key => $value) {
             HTMLDisplay::$url = '/view.php?job_id='.$job_id;
             break;
         case  'create_xlsx':
+            include __LAYOUT_HEADER__;
+            HTMLDisplay::put("processing for excel ","red");
 
-            //            HTMLDisplay::$timeout = 3;
-            //            include_once __LAYOUT_HEADER__;
+            BrowserStream::put("Getting array<BR>");
+
             $media->excelArray();
+            BrowserStream::put("Writing new excel files<BR>");
+
             $excel = new MediaXLSX($media);
+            BrowserStream::put("Writing new excel files<BR>");
+
             $excel->writeWorkbooks();
-            ob_flush();
+
             $msg = 'XLSX Files Created';
             break;
 
         case  'create_slip':
             include_once __LAYOUT_HEADER__;
+
             $media->excelArray();
             $excel = new MediaXLSX($media);
             $excel->writeMasterWorkbook();

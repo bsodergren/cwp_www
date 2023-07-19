@@ -1,7 +1,5 @@
 <?php
 
-ob_start();
-ob_implicit_flush(true);
 require('.config.inc.php');
 
 define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), '.php'));
@@ -41,13 +39,15 @@ if (isset($_POST['divClass'])) {
 switch (__FORM_POST__) {
 
     case "import":
+
         include __LAYOUT_HEADER__;
         // no break
     case "trim":
     case "view":
     case "settings":
     case "form":
-    case "index":
+            case "index":
+
         require_once(__INC_CORE_DIR__ . "/" . __FORM_POST__ . ".php");
         break;
     case "form_edit":

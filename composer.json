@@ -10,7 +10,9 @@
         "hassankhan/config": "^3.1",
         "twbs/bootstrap": "^5.2",
         "phpmailer/phpmailer": "^6.8",
-        "symfony/finder": "^6.3"
+        "symfony/finder": "^6.3",
+        "lamansky/fraction": "^1.0",
+        "coderofsalvation/browser-stream": "dev-master"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.2"

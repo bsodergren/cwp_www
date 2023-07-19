@@ -13,3 +13,4 @@ Media Load Flags/*
 cwp/*
 www/.files
 **/php_errors.log
+.gitignore
