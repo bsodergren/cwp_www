@@ -20,7 +20,7 @@ $locations = new MediaFileSystem();
 $upload_directory = $locations->getDirectory('upload', true);
 $params = [];
 $upload_params = [];
-
+$pdf_select_options = [];
 if ($emails) {
 
     foreach ($emails as $i => $m) {
@@ -91,12 +91,11 @@ if ($emails) {
                 }
             }
         }
-        $pdf_select_options['SELECT_NAME'] = 'mail_file';
-        $pdf_select_options['SELECT_DESC'] =  'Job Name';
-        $mail_import_card['FIRST_FORM'] =  template::GetHTML('/import/form_select', $pdf_select_options);
+        if(key_exists('SELECT_OPTIONS', $pdf_select_options)) {
+            $pdf_select_options['SELECT_NAME'] = 'mail_file';
+            $pdf_select_options['SELECT_DESC'] =  'Job Name';
+            $mail_import_card['FIRST_FORM'] =  template::GetHTML('/import/form_select', $pdf_select_options);
 
-
-        if ($matched == true) {
             foreach (array_unique($output_array[0]) as $v => $job_number) {
                 $jn_select_options['SELECT_OPTIONS'] .=  template::GetHTML('/import/form_option', [
                     'OPTION_VALUE' => $job_number,
@@ -107,15 +106,16 @@ if ($emails) {
             $jn_select_options['SELECT_DESC'] =  'Job Number';
             $mail_import_card['SECOND_FORM'] =  template::GetHTML('/import/form_select', $jn_select_options);
 
-        } else {
-            $mail_import_card['SECOND_FORM'] =  template::GetHTML('/import/form_text', ['JN_NAME' => 'mail_job_number']);
+            // } else {
+            //    $mail_import_card['SECOND_FORM'] =  template::GetHTML('/import/form_text', ['JN_NAME' => 'mail_job_number']);
+            $mail_import_card['CARD_HEADER'] = "Import from Gmail";
+            $params['EMAIL_IMPORT_HTML'] =  template::GetHTML('/import/form_card', $mail_import_card);
+
         }
 
 
 
     }
-    $mail_import_card['CARD_HEADER'] = "Import from Gmail";
-    $params['EMAIL_IMPORT_HTML'] =  template::GetHTML('/import/form_card', $mail_import_card);
     imap_close($imap);
 }
 
