@@ -9,6 +9,7 @@ username=
 password=
 db_dir=\.public\.database
 [gmail]
+enable=false
 name=
 password=
 [server]

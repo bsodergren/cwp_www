@@ -1,8 +1,9 @@
 <?php
+// {Major}.{Minor}.{Patch}.{env:BUILD_NUMBER}'
+
 require_once '../.config.inc.php';
 use Symfony\Component\Finder\Finder;
 use coderofsalvation\BrowserStream;
-
 
 define('TITLE', 'Test Page');
 //$template = new Template();
@@ -13,7 +14,7 @@ require __LAYOUT_HEADER__;
 
 BrowserStream::put("loading");
 
-for( $i = 0; $i < 10; $i++ ){
+for($i = 0; $i < 10; $i++) {
     BrowserStream::put(".");
     sleep(1);
 }
