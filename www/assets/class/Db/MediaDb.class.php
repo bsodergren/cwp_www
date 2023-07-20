@@ -3,6 +3,9 @@
  * CWP Media tool
  */
 
+/**
+ * CWP Media tool.
+ */
 class MediaDB
 {
     public $conn;
