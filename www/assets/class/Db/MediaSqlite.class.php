@@ -3,7 +3,10 @@
  * CWP Media tool
  */
 
-class MediaSqlite extends MediaDB
+/**
+ * CWP Media tool.
+ */
+class MediaSqlite extends MediaDb
 {
     public function checkTable($table)
     {

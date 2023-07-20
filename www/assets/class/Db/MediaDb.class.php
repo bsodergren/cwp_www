@@ -6,7 +6,7 @@
 /**
  * CWP Media tool.
  */
-class MediaDB
+class MediaDb
 {
     public $conn;
 

@@ -3,7 +3,10 @@
  * CWP Media tool
  */
 
-class MediaMySQL extends MediaDB
+/**
+ * CWP Media tool.
+ */
+class MediaMySQL extends MediaDb
 {
     public function checkColumn($table, $column)
     {
