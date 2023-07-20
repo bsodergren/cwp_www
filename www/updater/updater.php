@@ -26,6 +26,7 @@ if (false !== MediaProgramUpdate::$UPDATES_PENDING) {
     }
 } else {
     echo 'All up to date';
+    echo HTMLDisplay::JavaRefresh('/index.php', 10);
 }
 
 include_once __LAYOUT_FOOTER__;
