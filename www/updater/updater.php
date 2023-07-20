@@ -49,50 +49,55 @@ if ($current > $installed) {
         $doUpdates[]    = trim($Updates);
     }
 
-    foreach ($doUpdates as $version) {
-        $zip_filename           = 'update_'.$version.'.zip';
-        $zip_dl_url             = $zip_url.$zip_filename;
-        $data                   = get_content($zip_dl_url);
+    echo 'There are '.count($doUpdates).' updates pending<br>';
+    if (array_key_exists('update', $_POST)) {
+        foreach ($doUpdates as $version) {
+            $zip_filename           = 'update_'.$version.'.zip';
+            $zip_dl_url             = $zip_url.$zip_filename;
+            $data                   = get_content($zip_dl_url);
 
-        if (!is_dir(__VERSION_DL_DIR__)) {
-            mkdir(__VERSION_DL_DIR__, 0777, true);
-        }
-
-        $destination            = __VERSION_DL_DIR__.\DIRECTORY_SEPARATOR.$zip_filename;
-        $updateFiles[]          = $destination;
-        if (file_exists($destination)) {
-            unlink($destination);
-        }
-        $file                   = fopen($destination, 'w+');
-        fwrite($file, $data);
-        fclose($file);
-    }
-
-    foreach ($updateFiles as $updateFile) {
-        echo 'Running update on '.basename($updateFile).'<br>';
-
-        $command             = [
-            $patcher_exec,
-            '-O',
-            __DRIVE_LETTER__.$conf['server']['root_dir'],
-            '-P',
-            $updateFile,
-        ];
-
-        $process             = new Process($command);
-        $process->setTimeout(60000);
-
-        $runCommand          = $process->getCommandLine();
-
-        $process->run(function ($type, $buffer): void {
-            if (Process::ERR === $type) {
-                echo 'ERR > '.$buffer.'<br>';
-            } else {
-                echo 'OUT > '.$buffer.'<br>';
+            if (!is_dir(__VERSION_DL_DIR__)) {
+                mkdir(__VERSION_DL_DIR__, 0777, true);
             }
-        });
-        // $process->wait();
+
+            $destination            = __VERSION_DL_DIR__.\DIRECTORY_SEPARATOR.$zip_filename;
+            $updateFiles[]          = $destination;
+            if (file_exists($destination)) {
+                unlink($destination);
+            }
+            $file                   = fopen($destination, 'w+');
+            fwrite($file, $data);
+            fclose($file);
+        }
+
+        foreach ($updateFiles as $updateFile) {
+            echo 'Running update on '.basename($updateFile).'<br>';
+
+            $command             = [
+                $patcher_exec,
+                '-O',
+                __DRIVE_LETTER__.$conf['server']['root_dir'],
+                '-P',
+                $updateFile,
+            ];
+
+            $process             = new Process($command);
+            $process->setTimeout(60000);
+
+            $runCommand          = $process->getCommandLine();
+
+            $process->run(function ($type, $buffer): void {
+                if (Process::ERR === $type) {
+                    echo 'ERR > '.$buffer.'<br>';
+                } else {
+                    echo 'OUT > '.$buffer.'<br>';
+                }
+            });
+            // $process->wait();
+        }
     }
+} else {
+    echo 'All uo to date';
 }
 
 include_once __LAYOUT_FOOTER__;
