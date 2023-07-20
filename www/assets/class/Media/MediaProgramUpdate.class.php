@@ -26,17 +26,21 @@ class MediaProgramUpdate
 
     public function __construct()
     {
-        global $conf;
-        $this->conf                     = $conf;
-        $this->updateUrl                = $this->gitRaw.'current.txt?432=432';
-        $this->versionUrl               = $this->gitRaw.'version.txt?432=432';
-        $this->zip_url                  = $this->gitRaw.'versions/';
+        if (__NO_UPDATES__ === false) {
+            global $conf;
+            $this->conf                     = $conf;
+            $this->updateUrl                = $this->gitRaw.'current.txt?432=432';
+            $this->versionUrl               = $this->gitRaw.'version.txt?432=432';
+            $this->zip_url                  = $this->gitRaw.'versions/';
 
-        $current                        = trim($this->get_content($this->updateUrl));
-        $this->installed                = trim(file_get_contents(__VERSION_FILE__));
-        self::$UPDATES_PENDING          = false;
-        if ($current > $this->installed) {
-            self::$UPDATES_PENDING = $this->getNumUpdates();
+            $current                        = trim($this->get_content($this->updateUrl));
+            $this->installed                = trim(file_get_contents(__VERSION_FILE__));
+            self::$UPDATES_PENDING          = false;
+            if ($current > $this->installed) {
+                self::$UPDATES_PENDING = $this->getNumUpdates();
+            }
+        } else {
+            self::$UPDATES_PENDING = false;
         }
     }
 

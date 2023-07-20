@@ -17,10 +17,15 @@ $conf             = new Config($config_file);
 
 if (str_contains(strtolower($_SERVER['OS']), 'windows')) {
     define('__DRIVE_LETTER__', substr(__DIR__, 0, 2));
+    define('__NO_UPDATES__', false);
 } else {
+    if (str_contains(strtolower($_SERVER['SERVER_SOFTWARE']), 'ubuntu')) {
+        define('__NO_UPDATES__', true);
+    } else {
+        define('__NO_UPDATES__', false);
+    }
     define('__DRIVE_LETTER__', '');
 }
-
 /*
  *  Basic constants for application that are displayed in the output
  */
