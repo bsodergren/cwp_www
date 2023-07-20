@@ -18,15 +18,15 @@ if (false !== MediaProgramUpdate::$UPDATES_PENDING) {
         echo 'There are '.MediaProgramUpdate::$UPDATES_PENDING.' Pending <br>';
         ?>
 <form action="/updater/updater.php" method="post">
-	<input type="hidden" name="update" value="1">
-	<button type="submit" name="submit" class="btn active">Update!</button>
+    <input type="hidden" name="update" value="1">
+    <button type="submit" name="submit" class="btn active">Update!</button>
 </form>
 <?php
 
     }
 } else {
     echo 'All up to date';
-    echo HTMLDisplay::JavaRefresh('/index.php', 10);
+    echo HTMLDisplay::JavaRefresh('/index.php', 3);
 }
 
 include_once __LAYOUT_FOOTER__;
