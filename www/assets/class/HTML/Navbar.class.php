@@ -9,19 +9,18 @@ class Navbar extends Template
 {
     public static function display($template = '', $params = [])
     {
-        $templateObj                = new Template();
+        $templateObj                             = new Template();
 
-        $nav_link_html              = '';
-        $dropddown_menu_text        = '';
-        $dropdown_link_html         = '';
-        $navbar_menu_html           = '';
-        $nav_list_dir               = 'list';
+        $nav_link_html                           = '';
+        $dropddown_menu_text                     = '';
+        $dropdown_link_html                      = '';
+        $nav_list_dir                            = 'list';
 
-        $browser                    = new Browser();
+        $browser                                 = new Browser();
         if ('57.0.2987.98' != $browser->getVersion()) {
             $nav_list_dir = 'dropdown';
         }
-        $nav_links_array            = array_merge(__DEV_LINKS__, __NAVBAR_LINKS__);
+        $nav_links_array                         = array_merge(__DEV_LINKS__, __NAVBAR_LINKS__);
         foreach ($nav_links_array as $text =>  $url) {
             if (is_array($url)) {
                 $dropddown_menu_text = $text;
@@ -43,13 +42,16 @@ class Navbar extends Template
             define('__FOOTER_NAV_HTML__', $dropdown_link_html);
         }
 
-        $navbar_menu_html           = $templateObj->template('base/navbar/'.$nav_list_dir.'/navbar_menu', [
+        $params['NAVBAR_MENU_HTML']              = $templateObj->template('base/navbar/'.$nav_list_dir.'/navbar_menu', [
             'NAV_BAR_LINKS'  => $nav_link_html,
             'DROPDOWN_LINKS' => $dropdown_link_html,
             'DROPDOWN_TEXT'  => $dropddown_menu_text,
         ]);
-        $params['NAVBAR_MENU_HTML'] = $navbar_menu_html;
-        $params['NAVBAR_UPDATES_HTML'] = MediaProgramUpdate::$UPDATES_PENDING;
+
+        if (false !== MediaProgramUpdate::$UPDATES_PENDING) {
+            $params['NAVBAR_UPDATES_HTML']         = $templateObj->template('base/navbar/updates', [
+            'VERSION_UPDATES'  => MediaProgramUpdate::$UPDATES_PENDING]);
+        }
 
         return $templateObj->template('base/navbar/navbar', $params);
     }
