@@ -40,6 +40,10 @@ class MediaProgramUpdate
         }
     }
 
+    public function currentVersion(){
+
+return $this->installed;
+    }
     public function getNumUpdates()
     {
         $this->getUpdates();

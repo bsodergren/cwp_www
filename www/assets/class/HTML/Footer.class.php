@@ -3,18 +3,24 @@
  * CWP Media tool
  */
 
+/**
+ * CWP Media tool.
+ */
 class Footer extends Template
 {
     // public $html;
 
     public static function display($template = '', $params = [])
     {
+        global $mediaUpdates;
         $templateObj              = new Template();
 
         if (MediaSettings::isSet('__FOOTER_NAV_HTML__')) {
             $params['FOOT_NAV_PANEL'] = $templateObj->template(
                 'base/footer/settings_nav',
-                ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__]
+                ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__,
+                'CURRENT_VERSION'  => $mediaUpdates->currentVersion(),
+                ]
             );
         }
 
@@ -37,7 +43,6 @@ class Footer extends Template
         }
 
         $params['END_JAVASCRIPT'] = Template::GetHTML('base/footer/javascript');
-
         echo $templateObj->template('base/footer/footer', $params);
     }
 }
