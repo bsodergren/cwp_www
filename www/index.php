@@ -95,7 +95,7 @@ if ($cnt > 0) {
 
                 $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_zip', '', 'create zip', '', $class_create.$zdisabled.$tooltip.'create_zip"');
             }
-            if (__SHOW_EMAIL__ == true) {
+            if (__SHOW_MAIL__ == true) {
                 if (is_file($zip_file)) {
                     $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('email_zip', '', 'email zip', '', $class_create.$tooltip.'email_zip"');
                 }
