@@ -14,3 +14,4 @@ www/.files
 .gitignore
 .database/using_mysql.db
 www/files/*
+www/updater/download/

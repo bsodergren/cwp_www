@@ -52,20 +52,21 @@ if ($current > $installed) {
     }
 
     foreach ($doUpdates as $version) {
-        $zip_filename        = 'update_'.$version.'.zip';
-        $zip_url             = $zip_url.$zip_filename;
-        $data                = get_content($zip_url);
+        $zip_filename           = 'update_'.$version.'.zip';
+        $zip_dl_url             = $zip_url.$zip_filename;
+        dump($zip_dl_url);
+        $data                   = get_content($zip_dl_url);
 
         if (!is_dir(__VERSION_DL_DIR__)) {
             mkdir(__VERSION_DL_DIR__, 0777, true);
         }
 
-        $destination         = __VERSION_DL_DIR__.\DIRECTORY_SEPARATOR.zip_filename;
+        $destination            = __VERSION_DL_DIR__.\DIRECTORY_SEPARATOR.$zip_filename;
 
         if (file_exists($destination)) {
             unlink($destination);
         }
-        $file                = fopen($destination, 'w+');
+        $file                   = fopen($destination, 'w+');
         fwrite($file, $data);
         fclose($file);
     }
