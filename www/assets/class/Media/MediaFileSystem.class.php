@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool
+ */
 
 use Nette\Utils\FileSystem;
 
@@ -13,7 +16,7 @@ class MediaFileSystem
     public function __construct($pdf_file = null, $job_number = null)
     {
         $this->job_number = $job_number;
-        $this->pdf_file = $pdf_file;
+        $this->pdf_file   = $pdf_file;
     }
 
     public function getFilename($type = '', $form_number = '', $create_dir = '')
@@ -25,73 +28,73 @@ class MediaFileSystem
     {
         $directory = '';
 
-        if (! isset($this->pdf_file)) {
+        if (!isset($this->pdf_file)) {
             return false;
         }
 
-        $file = basename($this->pdf_file, '.pdf');
-        $filename = $this->job_number.'_'.$file;
+        $file      = basename($this->pdf_file, '.pdf');
+        $filename  = $this->job_number.'_'.$file;
 
-        if (strtolower($type) == 'xlsx') {
+        if ('xlsx' == strtolower($type)) {
             $filename = $filename.'_FM'.$form_number.'.xlsx';
         }
-        if (strtolower($type) == 'slips') {
+        if ('slips' == strtolower($type)) {
             $filename = $filename.'_CountSlips_FM'.$form_number.'.xlsx';
         }
-        if (strtolower($type) == 'zip') {
-            if ($form_number != '') {
+        if ('zip' == strtolower($type)) {
+            if ('' != $form_number) {
                 $filename = $filename.'_FM'.$form_number.'.zip';
             } else {
                 $filename = $filename.'.zip';
             }
         }
-        if (strtolower($type) == 'pdf') {
+        if ('pdf' == strtolower($type)) {
             $filename = $this->pdf_file;
         }
 
-        if ($type != '') {
+        if ('' != $type) {
             $directory = $this->__directory($type, $create_dir);
         }
 
-        $filename = $directory.DIRECTORY_SEPARATOR.$filename;
-        $filename = FileSystem::normalizePath($filename);
+        $filename  = $directory.\DIRECTORY_SEPARATOR.$filename;
+        $filename  = FileSystem::normalizePath($filename);
 
         return $filename;
     }
 
-    private function __directory($type = '', $create_dir = false)
+    private function __directory($type = '', $create_dir = true)
     {
         $output_filename = '';
 
-        if ($this->__filename() !== false) {
-            $output_filename = DIRECTORY_SEPARATOR.$this->__filename();
+        if (false !== $this->__filename()) {
+            $output_filename = \DIRECTORY_SEPARATOR.$this->__filename();
         }
 
-        $directory = $output_filename;
+        $directory       = $output_filename;
 
-        if (strtolower($type) == 'xlsx') {
+        if ('xlsx' == strtolower($type)) {
             $directory .= __XLSX_DIRECTORY__;
         }
 
-        if (strtolower($type) == 'slips') {
+        if ('slips' == strtolower($type)) {
             $directory .= __XLSX_SLIPS_DIRECTORY__;
         }
 
-        if (strtolower($type) == 'pdf') {
+        if ('pdf' == strtolower($type)) {
             $directory .= __PDF_UPLOAD_DIR__;
         }
-        if (strtolower($type) == 'zip') {
+        if ('zip' == strtolower($type)) {
             $directory .= __ZIP_FILE_DIR__;
         }
 
-        if (strtolower($type) == 'upload') {
+        if ('upload' == strtolower($type)) {
             $directory = __EMAIL_PDF_UPLOAD_DIR__;
         }
 
-        $directory = __FILES_DIR__.$directory;
+        $directory       = __FILES_DIR__.$directory;
         $this->directory = FileSystem::normalizePath($directory);
 
-        if ($create_dir == true) {
+        if (true == $create_dir) {
             FileSystem::createDir($this->directory);
         }
 
@@ -107,7 +110,7 @@ class MediaFileSystem
     {
         $msg = null;
         try {
-            if (filesystem::rename($old, $new) == false) {
+            if (false == filesystem::rename($old, $new)) {
                 throw new Nette\IOException();
             }
         } catch (Nette\IOException $e) {

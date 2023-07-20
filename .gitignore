@@ -12,3 +12,5 @@ cwp/*
 www/.files
 **/php_errors.log
 .gitignore
+.database/using_mysql.db
+www/files/*
