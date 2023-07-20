@@ -43,7 +43,7 @@ if ($current > $installed) {
     $allVersions         = get_content($versionUrl);
     $verArray            = explode("\n", $allVersions);
     foreach ($verArray as $Updates) {
-        if ($installed >= $Updates) {
+        if ($installed >= trim($Updates)) {
             continue;
         }
         $doUpdates[]    = trim($Updates);
@@ -68,8 +68,9 @@ if ($current > $installed) {
         fclose($file);
     }
 
-    dd($updateFiles);
     foreach ($updateFiles as $updateFile) {
+        echo 'Running update on '.basename($updateFile).'<br>';
+
         $command             = [
             $patcher_exec,
             '-O',
