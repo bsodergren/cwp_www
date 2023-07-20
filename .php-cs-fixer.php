@@ -19,7 +19,7 @@ return (new PhpCsFixer\Config())->setRules([
     // '@PHP71Migration' => true,
     // '@PHPUnit75Migration:risky' => true,
      '@Symfony'                                               => true,
-     '@Symfony:risky'                                         => true,
+    // '@Symfony:risky'                                         => true,
 
     'protected_to_private'                                    => false,
     'native_constant_invocation'                              => ['strict' => false],

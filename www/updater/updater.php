@@ -8,7 +8,7 @@ define('TITLE', 'Media Updater');
 include_once __LAYOUT_HEADER__;
 
 if (false !== MediaProgramUpdate::$UPDATES_PENDING) {
-    if (array_key_exists('update', $post)) {
+    if (key_exists('update', $_POST)) {
         $mediaUpdates->getUpdateFiles();
         $mediaUpdates->doUpdates();
 
