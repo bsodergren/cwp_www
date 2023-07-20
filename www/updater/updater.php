@@ -1,20 +1,32 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
-
 require '../.config.inc.php';
 
 define('TITLE', 'Media Updater');
 include_once __LAYOUT_HEADER__;
 
 if (false !== MediaProgramUpdate::$UPDATES_PENDING) {
-    dd($mediaUpdates);
+    if (array_key_exists('update', $post)) {
+        $mediaUpdates->getUpdateFiles();
+        $mediaUpdates->doUpdates();
 
-    if (array_key_exists('update', $_POST)) {
+        echo HTMLDisplay::JavaRefresh('/index.php', 0);
+        ob_flush();
+    } else {
+        echo 'There are '.MediaProgramUpdate::$UPDATES_PENDING.' Pending <br>';
+        ?>
+<form action="/updater/updater.php" method="post">
+	<input type="hidden" name="update" value="1">
+	<button type="submit" name="submit" class="btn active">Update!</button>
+</form>
+<?php
+
     }
 } else {
-    echo 'All uo to date';
+    echo 'All up to date';
 }
 
 include_once __LAYOUT_FOOTER__;
+?>

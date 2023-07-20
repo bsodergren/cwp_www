@@ -7,33 +7,33 @@ use Symfony\Component\Process\Process;
 
 class MediaProgramUpdate
 {
-    public $gitRaw             = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/www/updater/';
+    public $gitRaw                  = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/www/updater/';
     public $updateUrl;
     public $versionUrl;
     public $zip_url;
 
-    public $updateFiles        = [];
+    public $updateFiles             = [];
 
-    public $doUpdates          = [];
+    public $VersionUpdates          = [];
 
-    public $conf               = [];
+    public $conf                    = [];
 
     //  public $builder_exec       = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'builder.exe';
-    public $patcher_exec       = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'patcher.exe';
+    public $patcher_exec            = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'patcher.exe';
     public static $UPDATES_PENDING;
 
     public function __construct()
     {
         global $conf;
-        $this->conf               = $conf;
-        $this->updateUrl          = $this->gitRaw.'current.txt?432=432';
-        $this->versionUrl         = $this->gitRaw.'version.txt?432=432';
-        $this->zip_url            = $this->gitRaw.'versions/';
+        $this->conf                     = $conf;
+        $this->updateUrl                = $this->gitRaw.'current.txt?432=432';
+        $this->versionUrl               = $this->gitRaw.'version.txt?432=432';
+        $this->zip_url                  = $this->gitRaw.'versions/';
 
-        $current                  = trim($this->get_content($this->updateUrl));
-        $installed                = trim(file_get_contents(__VERSION_FILE__));
-        self::$UPDATES_PENDING    = false;
-        if ($current > $installed) {
+        $current                        = trim($this->get_content($this->updateUrl));
+        $this->installed                = trim(file_get_contents(__VERSION_FILE__));
+        self::$UPDATES_PENDING          = false;
+        if ($current > $this->installed) {
             self::$UPDATES_PENDING = $this->getNumUpdates();
         }
     }
@@ -42,7 +42,7 @@ class MediaProgramUpdate
     {
         $this->getUpdates();
 
-        return count($this->doUpdates());
+        return count($this->VersionUpdates);
     }
 
     public function getUpdates()
@@ -50,17 +50,20 @@ class MediaProgramUpdate
         $allVersions         = $this->get_content($this->versionUrl);
         $verArray            = explode("\n", $allVersions);
 
+        $installed           = str_replace('.', '', $this->installed);
         foreach ($verArray as $Updates) {
-            if ($this->installed >= trim($Updates)) {
+            $Updates                   = trim($Updates);
+            $UpdatesNum                = str_replace('.', '', $Updates);
+            if ($installed >= $UpdatesNum) {
                 continue;
             }
-            $this->doUpdates[]    = trim($Updates);
+            $this->VersionUpdates[]    = $Updates;
         }
     }
 
     public function getUpdateFiles()
     {
-        foreach ($this->doUpdates as $version) {
+        foreach ($this->VersionUpdates as $version) {
             $zip_filename           = 'update_'.$version.'.zip';
             $zip_dl_url             = $this->zip_url.$zip_filename;
             $data                   = $this->get_content($zip_dl_url);
