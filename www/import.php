@@ -17,13 +17,11 @@ $params                       = [];
 $upload_params                = [];
 $pdf_select_options           = [];
 
-if (1 == $conf['gmail']['enable']) {
-    $hostname                     = '{imap.gmail.com:993/imap/ssl}CWP';
-    $username                     =  $conf['gmail']['name'];
-    $password                     = $conf['gmail']['password'];
-
+if (1 == __IMAP_ENABLE__) {
     /* try to connect */
-    $imap                         = imap_open($hostname, $username, $password); // || exit('Cannot connect to Gmail: '.imap_last_error());
+    $imap = imap_open(__IMAP_HOST__.__IMAP_FOLDER__, __IMAP_USER__, __IMAP_PASSWD__); // || exit('Cannot connect to Gmail: '.imap_last_error());
+    // dd($imap);
+
     if (imap_is_open($imap)) {
         $emails                       = imap_search($imap, 'UNSEEN');
 
@@ -91,7 +89,7 @@ if (1 == $conf['gmail']['enable']) {
                         }
                     }
                 }
-                if (array_key_exists('SELECT_OPTIONS', $pdf_select_options)) {
+                if (key_exists('SELECT_OPTIONS', $pdf_select_options)) {
                     $pdf_select_options['SELECT_NAME'] = 'mail_file';
                     $pdf_select_options['SELECT_DESC'] =  'Job Name';
                     $mail_import_card['FIRST_FORM']    =  template::GetHTML('/import/form_select', $pdf_select_options);

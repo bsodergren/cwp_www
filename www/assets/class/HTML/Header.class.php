@@ -3,6 +3,10 @@
  * CWP Media tool
  */
 
+/*
+ * CWP Media tool.
+ */
+
 class Header extends Template
 {
     public static function display($template = '', $params = [])

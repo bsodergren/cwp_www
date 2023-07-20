@@ -7,7 +7,7 @@ require '.config.inc.php';
 
 define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.php'));
 
-define('TITLE', '');
+define('TITLE', 'processing');
 
 if (
     __FORM_POST__ == __SCRIPT_NAME__
@@ -62,11 +62,8 @@ if (!defined('REFRESH_MSG')) {
 
 if (false !== HTMLDisplay::$url) {
     echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, REFRESH_MSG);
-    ob_flush();
 }
 
 if (isset($_POST['FORM_PROCESS'])) {
     include_once __LAYOUT_FOOTER__;
 }
-
-ob_end_flush();

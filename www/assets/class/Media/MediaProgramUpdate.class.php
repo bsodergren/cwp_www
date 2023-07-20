@@ -3,8 +3,9 @@
  * CWP Media tool
  */
 
-use Symfony\Component\Process\Process;
-
+/**
+ * CWP Media tool.
+ */
 class MediaProgramUpdate
 {
     public $gitRaw                  = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/www/updater/';
@@ -101,28 +102,10 @@ class MediaProgramUpdate
     {
         foreach ($this->updateFiles as $updateFile) {
             HTMLDisplay::put('Writing '.basename($updateFile), 'red');
-
-            $command             = [
-                $this->patcher_exec,
-                '-O',
-                __DRIVE_LETTER__.$this->conf['server']['root_dir'],
-                '-P',
-                $updateFile,
-            ];
-
-            $process             = new Process($command);
-            $process->setTimeout(60000);
-
-            // $runCommand = $process->getCommandLine();
-
-            $process->run(function ($type, $buffer): void {
-                if (Process::ERR === $type) {
-                    HTMLDisplay::put('ERR > '.$buffer);
-                } else {
-                    HTMLDisplay::put('OUT > '.$buffer);
-                }
-            });
-            // $process->wait();
+            $process        = new exec($this->patcher_exec);
+            $process->option('-O', __DRIVE_LETTER__.$this->conf['server']['root_dir']);
+            $process->option('-P', $updateFile);
+            $process->run();
         }
     }
 }

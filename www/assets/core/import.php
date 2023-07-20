@@ -30,12 +30,7 @@ if (isset($_POST['submit'])) {
         $fileSize                 = filesize($fullFile);
         $fileTmpName              = $fullFile;
 
-        $hostname                 = '{imap.gmail.com:993/imap/ssl}CWP';
-        $username                 = $conf['gmail']['name'];
-        $password                 = $conf['gmail']['password'];
-
-        /* try to connect */
-        $imap                     = imap_open($hostname, $username, $password) or exit('Cannot connect to Gmail: '.imap_last_error());
+        $imap                     = imap_open(__IMAP_HOST__.__IMAP_FOLDER__, __IMAP_USER__, __IMAP_PASSWD__);
     } else {
         $fileName    = $_FILES['the_file']['name'];
         $fileSize    = $_FILES['the_file']['size'];
@@ -43,7 +38,7 @@ if (isset($_POST['submit'])) {
     }
 
     if ('' == $fileName) {
-        HTMLDisplay::output("<span class='p-3 text-danger'> no File selected </span> <br>");
+        HTMLDisplay::put("<span class='p-3 text-danger'> no File selected </span> ");
         $error = true;
     } else {
         $f             = explode('.', $fileName);
@@ -52,24 +47,24 @@ if (isset($_POST['submit'])) {
     }
 
     if (!in_array($fileExtension, $fileExtensionsAllowed)) {
-        HTMLDisplay::output('This file extension is not allowed. Please upload a PDF file<br>');
+        HTMLDisplay::put('This file extension is not allowed. Please upload a PDF file');
         $error = true;
     }
 
     if ($fileSize > 4000000000) {
-        HTMLDisplay::output('File exceeds maximum size (40MB)<br>');
+        HTMLDisplay::put('File exceeds maximum size (40MB)');
         $error = true;
     }
 
     if ('' == $job_number) {
-        HTMLDisplay::output("<span class='p-3 text-danger'>No Job Number </span> <br>");
+        HTMLDisplay::put("<span class='p-3 text-danger'>No Job Number </span> ");
         $error = true;
     }
     HTMLDisplay::$url = 'import.php';
 
     if (false == $error) {
         HTMLDisplay::$url     = 'index.php';
-        HTMLDisplay::$timeout = 5;
+        HTMLDisplay::$timeout = 1;
 
         $media_closing        = '/'.basename($fileName, '.pdf');
         $locations            = new MediaFileSystem($fileName, $job_number);
@@ -88,39 +83,38 @@ if (isset($_POST['submit'])) {
             }
 
             if ($didUpload) {
-                $descriptorspec = [
-                    0 => ['pipe', 'r'],
-                    // stdin is a pipe that the child will read from
-                    1 => ['pipe', 'w'],
-                ];
-
-                $qdf_cmd        = FileSystem::normalizePath('"'.__ROOT_BIN_DIR__.'/qpdf" ');
+                $qdf_cmd        = FileSystem::normalizePath(__ROOT_BIN_DIR__.'/qpdf');
                 $pdf_file       = FileSystem::normalizePath($pdf_file);
-                $cmd            = $qdf_cmd.'"'.$pdf_file.'"  --pages . 1-z -- --replace-input ';
-                $process        = proc_open($cmd, $descriptorspec, $pipes);
+                HTMLDisplay::put('Waiting for PDF for finish');
 
-                HTMLDisplay::output('Waiting for PDF for finish <br>');
-                sleep(5);
+                $process        = new exec($qdf_cmd);
+                $process->option($pdf_file);
+                $process->option('--pages', '.');
+                $process->option('1-z', '--');
+                $process->option('--replace-input');
+                $process->run();
 
-                HTMLDisplay::output('The file '.basename($fileName).' has been uploaded <br>');
-                HTMLDisplay::output('Job number '.$job_number.'<br>');
+                //  sleep(5);
+
+                HTMLDisplay::put('The file '.basename($fileName).' has been uploaded');
+                HTMLDisplay::put('Job number '.$job_number.'');
 
                 if (isset($imap)) {
                     imap_setflag_full($imap, $imap_id, '\\Seen');
                 }
             } else {
-                HTMLDisplay::output('An error occurred. Please contact the administrator.');
+                HTMLDisplay::put('An error occurred. Please contact the administrator.');
             } // end if
         } else {
-            HTMLDisplay::output("File already was uploaded<br>\n");
+            HTMLDisplay::put('File already was uploaded');
         } // end if
 
         $MediaImport          = new MediaImport($pdf_file, $job_number);
 
         if ($MediaImport->status < 1) {
-            HTMLDisplay::output("<span class='p-3 text-danger'>File failed to process</span> <br>");
-            HTMLDisplay::output("<span class='p-3 text-danger'>Will have to run Refresh Import </span><br>");
-            HTMLDisplay::output(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue <br>');
+            HTMLDisplay::put("<span class='p-3 text-danger'>File failed to process</span>");
+            HTMLDisplay::put("<span class='p-3 text-danger'>Will have to run Refresh Import </span>");
+            HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');
         }
     }
 }
