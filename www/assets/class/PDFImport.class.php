@@ -1,6 +1,8 @@
 <?php
+/**
+ * CWP Media tool
+ */
 
-use Nette\Utils\Strings;
 use coderofsalvation\BrowserStream;
 
 class PDFImport extends MediaImport
@@ -11,30 +13,30 @@ class PDFImport extends MediaImport
 
     public function __construct($pdf_file = '', $media_job_id = '', $form_number = '')
     {
-        if ($media_job_id != '') {
+        if ('' != $media_job_id) {
             $this->job_id = $media_job_id;
         }
 
         if (file_exists($pdf_file)) {
             $parser = new \Smalot\PdfParser\Parser();
-            $pdf = $parser->parseFile($pdf_file);
-            $pages = $pdf->getPages();
+            $pdf    = $parser->parseFile($pdf_file);
+            $pages  = $pdf->getPages();
 
-            if ($form_number != '') {
-                $form_number--;
+            if ('' != $form_number) {
+                --$form_number;
                 $page_text = [];
 
-                $text = $pages[$form_number]->getDataTm();
+                $text      = $pages[$form_number]->getDataTm();
                 $page_text = $this->cleanPdfText($text);
 
                 $this->parse_page($page_text);
             } else {
                 $noPagess = count($pages);
-                BrowserStream::put("Importing ".$noPagess." pages<BR>");
+                BrowserStream::put('Importing '.$noPagess.' pages<BR>');
                 foreach ($pages as $page) {
                     $page_text = [];
 
-                    $text = $page->getDataTm();
+                    $text      = $page->getDataTm();
 
                     $page_text = $this->cleanPdfText($text);
 
@@ -47,7 +49,7 @@ class PDFImport extends MediaImport
     public function cleanPdfText($text)
     {
         foreach ($text as $n => $row) {
-            //$page_text[$n] = trim(str_replace("&","and", $row[1]));
+            // $page_text[$n] = trim(str_replace("&","and", $row[1]));
             $page_text[$n] = trim($row[1]);
         }
 
@@ -56,79 +58,78 @@ class PDFImport extends MediaImport
 
     public function parse_page($page_text)
     {
-        $page_count = count($page_text);
+        $page_count  = count($page_text);
 
         $form_number = $this->find_key('run#', $page_text);
         $config_type = $this->find_key('config', $page_text);
 
-        if (isset($config_type) && $config_type == 'sheeter') {
+        if (isset($config_type) && 'sheeter' == $config_type) {
             return;
         }
 
         if (isset($form_number)) {
-            $this->form[$form_number]['details']['config'] = $config_type;
-            $this->form[$form_number]['details']['bind'] = $this->find_key('bind', $page_text);
+            $this->form[$form_number]['details']['config']      = $config_type;
+            $this->form[$form_number]['details']['bind']        = $this->find_key('bind', $page_text);
 
-            $this->form[$form_number]['details']['count'] = Utils::toint($this->find_key('count', $page_text));
+            $this->form[$form_number]['details']['count']       = Utils::toint($this->find_key('count', $page_text));
 
-            $this->form[$form_number]['details']['product'] = $this->find_key('production', $page_text);
-            $this->form[$form_number]['details']['job_id'] = $this->job_id;
+            $this->form[$form_number]['details']['product']     = $this->find_key('production', $page_text);
+            $this->form[$form_number]['details']['job_id']      = $this->job_id;
             $this->form[$form_number]['details']['form_number'] = $form_number;
 
-            for ($idx = 0; $idx <= $page_count; $idx++) {
-                if (! isset($res)) {
-                    $res = $this->find_first($form_number, $idx, $page_text);
+            for ($idx = 0; $idx <= $page_count; ++$idx) {
+                if (!isset($res)) {
+                    $res         = $this->find_first($form_number, $idx, $page_text);
                     $current_key = key($res);
-                    $idx = $res[$current_key]['start'];
+                    $idx         = $res[$current_key]['start'];
                 } else {
-                    $res2 = $this->find_end($form_number, $res, $page_text);
+                    $res2                = $this->find_end($form_number, $res, $page_text);
                     $form_number_array[] = $res2;
-                    $r_letter = key($res2);
-                    $idx = $res2[$r_letter]['stop'] + 1;
+                    $r_letter            = key($res2);
+                    $idx                 = $res2[$r_letter]['stop'] + 1;
                     unset($res);
                 }
             }
             foreach ($form_number_array as $_ => $letter_array) {
-                $letter = key($letter_array);
+                $letter             = key($letter_array);
 
-                $start = $letter_array[$letter]['start'];
-                $stop = $letter_array[$letter]['stop'];
+                $start              = $letter_array[$letter]['start'];
+                $stop               = $letter_array[$letter]['stop'];
 
                 $form_rows[$letter] = $this->row_data($start, $stop, $page_text);
 
-                if ($letter == 'ABCD' && MediaSettings::IsTrue('__HALF_FORM_CNT__')) {
-                    $half_count = $form_rows[$letter][0]['count'] / 2;
-                    $tmp_row1_array = [
+                if ('ABCD' == $letter && MediaSettings::IsTrue('__HALF_FORM_CNT__')) {
+                    $half_count                     = $form_rows[$letter][0]['count'] / 2;
+                    $tmp_row1_array                 = [
                         'original' => $form_rows[$letter][0]['original'],
-                        'market' => $form_rows[$letter][0]['market'],
-                        'pub' => $form_rows[$letter][0]['pub'],
-                        'count' => $half_count,
-                        'ship' => $form_rows[$letter][0]['ship'],
-                        'tip' => $form_rows[$letter][0]['tip'],
-
+                        'market'   => $form_rows[$letter][0]['market'],
+                        'pub'      => $form_rows[$letter][0]['pub'],
+                        'count'    => $half_count,
+                        'ship'     => $form_rows[$letter][0]['ship'],
+                        'tip'      => $form_rows[$letter][0]['tip'],
                     ];
 
                     $form_rows[$letter][0]['count'] = $half_count;
-                    $form_rows[$letter][] = $tmp_row1_array;
+                    $form_rows[$letter][]           = $tmp_row1_array;
                     unset($tmp_row1_array);
                     unset($half_count);
                 }
             }
 
-            $this->form[$form_number]['forms'] = $form_rows;
+            $this->form[$form_number]['forms']                  = $form_rows;
         }
     }
 
     public function find_key($needle, $haystack, $value = '', $strict = false)
     {
-        if ($value == '') {
+        if ('' == $value) {
             $value = strtolower($needle);
         }
 
         foreach ($haystack as $k => $item) {
-            if ($strict == true) {
+            if (true == $strict) {
                 $item = trim(str_replace(',', '', $item));
-                if ($value == 'letter') {
+                if ('letter' == $value) {
                     preg_match('/^[ABCD,]+\b/', $item, $matches);
                     if (count($matches) > 0) {
                         if ($matches[0] == trim($needle)) {
@@ -146,10 +147,10 @@ class PDFImport extends MediaImport
                 $search = strpos(strtolower($item), strtolower($needle));
             }
 
-            if ($search !== false) {
+            if (false !== $search) {
                 switch ($value) {
                     case 'run#':
-                        $form_peices = explode('Run#', $item);
+                        $form_peices    = explode('Run#', $item);
 
                         return trim($form_peices[1]);
                         break;
@@ -161,22 +162,22 @@ class PDFImport extends MediaImport
                         break;
 
                     case 'count':
-                        $peices = explode(':', $item);
+                        $peices         = explode(':', $item);
 
                         return Utils::toint(trim($peices[1]));
                         break;
 
                     case 'config':
-                        $peices = explode(':', $item);
-                        $type = str_replace(' ', '', $peices[1]);
-                        $type = $this->getPageCount($type);
+                        $peices         = explode(':', $item);
+                        $type           = str_replace(' ', '', $peices[1]);
+                        $type           = $this->getPageCount($type);
 
                         return trim($type);
                         break;
 
                     case 'bind':
-                        $peices = explode(':', $item);
-                        $type = str_replace(' ', '', $peices[1]);
+                        $peices         = explode(':', $item);
+                        $type           = str_replace(' ', '', $peices[1]);
 
                         return trim($type);
                         break;
@@ -195,11 +196,11 @@ class PDFImport extends MediaImport
 
     public function find_first($form_number, $start, $array)
     {
-        $result = [];
+        $result    = [];
         $row_count = count($array);
-        $array = array_slice($array, $start, $row_count, true);
+        $array     = array_slice($array, $start, $row_count, true);
 
-        $key = $this->find_key('#'.$form_number, $array, 'key');
+        $key       = $this->find_key('#'.$form_number, $array, 'key');
 
         if ($key) {
             $peices = explode('#'.$form_number, $array[$key]);
@@ -212,23 +213,23 @@ class PDFImport extends MediaImport
 
     public function find_end($form_number, $start_array, $array)
     {
-        $result = [];
+        $result                       = [];
 
-        $row_count = count($array);
-        $letter = key($start_array);
+        $row_count                    = count($array);
+        $letter                       = key($start_array);
 
         $start_array[$letter]['stop'] = $row_count - 1;
-        $start = $start_array[$letter]['start'] + 1;
-        $array = array_slice($array, $start, $row_count, true);
+        $start                        = $start_array[$letter]['start'] + 1;
+        $array                        = array_slice($array, $start, $row_count, true);
 
-        $key = $this->find_key('#'.$form_number, $array, 'key');
+        $key                          = $this->find_key('#'.$form_number, $array, 'key');
 
-        if ($key != null) {
-            $peices = explode('#'.$form_number, $array[$key]);
+        if (null != $key) {
+            $peices   = explode('#'.$form_number, $array[$key]);
 
             $t_letter = str_replace(',', '', $peices[1]);
-            if ($t_letter != null) {
-                $stop_key = $this->find_key($t_letter, $array, 'letter', true);
+            if (null != $t_letter) {
+                $stop_key                     = $this->find_key($t_letter, $array, 'letter', true);
                 $start_array[$letter]['stop'] = $stop_key - 1;
             }
         }
@@ -245,41 +246,41 @@ class PDFImport extends MediaImport
             $break = 4;
         }
 
-        $r = 0;
-        $i = 0;
-        for ($idx = $start; $idx <= $stop; $idx++) {
+        $r   = 0;
+        $i   = 0;
+        for ($idx = $start; $idx <= $stop; ++$idx) {
             switch ($r) {
                 case 0:
                     $market = $page_text[$idx];
                     break;
                 case 1:
-                    $pub = $page_text[$idx];
+                    $pub    = $page_text[$idx];
                     break;
                 case 2:
-                    $count = str_replace(',', '', $page_text[$idx]);
+                    $count  = str_replace(',', '', $page_text[$idx]);
                     break;
                 case 3:
-                    $ship = $page_text[$idx];
+                    $ship   = $page_text[$idx];
                     break;
                 case 4:
-                    $tip = $page_text[$idx];
+                    $tip    = $page_text[$idx];
                     break;
             }
 
             if ($r < $break) {
-                $r++;
+                ++$r;
             } else {
                 $row_array = [
                     'original' => $market.' '.$pub.' '.$count.' '.$ship,
-                    'market' => $market,
-                    'pub' => $pub,
-                    'count' => $count,
-                    'ship' => $ship,
-                    'tip' => $tip,
+                    'market'   => $market,
+                    'pub'      => $pub,
+                    'count'    => $count,
+                    'ship'     => $ship,
+                    'tip'      => $tip,
                 ];
-                $r = 0;
-                $rows[$i] = $row_array;
-                $i++;
+                $r         = 0;
+                $rows[$i]  = $row_array;
+                ++$i;
             }
         }
 
