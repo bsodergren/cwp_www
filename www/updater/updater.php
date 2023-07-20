@@ -2,7 +2,8 @@
 require '../.config.inc.php';
 define('TITLE', 'Media Updater');
 include_once __LAYOUT_HEADER__;
-
+$version         = file_get_contents('https://raw.githubusercontent.com/bsodergren/cwp_www/main/www/updater/version.txt');
+dd($version);
 ?>
 
 <H1 align="center">Updating Media Source files</H1>

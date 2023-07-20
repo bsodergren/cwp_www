@@ -44,11 +44,10 @@ if (array_key_exists('job_id', $_REQUEST)) {
     $media  = new Media($job);
 }
 define('__NAVBAR_LINKS__', [
-        'Home'       => '/index.php',
-        'Test'       => '/test/test.php',
-        'Import'     => '/import.php',
-        'Trim Sizes' => '/settings/trim.php',
-        'Settings'   => [
+        'Home'         => '/index.php',
+        'Import'       => '/import.php',
+        'Trim Sizes'   => '/settings/trim.php',
+        'Settings'     => [
             'Language'       => '/settings/language.php',
             'Local Settings' => '/settings/local.php',
 //            'Server Settings' => '/settings/settings.php',

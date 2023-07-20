@@ -7,12 +7,12 @@
         "jfcherng/php-diff": "^6.12",
         "phpoffice/phpspreadsheet": "^1.26",
         "sinergi/browser-detector": "^6.1",
-        "hassankhan/config": "^3.1",
         "twbs/bootstrap": "^5.2",
         "phpmailer/phpmailer": "^6.8",
         "symfony/finder": "^6.3",
         "lamansky/fraction": "^1.0",
-        "coderofsalvation/browser-stream": "dev-master"
+        "coderofsalvation/browser-stream": "dev-master",
+        "camoo/config": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.2"

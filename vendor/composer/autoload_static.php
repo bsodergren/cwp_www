@@ -57,6 +57,7 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'C' => 
         array (
             'Complex\\' => 8,
+            'Camoo\\Config\\' => 13,
         ),
     );
 
@@ -131,6 +132,10 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
+        ),
+        'Camoo\\Config\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/camoo/config/src',
         ),
     );
 

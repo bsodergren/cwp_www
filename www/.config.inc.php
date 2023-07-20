@@ -9,11 +9,10 @@ define('__COMPOSER_DIR__', __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 set_include_path(get_include_path().\PATH_SEPARATOR.__COMPOSER_DIR__);
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
+use Camoo\Config\Config;
 use Nette\Utils\FileSystem;
-use Noodlehaus\Config;
 
 $config_file      = __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'config.ini';
-
 $conf             = new Config($config_file);
 
 if (str_contains(strtolower($_SERVER['OS']), 'windows')) {
@@ -98,7 +97,7 @@ define('__URL_LAYOUT__', __URL_HOME__.'/assets/layout/');
 
 $__conf_pathCheck = __PROJECT_ROOT__.'/configCheck.php';
 $__conf_checked   = __PROJECT_ROOT__.'/.config.true';
-
+$__test_nav_links = __PROJECT_ROOT__.'/test_navlinks.php';
 $includes[]       = __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'includes.inc.php';
 $includes[]       = __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'configure.inc.php';
 $includes[]       = __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'settings.inc.php';
@@ -109,6 +108,12 @@ if (!file_exists($__conf_pathCheck)) {
 
 if (!file_exists($__conf_checked)) {
     require_once $__conf_pathCheck;
+}
+
+if (file_exists($__test_nav_links)) {
+    require_once $__test_nav_links;
+} else {
+    define('__DEV_LINKS__', []);
 }
 
 foreach ($includes as $file) {

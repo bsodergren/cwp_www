@@ -23,4 +23,5 @@ return array(
     'Jfcherng\\Utility\\' => array($vendorDir . '/jfcherng/php-color-output/src', $vendorDir . '/jfcherng/php-mb-string/src'),
     'Jfcherng\\Diff\\' => array($vendorDir . '/jfcherng/php-diff/src', $vendorDir . '/jfcherng/php-sequence-matcher/src'),
     'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
+    'Camoo\\Config\\' => array($vendorDir . '/camoo/config/src'),
 );
