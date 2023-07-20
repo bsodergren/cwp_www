@@ -7,6 +7,7 @@ dbname=cwp
 host=
 username=
 password=
+db_dir=\.public\.database
 [gmail]
 name=
 password=
@@ -16,5 +17,4 @@ bin_dir=\.bin
 #project_root=\.public
 web_root=\.public\www
 url_root=
-db_dir=\.public\.database
 file_root=\.files\media
