@@ -96,7 +96,7 @@ class MediaProgramUpdate
     public function doUpdates()
     {
         foreach ($this->updateFiles as $updateFile) {
-            echo 'Running update on '.basename($updateFile).'<br>';
+            HTMLDisplay::put('Writing '.basename($updateFile), 'red');
 
             $command             = [
                 $this->patcher_exec,
@@ -113,9 +113,9 @@ class MediaProgramUpdate
 
             $process->run(function ($type, $buffer): void {
                 if (Process::ERR === $type) {
-                    echo 'ERR > '.$buffer.'<br>';
+                    HTMLDisplay::put('ERR > '.$buffer);
                 } else {
-                    echo 'OUT > '.$buffer.'<br>';
+                    HTMLDisplay::put('OUT > '.$buffer);
                 }
             });
             // $process->wait();
