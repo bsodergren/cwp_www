@@ -15,7 +15,7 @@ class MediaProgramUpdate
 
     public $updateFiles             = [];
 
-        public $VersionUpdates          = [];
+    public $VersionUpdates          = [];
 
     public $conf                    = [];
 
