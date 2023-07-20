@@ -1,5 +1,5 @@
 <?php
-// {Major}.{Minor}.{Patch}.{env:BUILD_NUMBER}'
+// {major}.{minor}.{patch}.{env:BUILD_NUMBER}'
 
 require_once '../.config.inc.php';
 use Symfony\Component\Finder\Finder;
