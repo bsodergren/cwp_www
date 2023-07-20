@@ -1,26 +1,29 @@
 <?php
+/**
+ * CWP Media tool
+ */
 
 class MediaError
 {
-    public static function msg($severity, $msg = "", $refresh = 5)
+    public static function msg($severity, $msg = '', $refresh = 5)
     {
-        $url = "/index.php";
+        $url     = '/index.php';
         $timeout = $refresh;
 
-        if(is_array($refresh)) {
+        if (is_array($refresh)) {
             $timeout = 0;
-            if(key_exists('url', $refresh)) {
+            if (array_key_exists('url', $refresh)) {
                 $url = $refresh['url'];
             }
 
-            if(key_exists('timeout', $refresh)) {
+            if (array_key_exists('timeout', $refresh)) {
                 $timeout = $refresh['timeout'];
             }
         }
 
-        if ($msg != '') {
+        if ('' != $msg) {
             include_once __LAYOUT_HEADER__;
-            Template::echo("error/" . $severity, ['MSG' => $msg]);
+            Template::echo('error/'.$severity, ['MSG' => $msg]);
         }
 
         HTMLDisplay::javaRefresh($url, $timeout);

@@ -1,6 +1,7 @@
 <?php
-
-use Nette\Utils\FileSystem;
+/**
+ * CWP Media tool
+ */
 
 /**
  * @property mixed $job_id
@@ -37,40 +38,35 @@ class Media
         global $connection;
         global $explorer;
         $this->conn = $connection;
-        $this->exp = $explorer;
-
-
-
-
+        $this->exp  = $explorer;
 
         if (is_object($MediaDB)) {
-            $array = get_object_vars($MediaDB);
+            $array   = get_object_vars($MediaDB);
             unset($MediaDB);
             $MediaDB = $array;
         }
 
         if (is_array($MediaDB)) {
-            $this->job_id = (empty($MediaDB['job_id'])) ? '' : $MediaDB['job_id'];
-            $this->pdf_file = (empty($MediaDB['pdf_file'])) ? '' : $MediaDB['pdf_file'];
+            $this->job_id     = (empty($MediaDB['job_id'])) ? '' : $MediaDB['job_id'];
+            $this->pdf_file   = (empty($MediaDB['pdf_file'])) ? '' : $MediaDB['pdf_file'];
             $this->job_number = (empty($MediaDB['job_number'])) ? '' : $MediaDB['job_number'];
-            $this->xlsx = (empty($MediaDB['xlsx_exists'])) ? '' : $MediaDB['xlsx_exists'];
-            $this->zip = (empty($MediaDB['zip_exists'])) ? '' : $MediaDB['zip_exists'];
-            $this->location = (empty($MediaDB['base_dir'])) ? '' : $MediaDB['base_dir'];
+            $this->xlsx       = (empty($MediaDB['xlsx_exists'])) ? '' : $MediaDB['xlsx_exists'];
+            $this->zip        = (empty($MediaDB['zip_exists'])) ? '' : $MediaDB['zip_exists'];
+            $this->location   = (empty($MediaDB['base_dir'])) ? '' : $MediaDB['base_dir'];
 
             $this->getDirectories();
         }
 
-       // $this->getPubList([1,2]);
+        // $this->getPubList([1,2]);
     }
-
 
     public function getPubList($ids)
     {
-       // if(is_array($ids)) {
-            $ids = implode(",",$ids);
-       // }
+        // if(is_array($ids)) {
+        $ids  = implode(',', $ids);
+        // }
 
-        $sql = "SELECT * FROM pub_trim WHERE id IN (".$ids.");";
+        $sql  = 'SELECT * FROM pub_trim WHERE id IN ('.$ids.');';
         $pubs = $this->conn->query($sql);
         foreach ($pubs as $row) {
             echo $row->id;
@@ -78,74 +74,73 @@ class Media
         }
 
         dd($pubs);
-
     }
 
     public function excelArray($form_number = null)
     {
-        //global $explorer;
+        // global $explorer;
 
         $form_config = $this->get_drop_details($form_number);
 
         foreach ($form_config as $form_number => $vars) {
             $total_back_peices = 0;
 
-            $prev_form_letter = '';
+            $prev_form_letter  = '';
 
-            $sort = ['SORT_FORMER' => 1, 'SORT_LETTER' => 1, 'SORT_PUB' => 1];
+            $sort              = ['SORT_FORMER' => 1, 'SORT_LETTER' => 1, 'SORT_PUB' => 1];
 
-            $result = $this->get_drop_form_data($form_number, $sort);
+            $result            = $this->get_drop_form_data($form_number, $sort);
 
             foreach ($result as $row_id => $form_row) {
                 $current_form_letter = $form_row['form_letter'];
 
                 if ($prev_form_letter != $current_form_letter) {
                     $total_back_peices = 0;
-                    $prev_form_letter = $current_form_letter;
+                    $prev_form_letter  = $current_form_letter;
                 }
 
-                if (! isset($this->MediaArray[$form_number]['bind'])) {
+                if (!isset($this->MediaArray[$form_number]['bind'])) {
                     $this->MediaArray[$form_number] = [
-                        'bind' => $vars['bind'],
-                        'config' => $vars['config'],
+                        'bind'       => $vars['bind'],
+                        'config'     => $vars['config'],
                         'job_number' => $form_row['job_number'],
-                        'pdf_file' => $form_row['pdf_file'],
-                        'job_id' => $this->job_id,
+                        'pdf_file'   => $form_row['pdf_file'],
+                        'job_id'     => $this->job_id,
                     ];
                 }
 
-                if ($form_row['former'] == 'Back') {
-                    $total_back_peices = $total_back_peices + $form_row['count'];
+                if ('Back' == $form_row['former']) {
+                    $total_back_peices                                                   = $total_back_peices + $form_row['count'];
                     $this->MediaArray[$form_number]['Back'][$form_row['form_letter']][0] = [
-                        'form_id' => $form_row['id'],
+                        'form_id'     => $form_row['id'],
                         'form_number' => $form_row['form_number'],
-                        'form_letter' =>$form_row['form_letter'],
-                        'job_id' => $this->job_id,
-                        'market' => $form_row['market'],
-                        'pub' => $form_row['pub'],
-                        'count' =>  $total_back_peices,
-                        'ship' => $form_row['ship'],
-                        'job_number' => $form_row['job_number'],
-                        'former' => 'Back',
-                        'face_trim' => $form_row['face_trim'],
-                        'no_bindery' => $form_row['no_bindery'],
-                        'bind' => $vars['bind'],
+                        'form_letter' => $form_row['form_letter'],
+                        'job_id'      => $this->job_id,
+                        'market'      => $form_row['market'],
+                        'pub'         => $form_row['pub'],
+                        'count'       => $total_back_peices,
+                        'ship'        => $form_row['ship'],
+                        'job_number'  => $form_row['job_number'],
+                        'former'      => 'Back',
+                        'face_trim'   => $form_row['face_trim'],
+                        'no_bindery'  => $form_row['no_bindery'],
+                        'bind'        => $vars['bind'],
                     ];
                 } else {
                     $this->MediaArray[$form_number]['Front'][$form_row['form_letter']][] = [
-                        'form_id' => $form_row['id'],
+                        'form_id'     => $form_row['id'],
                         'form_number' => $form_row['form_number'],
-                        'form_letter' =>$form_row['form_letter'],
-                        'job_id' => $this->job_id,
-                        'market' => $form_row['market'],
-                        'pub' => $form_row['pub'],
-                        'count' =>  $form_row['count'],
-                        'ship' => $form_row['ship'],
-                        'job_number' => $form_row['job_number'],
-                        'former' => 'Front',
-                        'face_trim' => $form_row['face_trim'],
-                        'no_bindery' => $form_row['no_bindery'],
-                        'bind' => $vars['bind'],
+                        'form_letter' => $form_row['form_letter'],
+                        'job_id'      => $this->job_id,
+                        'market'      => $form_row['market'],
+                        'pub'         => $form_row['pub'],
+                        'count'       => $form_row['count'],
+                        'ship'        => $form_row['ship'],
+                        'job_number'  => $form_row['job_number'],
+                        'former'      => 'Front',
+                        'face_trim'   => $form_row['face_trim'],
+                        'no_bindery'  => $form_row['no_bindery'],
+                        'bind'        => $vars['bind'],
                     ];
                 }
             }
@@ -157,16 +152,16 @@ class Media
 
     private function getDirectories()
     {
-        $this->mediaLoc = new MediaFileSystem($this->pdf_file, $this->job_number);
+        $this->mediaLoc       = new MediaFileSystem($this->pdf_file, $this->job_number);
 
-        $this->base_dir = $this->mediaLoc->getDirectory();
+        $this->base_dir       = $this->mediaLoc->getDirectory();
 
-        $this->pdf_fullname = $this->mediaLoc->getFilename('pdf');
-        $this->pdf_tmp_file = $this->pdf_fullname.'.~qpdf-orig';
+        $this->pdf_fullname   = $this->mediaLoc->getFilename('pdf');
+        $this->pdf_tmp_file   = $this->pdf_fullname.'.~qpdf-orig';
 
         $this->xlsx_directory = $this->mediaLoc->getDirectory('xlsx');
-        $this->zip_directory = $this->mediaLoc->getDirectory('zip');
-        $this->zip_file = $this->mediaLoc->getFilename('zip');
+        $this->zip_directory  = $this->mediaLoc->getDirectory('zip');
+        $this->zip_file       = $this->mediaLoc->getFilename('zip');
     }
 
     public function getFilename($type = '', $form_number = '', $create_dir = '')
@@ -182,7 +177,7 @@ class Media
     public static function set_exists($value, $field, $job_id)
     {
         global $explorer;
-        if ($value == 0) {
+        if (0 == $value) {
             $value = '';
         }
         $result = $explorer->table('media_job')->where('job_id', $job_id)->update([$field.'_exists' => $value]);
@@ -191,8 +186,8 @@ class Media
     public static function get_exists($field, $job_id)
     {
         global $explorer;
-        $result = $explorer->table('media_job')->select($field.'_exists')->where('job_id', $job_id);
-        $exists = $result->fetch();
+        $result   = $explorer->table('media_job')->select($field.'_exists')->where('job_id', $job_id);
+        $exists   = $result->fetch();
         $var_name = $field.'_exists';
 
         return Utils::toint($exists->$var_name);
@@ -205,7 +200,7 @@ class Media
 
     public function get_form_list()
     {
-        $sql = 'SELECT form_number FROM media_forms WHERE `job_id` = '.$this->job_id;
+        $sql    = 'SELECT form_number FROM media_forms WHERE `job_id` = '.$this->job_id;
         $result = $this->conn->fetchAll($sql);
 
         return $result;
@@ -213,7 +208,7 @@ class Media
 
     public function get_max_drop_forms()
     {
-        $sql = 'SELECT DISTINCT(`form_number`) as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.'  ORDER BY `max` DESC limit 1';
+        $sql    = 'SELECT DISTINCT(`form_number`) as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.'  ORDER BY `max` DESC limit 1';
         $result = $this->conn->fetch($sql);
 
         return $result['max'];
@@ -221,7 +216,7 @@ class Media
 
     public function get_first_form()
     {
-        $sql = 'SELECT `form_number` as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.' ORDER BY `max` ASC limit 1';
+        $sql    = 'SELECT `form_number` as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.' ORDER BY `max` ASC limit 1';
         $result = $this->conn->fetch($sql);
 
         return $result['max'];
@@ -229,17 +224,17 @@ class Media
 
     public function get_drop_details($form_number = '')
     {
-        $form = '';
+        $form              = '';
 
-        if ($form_number == true) {
+        if (true == $form_number) {
             $form = ' and `form_number`= '.$form_number;
         }
 
-        $sql = 'SELECT `bind`,`config`,`form_number` FROM `media_forms` WHERE `job_id` = '.$this->job_id.$form;
+        $sql               = 'SELECT `bind`,`config`,`form_number` FROM `media_forms` WHERE `job_id` = '.$this->job_id.$form;
 
-        $result = $this->conn->query($sql);
+        $result            = $this->conn->query($sql);
 
-        $form_config = [];
+        $form_config       = [];
 
         foreach ($result as $idx => $data) {
             $form_config[$data['form_number']] = ['bind' => $data['bind'], 'config' => $data['config']];
@@ -252,9 +247,9 @@ class Media
 
     public function get_drop_form_data($form_number = '', $sort = [])
     {
-        $add = '';
+        $add    = '';
 
-        if ($form_number == true) {
+        if (true == $form_number) {
             $FORM_SEQ = ' and `f`.`form_number` = '.$form_number;
         }
 
@@ -292,7 +287,7 @@ class Media
             $sort_query = '';
         }
 
-        $sql = 'SELECT `f`.`id`,`f`.`job_id`,`f`.`form_number`,`f`.`form_letter`,`f`.`market`,`f`.`pub`,`f`.`count`,`f`.`ship`,`f`.`former`,`f`.`face_trim`,`f`.`no_bindery`,`m`.`job_number`, `m`.`pdf_file` FROM `form_data` f, `media_job` m WHERE ( `f`.`job_id` = '.$this->job_id.' and `m`.`job_id` = '.$this->job_id.$FORM_SEQ.' ) '.$sort_query;
+        $sql    = 'SELECT `f`.`id`,`f`.`job_id`,`f`.`form_number`,`f`.`form_letter`,`f`.`market`,`f`.`pub`,`f`.`count`,`f`.`ship`,`f`.`former`,`f`.`face_trim`,`f`.`no_bindery`,`m`.`job_number`, `m`.`pdf_file` FROM `form_data` f, `media_job` m WHERE ( `f`.`job_id` = '.$this->job_id.' and `m`.`job_id` = '.$this->job_id.$FORM_SEQ.' ) '.$sort_query;
 
         $result = $this->conn->fetchAll($sql);
 
@@ -301,7 +296,7 @@ class Media
 
     public function get_form_configuration($data)
     {
-        $config = $data['config'];
+        $config                              = $data['config'];
         list($bind_type, $jog, $carton_code) = str_split($data['bind']);
 
         switch ($bind_type) {
@@ -325,28 +320,28 @@ class Media
         switch ($carton_code) {
             case 'S':
                 $carton_size = 'small';
-                $paper_size = 'small';
+                $paper_size  = 'small';
                 break;
             case 'L':
                 $carton_size = 'large';
-                $paper_size = 'large';
+                $paper_size  = 'large';
                 break;
             case 'M':
                 $carton_size = 'large';
-                $paper_size = 'small';
+                $paper_size  = 'small';
                 break;
         }
 
-        $form_configuration = [
+        $form_configuration                  = [
             'configuration' => $config,
-            'paper_wieght' => $paper_wieght,
-            'jog_to' => $jog_to,
-            'carton_size' => $carton_size,
-            'paper_size' => $paper_size,
-            'bind_type' => $bind_type,
+            'paper_wieght'  => $paper_wieght,
+            'jog_to'        => $jog_to,
+            'carton_size'   => $carton_size,
+            'paper_size'    => $paper_size,
+            'bind_type'     => $bind_type,
         ];
 
-        $this->form_configuration = $form_configuration;
+        $this->form_configuration            = $form_configuration;
 
         return $form_configuration;
     }
@@ -366,7 +361,7 @@ class Media
         $this->deleteFromDatabase('form_data', $form_number);
         $this->deleteFromDatabase('form_data_count', $form_number);
 
-        if ($form_number == '') {
+        if ('' == $form_number) {
             $this->deleteFromDatabase('media_forms');
         }
     }
@@ -374,7 +369,7 @@ class Media
     private function deleteFromDatabase($table, $form_number = '')
     {
         $table_obj = $this->exp->table($table);
-        if ($form_number != '') {
+        if ('' != $form_number) {
             $table_obj->where('form_number', $form_number);
         }
         $table_obj->where('job_id', $this->job_id)->delete();
@@ -383,9 +378,9 @@ class Media
     public function delete_xlsx()
     {
         $msg = null;
-        if ($this->xlsx == true) {
+        if (true == $this->xlsx) {
             $msg = MediaFileSystem::delete($this->xlsx_directory);
-            if ($msg === null) {
+            if (null === $msg) {
                 self::set_exists(0, 'xlsx', $this->job_id);
                 $this->xlsx = false;
             }
@@ -397,9 +392,9 @@ class Media
     public function delete_zip()
     {
         $msg = null;
-        if ($this->zip == true) {
+        if (true == $this->zip) {
             $msg = MediaFileSystem::delete($this->zip_directory);
-            if ($msg === null) {
+            if (null === $msg) {
                 self::set_exists(0, 'zip', $this->job_id);
                 $this->zip = false;
             }
@@ -410,7 +405,7 @@ class Media
 
     public function update_job_number($job_number)
     {
-        $data = ['job_number' => $job_number];
+        $data             = ['job_number' => $job_number];
         $this->exp->table('media_job')->where('job_id', $this->job_id)->update($data);
         $this->job_number = $job_number;
         $this->getDirectories();
@@ -463,7 +458,7 @@ class Media
 
         foreach ($forms as $letter => $row) {
             foreach ($row as $individual_part) {
-                $individual_part['job_id'] = $this->job_id;
+                $individual_part['job_id']      = $this->job_id;
                 $individual_part['form_letter'] = $letter;
                 $individual_part['form_number'] = $form_number;
                 $this->exp->table('form_data')->insert($individual_part);
@@ -474,15 +469,15 @@ class Media
     public static function insertJobNumber($pdf_filename, $job_number)
     {
         global $explorer;
-        $job_id = null;
+        $job_id       = null;
         $pdf_filename = basename($pdf_filename);
 
         $explorer->table('media_job')->insert([
             'job_number' => $job_number,
-            'pdf_file' => $pdf_filename,
+            'pdf_file'   => $pdf_filename,
         ]);
 
-        $vares = $explorer->table('media_job')->where('pdf_file = ?', $pdf_filename);
+        $vares        = $explorer->table('media_job')->where('pdf_file = ?', $pdf_filename);
         foreach ($vares as $u) {
             $job_id = $u->job_id;
         }
@@ -493,18 +488,18 @@ class Media
     public static function getJobNumber($pdf_filename, $job_number = null)
     {
         global $explorer;
-        $job_id = null;
+        $job_id       = null;
         $pdf_filename = basename($pdf_filename);
 
-        $val = $explorer->table('media_job')->where('pdf_file = ?', $pdf_filename);
-        //$val->where('pdf_file LIKE ', $pdf_filename); //->select('job_id');
+        $val          = $explorer->table('media_job')->where('pdf_file = ?', $pdf_filename);
+        // $val->where('pdf_file LIKE ', $pdf_filename); //->select('job_id');
 
-        //dd($pdf_filename, $val);
+        // dd($pdf_filename, $val);
         foreach ($val as $u) {
             $job_id = $u->job_id;
         }
-        if ($job_number !== null) {
-            if ($job_id === null) {
+        if (null !== $job_number) {
+            if (null === $job_id) {
                 $job_id = self::insertJobNumber($pdf_filename, $job_number);
             }
         }
