@@ -1,20 +1,8 @@
 <?php
-
 require '../.config.inc.php';
-
 define('TITLE', 'Media Updater');
-
-$form            = new Formr\Formr('bootstrap');
-
-if ($form->submitted()) {
-    if (array_key_exists('cancel', $_POST)) {
-        header('Location: /index.php');
-
-        exit;
-    }
-}
-
 include_once __LAYOUT_HEADER__;
+
 ?>
 
 <H1 align="center">Updating Media Source files</H1>
@@ -89,28 +77,28 @@ if ($form->submitted()) {
         ?>
 
 <div class="progress">
-    <div id="theBar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
-        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-    </div>
+	<div id="theBar" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+		aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+	</div>
 </div>
 
 <script>
-    var i = 100;
+	var i = 100;
 
-    var counterBack = setInterval(function() {
-        i--;
-        if (i > 0) {
-            document.getElementById("theBar").style.width = i + 1 + "%";
-            document.getElementById("theBar").innerHTML = i + 1 + "%";
-        } else {
-            clearTimeout(counterBack);
-        }
+	var counterBack = setInterval(function() {
+		i--;
+		if (i > 0) {
+			document.getElementById("theBar").style.width = i + 1 + "%";
+			document.getElementById("theBar").innerHTML = i + 1 + "%";
+		} else {
+			clearTimeout(counterBack);
+		}
 
-    }, 600);
+	}, 600);
 </script>
 <HR>
 <UL>
-    <?php
+	<?php
 
             $base_dir      = realpath(__DIR__.'\\..\\');
         set_time_limit(0);
