@@ -36,9 +36,6 @@ define('__ZIP_FILE_DIR__', \DIRECTORY_SEPARATOR.'zip');
 define('__XLSX_DIRECTORY__', \DIRECTORY_SEPARATOR.'xlsx');
 define('__XLSX_SLIPS_DIRECTORY__', \DIRECTORY_SEPARATOR.__XLSX_DIRECTORY__.\DIRECTORY_SEPARATOR.'slipsheets');
 
-define('__VERSION_DL_DIR__', __DRIVE_LETTER__.$conf['server']['root_dir'].$conf['server']['web_root'].\DIRECTORY_SEPARATOR.'updater/download');
-define('__VERSION_FILE__', __DRIVE_LETTER__.$conf['server']['root_dir'].$conf['server']['web_root'].\DIRECTORY_SEPARATOR.'updater/version.txt');
-
 $template = new Template();
 
 if (array_key_exists('job_id', $_REQUEST)) {
