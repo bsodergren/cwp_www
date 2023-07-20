@@ -1,6 +1,9 @@
 <?php
+/**
+ * CWP Media tool
+ */
 
-$constants = [
+$constants    = [
     '__APP_ROOT__',
     '__WEB_ROOT__',
     '__ROOT_BIN_DIR__',
@@ -13,14 +16,14 @@ $urlconstants = [
     '__URL_LAYOUT__',
 ];
 
-$pass = true;
+$pass         = true;
 foreach ($constants as $const) {
     $value = constant($const);
     if (is_dir($value)) {
         $msg[] = $value;
     } else {
         $msg[] = 'Dir not found - '.$value;
-        $pass = false;
+        $pass  = false;
     }
 }
 foreach ($urlconstants as $const) {
@@ -29,19 +32,19 @@ foreach ($urlconstants as $const) {
 }
 
 foreach ($includes as $file) {
-    if (! file_exists($file)) {
+    if (!file_exists($file)) {
         $msg[] = 'Include file '.$file.' not found';
-        $pass = false;
+        $pass  = false;
     }
 }
 
-if ($pass === true) {
+if (true === $pass) {
     touch($__conf_checked);
 } else {
     foreach ($msg as $txt) {
         echo $txt.'<br>';
     }
-    die();
+    exit;
 }
 
-//dd("Config Checker");
+// dd("Config Checker");
