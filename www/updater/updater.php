@@ -37,10 +37,8 @@ include_once __LAYOUT_HEADER__;
 $current            = trim(get_content($updateUrl));
 $installed          = trim(file_get_contents(__VERSION_FILE__));
 
-dump(['Current' => $current, 'Installed' => $installed]);
-
 if ($current > $installed) {
-    echo 'time to update date '.$patcher_exec;
+    echo 'time to update date <br>';
 
     $allVersions         = get_content($versionUrl);
     $verArray            = explode("\n", $allVersions);
@@ -48,13 +46,12 @@ if ($current > $installed) {
         if ($installed >= $Updates) {
             continue;
         }
-        $doUpdates[]    = $Updates;
+        $doUpdates[]    = trim($Updates);
     }
 
     foreach ($doUpdates as $version) {
         $zip_filename           = 'update_'.$version.'.zip';
         $zip_dl_url             = $zip_url.$zip_filename;
-        dump($zip_dl_url);
         $data                   = get_content($zip_dl_url);
 
         if (!is_dir(__VERSION_DL_DIR__)) {
@@ -62,7 +59,7 @@ if ($current > $installed) {
         }
 
         $destination            = __VERSION_DL_DIR__.\DIRECTORY_SEPARATOR.$zip_filename;
-
+        $updateFiles[]          = $destination;
         if (file_exists($destination)) {
             unlink($destination);
         }
@@ -71,24 +68,30 @@ if ($current > $installed) {
         fclose($file);
     }
 
-    dd('fdas');
-    $command             = [
-        $patcher_exec,
-        '-O',
-        __DRIVE_LETTER__.$conf['server']['root_dir'],
-        '-P',
-        $destination,
-    ];
+    dd($updateFiles);
+    foreach ($updateFiles as $updateFile) {
+        $command             = [
+            $patcher_exec,
+            '-O',
+            __DRIVE_LETTER__.$conf['server']['root_dir'],
+            '-P',
+            $updateFile,
+        ];
 
-    $process             = new Process($command);
-    $process->setTimeout(60000);
+        $process             = new Process($command);
+        $process->setTimeout(60000);
 
-    $runCommand          = $process->getCommandLine();
+        $runCommand          = $process->getCommandLine();
 
-    dd($runCommand);
-
-    //            $process->start();
-    //            $process->wait($callback);
+        $process->run(function ($type, $buffer): void {
+            if (Process::ERR === $type) {
+                echo 'ERR > '.$buffer.'<br>';
+            } else {
+                echo 'OUT > '.$buffer.'<br>';
+            }
+        });
+        // $process->wait();
+    }
 }
 
 include_once __LAYOUT_FOOTER__;
