@@ -26,6 +26,7 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\VarDumper\\' => 28,
+            'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\Finder\\' => 25,
             'Sinergi\\BrowserDetector\\' => 24,
         ),
@@ -36,10 +37,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
             'Psr\\Http\\Client\\' => 16,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
             'PHPMailer\\PHPMailer\\' => 20,
-        ),
-        'N' => 
-        array (
-            'Noodlehaus\\' => 11,
         ),
         'M' => 
         array (
@@ -78,6 +75,10 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
+        'Symfony\\Component\\Process\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/process',
+        ),
         'Symfony\\Component\\Finder\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
@@ -106,10 +107,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-        ),
-        'Noodlehaus\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/hassankhan/config/src',
         ),
         'Matrix\\' => 
         array (

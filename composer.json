@@ -12,7 +12,8 @@
         "symfony/finder": "^6.3",
         "lamansky/fraction": "^1.0",
         "coderofsalvation/browser-stream": "dev-master",
-        "camoo/config": "^1.0"
+        "camoo/config": "^1.0",
+        "symfony/process": "^6.3"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.2"
