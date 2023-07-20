@@ -11,10 +11,11 @@ class MediaProgramUpdate
     public $updateUrl;
     public $versionUrl;
     public $zip_url;
+    public $installed;
 
     public $updateFiles             = [];
 
-    public $VersionUpdates          = [];
+        public $VersionUpdates          = [];
 
     public $conf                    = [];
 
