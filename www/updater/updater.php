@@ -21,7 +21,7 @@ function get_content($URL)
 use Symfony\Component\Process\Process;
 
 $gitRaw           = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/www/updater/';
-$updateUrl        = $gitRaw.'version.txt';
+$updateUrl        = $gitRaw.'version.txt?432=432';
 $zip_url          = $gitRaw.'Latest.zip';
 
 $builder_exec     = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'builder.exe';
