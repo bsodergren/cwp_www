@@ -2,20 +2,18 @@
 // {major}.{minor}.{patch}.{env:BUILD_NUMBER}'
 
 require_once '../.config.inc.php';
-use Symfony\Component\Finder\Finder;
 use coderofsalvation\BrowserStream;
+use Symfony\Component\Finder\Finder;
 
 define('TITLE', 'Test Page');
 //$template = new Template();
 
 require __LAYOUT_HEADER__;
 
+BrowserStream::put('loading');
 
-
-BrowserStream::put("loading");
-
-for($i = 0; $i < 10; $i++) {
-    BrowserStream::put(".");
+for ($i = 0; $i < 10; $i++) {
+    BrowserStream::put('.');
     sleep(1);
 }
 
@@ -144,3 +142,4 @@ foreach ($array as $line) {
 }
 
 dump($pub_array);
+?>
