@@ -30,7 +30,7 @@ class MediaProgramUpdate
         $this->versionUrl         = $this->gitRaw.'version.txt?432=432';
         $this->zip_url            = $this->gitRaw.'versions/';
 
-        $current                  = trim(get_content($this->updateUrl));
+        $current                  = trim($this->get_content($this->updateUrl));
         $installed                = trim(file_get_contents(__VERSION_FILE__));
         self::$UPDATES_PENDING    = false;
         if ($current > $installed) {
