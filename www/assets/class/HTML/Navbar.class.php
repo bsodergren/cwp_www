@@ -49,6 +49,7 @@ class Navbar extends Template
             'DROPDOWN_TEXT'  => $dropddown_menu_text,
         ]);
         $params['NAVBAR_MENU_HTML'] = $navbar_menu_html;
+        $params['NAVBAR_UPDATES_HTML'] = MediaProgramUpdate::$UPDATES_PENDING;
 
         return $templateObj->template('base/navbar/navbar', $params);
     }

@@ -55,6 +55,5 @@ define('__NAVBAR_LINKS__', [
             'Update'         => '/updater/updater.php',
             'Language'       => '/settings/language.php',
             'Local Settings' => '/settings/local.php',
-//            'Server Settings' => '/settings/settings.php',
         ],
     ]);
