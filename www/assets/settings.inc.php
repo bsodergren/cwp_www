@@ -3,9 +3,9 @@
  * CWP Media tool
  */
 
-$table    = $explorer->table('settings');
+$table          = $explorer->table('settings');
 $table->order('setting_type ASC');
-$results  = $table->fetchAssoc('id');
+$results        = $table->fetchAssoc('id');
 
 if ($results) {
     foreach ($results as $k => $u) {
@@ -24,9 +24,12 @@ if ($results) {
 
     define('__SETTINGS__', $setting);
 }
-$const    = get_defined_constants(true);
+$const          = get_defined_constants(true);
 
 unset($setting);
+
+define('__VERSION_DL_DIR__', __DRIVE_LETTER__.$conf['server']['root_dir'].$conf['server']['web_root'].\DIRECTORY_SEPARATOR.'updater/download');
+define('__VERSION_FILE__', __DRIVE_LETTER__.$conf['server']['root_dir'].$conf['server']['web_root'].\DIRECTORY_SEPARATOR.'updater/current.txt');
 
 define('__FILES_DIR__', __DRIVE_LETTER__.$conf['server']['root_dir'].$conf['server']['web_root'].$conf['server']['file_root']);
 
@@ -36,7 +39,8 @@ define('__ZIP_FILE_DIR__', \DIRECTORY_SEPARATOR.'zip');
 define('__XLSX_DIRECTORY__', \DIRECTORY_SEPARATOR.'xlsx');
 define('__XLSX_SLIPS_DIRECTORY__', \DIRECTORY_SEPARATOR.__XLSX_DIRECTORY__.\DIRECTORY_SEPARATOR.'slipsheets');
 
-$template = new Template();
+$template       = new Template();
+$mediaUpdates   = new MediaProgramUpdate();
 
 if (array_key_exists('job_id', $_REQUEST)) {
     $job_id = $_REQUEST['job_id'];
