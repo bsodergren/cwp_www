@@ -15,9 +15,13 @@ $array_html     = '';
 $textbox_html   = '';
 
 $cat            = 'server';
-
+$text_col_width = 'col-2';
 if (isset($_GET['cat'])) {
     $cat = $_GET['cat'];
+}
+
+if ('lang' == $cat) {
+    $text_col_width = 'col-4';
 }
 
 foreach (__SETTINGS__[$cat] as $definedName => $array) {
@@ -87,13 +91,14 @@ foreach (__SETTINGS__[$cat] as $definedName => $array) {
         $description_label = Template::GetHTML('settings/text/'.$desc_template, $row_desc_params);
 
         $params            = [
-            'DEFINED_NAME'      => $definedName,
-            'PLACEHOLDER'       => $place_holder,
-            'TOOLTIP'           => $tooltip,
-            'VALUE'             => $value,
-            'NAME'              => $name,
-            'NAME_LABEL'        => $name_label,
-            'DESCRIPTION_LABEL' => $description_label,
+            'DEFINED_NAME'       => $definedName,
+            'PLACEHOLDER'        => $place_holder,
+            'TOOLTIP'            => $tooltip,
+            'VALUE'              => $value,
+            'NAME'               => $name,
+            'NAME_LABEL'         => $name_label,
+            'DESCRIPTION_LABEL'  => $description_label,
+            'SETTINGS_COL_WIDTH' => $text_col_width,
         ];
         $text_fields .= Template::GetHTML('settings/text/text', $params);
     }
@@ -142,16 +147,7 @@ foreach (__SETTINGS__[$cat] as $definedName => $array) {
 
         $checked           = 'checked';
         foreach ($pub_list['selected'] as $bind => $pubArray) {
-            $bind_name = str_replace(
-                ['pfl', 'pfm', 'pfs', 'shs', 'phl', 'phm', 'pfs'],
-                [
-                    'Perfect Foot Large',
-                    'Perfect Foot Medium',
-                    'Perfect Foot Small',
-                    'Saddle Head Small',
-                    'Perfect Head Large',
-                    'Perfect Head Medium',
-                    'Perfect Head Small'], $bind);
+            $bind_name = utils::bindtype($bind);
             foreach ($pubArray as $pub) {
                 $pub_name = ucwords(str_replace('_', ' ', $pub['name']));
                 $select_options .= Template::GetHTML('settings/list/select_options', [
@@ -170,16 +166,7 @@ foreach (__SETTINGS__[$cat] as $definedName => $array) {
 
         $select_options    = '';
         foreach ($pub_list['not_selected'] as $bind => $pubArray) {
-            $bind_name      = str_replace(
-                ['pfl', 'pfm', 'pfs', 'shs', 'phl', 'phm', 'pfs'],
-                [
-                    'Perfect Foot Large',
-                    'Perfect Foot Medium',
-                    'Perfect Foot Small',
-                    'Saddle Head Small',
-                    'Perfect Head Large',
-                    'Perfect Head Medium',
-                    'Perfect Head Small'], $bind);
+            $bind_name      = utils::bindtype($bind);
             $select_options = '';
 
             foreach ($pubArray as $pub) {
@@ -212,7 +199,9 @@ if ('' != $checkbox_fields) {
     $checkbox_html = Template::GetHTML('settings/checkbox/main', ['CHECKBOX_FIELDS' => $checkbox_fields]);
 }
 if ('' != $text_fields) {
-    $textbox_html = Template::GetHTML('settings/text/main', ['TEXTBOX_FIELDS' => $text_fields]);
+    $textbox_html = Template::GetHTML('settings/text/main', ['TEXTBOX_FIELDS' => $text_fields,
+    'SETTINGS_COL_WIDTH'                                                      => $text_col_width,
+]);
 }
 if ('' != $array_fields) {
     $array_html = Template::GetHTML('settings/array/main', ['ARRAY_FIELDS' => $array_fields]);
@@ -221,7 +210,7 @@ if ('' != $list_fields) {
     $list_html = Template::GetHTML('settings/list/main', ['LIST_FIELDS' => $list_fields]);
 }
 
-$template->template('settings/new_setting', ['CATEGORY' => $cat]);
+// $template->template('settings/new_setting', ['CATEGORY' => $cat]);
 
 $settings_html  = $template->return();
 

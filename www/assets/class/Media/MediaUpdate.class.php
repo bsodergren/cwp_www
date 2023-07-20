@@ -64,10 +64,10 @@ class MediaUpdate
     {
         global $conf;
         $this->conn       = $db_conn;
-        $dbType           = 'sqlite';
+        $dbType           = 'MediaSqlite';
 
         if ('mysql' == $conf['db']['type']) {
-            $dbType = 'mysql';
+            $dbType = 'MediaMySQL';
         }
         $this->dbClassObj = new $dbType($this, $db_conn);
     }
@@ -268,110 +268,5 @@ class MediaUpdate
         }
 
         return false;
-    }
-}
-
-class MediaDB
-{
-    public $conn;
-
-    public function __construct($parent, $conn)
-    {
-        $this->conn = $parent;
-    }
-
-    public function check_tableExists($table = '')
-    {
-        $query = $this->checkTable($table);
-
-        return $this->conn->queryOne($query);
-    }
-
-    public function check_columnExists($table, $column)
-    {
-        $query = $this->checkColumn($table, $column);
-
-        return $this->conn->queryOne($query);
-    }
-
-    public function rename_column($table, $old, $new)
-    {
-        $query = $this->renameColumn($table, $old, $new);
-
-        return $this->conn->queryOne($query);
-    }
-
-    public function create_column($table, $column, $type)
-    {
-        $query = $this->createColumn($table, $column, $type);
-
-        return $this->conn->queryOne($query);
-    }
-
-    public function reset_table($table)
-    {
-        $query = $this->resetTable($table);
-
-        return $this->conn->queryOne($query);
-    }
-}
-
-class mysql extends MediaDB
-{
-    public function checkColumn($table, $column)
-    {
-        return 'SHOW COLUMNS FROM '.$table." LIKE '%".$column."%'";
-    }
-
-    public function checkTable($table)
-    {
-        return "SELECT count(*) FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
-    }
-
-    public function renameColumn($table, $old, $new)
-    {
-        $query  = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table."' AND COLUMN_NAME = '".$old."';";
-        $result = $this->conn->queryOne($query);
-
-        return 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
-    }
-
-    public function createColumn($table, $column, $type)
-    {
-        $type = str_ireplace('TEXT', 'VARCHAR(255)', $type);
-
-        return 'ALTER TABLE '.$table.' ADD '.$column.' '.$type.';';
-    }
-
-    public function resetTable($table_name)
-    {
-        return 'TRUNCATE `'.$table_name.'`; ';
-    }
-}
-class sqlite extends MediaDB
-{
-    public function checkTable($table)
-    {
-        return "SELECT name FROM sqlite_master WHERE type='table' AND name='".$table."'";
-    }
-
-    public function checkColumn($table, $column)
-    {
-        return "SELECT 1 FROM pragma_table_info('".$table."') where name='".$column."'";
-    }
-
-    public function renameColumn($table, $old, $new)
-    {
-        return 'ALTER TABLE '.$table." RENAME COLUMN '".$old."'  TO '".$new."';";
-    }
-
-    public function createColumn($table, $column, $type)
-    {
-        return 'ALTER TABLE '.$table.' ADD '.$column.' '.$type.';';
-    }
-
-    public function resetTable($table_name)
-    {
-        return 'DELETE FROM '.$table_name.'; UPDATE sqlite_sequence SET seq = 0 WHERE name="'.$table_name.'"';
     }
 }

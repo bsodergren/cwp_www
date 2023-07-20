@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool
+ */
 
 class Utils
 {
@@ -15,8 +18,8 @@ class Utils
                 $filename = $file->getPathname();
                 $filename = \Nette\Utils\FileSystem::normalizePath($filename);
                 if (preg_match('/('.$ext.')$/', $filename)) {
-                    if ($skip_files == 1) {
-                        if (! self::skipFile($filename)) {
+                    if (1 == $skip_files) {
+                        if (!self::skipFile($filename)) {
                             $files_array[] = $filename;
                         }
                     } else {
@@ -31,7 +34,7 @@ class Utils
 
     public static function skipFile($filename)
     {
-        $f = fopen($filename, 'r');
+        $f    = fopen($filename, 'r');
         $line = fgets($f);
         fclose($f);
 
@@ -40,11 +43,11 @@ class Utils
 
     public static function setSkipFile($filename)
     {
-        if (! self::skipFile($filename)) {
+        if (!self::skipFile($filename)) {
             $replacement = '<?php';
             $replacement .= ' #skip';
             $__db_string = FileSystem::read($filename);
-            $__db_write = str_replace('<?php', $replacement, $__db_string);
+            $__db_write  = str_replace('<?php', $replacement, $__db_string);
             FileSystem::write($filename, $__db_write);
         }
     }
@@ -74,25 +77,25 @@ class Utils
 
     public static function fracToFloat($number)
     {
-        $float = '000';
+        $float  = '000';
         $digits = '0';
 
-        if ($number != 0) {
+        if (0 != $number) {
             preg_match('/([0-9]+-?)?([0-9]+)?\/?([0-9]+)?/', $number, $output_array);
-            $float = '000';
+            $float  = '000';
             $digits = $output_array[1];
             $digits = str_replace('-', '', $digits);
             if (array_key_exists(2, $output_array)) {
-                if ($output_array[2] == '') {
-                    $digits = 0;
+                if ('' == $output_array[2]) {
+                    $digits          = 0;
                     $output_array[2] = $output_array[1];
                 }
 
-                $num = $output_array[2];
-                $den = $output_array[3];
+                $num   = $output_array[2];
+                $den   = $output_array[3];
                 $float = fdiv($num, $den);
                 $float = str_replace('0.', '', $float);
-                $float = str_pad($float, 3, '0', STR_PAD_RIGHT);
+                $float = str_pad($float, 3, '0', \STR_PAD_RIGHT);
             }
         }
 
@@ -101,7 +104,7 @@ class Utils
 
     public static function floatToFrac($f)
     {
-        $f = floatval($f);
+        $f           = floatval($f);
 
         // keep the original sign so that the numerator could be converted later
         $is_negative = ($f < 0);
@@ -110,13 +113,13 @@ class Utils
         }
 
         // get the part before the floating point
-        $int = floor($f);
+        $int         = floor($f);
 
         // make the float belonging to the interval [0, 1)
-        $flt = $f - $int;
+        $flt         = $f - $int;
         // strip the zero and the floating point
-        $flt = substr($flt, 2);
-        if ($flt == '') {
+        $flt         = substr($flt, 2);
+        if ('' == $flt) {
             $flt = 0;
         }
         do {
@@ -130,10 +133,10 @@ class Utils
             $val *= -1;
         }
 
-        $num = intval($val);
-        $den = pow(10, $len);
-        $f = new Lamansky\Fraction\Fraction($num, $den);
-        $string = str_replace(' ', '-', $f->toString());
+        $num         = intval($val);
+        $den         = pow(10, $len);
+        $f           = new Lamansky\Fraction\Fraction($num, $den);
+        $string      = str_replace(' ', '-', $f->toString());
 
         return $string;
     }
@@ -141,8 +144,8 @@ class Utils
     public static function DelSizeToFrac($dec)
     {
         [$height,$width] = explode(' x ', $dec);
-        $size_height = self::floattofrac($height);
-        $size_width = self::floattofrac($width);
+        $size_height     = self::floattofrac($height);
+        $size_width      = self::floattofrac($width);
 
         return $size_height.' x '.$size_width;
     }
@@ -150,8 +153,8 @@ class Utils
     public static function DelSizeToFloat($frac)
     {
         [$height,$width] = explode(' x ', $frac);
-        $size_height = self::fracToFloat($height);
-        $size_width = self::fracToFloat($width);
+        $size_height     = self::fracToFloat($height);
+        $size_width      = self::fracToFloat($width);
 
         return $size_height.' x '.$size_width;
     }
