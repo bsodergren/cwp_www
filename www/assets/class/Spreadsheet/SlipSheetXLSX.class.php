@@ -89,6 +89,7 @@ class SlipSheetXLSX extends Media
                             break;
                         case 5:
                             $this->setFormerInfo($col_A, $row);
+                            $this->setPcsInfo($col_B, $row);
                             break;
                         case 6:
                             $this->boxDataBoxes($col_A, $col_B, $row, $box);
@@ -146,13 +147,21 @@ class SlipSheetXLSX extends Media
 
     private function setFormLocation($column, $row)
     {
-        $text = ucwords(strtolower($this->SlipData->pub.' '.$this->SlipData->market), ' /');
+        // $text = ucwords(strtolower($this->SlipData->pub.' '.$this->SlipData->market), ' /');
+        $text = ucwords(strtolower($this->SlipData->pub), ' /');
+
         $this->styles->addSheetData($text, $column.$row);
     }
 
     private function setFormerInfo($column, $row)
     {
-        $text = $this->SlipData->former.' '.$this->SlipData->count.' pcs';
+        $text           = $this->SlipData->former;
+        $this->styles->addSheetData($text, $column.$row);
+    }
+
+    private function setPcsInfo($column, $row)
+    {
+        $text = $this->SlipData->count.' pcs';
         $this->styles->addSheetData($text, $column.$row);
     }
 

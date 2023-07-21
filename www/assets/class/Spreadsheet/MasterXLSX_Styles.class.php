@@ -6,7 +6,7 @@
 /**
  * CWP Media tool.
  */
-class MediaXLSX_Styles extends Styles
+class MasterXLSX_Styles extends Styles
 {
     public $obj;
     public $rowHeight = [
@@ -145,10 +145,21 @@ class MediaXLSX_Styles extends Styles
             $this->setCellText(Styles::row('D', 8), $form['skid_count']);
         }
 
+        if (true == $form['bindery_trim']) {
+            $merg_rows = [24, 25, 26];
 
+            foreach ($merg_rows as $row) {
+                $cell = Styles::row('A', $row).':'.Styles::row('D', $row);
+                $this->setMerge($cell);
+            }
 
+            $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 26),  'border' => 'outline']);
+
+            $this->setCellText(Styles::row('A', 24), $form['ship_value']);
+            $this->setCellText(Styles::row('A', 25), $form['ship_value']);
+            $this->setCellText(Styles::row('A', 26), $form['ship_value']);
+        } else {
             $trim_cell = 26;
-
             if (0 != $form['del_size']) {
                 $deliveryInst[$trim_cell] = ['text' => 'Delivered Size', 'value' => $form['del_size']];
                 $trim_cell                = 25;
@@ -183,21 +194,7 @@ class MediaXLSX_Styles extends Styles
                     $this->setAlign($cellB, 'V', 'C');
                 }
             }
-
-            if (true == $form['bindery_trim']) {
-                $row            = 24;
-
-                    $cell = Styles::row('A', $row).':'.Styles::row('D', $row);
-                    $this->setMerge($cell);
-
-
-               // $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 24),  'border' => 'outline']);
-
-                $this->setCellText(Styles::row('A', 24), $form['ship_value']);
-    //            $this->setCellText(Styles::row('A', 25), $form['ship_value']);
-    //            $this->setCellText(Styles::row('A', 26), $form['ship_value']);
-            }
-
+        }
     }
 
     public function createPage($form, $sheet_labels, $copies = 1)

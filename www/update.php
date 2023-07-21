@@ -4,6 +4,7 @@
  */
 
 require_once '.config.inc.php';
+define('TITLE', 'Update Form');
 
 HTMLDisplay::$timeout = 3;
 include_once __LAYOUT_HEADER__;

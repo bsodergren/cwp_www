@@ -54,11 +54,9 @@ class HTMLDisplay
         }
     }
 
-    public static function output($var, $nl = '')
+    public static function output($var)
     {
-        //        echo $var.$nl."\n";
-        BrowserStream::put($var.$nl);
-        //      ob_flush();
+        self::put($var);
     }
 
     public function draw_checkbox($name, $value, $text = 'Face Trim')
@@ -78,23 +76,16 @@ class HTMLDisplay
 
     public static function draw_excelLink($excel_file)
     {
-        global $conf;
-
-        $rootPath     = $conf['server']['root_dir'].$conf['server']['web_root'];
-        $relativePath = substr($excel_file, strlen($rootPath) + 1);
+        $relativePath = substr($excel_file, strlen(__WEB_ROOT__) + 1);
         $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
-
         return 'ms-excel:ofe|u|'.$url;
     }
 
     public static function getPdfLink($pdf_file)
     {
-        global $conf;
 
-        $rootPath     = $conf['server']['root_dir'].$conf['server']['web_root'];
-        $relativePath = substr($pdf_file, strlen($rootPath) + 1);
+        $relativePath = substr($pdf_file, strlen(__WEB_ROOT__) + 1);
         $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
-
         return $url;
     }
 }

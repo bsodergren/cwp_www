@@ -16,8 +16,11 @@ class MediaXLSX extends Media
     protected object $spreadsheet;
     protected object $media;
     public $xlsx_array;
+    public $box;
+    public $form_details;
+
     public $trim_details = [];
-    public function __construct($media= false, $quiet = false)
+    public function __construct(object $media, $quiet = false)
     {
 
         $this->media = $media;
@@ -34,66 +37,6 @@ class MediaXLSX extends Media
         $this->job_id = $this->xlsx_array[$keyidx]["job_id"];
     }
 
-
-    public function writeMasterWorkbook()
-    {
-        $this->spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-
-        foreach ($this->xlsx_array as $form_number => $data) {
-
-
-            $sql = "SELECT * FROM form_data_count  WHERE job_id = " . $this->media->job_id ." AND form_number = ".$form_number ." order by former DESC ,form_id ASC";
-
-            $result = $this->conn->fetchAll($sql);
-            foreach($result as $form_data) {
-                $trims  = $this->getTrimData($form_data->pub, $form_data->bind);
-                $MasterArray[$form_number][$form_data->former][$form_data->form_letter][] = [
-                    "pub" => $form_data->pub,
-                    "count" => $form_data->count,
-                    "face_trim" => $this->form_details['face_trim'],
-                    "no_bindery" => $this->form_details['no_bindery'],
-                    "bind" => $form_data->bind,
-                    "packaging" => $form_data->packaging,
-                    "full_boxes" => $form_data->full_boxes,
-                    "layers_last_box" => $form_data->layers_last_box,
-                    "lifts_last_layer" => $form_data->lifts_last_layer,
-                    "head_trim" => $trims['head_trim'],
-                    "foot_trim" => $trims['foot_trim'],
-
-                ];
-            }
-
-
-
-        }
-
-        $worksheet_title = "Master List" ;
-        $masterWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($this->spreadsheet, $worksheet_title);
-        $this->spreadsheet->addSheet($masterWorkSheet, 0);
-        $sheet = $this->spreadsheet->getSheet(0);
-        $sheet->getHeaderFooter()->setOddHeader('&36&B ' . __LANG_MEDIA_LOAD_FLAG);
-        $sheet->getHeaderFooter()->setOddFooter('&L&B' . __LANG_MEDIA_LOAD_FLAG . '&RPage &P of &N');
-
-        foreach($MasterArray as $form_number => $data) {
-
-
-
-            foreach($data as $former => $formData) {
-
-                foreach($formData as $letter => $parts) {
-
-                    dd($letter, $parts);
-                }
-
-            }
-
-
-
-
-
-        }
-
-    }
 
 
     public function writeWorkbooks()
@@ -199,7 +142,7 @@ class MediaXLSX extends Media
 
         if ($delivery  == "back" || $this->form_details['face_trim'] == 1) {
             if ($this->form_details['no_bindery'] != 1) {
-                $this->form_details['market'] = "";
+               // $this->form_details['market'] = "";
                 $ship_value = __LANG_BINDERY;
                 if($this->form_details['face_trim'] == 1) {
                     $ship_value = __LANG_BINDERY_FACETRIM;

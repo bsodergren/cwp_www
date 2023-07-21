@@ -183,27 +183,22 @@ if ('' != $file_id) {
     foreach ($rep_array as $find => $replace) {
         $custom_css = str_replace($find, $replace, $custom_css);
     }
-    // $custom_css = str_replace('{border: 1px solid black;}','{border: 0px dashed red;}',$custom_css );
-
-    //            $custom_css = str_replace('font-size:11pt','',$custom_css );
 
     $message                   = $writer->generateSheetData();
+    /*
+        $rep_array                 = [
+            // "page: page0'>" => "page: page0' class='scrpgbrk'>",
+            // 'column0 style7' => 'column0 style6',
+            // 'scrpgbrk' => 'page-break'
+        ];
 
-    //    $message = preg_replace("/(page[0-9]\\')>/", "$1 class='scrpgbrk'>", $message);
-    $rep_array                 = [
-        // "page: page0'>" => "page: page0' class='scrpgbrk'>",
-        'column0 style7' => 'column0 style6',
-
-        //        'scrpgbrk' => 'page-break'
-    ];
-    foreach ($rep_array as $find => $replace) {
-        $message = str_replace($find, $replace, $message);
-    }
+        foreach ($rep_array as $find => $replace) {
+            $message = str_replace($find, $replace, $message);
+        }
+    */
 
     if (!array_key_exists('quicksheet', $_REQUEST)) {
         $header = "<thead class='media: header'><tr><th colspan='4' class='text-center fs-1'>Media Load Flag</th></tr></thead> <tbody>";
-
-        //        $message = str_replace("<tbody>", $header, $message);
     }
 
     $params['MESSAGE']         = $message;

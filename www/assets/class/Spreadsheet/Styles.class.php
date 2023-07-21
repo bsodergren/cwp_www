@@ -3,9 +3,13 @@
  * CWP Media tool
  */
 
+/**
+ * CWP Media tool.
+ */
 class styles
 {
     public static $offset;
+    public $obj;
 
     public static function row($letter, $row)
     {
@@ -31,7 +35,7 @@ class styles
         $this->obj->getPageMargins()->setBottom(0.25);
     }
 
-    public function setNumberCode($cell, $code)
+    public function setNumberCode($cell, $code = null)
     {
         $this->obj->getStyle($cell)->getNumberFormat()->setFormatCode($code);
     }
@@ -39,6 +43,11 @@ class styles
     public function setShrink($cell)
     {
         $this->obj->getStyle($cell)->getAlignment()->setShrinkToFit(true);
+    }
+
+    public function setIndent($cell)
+    {
+        $this->obj->getStyle($cell)->getAlignment()->setIndent(1);
     }
 
     public function setPageBreak($cell)
@@ -121,25 +130,36 @@ class styles
         //        $this->obj->getStyle($this->RightBlock($cell))->getFont()->setBold(1);
     }
 
-    public function setAlign($cell, $style = 'H')
+    public function setAlign($cell, $style = 'H', $align = 'C')
     {
-        $cellArray[] = $cell;
+        if (is_array($cell)) {
+            $tmpCellArray      = $cell;
+            unset($cell);
+            foreach ($tmpCellArray as $var => $value) {
+                $$var           = $value;
+            }
+        }
+
+
+        $cellArray[]    = $cell;
         if (method_exists(get_called_class(), 'RightBlock')) {
             $cellArray[] = $this->RightBlock($cell);
         }
 
+        $replace        = ['H' => 'HORIZONTAL', 'V' => 'VERTICAL'];
+        $style_c        =  strtr($style, $replace);
+
+        $replace        = ['C' => 'CENTER', 'L' => 'LEFT', 'R' => 'RIGHT', 'T' => 'TOP', 'B' => 'BOTTOM'];
+        $align_c        =  strtr($align, $replace);
+
+        $constant       = constant("\PhpOffice\PhpSpreadsheet\Style\Alignment::".strtoupper($style_c).'_'.strtoupper($align_c));
+
         foreach ($cellArray as $n => $cell) {
             if ('H' == $style) {
-                $this->obj->getStyle($cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $this->obj->getStyle($cell)->getAlignment()->setHorizontal($constant);
             }
-
             if ('V' == $style) {
-                $this->obj->getStyle($cell)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-            }
-
-            if ('VH' == $style || 'HV' == $style) {
-                $this->obj->getStyle($cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $this->obj->getStyle($cell)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                $this->obj->getStyle($cell)->getAlignment()->setVertical($constant);
             }
         }
     }

@@ -3,6 +3,9 @@
  * CWP Media tool
  */
 
+/**
+ * CWP Media tool.
+ */
 class SlipSheetXLSX_Styles extends Styles
 {
     public $colWidth      = 0.875;
@@ -13,7 +16,7 @@ class SlipSheetXLSX_Styles extends Styles
     public $totalRows;
 
     public $Columns       = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-    public $rowHeight     = [10, 35, 35, 25, 25, 30, 30, 30, 5];
+    public $rowHeight     = [5, 35, 35, 25, 25, 30, 30, 30, 5];
 
     public function sheetCommon()
     {
@@ -63,38 +66,62 @@ class SlipSheetXLSX_Styles extends Styles
 
             switch ($mergeidx) {
                 case 1:
-                    $styleProps['setMerge'][] = 'A'.$row.':D'.$row;
+                    $styleProps['setMerge'][]   = 'A'.$row.':D'.$row;
                     break;
                 case 2:
                 case 3:
-                    $styleProps['setSize'][]  = ['cell' => 'A'.$row, 'size' => 32];
-                    $styleProps['setBold'][]  = 'A'.$row;
-                    $styleProps['setAlign'][] = 'A'.$row;
-                    $styleProps['setMerge'][] = 'A'.$row.':D'.$row;
+                    $styleProps['setSize'][]    = ['cell' => 'A'.$row, 'size' => 26];
+                    $styleProps['setBold'][]    = 'A'.$row;
+                    $styleProps['setAlign'][]   = 'A'.$row;
+                    $styleProps['setMerge'][]   = 'A'.$row.':D'.$row;
                     break;
 
                 case 4:
+                    $styleProps['setSize'][]    = ['cell' => 'A'.$row, 'size' => 16];
+                    $styleProps['setBold'][]    = 'A'.$row;
+                    $styleProps['setBold'][]    = 'A'.$row;
+                    $styleProps['setShrink'][]  = 'A'.$row;
+                    $styleProps['setAlign'][]   = 'A'.$row;
+                    $styleProps['setMerge'][]   = 'A'.$row.':D'.$row;
+                    break;
+
                 case 5:
-                    $styleProps['setSize'][]  = ['cell' => 'A'.$row, 'size' => 16];
-                    $styleProps['setBold'][]  = 'A'.$row;
-                    $styleProps['setAlign'][] = 'A'.$row;
-                    $styleProps['setAlign'][] = 'A'.$row;
-                    $styleProps['setMerge'][] = 'A'.$row.':D'.$row;
+                    $styleProps['setSize'][]    = ['cell' => 'A'.$row, 'size' => 16];
+                    $styleProps['setBold'][]    = 'A'.$row;
+                    $styleProps['setBold'][]    = 'A'.$row;
+                    $styleProps['setShrink'][]  = 'A'.$row;
+                    // $styleProps['setAlign'][]   = 'A'.$row;
+                    $styleProps['setAlign'][]   = ['cell' => 'A'.$row, 'style' => 'H', 'align' => 'C'];
+
+                    $styleProps['setMerge'][]   = 'A'.$row.':B'.$row;
+                    //$styleProps['setIndent'][]  = 'A'.$row;
+
+                    $styleProps['setSize'][]    = ['cell' => 'C'.$row, 'size' => 16];
+                    $styleProps['setBold'][]    = 'C'.$row;
+                    $styleProps['setBold'][]    = 'C'.$row;
+                    $styleProps['setShrink'][]  = 'C'.$row;
+                    // $styleProps['setAlign'][]   = 'C'.$row;
+                    $styleProps['setAlign'][]   = ['cell' => 'C'.$row, 'style' => 'H', 'align' => 'C'];
+                    $styleProps['setMerge'][]   = 'C'.$row.':D'.$row;
+
                     break;
 
                 case 6:
                 case 7:
                 case 8:
-                    $styleProps['setSize'][]  = ['cell' => 'A'.$row, 'size' => 26];
-                    $styleProps['setSize'][]  = ['cell' => 'C'.$row, 'size' => 26];
-                    $styleProps['setAlign'][] = 'C'.$row;
-                    $styleProps['setBold'][]  = 'A'.$row;
-                    $styleProps['setMerge'][] = 'A'.$row.':B'.$row;
-                    $styleProps['setMerge'][] = 'C'.$row.':D'.$row;
+                    $styleProps['setSize'][]    = ['cell' => 'A'.$row, 'size' => 22];
+                    $styleProps['setSize'][]    = ['cell' => 'C'.$row, 'size' => 22];
+                    $styleProps['setAlign'][]   = ['cell' => 'C'.$row];
+                    $styleProps['setBold'][]    = 'A'.$row;
+                    $styleProps['setIndent'][]  = 'A'.$row;
+                    $styleProps['setMerge'][]   = 'A'.$row.':B'.$row;
+                    $styleProps['setMerge'][]   = 'C'.$row.':D'.$row;
+
+
                     break;
 
                 default:
-                    $mergeidx                 = 0;
+                    $mergeidx                   = 0;
                     break;
             }
 
