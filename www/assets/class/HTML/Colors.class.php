@@ -3,6 +3,9 @@
  * CWP Media tool
  */
 
+/**
+ * CWP Media tool.
+ */
 class Colors
 {
     private $foreground_colors = [];
