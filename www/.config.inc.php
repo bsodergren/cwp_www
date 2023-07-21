@@ -56,7 +56,7 @@ define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
  *
  */
 define('__ASSETS_DIR__', __WEB_ROOT__.\DIRECTORY_SEPARATOR.'assets');
-define('__INC_CLASS_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'class');
+//define('__INC_CLASS_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'class');
 define('__INC_CORE_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'core');
 define('__CONFIG_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'configuration');
 define('__UPDATES_DIR__', __CONFIG_DIR__.\DIRECTORY_SEPARATOR.'updates');
@@ -103,7 +103,7 @@ define('__URL_LAYOUT__', __URL_HOME__.'/assets/layout/');
 $__conf_pathCheck = __PROJECT_ROOT__.'/configCheck.php';
 $__conf_checked   = __PROJECT_ROOT__.'/.config.true';
 $__test_nav_links = __PROJECT_ROOT__.'/test_navlinks.php';
-$includes[]       = __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'includes.inc.php';
+//$includes[]       = __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'includes.inc.php';
 $includes[]       = __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'configure.inc.php';
 $includes[]       = __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'settings.inc.php';
 
