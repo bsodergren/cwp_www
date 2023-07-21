@@ -14,7 +14,7 @@ if (false !== MediaProgramUpdate::$UPDATES_PENDING) {
         $mediaUpdates->getUpdateFiles();
         $mediaUpdates->doUpdates();
 
-        echo HTMLDisplay::JavaRefresh('/index.php', 0);
+        //echo HTMLDisplay::JavaRefresh('/index.php', 0);
         ob_flush();
     } else {
         echo 'There are '.MediaProgramUpdate::$UPDATES_PENDING.' Pending <br>';
