@@ -79,7 +79,7 @@ class HTMLDisplay
 
     public static function draw_excelLink($excel_file)
     {
-        $relativePath = substr($excel_file, strlen(__WEB_ROOT__) + 1);
+        $relativePath = substr($excel_file, strlen(__HTTP_ROOT__) + 1);
         $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
         return 'ms-excel:ofe|u|'.$url;
     }
@@ -87,7 +87,7 @@ class HTMLDisplay
     public static function getPdfLink($pdf_file)
     {
 
-        $relativePath = substr($pdf_file, strlen(__WEB_ROOT__) + 1);
+        $relativePath = substr($pdf_file, strlen(__HTTP_ROOT__) + 1);
         $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
         return $url;
     }

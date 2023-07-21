@@ -11,8 +11,8 @@ require_once '.config.inc.php';
 define('TITLE', APP_NAME);
 
 // $template = new Template();
-
 include_once __LAYOUT_HEADER__;
+
 
 $table   = $explorer->table('media_job');
 $results = $table->fetchAssoc('job_id');

@@ -87,7 +87,7 @@ if (isset($_POST['submit'])) {
             }
 
             if ($didUpload) {
-                $qdf_cmd        = FileSystem::normalizePath(__ROOT_BIN_DIR__.'/qpdf');
+                $qdf_cmd        = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
                 $pdf_file       = FileSystem::normalizePath($pdf_file);
                 HTMLDisplay::put('Waiting for PDF for finish');
 

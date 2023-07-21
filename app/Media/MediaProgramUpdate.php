@@ -25,7 +25,7 @@ class MediaProgramUpdate
     public $conf                    = [];
 
     //  public $builder_exec       = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'builder.exe';
-    public $patcher_exec            = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'patcher.exe';
+    public $patcher_exec            = __BIN_DIR__.DIRECTORY_SEPARATOR.'patcher.exe';
     public static $UPDATES_PENDING;
 
     public function __construct()
@@ -87,7 +87,7 @@ class MediaProgramUpdate
                 mkdir(__VERSION_DL_DIR__, 0777, true);
             }
 
-            $destination            = __VERSION_DL_DIR__.\DIRECTORY_SEPARATOR.$zip_filename;
+            $destination            = __VERSION_DL_DIR__.DIRECTORY_SEPARATOR.$zip_filename;
             $this->updateFiles[]    = $destination;
             if (file_exists($destination)) {
                 unlink($destination);
