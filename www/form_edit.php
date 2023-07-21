@@ -1,4 +1,5 @@
 <?php
+use CWP\HTML\HTMLDisplay;
 /**
  * CWP Media tool
  */

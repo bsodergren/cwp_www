@@ -1,4 +1,7 @@
 <?php
+use CWP\HTML\Template;
+use CWP\Media\Media;
+use CWP\Media\MediaDisplay;
 /**
  * CWP Media tool
  */
@@ -133,7 +136,7 @@ foreach ($new_forms as $form_number => $parts) {
         // $previous_form_html =' ';
         $next_form_number = $current_form_number;
     } else {
-        $page_form_html .= template::GetHTML('/form/page_links', [
+        $page_form_html .= Template::GetHTML('/form/page_links', [
             'PAGE_CLASS'       => ' btn-warning',
             'PAGE_FORM_URL'    => __URL_PATH__.'/update.php?job_id='.$media->job_id,
             'PAGE_FORM_NUMBER' => 'Update',

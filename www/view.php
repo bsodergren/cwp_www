@@ -5,8 +5,12 @@
 
 require_once '.config.inc.php';
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use CWP\HTML\Template;
+use CWP\XLSXViewer;
+use CWP\HTML\Header;
+use CWP\HTML\HTMLDisplay;
 use Symfony\Component\Finder\Finder;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 define('TITLE', 'View Form');
 
@@ -62,7 +66,7 @@ foreach ($finder as $file) {
         $current_form_number  = $text_number;
 
         $url_link             = HTMLDisplay::draw_excelLink($file->getRealPath());
-        $params['EXCEL_LINK'] = template::GetHTML('/view/sheet_link', [
+        $params['EXCEL_LINK'] = Template::GetHTML('/view/sheet_link', [
             'PAGE_FORM_URL'    => $url_link,
             'PAGE_FORM_NUMBER' => $file->getfilename(),
             'SHEET_DISABLED'   => 'enabled',

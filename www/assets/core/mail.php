@@ -2,12 +2,17 @@
 
 require_once('.config.inc.php');
 
+
+
+use CWP\HTML\Template;
+use CWP\HTML\HTMLDisplay;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+
+
 HTMLDisplay::$url = '/index.php';
 HTMLDisplay::$timeout = 0;
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 
 $product  = $connection->fetch('select product from media_forms where job_id = ? group by product', $job_id);
 

@@ -1,5 +1,7 @@
 <?php
 
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaSettings;
 use Nette\Utils\FileSystem;
 
 HTMLDisplay::$timeout = 0;

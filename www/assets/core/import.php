@@ -5,7 +5,11 @@
 
 require_once '.config.inc.php';
 
+use CWP\exec;
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaImport;
 use Nette\Utils\FileSystem;
+use CWP\Media\MediaFileSystem;
 
 HTMLDisplay::$timeout  = 10;
 HTMLDisplay::$url      = 'import.php';

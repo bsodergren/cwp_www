@@ -1,7 +1,14 @@
 <?php
 require_once '.config.inc.php';
 
+use CWP\Zip;
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaError;
+use CWP\Media\MediaImport;
+use CWP\Media\MediaFileSystem;
 use coderofsalvation\BrowserStream;
+use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
 
 
 if (array_key_exists('update_job', $_REQUEST)) {

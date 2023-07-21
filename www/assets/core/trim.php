@@ -1,4 +1,7 @@
 <?php
+use CWP\HTML\HTMLDisplay;
+use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Utils;
 /**
  * CWP Media tool
  */
@@ -12,7 +15,7 @@ function cleanTrimPost($var, $size = false)
     } else {
         if (!str_contains($var, '/')) {
             if (true == $size) {
-                $var = utils::DelSizeToFrac($var);
+                $var = Utils::DelSizeToFrac($var);
             } else {
                 $var = utils::floatToFrac($var);
             }

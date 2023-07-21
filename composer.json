@@ -1,5 +1,11 @@
 {
+    "autoload": {
+        "psr-4": {
+            "CWP\\": "app"
+        },
 
+        "classmap": ["app"]
+    },
     "require": {
         "nette/utils": "^3.2",
         "nette/database": "^3.1",

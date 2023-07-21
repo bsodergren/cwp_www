@@ -1,4 +1,8 @@
 <?php
+use CWP\HTML\HTMLDisplay;
+use CWP\HTML\HTMLForms;
+use CWP\HTML\Template;
+use CWP\Utils;
 
 require_once '../.config.inc.php';
 
@@ -28,7 +32,7 @@ function showDecimals($var, $size = false)
             $var = null;
         } else {
             if ($size == true) {
-                $var = utils::DelSizeToFloat($var);
+                $var = Utils::DelSizeToFloat($var);
             } else {
                 $var = utils::fracToFloat($var);
             }

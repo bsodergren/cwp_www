@@ -24,4 +24,5 @@ return array(
     'Jfcherng\\Diff\\' => array($vendorDir . '/jfcherng/php-diff/src', $vendorDir . '/jfcherng/php-sequence-matcher/src'),
     'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
     'Camoo\\Config\\' => array($vendorDir . '/camoo/config/src'),
+    'CWP\\' => array($baseDir . '/app'),
 );

@@ -1,4 +1,6 @@
 <?php
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaProgramUpdate;
 /**
  * CWP Media tool.
  */

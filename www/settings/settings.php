@@ -1,4 +1,7 @@
 <?php
+use CWP\HTML\Template;
+use CWP\Media\MediaSettings;
+use CWP\Utils;
 /**
  * CWP Media tool
  */
@@ -147,7 +150,7 @@ foreach (__SETTINGS__[$cat] as $definedName => $array) {
 
         $checked           = 'checked';
         foreach ($pub_list['selected'] as $bind => $pubArray) {
-            $bind_name = utils::bindtype($bind);
+            $bind_name = Utils::bindtype($bind);
             foreach ($pubArray as $pub) {
                 $pub_name = ucwords(str_replace('_', ' ', $pub['name']));
                 $select_options .= Template::GetHTML('settings/list/select_options', [

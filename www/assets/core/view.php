@@ -1,4 +1,6 @@
 <?php
+use CWP\HTML\HTMLDisplay;
+use CWP\Spreadsheet\Media\MediaXLSX;
 /**
  * CWP Media tool
  */

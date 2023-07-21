@@ -2,11 +2,12 @@
 /**
  * CWP Media tool
  */
-
-/**
+/*
  * CWP Media tool.
  */
-function autoloadHTML($className)
+
+/*
+ function autoloadHTML($className)
 {
     $filename = __INC_CLASS_DIR__.'/HTML/'.$className.'.class.php';
     if (is_readable($filename)) {
@@ -50,3 +51,5 @@ spl_autoload_register('autoloadDb');
 
 spl_autoload_register('autoloadExel');
 spl_autoload_register('autoloadClass');
+
+*/

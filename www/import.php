@@ -1,4 +1,8 @@
 <?php
+
+use CWP\Media\Media;
+use CWP\HTML\Template;
+use CWP\Media\MediaFileSystem;
 /**
  * CWP Media tool
  */

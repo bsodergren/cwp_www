@@ -1,4 +1,6 @@
 <?php
+use CWP\Media\MediaError;
+use CWP\PDFImport;
 /**
  * CWP Media tool
  */

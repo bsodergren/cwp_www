@@ -1,4 +1,5 @@
 <?php
+use CWP\HTML\HTMLDisplay;
 require_once '.config.inc.php';
 define('TITLE', 'Media Job editor');
 

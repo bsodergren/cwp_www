@@ -55,6 +55,7 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             'Complex\\' => 8,
             'Camoo\\Config\\' => 13,
+            'CWP\\' => 4,
         ),
     );
 
@@ -134,6 +135,10 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             0 => __DIR__ . '/..' . '/camoo/config/src',
         ),
+        'CWP\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -154,7 +159,42 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
     );
 
     public static $classMap = array (
+        'CWP\\AdvancedFilesystemIterator' => __DIR__ . '/../..' . '/app/Zip.php',
+        'CWP\\Db\\MediaDb' => __DIR__ . '/../..' . '/app/Db/MediaDb.php',
+        'CWP\\Db\\MediaMySQL' => __DIR__ . '/../..' . '/app/Db/MediaMySQL.php',
+        'CWP\\Db\\MediaSqlite' => __DIR__ . '/../..' . '/app/Db/MediaSqlite.php',
+        'CWP\\GroupSorter' => __DIR__ . '/../..' . '/app/GroupSorter.php',
+        'CWP\\HTML\\Colors' => __DIR__ . '/../..' . '/app/HTML/Colors.php',
+        'CWP\\HTML\\Footer' => __DIR__ . '/../..' . '/app/HTML/Footer.php',
+        'CWP\\HTML\\HTMLDisplay' => __DIR__ . '/../..' . '/app/HTML/HTMLDisplay.php',
+        'CWP\\HTML\\HTMLForms' => __DIR__ . '/../..' . '/app/HTML/HTMLForms.php',
+        'CWP\\HTML\\Header' => __DIR__ . '/../..' . '/app/HTML/Header.php',
+        'CWP\\HTML\\Navbar' => __DIR__ . '/../..' . '/app/HTML/Navbar.php',
+        'CWP\\HTML\\Template' => __DIR__ . '/../..' . '/app/HTML/Template.php',
+        'CWP\\Media\\Media' => __DIR__ . '/../..' . '/app/Media/Media.php',
+        'CWP\\Media\\MediaDisplay' => __DIR__ . '/../..' . '/app/Media/MediaDisplay.php',
+        'CWP\\Media\\MediaError' => __DIR__ . '/../..' . '/app/Media/MediaError.php',
+        'CWP\\Media\\MediaFileSystem' => __DIR__ . '/../..' . '/app/Media/MediaFileSystem.php',
+        'CWP\\Media\\MediaImport' => __DIR__ . '/../..' . '/app/Media/MediaImport.php',
+        'CWP\\Media\\MediaLogger' => __DIR__ . '/../..' . '/app/Media/MediaLogger.php',
+        'CWP\\Media\\MediaProgramUpdate' => __DIR__ . '/../..' . '/app/Media/MediaProgramUpdate.php',
+        'CWP\\Media\\MediaSettings' => __DIR__ . '/../..' . '/app/Media/MediaSettings.php',
+        'CWP\\Media\\MediaUpdate' => __DIR__ . '/../..' . '/app/Media/MediaUpdate.php',
+        'CWP\\Media\\log' => __DIR__ . '/../..' . '/app/Media/MediaLogger.php',
+        'CWP\\PDFImport' => __DIR__ . '/../..' . '/app/PDFImport.php',
+        'CWP\\Spreadsheet\\MasterList\\MasterXLSX' => __DIR__ . '/../..' . '/app/Spreadsheet/MasterList/MasterXLSX.php',
+        'CWP\\Spreadsheet\\MasterList\\MasterXLSX_Styles' => __DIR__ . '/../..' . '/app/Spreadsheet/MasterList/MasterXLSX_Styles.php',
+        'CWP\\Spreadsheet\\Media\\MediaXLSX' => __DIR__ . '/../..' . '/app/Spreadsheet/Media/MediaXLSX.php',
+        'CWP\\Spreadsheet\\Media\\MediaXLSX_Styles' => __DIR__ . '/../..' . '/app/Spreadsheet/Media/MediaXLSX_Styles.php',
+        'CWP\\Spreadsheet\\Slipsheets\\SlipSheetXLSX' => __DIR__ . '/../..' . '/app/Spreadsheet/Slipsheets/SlipSheetXLSX.php',
+        'CWP\\Spreadsheet\\Slipsheets\\SlipSheetXLSX_Styles' => __DIR__ . '/../..' . '/app/Spreadsheet/Slipsheets/SlipSheetXLSX_Styles.php',
+        'CWP\\Spreadsheet\\styles' => __DIR__ . '/../..' . '/app/Spreadsheet/Styles.php',
+        'CWP\\Utils' => __DIR__ . '/../..' . '/app/Utils.php',
+        'CWP\\XLSXViewer' => __DIR__ . '/../..' . '/app/XLSXViewer.php',
+        'CWP\\Zip' => __DIR__ . '/../..' . '/app/Zip.php',
+        'CWP\\exec' => __DIR__ . '/../..' . '/app/Exec.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Lang' => __DIR__ . '/../..' . '/app/Translate.php',
         'Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'Nette\\Bridges\\CacheDI\\CacheExtension' => __DIR__ . '/..' . '/nette/caching/src/Bridges/CacheDI/CacheExtension.php',
         'Nette\\Bridges\\CacheLatte\\CacheExtension' => __DIR__ . '/..' . '/nette/caching/src/Bridges/CacheLatte/CacheExtension.php',
