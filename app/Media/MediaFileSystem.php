@@ -1,9 +1,15 @@
 <?php
-namespace CWP\Media;
 /**
  * CWP Media tool
  */
 
+namespace CWP\Media;
+
+/*
+ * CWP Media tool
+ */
+
+use Nette\IOException;
 use Nette\Utils\FileSystem;
 
 class MediaFileSystem
@@ -112,9 +118,9 @@ class MediaFileSystem
         $msg = null;
         try {
             if (false == filesystem::rename($old, $new)) {
-                throw new Nette\IOException();
+                throw new IOException();
             }
-        } catch (Nette\IOException $e) {
+        } catch (IOException $e) {
             $msg = $e->getMessage();
         }
 
@@ -127,7 +133,7 @@ class MediaFileSystem
         if (file_exists($file) || is_dir($file)) {
             try {
                 FileSystem::delete($file);
-            } catch (Nette\IOException $e) {
+            } catch (IOException $e) {
                 $msg = $e->getMessage();
             }
         } else {
