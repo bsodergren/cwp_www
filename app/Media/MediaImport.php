@@ -1,11 +1,15 @@
 <?php
-namespace CWP\Media;
 /**
  * CWP Media tool
  */
 
+namespace CWP\Media;
+
+/*
+ * CWP Media tool
+ */
+
 use coderofsalvation\BrowserStream;
-use CWP\Media\Media;
 use CWP\PDFImport;
 
 class MediaImport extends Media
@@ -14,18 +18,21 @@ class MediaImport extends Media
 
     public $status = '';
 
-    protected $conn;
+    public $conn;
 
-    protected $exp;
+    public $exp;
 
-    public function __construct($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
+    public function __construct()
     {
         global $connection;
         global $explorer;
 
         $this->conn   = $connection;
         $this->exp    = $explorer;
+    }
 
+    public function importFromPDF($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
+    {
         $pdf_filename = basename($pdf_uploaded_file);
 
         $base_dir     = dirname($pdf_uploaded_file, 2);
@@ -52,5 +59,10 @@ class MediaImport extends Media
         }
 
         $this->status = 1;
+    }
+
+    public function importFromZip()
+    {
+
     }
 }

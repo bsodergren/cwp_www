@@ -22,9 +22,9 @@ use CWP\Media\MediaFileSystem;
  */
 class Media
 {
-    protected $exp;
+    public $exp;
 
-    protected $conn;
+    public $conn;
 
     private $mediaLoc;
 
@@ -111,6 +111,8 @@ class Media
                 if (!isset($this->MediaArray[$form_number]['bind'])) {
                     $this->MediaArray[$form_number] = [
                         'bind'       => $vars['bind'],
+                        'product'       => $vars['product'],
+                        'count'       => $vars['count'],
                         'config'     => $vars['config'],
                         'job_number' => $form_row['job_number'],
                         'pdf_file'   => $form_row['pdf_file'],
@@ -239,14 +241,16 @@ class Media
             $form = ' and `form_number`= '.$form_number;
         }
 
-        $sql               = 'SELECT `bind`,`config`,`form_number` FROM `media_forms` WHERE `job_id` = '.$this->job_id.$form;
+        $sql               = 'SELECT * FROM `media_forms` WHERE `job_id` = '.$this->job_id.$form;
 
         $result            = $this->conn->query($sql);
 
         $form_config       = [];
 
         foreach ($result as $idx => $data) {
-            $form_config[$data['form_number']] = ['bind' => $data['bind'], 'config' => $data['config']];
+            $form_config[$data['form_number']] = ['bind' => $data['bind'], 'config' => $data['config'],
+            'product' => $data['product'],
+            'count' => $data['count']];
         }
 
         $this->form_config = $form_config;

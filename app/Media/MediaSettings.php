@@ -10,6 +10,7 @@ class MediaSettings
 {
     public static function skipTrimmers($data)
     {
+        $data           = $data[0];
         $publication = $data['pub'];
         $nobindery   = $data['nobindery'];
 

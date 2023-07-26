@@ -1,6 +1,7 @@
 <?php
 require_once '.config.inc.php';
 
+use CWP\Media\MediaExport;
 use CWP\Zip;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaError;
@@ -22,11 +23,13 @@ if (array_key_exists('update_job', $_REQUEST)) {
         if ($msg = $media->delete_zip() === null) {
             $mediaLoc = new MediaFileSystem($media->pdf_file, $job_number);
             $mediaLoc->getDirectory();
-
             if ($msg = MediaFileSystem::rename($media->base_dir, $mediaLoc->directory) === null) {
                 $media->update_job_number($job_number);
+                dd($media,$mediaLoc);
+
                 echo HTMLDisplay::JavaRefresh('/index.php', 0);
             }
+            dd($msg);
         }
     }
     MediaError::msg('warning', 'There was a problem <br> '.$msg, 15);
@@ -89,13 +92,20 @@ foreach ($_REQUEST as $key => $value) {
                 if ($msg = $media->delete_zip() === null) {
                     $media->delete_form();
                     include_once __LAYOUT_HEADER__;
-
-                    $x = new MediaImport($media->pdf_fullname, $media->job_number);
+                    $import              = new MediaImport();
+                    $import->importFromPDF($media->pdf_fullname, $media->job_number);
                     $msg = 'PDF Reimported';
                 }
             }
 
             break;
+
+            case  'export_job':
+                $media->excelArray();
+                $export = new MediaExport($media);
+                $forms          = $export->exportZip();
+                break;
+
         case  'delete_zip':
             if ($msg = $media->delete_zip() === null) {
                 $msg = 'Zip Deleted';

@@ -4,6 +4,7 @@ namespace CWP\Spreadsheet\Media;
 
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\Media;
+use CWP\Spreadsheet\Calculator;
 use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
 use CWP\Utils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -19,7 +20,7 @@ use coderofsalvation\BrowserStream;
 class MediaXLSX extends Media
 {
     protected object $spreadsheet;
-    protected object $media;
+    public object $media;
     public $xlsx_array;
     public $box;
     public $form_details;
@@ -47,6 +48,7 @@ class MediaXLSX extends Media
     public function writeWorkbooks()
     {
 
+        $calc           = new Calculator($this->media);
         foreach ($this->xlsx_array as $form_number => $data) {
             $this->spreadsheet = new Spreadsheet();
             $slipSheet = new SlipSheetXLSX($this->media);
@@ -59,7 +61,8 @@ class MediaXLSX extends Media
                     foreach ($result_array as $form_letter => $form_details_array) {
                         foreach ($form_details_array as $key => $this->form_details) {
 
-                            $this->calculateBox();
+                            $this->box = $calc->calculateBox($this->form_details);
+
                             $this->addFormBoxData();
 
                             if ($this->box['packaging'] == "full" || $this->box['packaging'] == "half") {
@@ -121,7 +124,6 @@ class MediaXLSX extends Media
             $this->spreadsheet->disconnectWorksheets();
             unset($this->spreadsheet);
         }
-
         $this->exp->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
     }
 
@@ -129,7 +131,6 @@ class MediaXLSX extends Media
     {
 
         $bindery_trim = false;
-
         foreach ($this->box as $var => $value) {
             $$var = $value;
         }
@@ -213,6 +214,8 @@ class MediaXLSX extends Media
             $labels['14'] = "Lifts per Layer";
             $sheet_labels['15'] = [$layers_per_skid, __LANG_LAYERS_PER_SKID];
 
+            $labels['16'] = "Max Skid";
+            $sheet_labels['16'] = [$max_skid, __LANG_MAX_SKID];
 
             // Lifts per Carton
             // Number of Layers
@@ -260,97 +263,6 @@ class MediaXLSX extends Media
 
 
 
-    public function calculateBox()
-    {
-
-        $face_trim = $this->form_details["face_trim"];
-
-        $pcs = str_replace(',', '', trim($this->form_details['count']));
-        $config = $this->media->form_configuration['configuration'];
-        $paper_wieght = $this->media->form_configuration['paper_wieght'];
-        $carton_size = $this->media->form_configuration['carton_size'];
-
-        $delivery =  strtolower($this->form_details['former']);
-
-        $paper_size = $this->media->form_configuration['paper_size'];
-        $config = str_replace("pg", "", $config);
-
-        $res = $this->exp->table("paper_type")->select("id")->where("paper_wieght = ?  AND paper_size = ?  AND pages = ?", $paper_wieght, $paper_size, $config)->fetch();
-        $res = $this->exp->table("paper_count")->where('paper_id', $res['id'])->fetch();
-
-        foreach ($res as $var => $value) {
-            $$var = $value;
-        }
-
-
-        if ($pcs <= $max_carton && $face_trim != 1) {
-            $package = "carton";
-        } elseif (($pcs > $max_carton || $face_trim == 1)  && $pcs <= $max_half_skid) {
-            $package = "half";
-        } else {
-            $package = "full";
-        }
-
-        if ($delivery == "back") {
-            if ($pcs <= $max_half_skid) {
-                $package = "half";
-            } else {
-                $package = "full";
-            }
-        }
-
-        $lift_size = $delivery . "_lift";
-
-        if ($package == "carton") {
-
-            // lifts per carton
-            $lifts_per_layer = $pcs_carton / $$lift_size;
-
-            $full_boxes = floor($pcs / $pcs_carton);
-
-            $lifts_last_layer =  $pcs - ($pcs_carton * $full_boxes);
-
-            $package = $carton_size . " " . $package . "s";
-
-            $layers_last_box = $pcs_carton;
-        } else {
-            $lifts_per_layer = $package . "_skid_lifts_layer";
-
-            $layers_per_skid = $delivery . "_" . $package . "_skid_layers";
-            // number of lifts in full count.
-
-            $number_of_lifts = ceil($pcs / $$lift_size);
-
-            $lifts_in_box = $$lifts_per_layer * $$layers_per_skid;
-
-            $full_boxes = floor($number_of_lifts / $lifts_in_box);
-
-            $lifts_last_box = $number_of_lifts - ($full_boxes * $lifts_in_box);
-
-            $layers_last_box = floor($lifts_last_box / $$lifts_per_layer);
-
-            $lifts_last_layer = ceil($lifts_last_box - ($layers_last_box * $$lifts_per_layer));
-
-            $lifts_per_layer = $$lifts_per_layer;
-        }
-
-        $result = array(
-            "packaging" => $package,
-            "full_boxes" => $full_boxes,
-            "layers_last_box" => $layers_last_box,
-            "lifts_last_layer" => $lifts_last_layer,
-            "lift_size" => $$lift_size,
-            "lifts_per_layer" => $lifts_per_layer
-        );
-
-        if (isset($$layers_per_skid)) {
-            $result["layers_per_skid"] = $$layers_per_skid;
-        }
-
-        #return [ $package,$full_boxes,$layers_last_box,$lifts_last_layer,$$lift_size,$lifts_per_layer];
-        $this->box = $result;
-
-    }
 
     public function addFormBoxData()
     {
@@ -363,12 +275,13 @@ class MediaXLSX extends Media
         $form_box_data['market'] = $this->form_details['market'];
         $form_box_data['pub'] = $this->form_details['pub'];
         $form_box_data['bind'] = $this->form_details['bind'];
-
         $form_box_data['former'] = $this->form_details['former'];
+
         $count = $this->exp->table('form_data_count')
             ->where('form_id', $this->form_details['form_id'])
             ->update($form_box_data);
-        if($count == 0) {
+
+            if($count == 0) {
             $form_box_data['form_id'] = $this->form_details['form_id'];
             $count = 	$this->exp->table("form_data_count")->insert($form_box_data);
         }

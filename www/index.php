@@ -104,6 +104,8 @@ if ($cnt > 0) {
                 }
             }
         }
+     //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('export_job', '', 'Export Job', '', $class_create.$tooltip.'export"');
+
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('refresh_import', '', 'refresh import', '', $class_create.$tooltip.'refresh_import"');
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_job', '', 'delete job', '', $class_delete.$tooltip.'delete_job"');
         $replacement['FORM_CLOSE']        = $form->close();

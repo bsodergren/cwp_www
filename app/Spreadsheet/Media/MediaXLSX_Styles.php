@@ -92,6 +92,7 @@ class MediaXLSX_Styles extends styles
         $this->setBorder(['cell' => Styles::row('A', 10), 'border' => 'bottom']);
         $this->setBorder(['cell' => Styles::row('A', 10),  'border' => 'right']);
         $this->setBorder(['cell' => Styles::row('B', 10),  'border' => 'bottom']);
+        $this->setNumberCode(Styles::row('B', 16), '#,##0');
 
         $this->setNumberCode(Styles::row('B', 21), '#,##0');
         $this->setShrink(Styles::row('B', 7));

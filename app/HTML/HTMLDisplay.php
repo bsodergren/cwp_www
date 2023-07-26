@@ -62,9 +62,9 @@ class HTMLDisplay
         self::put($var);
     }
 
-    public function draw_checkbox($name, $value, $text = 'Face Trim')
+    public function draw_checkbox($name, $value, $text = 'Face Trim',$template='elements/checkbox')
     {
-        return HTMLForms::draw_checkbox($name, $value, $text);
+        return HTMLForms::draw_checkbox($name, $value, $text,$template);
     }
 
     public function draw_radio($name, $value)

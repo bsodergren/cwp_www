@@ -30,7 +30,7 @@ class HTMLForms
         return Template::GetHTML('elements/select/select', ['SELECT_NAME' => $name, 'SELECT_LABEL' => $text, 'SELECT_STYLE' => $style, 'SELECT_OPTIONS' => $option_html]);
     }
 
-    public static function draw_checkbox($name, $value, $text = 'Face Trim')
+    public static function draw_checkbox($name, $value, $text = 'Face Trim',$template='elements/checkbox')
     {
         global $pub_keywords;
 
@@ -48,7 +48,7 @@ class HTMLForms
             'CHECKED' => $checked,
         ];
 
-        return self::formInput('elements/checkbox', $params);
+        return self::formInput($template, $params);
     }
 
     public static function draw_radio($name, $value)

@@ -9,6 +9,7 @@ namespace CWP\Media;
  * CWP Media tool
  */
 
+use Nette\InvalidStateException;
 use Nette\IOException;
 use Nette\Utils\FileSystem;
 
@@ -116,11 +117,15 @@ class MediaFileSystem
     public static function rename($old, $new)
     {
         $msg = null;
+        $old = FileSystem::platformSlashes($old);
+
+        $new = FileSystem::platformSlashes($new);
+
         try {
             if (false == filesystem::rename($old, $new)) {
-                throw new IOException();
+                throw new  InvalidStateException();
             }
-        } catch (IOException $e) {
+        } catch ( InvalidStateException $e) {
             $msg = $e->getMessage();
         }
 

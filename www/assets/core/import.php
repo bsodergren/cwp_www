@@ -113,7 +113,8 @@ if (isset($_POST['submit'])) {
             HTMLDisplay::put('File already was uploaded');
         } // end if
 
-        $MediaImport          = new MediaImport($pdf_file, $job_number);
+        $MediaImport              = new MediaImport();
+        $MediaImport->importFromPDF($pdf_file, $job_number);
 
         if ($MediaImport->status < 1) {
             HTMLDisplay::put("<span class='p-3 text-danger'>File failed to process</span>");

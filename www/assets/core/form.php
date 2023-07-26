@@ -13,6 +13,7 @@ if ('Edit' == $_POST['submit']) {
     HTMLDisplay::$timeout =  0;
     $break                = true;
 } else {
+    $job_id = $_REQUEST['job_id'];
     HTMLDisplay::$timeout =  0;
     foreach ($_REQUEST as $key => $value) {
         $break = false;
@@ -27,8 +28,14 @@ if ('Edit' == $_POST['submit']) {
         }
 
         if (str_starts_with($key, 'nobindery')) {
-            list($front, $id) = explode('_', $key);
-            $count            = $explorer->table('form_data')->where('id', $id)->update(['no_bindery' => $value]);
+            list($front, $id,$letters) = explode('_', $key);
+
+            //dd($front,$id,$letters,$value, $job_id);
+
+            $count            = $explorer->table('form_data')->where('job_id', $job_id)
+            ->where('form_number',$id)
+            ->where('form_letter',$letters)
+            ->update(['no_bindery' => $value]);
         }
     }
 

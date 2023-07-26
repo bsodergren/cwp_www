@@ -1,11 +1,16 @@
 <?php
-use CWP\HTML\Template;
-use CWP\Media\Media;
-use CWP\Media\MediaDisplay;
 /**
  * CWP Media tool
  */
 
+use CWP\HTML\Template;
+use CWP\Media\Media;
+use CWP\Media\MediaDisplay;
+use CWP\Media\MediaSettings;
+
+/**
+ * CWP Media tool.
+ */
 require_once '.config.inc.php';
 
 define('TITLE', 'Form Editor');
@@ -151,8 +156,12 @@ foreach ($new_forms as $form_number => $parts) {
     $form_html['NAME']     = $form_array['job_number'].' - Form Number '.$form_number.' of '.$max_forms.' - '.$config[$form_number]['config'].' - '.$config[$form_number]['bind'];
 
     foreach ($parts as $form_letter => $form_data) {
-        $row_html = $display->display_table_rows($form_data, $form_letter);
-        $template->template('form/header', ['NUMBER' => $form_number, 'LETTER' => $form_letter, 'ROWS' => $row_html]);
+        $row_html       = $display->display_table_rows($form_data, $form_letter);
+        $nobindery      = MediaSettings::skipTrimmers($form_data);
+        $checkbox       =  $display->draw_checkbox('nobindery_'.$form_number.'_'.$form_letter,
+            $nobindery, 'No Trimmers', 'form/checkbox');
+        $template->template('form/header', ['NUMBER' => $form_number, 'LETTER' => $form_letter, 'TRIMMERS' => $checkbox,
+        'ROWS'                                       => $row_html]);
 
         // $template->clear();
     }

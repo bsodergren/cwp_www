@@ -4,6 +4,7 @@
 use CWP\Bootstrap;
 use Camoo\Config\Config;
 use Nette\Utils\FileSystem;
+use Tracy\Debugger;
 
 define('__PROJECT_ROOT__', dirname(__FILE__,3));
 define('__PUBLIC_ROOT__',  dirname(__FILE__,2));
@@ -13,6 +14,9 @@ define('__COMPOSER_DIR__',  __PUBLIC_ROOT__.DIRECTORY_SEPARATOR.'vendor');
 
 //set_include_path(get_include_path().PATH_SEPARATOR.__COMPOSER_DIR__);
 require __COMPOSER_DIR__.DIRECTORY_SEPARATOR.'autoload.php';
+
+Debugger::enable();
+
 
 $boot             = new Bootstrap(new Config(__PUBLIC_ROOT__.DIRECTORY_SEPARATOR.'config.ini'));
 $boot->definePath('__DATABASE_ROOT__',  dirname(__FILE__,2).DIRECTORY_SEPARATOR.'database');

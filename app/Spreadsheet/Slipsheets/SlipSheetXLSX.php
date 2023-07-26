@@ -1,11 +1,15 @@
 <?php
-namespace CWP\Spreadsheet\Slipsheets;
 /**
  * CWP Media tool
  */
 
+namespace CWP\Spreadsheet\Slipsheets;
+
+/*
+ * CWP Media tool
+ */
+
 use CWP\Media\Media;
-use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX_Styles;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -89,22 +93,22 @@ class SlipSheetXLSX extends Media
                         case 3:
                             $box = $this->setPackaging($col_A, $row);
                             break;
+                            break;
                         case 4:
-                            $this->setFormLocation($col_A, $row);
-                            break;
-                        case 5:
-                            $this->setFormerInfo($col_A, $row);
-                            $this->setPcsInfo($col_B, $row);
-                            break;
-                        case 6:
                             $this->boxDataBoxes($col_A, $col_B, $row, $box);
                             break;
-                        case 7:
+                        case 5:
                             $this->boxDataLayers($col_A, $col_B, $row, $box);
                             break;
-                        case 8:
+                        case 6:
                             $this->boxDataLifts($col_A, $col_B, $row, $box);
                             break;
+                        case 7:
+                            // $this->setFormLocation($col_A, $row);
+                            break;
+                        case 8:
+                            $this->setFormerInfo($col_B, $row);
+                            //  $this->setPcsInfo($col_B, $row);
                     }
                     ++$row;
                 }

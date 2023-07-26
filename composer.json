@@ -6,23 +6,38 @@
 
         "classmap": ["app"]
     },
-    "require": {
-        "nette/utils": "^3.2",
-        "nette/database": "^3.1",
-        "formr/formr": "^1.4",
-        "smalot/pdfparser": "^2.3",
-        "jfcherng/php-diff": "^6.12",
-        "phpoffice/phpspreadsheet": "^1.26",
-        "sinergi/browser-detector": "^6.1",
-        "twbs/bootstrap": "^5.2",
-        "phpmailer/phpmailer": "^6.8",
-        "symfony/finder": "^6.3",
-        "lamansky/fraction": "^1.0",
-        "coderofsalvation/browser-stream": "dev-master",
-        "camoo/config": "^1.0",
-        "symfony/process": "^6.3"
-    },
+
     "require-dev": {
         "symfony/var-dumper": "^6.2"
+    },
+    "require": {
+        "nette/utils": "*",
+        "formr/formr": "^1.4",
+        "ezyang/htmlpurifier": "^4.16",
+        "camoo/config": "^1.0",
+        "jfcherng/php-mb-string": "^2.0",
+        "jfcherng/php-diff": "^6.15",
+        "jfcherng/php-color-output": "^3.0",
+        "maennchen/zipstream-php": "^3.1",
+        "lamansky/fraction": "^1.0",
+        "jfcherng/php-sequence-matcher": "^4.0",
+        "nette/database": "^3.1",
+        "nette/caching": "^3.2",
+        "markbaker/matrix": "^3.0",
+        "markbaker/complex": "^3.0",
+        "phpoffice/phpspreadsheet": "^1.29",
+        "phpmailer/phpmailer": "^6.8",
+        "psr/http-message": "^2.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-client": "^1.0",
+        "smalot/pdfparser": "^2.5",
+        "sinergi/browser-detector": "^6.1",
+        "psr/simple-cache": "^3.0",
+        "twbs/bootstrap": "^5.3",
+        "tracy/tracy": "^2.10",
+        "symfony/process": "^6.3",
+        "symfony/finder": "^6.3",
+        "coderofsalvation/browser-stream": "dev-master",
+        "nette/finder": "^3.0"
     }
 }

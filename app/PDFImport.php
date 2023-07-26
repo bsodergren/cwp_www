@@ -102,6 +102,7 @@ class PDFImport extends MediaImport
 
                 $form_rows[$letter] = $this->row_data($start, $stop, $page_text);
 
+                /*
                 if ('ABCD' == $letter && MediaSettings::IsTrue('__HALF_FORM_CNT__')) {
                     $half_count                     = $form_rows[$letter][0]['count'] / 2;
                     $tmp_row1_array                 = [
@@ -118,6 +119,7 @@ class PDFImport extends MediaImport
                     unset($tmp_row1_array);
                     unset($half_count);
                 }
+                */
             }
 
             $this->form[$form_number]['forms']                  = $form_rows;
