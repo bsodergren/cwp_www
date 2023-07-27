@@ -38,12 +38,14 @@ if (isset($_POST['divClass'])) {
         ]);
     exit;
 }
+
 switch (__FORM_POST__) {
     case 'import':
         include __LAYOUT_HEADER__;
         // no break
     case 'trim':
     case 'view':
+        case 'paper':
     case 'settings':
     case 'form':
     case 'index':

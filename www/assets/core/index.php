@@ -49,7 +49,7 @@ foreach ($_REQUEST as $key => $value) {
             break;
         case  'create_xlsx':
             include __LAYOUT_HEADER__;
-            HTMLDisplay::put("processing for excel ","red");
+            BrowserStream::put("processing for excel ");
 
             BrowserStream::put("Getting array<BR>");
 
