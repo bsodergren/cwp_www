@@ -8,15 +8,12 @@ use CWP\Bootstrap;
 define('APP_NAME', Bootstrap::$CONFIG['application']['name']);
 define('APP_ORGANIZATION', 'cwp');
 define('APP_OWNER', 'bjorn');
-define('APP_DESCRIPTION', 'Embeddable PHP Login System');
 
 list($__filename) = explode('?', $_SERVER['REQUEST_URI']);
 $__request_name   = basename($__filename, '.php');
 $__script_name    = basename($_SERVER['SCRIPT_NAME'], '.php');
 
 define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
-
-
 
 if (__NO_UPDATES__ == true) {
     define('__NAVBAR_LINKS__', [
