@@ -7,10 +7,9 @@ require_once '.config.inc.php';
 
 use CWP\exec;
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\MediaImport;
-use Nette\Utils\FileSystem;
-use CWP\Media\MediaFileSystem;
 use CWP\Media\Import\PDFImport;
+use CWP\Media\MediaFileSystem;
+use Nette\Utils\FileSystem;
 
 HTMLDisplay::$timeout  = 10;
 HTMLDisplay::$url      = 'import.php';
@@ -68,13 +67,13 @@ if (isset($_POST['submit'])) {
     HTMLDisplay::$url = 'import.php';
 
     if (false == $error) {
-        HTMLDisplay::$url     = 'index.php';
-        HTMLDisplay::$timeout = 1;
+        HTMLDisplay::$url         = 'index.php';
+        HTMLDisplay::$timeout     = 1;
 
-        $media_closing        = '/'.basename($fileName, '.pdf');
-        $locations            = new MediaFileSystem($fileName, $job_number);
-        $pdf_directory        = $locations->getDirectory('pdf', true);
-        $pdf_file             = $pdf_directory.'/'.basename($fileName);
+        $media_closing            = '/'.basename($fileName, '.pdf');
+        $locations                = new MediaFileSystem($fileName, $job_number);
+        $pdf_directory            = $locations->getDirectory('pdf', true);
+        $pdf_file                 = $pdf_directory.'/'.basename($fileName);
 
         if (file_exists($pdf_file)) {
             FileSystem::delete($pdf_file);
@@ -88,16 +87,11 @@ if (isset($_POST['submit'])) {
             }
 
             if ($didUpload) {
-                $qdf_cmd        = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
                 $pdf_file       = FileSystem::normalizePath($pdf_file);
                 HTMLDisplay::put('Waiting for PDF for finish');
 
-                $process        = new exec($qdf_cmd);
-                $process->option($pdf_file);
-                $process->option('--pages', '.');
-                $process->option('1-z', '--');
-                $process->option('--replace-input');
-                $process->run();
+                $process        = new exec();
+                $process->cleanPdf($pdf_file);
 
                 //  sleep(5);
 
@@ -113,7 +107,6 @@ if (isset($_POST['submit'])) {
         } else {
             HTMLDisplay::put('File already was uploaded');
         } // end if
-
 
         $MediaImport              = new PDFImport();
         $MediaImport->Import($pdf_file, $job_number);

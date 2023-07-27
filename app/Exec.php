@@ -4,6 +4,7 @@ namespace CWP;
  * CWP Media tool
  */
 
+use CWP\HTML\HTMLDisplay;
 use Nette\Utils\Callback;
 use Nette\Utils\FileSystem;
 use Symfony\Component\Process\Process;
@@ -19,9 +20,15 @@ class exec
 
     public $cmdArgs  = [];
 
-    public function __construct($exec)
+    public function __construct()
     {
         $this->cmdArgs    = [];
+
+    }
+
+    public function command($exec)
+    {
+
         $this->executable =  FileSystem::normalizePath($exec);
     }
 
@@ -40,9 +47,6 @@ class exec
             }
         }
     }
-
-
-
 
     public function run()
     {
@@ -63,6 +67,24 @@ class exec
         return $this->ExecProcess->getCommandLine();
 
     }
+
+
+    public function cleanPdf($pdf_file)
+    {
+        $qdf_cmd        = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
+        $pdf_file       = FileSystem::normalizePath($pdf_file);
+        HTMLDisplay::put('Waiting for PDF for finish');
+
+        $this->command($qdf_cmd);
+        $this->option($pdf_file);
+        $this->option('--pages', '.');
+        $this->option('1-z', '--');
+        $this->option('--replace-input');
+        //  dd($process->getCommand());
+        $this->run();
+    }
+
+
 
     public function callback($type, $buffer): void
     {

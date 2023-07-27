@@ -1,10 +1,13 @@
 <?php
+/**
+ * CWP Media tool
+ */
+
 namespace CWP\Media\Update;
 
-use CWP\exec;
 use CWP\Bootstrap;
+use CWP\exec;
 use CWP\HTML\HTMLDisplay;
-
 
 class AppUpdate extends MediaUpdate
 {
@@ -21,13 +24,11 @@ class AppUpdate extends MediaUpdate
     public $conf                    = [];
 
     //  public $builder_exec       = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'builder.exe';
-    public $patcher_exec            = __BIN_DIR__.DIRECTORY_SEPARATOR.'patcher.exe';
+    public $patcher_exec            = __BIN_DIR__.\DIRECTORY_SEPARATOR.'patcher.exe';
     public static $UPDATES_PENDING;
 
     public function init()
     {
-
-
         if (__NO_UPDATES__ === false) {
             $this->updateUrl                = $this->gitRaw.'current.txt?432=432';
             $this->versionUrl               = $this->gitRaw.'version.txt?432=432';
@@ -83,7 +84,7 @@ class AppUpdate extends MediaUpdate
                 mkdir(__VERSION_DL_DIR__, 0777, true);
             }
 
-            $destination            = __VERSION_DL_DIR__.DIRECTORY_SEPARATOR.$zip_filename;
+            $destination            = __VERSION_DL_DIR__.\DIRECTORY_SEPARATOR.$zip_filename;
             $this->updateFiles[]    = $destination;
             if (file_exists($destination)) {
                 unlink($destination);
@@ -111,11 +112,10 @@ class AppUpdate extends MediaUpdate
     {
         foreach ($this->updateFiles as $updateFile) {
             HTMLDisplay::put('Writing '.basename($updateFile), 'red');
-            $process        = new exec($this->patcher_exec);
+            $process        = new exec();
+            $process->command($this->patcher_exec);
             $process->option('-O', __DRIVE_LETTER__.Bootstrap::$CONFIG['server']['root_dir']);
             $process->option('-P', $updateFile);
-
-            dd($process->getCommand());
             $process->run();
         }
     }
