@@ -39,27 +39,25 @@ class Calculator
             $$var = $value;
         }
 
-        $max_skid       = null;
 
         if ($pcs <= $max_carton && 1 != $face_trim) {
             $package = 'carton';
-        } elseif (($pcs > $max_carton || 1 == $face_trim) && $pcs <= $max_half_skid) {
+        } elseif (($pcs > $max_carton || 1 == $face_trim) && $pcs <= $max_half) {
             $package        = 'half';
-            $max_skid       = $max_half_skid;
         } else {
             $package        = 'full';
-            $max_skid       = $max_full_skid;
         }
 
         if ('back' == $delivery) {
-            if ($pcs <= $max_half_skid) {
+            if ($pcs <= $max_half) {
                 $package        = 'half';
-                $max_skid       = $max_half_skid;
             } else {
                 $package        = 'full';
-                $max_skid       = $max_full_skid;
             }
         }
+
+        $max_skid_var       = "max_".$package;
+        $max_skid = $$max_skid_var;
 
         $lift_size      = $delivery.'_lift';
 

@@ -14,6 +14,7 @@ if ($form->submitted()) {
         foreach ($errorArray as $k => $file) {
             FileSystem::delete($file);
         }
+
         HTMLDisplay::$url = 'index.php';
 
         echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout);

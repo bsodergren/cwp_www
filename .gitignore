@@ -15,3 +15,4 @@ www/.files
 .database/using_mysql.db
 www/files/*
 www/updater/download/
+config/boot.php

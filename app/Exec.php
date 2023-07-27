@@ -13,6 +13,8 @@ class exec
     public $executable;
     public $optArray = [];
 
+    private object $ExecProcess;
+
     // public $optArray = [];
 
     public $cmdArgs  = [];
@@ -39,19 +41,27 @@ class exec
         }
     }
 
+
+
+
     public function run()
     {
+        $this->getCommand();
+
         $callback            = Callback::check([$this, 'callback']);
 
+        $this->ExecProcess->start();
+        $this->ExecProcess->wait($callback);
+    }
+
+    public function getCommand()
+    {
         $this->createCmd();
+        $this->ExecProcess             = new Process($this->cmdArgs);
+        $this->ExecProcess->setTimeout(60000);
 
-        $process             = new Process($this->cmdArgs);
-        $process->setTimeout(60000);
+        return $this->ExecProcess->getCommandLine();
 
-        $runCommand          = $process->getCommandLine();
-
-        $process->start();
-        $process->wait($callback);
     }
 
     public function callback($type, $buffer): void

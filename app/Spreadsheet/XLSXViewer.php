@@ -1,7 +1,8 @@
 <?php
-namespace CWP;
+namespace CWP\Spreadsheet;
 use CWP\HTML\HTMLDisplay;
 use CWP\Spreadsheet\Media\MediaXLSX;
+
 class XLSXViewer
 {
     public static function checkifexist($media)

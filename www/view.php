@@ -5,10 +5,11 @@
 
 require_once '.config.inc.php';
 
-use CWP\HTML\Template;
-use CWP\XLSXViewer;
 use CWP\HTML\Header;
+
+use CWP\HTML\Template;
 use CWP\HTML\HTMLDisplay;
+use CWP\Spreadsheet\XLSXViewer;
 use Symfony\Component\Finder\Finder;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 

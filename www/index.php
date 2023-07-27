@@ -1,18 +1,21 @@
 <?php
-use CWP\HTML\HTMLDisplay;
-use CWP\Media\Media;
-use CWP\Media\MediaFileSystem;
 /**
  * CWP Media tool
  */
 
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\Media;
+use CWP\Media\MediaFileSystem;
+
+/**
+ * CWP Media tool.
+ */
 require_once '.config.inc.php';
 
 define('TITLE', APP_NAME);
 
 // $template = new Template();
 include_once __LAYOUT_HEADER__;
-
 
 $table   = $explorer->table('media_job');
 $results = $table->fetchAssoc('job_id');
@@ -104,7 +107,7 @@ if ($cnt > 0) {
                 }
             }
         }
-     //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('export_job', '', 'Export Job', '', $class_create.$tooltip.'export"');
+        //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('export_job', '', 'Export Job', '', $class_create.$tooltip.'export"');
 
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('refresh_import', '', 'refresh import', '', $class_create.$tooltip.'refresh_import"');
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_job', '', 'delete job', '', $class_delete.$tooltip.'delete_job"');

@@ -39,6 +39,16 @@ class Media
     public $xlsx;
 
     public $zip;
+    public $base_dir;
+    public $pdf_tmp_file;
+    public $pdf_fullname;
+    public $xlsx_exists;
+
+    public $xlsx_directory;
+    public  $zip_directory;
+    public $zip_file;
+    public $form_config;
+
 
     public $location;
 
@@ -200,8 +210,11 @@ class Media
         $result   = $explorer->table('media_job')->select($field.'_exists')->where('job_id', $job_id);
         $exists   = $result->fetch();
         $var_name = $field.'_exists';
+        if (isset($exists->$var_name)) {
+            return Utils::toint($exists->$var_name);
+        }
 
-        return Utils::toint($exists->$var_name);
+        return null;
     }
 
     public function number_of_forms()

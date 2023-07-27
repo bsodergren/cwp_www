@@ -1,6 +1,7 @@
 <?php
 use CWP\Media\MediaError;
-use CWP\PDFImport;
+use CWP\Media\Import\PDFImport;
+
 /**
  * CWP Media tool
  */
@@ -17,8 +18,8 @@ if (array_key_exists('Return', $_REQUEST)) {
 
 if (array_key_exists('Reset', $_REQUEST)) {
     $media->delete_form($form_number);
-    $pdfObj = new PDFImport($media->pdf_fullname, $media->job_id, $form_number);
-
+    $pdfObj = new PDFImport();
+    $pdfObj->processPdf($media->pdf_fullname, $media->job_id, $form_number);
     $media->add_form_data($form_number, $pdfObj->form[$form_number]);
     MediaError::msg('info', 'Resetting all Form Data', $form_edit);
 }

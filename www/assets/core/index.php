@@ -5,9 +5,9 @@ use CWP\Media\MediaExport;
 use CWP\Zip;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaError;
-use CWP\Media\MediaImport;
 use CWP\Media\MediaFileSystem;
 use coderofsalvation\BrowserStream;
+use CWP\Media\Import\PDFImport;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
 
@@ -92,8 +92,8 @@ foreach ($_REQUEST as $key => $value) {
                 if ($msg = $media->delete_zip() === null) {
                     $media->delete_form();
                     include_once __LAYOUT_HEADER__;
-                    $import              = new MediaImport();
-                    $import->importFromPDF($media->pdf_fullname, $media->job_number);
+                    $import              = new PDFImport();
+                    $import->Import($media->pdf_fullname, $media->job_number);
                     $msg = 'PDF Reimported';
                 }
             }

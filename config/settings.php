@@ -31,4 +31,5 @@ if ($results) {
 }
 $const          = get_defined_constants(true);
 
+
 unset($setting);

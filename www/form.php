@@ -22,7 +22,8 @@ include_once __LAYOUT_HEADER__;
 
 $row_html                      = '';
 $letter_html                   = '';
-// $page_form_html = '';
+$page_form_html = '';
+$dropdown_links = '';
 $next_view                     = 'job';
 // $media->job_id = $_REQUEST['job_id'];
 
@@ -97,13 +98,14 @@ foreach ($new_forms as $form_number => $parts) {
 
         $page_form_number = $list_form_number->form_number;
         if ($current_form_number == $page_form_number) {
-            if (true == Media::get_exists('xlsx', $row['job_id'])) {
-                $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
-                    'PAGE_CLASS'       => ' btn-success',
-                    'PAGE_FORM_URL'    => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&form_number='.$page_form_number,
-                    'PAGE_FORM_NUMBER' => 'View',
-                ]);
-            }
+
+            // if (true == Media::get_exists('xlsx', $row['job_id'])) {
+            //     $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
+            //         'PAGE_CLASS'       => ' btn-success',
+            //         'PAGE_FORM_URL'    => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&form_number='.$page_form_number,
+            //         'PAGE_FORM_NUMBER' => 'View',
+            //     ]);
+            // }
             $edit_url         = __URL_PATH__.'/form_edit.php?job_id='.$media->job_id.'&form_number='.$page_form_number;
             $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
                 'PAGE_CLASS'       => ' btn-danger',

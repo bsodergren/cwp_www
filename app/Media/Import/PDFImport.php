@@ -1,21 +1,51 @@
 <?php
-namespace CWP;
-/**
- * CWP Media tool
- */
+namespace CWP\Media\Import;
 
-use CWP\Media\MediaImport;
+use CWP\Utils;
+use CWP\Media\Media;
 use CWP\Media\MediaSettings;
 use Smalot\PdfParser\Parser;
+use CWP\Media\Import\MediaImport;
 use coderofsalvation\BrowserStream;
+
 
 class PDFImport extends MediaImport
 {
+
+    public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
+    {
+        $pdf_filename = basename($pdf_uploaded_file);
+        $base_dir     = dirname($pdf_uploaded_file, 2);
+
+        $this->job_id = Media::getJobNumber($pdf_filename, $job_number);
+
+        $this->processPdf($pdf_uploaded_file, $this->job_id, $update_form);
+
+        $pdf          = $this->form;
+        if (count($pdf) < 1) {
+            $this->status = 0;
+
+            return 0;
+        }
+
+        $keyidx       = array_key_first($pdf);
+
+        $this->exp->table('media_job')->where('job_id', $this->job_id)->update(['close' => $pdf[$keyidx]['details']['product'], 'base_dir' => $base_dir]);
+
+        foreach ($pdf as $form_number => $form_info) {
+            BrowserStream::put('Importing form '.$form_number.'<BR>');
+            $this->add_form_details($form_info['details']);
+            $this->add_form_data($form_number, $form_info);
+        }
+
+        $this->status = 1;
+    }
+
     public $form = [];
 
     public $job_id;
 
-    public function __construct($pdf_file = '', $media_job_id = '', $form_number = '')
+    public function processPdf($pdf_file = '', $media_job_id = '', $form_number = '')
     {
         if ('' != $media_job_id) {
             $this->job_id = $media_job_id;
@@ -324,4 +354,7 @@ class PDFImport extends MediaImport
                 return 'sheeter';
         }
     }
+
+
+
 }

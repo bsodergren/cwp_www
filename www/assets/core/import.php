@@ -10,6 +10,7 @@ use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaImport;
 use Nette\Utils\FileSystem;
 use CWP\Media\MediaFileSystem;
+use CWP\Media\Import\PDFImport;
 
 HTMLDisplay::$timeout  = 10;
 HTMLDisplay::$url      = 'import.php';
@@ -113,8 +114,9 @@ if (isset($_POST['submit'])) {
             HTMLDisplay::put('File already was uploaded');
         } // end if
 
-        $MediaImport              = new MediaImport();
-        $MediaImport->importFromPDF($pdf_file, $job_number);
+
+        $MediaImport              = new PDFImport();
+        $MediaImport->Import($pdf_file, $job_number);
 
         if ($MediaImport->status < 1) {
             HTMLDisplay::put("<span class='p-3 text-danger'>File failed to process</span>");

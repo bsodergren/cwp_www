@@ -1,16 +1,12 @@
 <?php
-namespace CWP\Media;
+namespace CWP\Media\Update;
 
 use CWP\exec;
+use CWP\Bootstrap;
 use CWP\HTML\HTMLDisplay;
-/**
- * CWP Media tool
- */
 
-/**
- * CWP Media tool.
- */
-class MediaProgramUpdate
+
+class AppUpdate extends MediaUpdate
 {
     public $gitRaw                  = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/www/updater/';
     public $updateUrl;
@@ -28,11 +24,11 @@ class MediaProgramUpdate
     public $patcher_exec            = __BIN_DIR__.DIRECTORY_SEPARATOR.'patcher.exe';
     public static $UPDATES_PENDING;
 
-    public function __construct()
+    public function init()
     {
+
+
         if (__NO_UPDATES__ === false) {
-            global $conf;
-            $this->conf                     = $conf;
             $this->updateUrl                = $this->gitRaw.'current.txt?432=432';
             $this->versionUrl               = $this->gitRaw.'version.txt?432=432';
             $this->zip_url                  = $this->gitRaw.'versions/';
@@ -116,8 +112,10 @@ class MediaProgramUpdate
         foreach ($this->updateFiles as $updateFile) {
             HTMLDisplay::put('Writing '.basename($updateFile), 'red');
             $process        = new exec($this->patcher_exec);
-            $process->option('-O', __DRIVE_LETTER__.$this->conf['server']['root_dir']);
+            $process->option('-O', __DRIVE_LETTER__.Bootstrap::$CONFIG['server']['root_dir']);
             $process->option('-P', $updateFile);
+
+            dd($process->getCommand());
             $process->run();
         }
     }

@@ -5,7 +5,7 @@ namespace CWP\HTML;
  */
 
 use CWP\HTML\Template;
-use CWP\Media\MediaProgramUpdate;
+use CWP\Media\Update\AppUpdate;
 use Sinergi\BrowserDetector\Browser;
 
 class Navbar extends Template
@@ -51,9 +51,9 @@ class Navbar extends Template
             'DROPDOWN_TEXT'  => $dropddown_menu_text,
         ]);
 
-        if (false !== MediaProgramUpdate::$UPDATES_PENDING) {
+        if (false !== AppUpdate::$UPDATES_PENDING) {
             $params['NAVBAR_UPDATES_HTML']         = $templateObj->template('base/navbar/updates', [
-            'VERSION_UPDATES'  => MediaProgramUpdate::$UPDATES_PENDING]);
+            'VERSION_UPDATES'  => AppUpdate::$UPDATES_PENDING]);
         }
 
         return $templateObj->template('base/navbar/navbar', $params);
