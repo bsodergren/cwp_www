@@ -6,12 +6,11 @@
 require_once '.config.inc.php';
 
 use CWP\HTML\Header;
-
-use CWP\HTML\Template;
 use CWP\HTML\HTMLDisplay;
+use CWP\HTML\Template;
 use CWP\Spreadsheet\XLSXViewer;
-use Symfony\Component\Finder\Finder;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\Finder\Finder;
 
 define('TITLE', 'View Form');
 
@@ -35,6 +34,8 @@ if (!is_dir($media->xlsx_directory)) {
 }
 
 $finder                    = new Finder();
+
+dd($media->xlsx_directory);
 $finder->files()->in($media->xlsx_directory)->name('*.xlsx')->notName('~*')->sortByName(true);
 $found                     = false;
 
