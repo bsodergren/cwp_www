@@ -67,14 +67,14 @@ foreach ($finder as $file) {
         $class                = 'disabled';
         $current_form_number  = $text_number;
 
-        $url_link             = HTMLDisplay::draw_excelLink($file->getRealPath());
-        $params['EXCEL_LINK'] = Template::GetHTML('/view/sheet_link', [
-            'PAGE_FORM_URL'    => $url_link,
-            'PAGE_FORM_NUMBER' => $file->getfilename(),
-            'SHEET_DISABLED'   => 'enabled',
-            'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
-            'SHEET_CLASS'      => 'btn-info',
-        ]);
+        // $url_link             = HTMLDisplay::draw_excelLink($file->getRealPath());
+        // $params['EXCEL_LINK'] = Template::GetHTML('/view/sheet_link', [
+        //     'PAGE_FORM_URL'    => $url_link,
+        //     'PAGE_FORM_NUMBER' => $file->getfilename(),
+        //     'SHEET_DISABLED'   => 'enabled',
+        //     'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
+        //     'SHEET_CLASS'      => 'btn-info',
+        // ]);
     }
 
     $page_form_html .= template::GetHTML('/view/form_link', [
