@@ -5,7 +5,6 @@
 
 namespace CWP\Media\Update;
 
-use CWP\Bootstrap;
 use CWP\exec;
 use CWP\HTML\HTMLDisplay;
 
@@ -114,7 +113,7 @@ class AppUpdate extends MediaUpdate
             HTMLDisplay::put('Writing '.basename($updateFile), 'red');
             $process        = new exec();
             $process->command($this->patcher_exec);
-            $process->option('-O', __DRIVE_LETTER__.Bootstrap::$CONFIG['server']['root_dir']);
+            $process->option('-O', __PROJECT_ROOT__);
             $process->option('-P', $updateFile);
             $process->run();
         }
