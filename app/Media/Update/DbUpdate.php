@@ -57,6 +57,7 @@ class DbUpdate extends MediaUpdate
         } else {
             $this->setSkipFile($file);
         }
+
     }
 
     public function newData($new_data)
@@ -267,7 +268,6 @@ class DbUpdate extends MediaUpdate
 
             $refresh         = $this->refresh;
         }
-
         return $refresh;
     }
 }

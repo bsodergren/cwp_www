@@ -24,8 +24,8 @@ class MediaMySQL extends MediaDb
     {
         $query  = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table."' AND COLUMN_NAME = '".$old."';";
         $result = $this->conn->queryOne($query);
-
-        return 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
+        $query = 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
+        return $query;
     }
 
     public function createColumn($table, $column, $type)
