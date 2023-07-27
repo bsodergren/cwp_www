@@ -253,7 +253,6 @@ class DbUpdate extends MediaUpdate
             }
             $version_updates_skipSkipFile = 0;
         }
-
         $updates_array = Utils::get_filelist(__SQL_UPDATES_DIR__, 'php', $version_updates_skipSkipFile);
         sort($updates_array);
         if (count($updates_array) >= 1) {

@@ -43,7 +43,7 @@ class HTMLDisplay
 
     public static function put($contents, $color = null)
     {
-        $colorObj = new colors();
+        $colorObj = new Colors();
         $contents = $colorObj->getColoredSpan($contents, $color);
         BrowserStream::put($contents."<br> \n");
     }

@@ -1,5 +1,5 @@
 <?php
-
+/*
 $new_table = ['updates'];
 
 $new_data = [
@@ -10,3 +10,4 @@ $new_data = [
         ["update_filename" => "ver01.php",]
     ]
 ];
+*/

@@ -31,7 +31,7 @@ class Bootstrap
     {
         $path = FileSystem::normalizePath($path);
         if (!is_dir($path)) {
-            FileSystem::createDir($path, 777);
+            FileSystem::createDir($path, 511);
         }
 
         return $path;

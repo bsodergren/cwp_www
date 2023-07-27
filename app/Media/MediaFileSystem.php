@@ -99,16 +99,21 @@ class MediaFileSystem
             $directory = __EMAIL_PDF_UPLOAD_DIR__;
         }
 
-        if(MediaSettings::isSet('__MEDIA_FILES_DIR__')){
-            $directory       = __MEDIA_FILES_DIR__.$directory;
+        if (defined('__MEDIA_FILES_DIR__')) {
+            if (is_dir(__MEDIA_FILES_DIR__)) {
+                $directory       = __MEDIA_FILES_DIR__.$directory;
+            } else {
+                $directory       = __FILES_DIR__.$directory;
+            }
         } else {
             $directory       = __FILES_DIR__.$directory;
         }
 
+
         $this->directory = FileSystem::normalizePath($directory);
 
         if (true == $create_dir) {
-            FileSystem::createDir($this->directory);
+            FileSystem::createDir($this->directory, 511);
         }
 
         return $this->directory;

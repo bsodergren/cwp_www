@@ -16,3 +16,4 @@ www/.files
 www/files/*
 www/updater/download/
 config/boot.php
+database/using_mysql.db
