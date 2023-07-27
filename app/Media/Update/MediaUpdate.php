@@ -1,18 +1,21 @@
 <?php
-namespace CWP\Media\Update;
 /**
  * CWP Media tool
  */
 
-use CWP\Utils;
-use PDOException;
+namespace CWP\Media\Update;
+
+/*
+ * CWP Media tool
+ */
+
 use CWP\Bootstrap;
 use CWP\Db\MediaMySQL;
 use CWP\Db\MediaSqlite;
+use CWP\Utils;
+use Nette\Database\Connection;
 use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
-use Nette\Database\Connection;
-
 
 class MediaUpdate
 {
@@ -23,14 +26,11 @@ class MediaUpdate
     public $conn;
     public $conf;
 
-    public object $dbClassObj ;
-
-
+    public object $dbClassObj;
 
     public function __construct($db_conn)
     {
         $this->conn       = $db_conn;
-
 
         if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
             $this->dbClassObj =  new MediaMySQL($this, $db_conn);
@@ -43,7 +43,7 @@ class MediaUpdate
     public static function createDatabase()
     {
         if (!file_exists(__SQLITE_DATABASE__)) {
-            FileSystem::createDir(__DATABASE_ROOT__,777);
+            FileSystem::createDir(__DATABASE_ROOT__, 777);
             if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
                 touch(__SQLITE_DATABASE__);
             }

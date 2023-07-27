@@ -10,13 +10,8 @@ namespace CWP\Media\Update;
  */
 
 use CWP\Utils;
-use CWP\Bootstrap;
-use CWP\Db\MediaMySQL;
-use CWP\Db\MediaSqlite;
 use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
-use Nette\Database\Connection;
-use CWP\Media\Update\MediaUpdate;
 
 class DbUpdate extends MediaUpdate
 {
@@ -57,7 +52,6 @@ class DbUpdate extends MediaUpdate
         } else {
             $this->setSkipFile($file);
         }
-
     }
 
     public function newData($new_data)
@@ -267,6 +261,7 @@ class DbUpdate extends MediaUpdate
 
             $refresh         = $this->refresh;
         }
+
         return $refresh;
     }
 }
