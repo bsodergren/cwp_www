@@ -5,7 +5,7 @@
 
 require_once '.config.inc.php';
 
-define('TITLE', 'Import new Media drop');
+define('TITLE', 'Email excel zip file');
 require_once __LAYOUT_HEADER__;
 
 if (isset($_REQUEST['job_id'])) {

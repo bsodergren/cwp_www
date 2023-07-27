@@ -12,6 +12,17 @@ use CWP\Spreadsheet\XLSXViewer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Finder\Finder;
 
+if ('email' == $_REQUEST['action']) {
+    define('TITLE', 'Email excel zip file');
+    require_once __LAYOUT_HEADER__;
+    $template->render('view/mail_form', [
+        '__FORM_URL__' => '/process.php',
+        'FORM_NUMBER'  => $_REQUEST['form_number'],
+        'JOB_ID'       => $_REQUEST['job_id']]);
+    require_once __LAYOUT_FOOTER__;
+    exit;
+}
+
 define('TITLE', 'View Form');
 
 $form_number               = '';
@@ -35,7 +46,6 @@ if (!is_dir($media->xlsx_directory)) {
 
 $finder                    = new Finder();
 
-dd($media->xlsx_directory);
 $finder->files()->in($media->xlsx_directory)->name('*.xlsx')->notName('~*')->sortByName(true);
 $found                     = false;
 
@@ -154,7 +164,7 @@ if ('' != $file_id) {
         'SHEET_CLASS'      => 'btn-info',
     ]);
     $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
-        'PAGE_FORM_URL'    => __URL_PATH__.'/process.php?job_id='.$media->job_id.'&form_number='.$current_form_number,
+        'PAGE_FORM_URL'    => __URL_PATH__.'/process.php?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=update',
         'PAGE_FORM_NUMBER' => 'Update Excel Sheet',
         'SHEET_DISABLED'   => 'enabled',
         'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
@@ -162,6 +172,14 @@ if ('' != $file_id) {
         'SHEET_CLASS'      => 'btn-info',
     ]);
 
+    $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
+        'PAGE_FORM_URL'    => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=email',
+        'PAGE_FORM_NUMBER' => 'Email Updated Excel Sheet',
+        'SHEET_DISABLED'   => 'enabled',
+        'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
+
+        'SHEET_CLASS'      => 'btn-info',
+    ]);
     $params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
 
     $writer                    = IOFactory::createWriter($spreadsheet, 'Html');
