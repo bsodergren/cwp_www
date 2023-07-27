@@ -43,7 +43,7 @@ class MediaUpdate
     public static function createDatabase()
     {
         if (!file_exists(__SQLITE_DATABASE__)) {
-            FileSystem::createDir(__SQLITE_DIR__);
+            FileSystem::createDir(__DATABASE_ROOT__,511);
             if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
                 touch(__SQLITE_DATABASE__);
             }
