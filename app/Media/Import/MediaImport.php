@@ -16,10 +16,6 @@ class MediaImport extends Media
 
     public function __construct()
     {
-        global $connection;
-        global $explorer;
 
-        $this->conn   = $connection;
-        $this->exp    = $explorer;
     }
 }

@@ -88,8 +88,6 @@ if (isset($_POST['submit'])) {
 
             if ($didUpload) {
                 $pdf_file       = FileSystem::normalizePath($pdf_file);
-                HTMLDisplay::put('Waiting for PDF for finish');
-
                 $process        = new exec();
                 $process->cleanPdf($pdf_file);
 

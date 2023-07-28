@@ -1,14 +1,14 @@
 <?php
 namespace CWP\Db;
+
+use CWP\Media\Media;
 /**
  * CWP Media tool
  */
 
-/**
- * CWP Media tool.
- */
 class MediaDb
 {
+
     public $conn;
 
     public function __construct($parent, $conn)

@@ -4,6 +4,7 @@
  */
 
 namespace CWP\Spreadsheet\Media;
+use CWP\Media\Media;
 use CWP\Spreadsheet\styles;
 
 /**
@@ -47,7 +48,6 @@ class MediaXLSX_Styles extends styles
 
     public function sheetCommon()
     {
-        global $connection;
 
         $merg_rows   = [6, 7, 8, 9, 10];
 
@@ -64,7 +64,7 @@ class MediaXLSX_Styles extends styles
 
         $sql         = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
 
-        $result      = $connection->fetchAll($sql);
+        $result      = Media::$connection->fetchAll($sql);
         foreach ($result as $k => $val) {
             $col       = Styles::row($val['ecol'], $val['erow']);
             $text      = $val['text'];
@@ -98,7 +98,6 @@ class MediaXLSX_Styles extends styles
         $this->setShrink(Styles::row('B', 7));
         $this->setPageBreak(Styles::row('A', 27));
     }
-
     public function addSheetData($value, $text, $row)
     {
         $textCell = Styles::row('A', $row);
@@ -121,8 +120,7 @@ class MediaXLSX_Styles extends styles
 
     public function setColWidth($style = 'Load Flag')
     {
-        global $connection;
-        $result = $connection->fetchAll("SELECT ecol,width FROM flag_style WHERE erow IS NULL and style_name = '".$style."' ORDER BY ecol ASC");
+        $result = Media::$connection->fetchAll("SELECT ecol,width FROM flag_style WHERE erow IS NULL and style_name = '".$style."' ORDER BY ecol ASC");
 
         foreach ($result as $k => $v) {
             $columns[] = ['column' => $v['ecol'], 'width' => $v['width']];

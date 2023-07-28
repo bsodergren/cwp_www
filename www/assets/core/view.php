@@ -10,15 +10,14 @@ use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Spreadsheet\XLSXViewer;
 use Symfony\Component\Finder\Finder;
 
-/**
- * CWP Media tool.
- */
 require_once '.config.inc.php';
 
 $form_number      = $_REQUEST['form_number'];
 
 if (key_exists('action', $_REQUEST)) {
     if ('update' == $_REQUEST['action']) {
+        define('TITLE', 'Updating excel sheet');
+        include_once __LAYOUT_HEADER__;
         $media->excelArray($form_number);
 
         $excel            = new MediaXLSX($media);

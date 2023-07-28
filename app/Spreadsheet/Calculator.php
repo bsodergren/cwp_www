@@ -5,6 +5,8 @@
 
 namespace CWP\Spreadsheet;
 
+use CWP\Media\Media;
+
 class Calculator
 {
     public $form_details;
@@ -16,11 +18,11 @@ class Calculator
     public function __construct($media)
     {
         $this->media    = $media;
-        $this->exp      = $media->exp;
     }
 
     public function calculateBox($form_details)
     {
+
         $face_trim      = $form_details['face_trim'];
         $pcs            = str_replace(',', '', trim($form_details['count']));
         $config         = $this->media->form_configuration['configuration'];
@@ -32,8 +34,8 @@ class Calculator
         $paper_size     = $this->media->form_configuration['paper_size'];
         $config         = str_replace('pg', '', $config);
 
-        $res            = $this->exp->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch();
-        $res            = $this->exp->table('paper_count')->where('paper_id', $res['id'])->fetch();
+        $res            = Media::$explorer->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch();
+        $res            = Media::$explorer->table('paper_count')->where('paper_id', $res['id'])->fetch();
 
         foreach ($res as $var => $value) {
             $$var = $value;

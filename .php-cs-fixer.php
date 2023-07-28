@@ -36,8 +36,8 @@ return (new PhpCsFixer\Config())->setRules([
 
     'binary_operator_spaces'                                  => [
         'operators' => [
-            '=>'  => 'align_single_space_by_scope',
-            '='   => 'align_single_space_by_scope',
+          //  '=>'  => 'align_single_space_by_scope',
+          //  '='   => 'align_single_space_by_scope',
             //            '===' => 'align_single_space_minimal',
         ],
     ],

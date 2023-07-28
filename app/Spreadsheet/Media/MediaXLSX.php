@@ -15,7 +15,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Borders;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf;
-use coderofsalvation\BrowserStream;
+use CWP\Media\MediaPublication;
 
 class MediaXLSX extends Media
 {
@@ -30,17 +30,15 @@ class MediaXLSX extends Media
     {
 
         $this->media = $media;
-        $this->exp = $media->exp;
-        $this->conn = $media->conn;
-
-
         $this->xlsx_array = $media->MediaArray;
 
         $keyidx = array_key_first($this->xlsx_array);
+        $array          =  $this->xlsx_array[$keyidx]['details'];
+        //$array          =  $this->xlsx_array[$keyidx];
 
-        $this->job_number = $this->xlsx_array[$keyidx]["job_number"];
-        $this->pdf_file = $this->xlsx_array[$keyidx]["pdf_file"];
-        $this->job_id = $this->xlsx_array[$keyidx]["job_id"];
+        $this->job_number = $array["job_number"];
+        $this->pdf_file = $array["pdf_file"];
+        $this->job_id = $array["job_id"];
     }
 
 
@@ -49,22 +47,22 @@ class MediaXLSX extends Media
     {
 
         $calc           = new Calculator($this->media);
-        foreach ($this->xlsx_array as $form_number => $data) {
+        foreach ($this->xlsx_array as $form_number => $dataArray) {
+            $data           = $dataArray['forms'];
+            //$data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
             $slipSheet = new SlipSheetXLSX($this->media);
             $s_idx = 0;
 
-            $this->media->get_form_configuration($data);
+            $this->media->get_form_configuration($dataArray['details']);
 
             foreach ($data as $former => $result_array) {
+
                 if ($former == "Front" || $former == "Back") {
                     foreach ($result_array as $form_letter => $form_details_array) {
                         foreach ($form_details_array as $key => $this->form_details) {
-
                             $this->box = $calc->calculateBox($this->form_details);
-
                             $this->addFormBoxData();
-
                             if ($this->box['packaging'] == "full" || $this->box['packaging'] == "half") {
                                 $tmp_box = $this->box;
                                 $full_boxes = $this->box['full_boxes'];
@@ -124,7 +122,7 @@ class MediaXLSX extends Media
             $this->spreadsheet->disconnectWorksheets();
             unset($this->spreadsheet);
         }
-        $this->exp->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
+        Media::$explorer->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
     }
 
     public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
@@ -138,7 +136,7 @@ class MediaXLSX extends Media
         $pub_value = $this->form_details["pub"];
 
 
-        $this->getTrimData($pub_value, $this->form_details['bind']);
+        $this->trim_details = MediaPublication::getTrimData($pub_value, $this->form_details['bind']);
         $head_trim = $this->trim_details['head_trim'];
         $foot_trim = $this->trim_details['foot_trim'];
         $del_size = $this->trim_details['size'];
@@ -277,72 +275,16 @@ class MediaXLSX extends Media
         $form_box_data['bind'] = $this->form_details['bind'];
         $form_box_data['former'] = $this->form_details['former'];
 
-        $count = $this->exp->table('form_data_count')
+        $count = Media::$explorer->table('form_data_count')
             ->where('form_id', $this->form_details['form_id'])
             ->update($form_box_data);
 
             if($count == 0) {
             $form_box_data['form_id'] = $this->form_details['form_id'];
-            $count = 	$this->exp->table("form_data_count")->insert($form_box_data);
+            $count = 	Media::$explorer->table("form_data_count")->insert($form_box_data);
         }
     }
 
 
-    public function getTrimData($publication, $bind)
-    {
-        $head = null;
-        $foot = null;
-        $get = false;
-        $insert = false;
-        $pub = $this->cleanPub($publication);
-        $b = strtolower($bind);
 
-        if(!key_exists("pub", $this->trim_details)) {
-            $get = true;
-        } elseif($this->trim_details["pub"] != $pub) {
-            $get = true;
-        }
-
-        if($get === true) {
-            $res = $this->exp->table("pub_trim")->select("head_trim,foot_trim,delivered_size")->where("pub_name = ?  AND bind = ? ", $pub, $b)->fetch();
-            if($res == null) {
-                $insert = true;
-                $res = $this->exp->table("pub_trim")->insert(["pub_name"=>$pub,"bind"=>$b]);
-            }
-
-            if(is_object($res)) {
-                $head = $res->head_trim;
-                $foot = $res->foot_trim;
-                $size = $res->delivered_size;
-                $this->trim_details = ['pub'=>$publication,'bind'=>$bind,'head_trim'=>$head,'foot_trim'=>$foot,'size'=>$size];
-            }
-
-            if($insert === true) {
-                $this->getTrimData($publication, $bind);
-
-            }
-
-        }
-
-        // $this->trim_details = ['pub'=>$publication,'bind'=>$bind,'head_trim'=>$head,'foot_trim'=>$foot,'size'=>$size];
-        // return  $this->trim_details;
-    }
-
-
-    public function cleanPub($publication)
-    {
-        return self::CleanPublication($publication);
-    }
-
-    public static function CleanPublication($publication)
-    {
-
-        $pcs = ["+","'","&"];
-        $publication = str_replace($pcs, "", $publication);
-        $publication = str_replace("É", "E", $publication);
-        $publication = str_replace("  ", " ", $publication);
-        $publication = str_replace(" ", "_", $publication);
-        $publication = strtolower($publication);
-        return $publication;
-    }
 }

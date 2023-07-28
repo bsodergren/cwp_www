@@ -1,5 +1,6 @@
 <?php
 use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Utils;
 /**
@@ -40,7 +41,7 @@ if ($form->submitted()) {
             $delivered_size = cleanTrimPost($_POST['delivered_size'], true);
 
             $data           = [
-                'pub_name'       => MediaXLSX::CleanPublication($publication),
+                'pub_name'       => MediaPublication::CleanPublication($publication),
                 'bind'           => $bind,
                 'head_trim'      => $head_trim,
                 'foot_trim'      => $foot_trim,

@@ -22,10 +22,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
     );
 
     public static $prefixLengthsPsr4 = array (
-        'c' => 
-        array (
-            'coderofsalvation\\' => 17,
-        ),
         'Z' => 
         array (
             'ZipStream\\' => 10,
@@ -94,10 +90,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
     );
 
     public static $prefixDirsPsr4 = array (
-        'coderofsalvation\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/coderofsalvation/browser-stream/src',
-        ),
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
@@ -307,6 +299,8 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'CWP\\Media\\MediaExport' => __DIR__ . '/../..' . '/app/Media/MediaExport.php',
         'CWP\\Media\\MediaFileSystem' => __DIR__ . '/../..' . '/app/Media/MediaFileSystem.php',
         'CWP\\Media\\MediaLogger' => __DIR__ . '/../..' . '/app/Media/MediaLogger.php',
+        'CWP\\Media\\MediaMailer' => __DIR__ . '/../..' . '/app/Media/MediaMailer.php',
+        'CWP\\Media\\MediaPublication' => __DIR__ . '/../..' . '/app/Media/MediaPublication.php',
         'CWP\\Media\\MediaSettings' => __DIR__ . '/../..' . '/app/Media/MediaSettings.php',
         'CWP\\Media\\Update\\AppUpdate' => __DIR__ . '/../..' . '/app/Media/Update/AppUpdate.php',
         'CWP\\Media\\Update\\DbUpdate' => __DIR__ . '/../..' . '/app/Media/Update/DbUpdate.php',
@@ -325,7 +319,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'CWP\\Zip' => __DIR__ . '/../..' . '/app/Zip.php',
         'CWP\\exec' => __DIR__ . '/../..' . '/app/Exec.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Lang' => __DIR__ . '/../..' . '/app/Translate.php',
         'Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'Nette\\Bridges\\CacheDI\\CacheExtension' => __DIR__ . '/..' . '/nette/caching/src/Bridges/CacheDI/CacheExtension.php',
         'Nette\\Bridges\\CacheLatte\\CacheExtension' => __DIR__ . '/..' . '/nette/caching/src/Bridges/CacheLatte/CacheExtension.php',

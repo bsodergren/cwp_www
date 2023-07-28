@@ -13,13 +13,6 @@ use Nette\Database\Conventions\DiscoveredConventions;
 use Nette\Database\Explorer;
 use Nette\Database\Structure;
 
-$__test_nav_links = __PUBLIC_ROOT__.'/test_navlinks.php';
-
-if (file_exists($__test_nav_links)) {
-    require_once $__test_nav_links;
-} else {
-    define('__DEV_LINKS__', []);
-}
 $refresh          = DbUpdate::createDatabase();
 
 $connection       = new Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
@@ -38,6 +31,9 @@ if (true == $refresh) {
     exit;
 }
 
-$template         = new Template();
 $mediaUpdates     = new AppUpdate($connection);
 $mediaUpdates->init();
+
+Media::$connection = $connection;
+Media::$explorer = $explorer;
+

@@ -25,8 +25,6 @@ class MasterXLSX extends Media
     public function __construct(object $media, $quiet = false)
     {
         $this->media      = $media;
-        $this->exp        = $media->exp;
-        $this->conn       = $media->conn;
 
         $this->xlsx_array = $media->MediaArray;
 
@@ -39,7 +37,7 @@ class MasterXLSX extends Media
 
     public function MasterWorkbook()
     {
-        $result = $this->conn->fetchAll('SELECT form_number FROM media_forms WHERE job_id = '.$this->media->job_id.'');
+        $result = Media::$connection->fetchAll('SELECT form_number FROM media_forms WHERE job_id = '.$this->media->job_id.'');
 
         foreach ($result as $data) {
             $form_number       = $data->form_number;
@@ -59,7 +57,7 @@ class MasterXLSX extends Media
         foreach ($this->xlsx_array as $form_number => $data) {
             $sql    = 'SELECT * FROM form_data_count  WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by former DESC ,form_id ASC';
 
-            $result = $this->conn->fetchAll($sql);
+            $result = Media::$connection->fetchAll($sql);
             foreach ($result as $form_data) {
                 $MasterArray[$form_number][$form_data->former][$form_data->form_letter][] = [
                     'pub'              => $form_data->pub,
@@ -162,7 +160,7 @@ class MasterXLSX extends Media
             unset($this->spreadsheet);
         }
 
-        $this->exp->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
+        Media::$explorer->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
     }
 
     public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
@@ -324,8 +322,8 @@ class MasterXLSX extends Media
         $paper_size            = $this->media->form_configuration['paper_size'];
         $config                = str_replace('pg', '', $config);
 
-        $res                   = $this->exp->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch();
-        $res                   = $this->exp->table('paper_count')->where('paper_id', $res['id'])->fetch();
+        $res                   = Media::$explorer->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch();
+        $res                   = Media::$explorer->table('paper_count')->where('paper_id', $res['id'])->fetch();
 
         foreach ($res as $var => $value) {
             $$var = $value;
@@ -410,12 +408,12 @@ class MasterXLSX extends Media
         $form_box_data['bind']        = $this->form_details['bind'];
 
         $form_box_data['former']      = $this->form_details['former'];
-        $count                        = $this->exp->table('form_data_count')
+        $count                        = Media::$explorer->table('form_data_count')
             ->where('form_id', $this->form_details['form_id'])
             ->update($form_box_data);
         if (0 == $count) {
             $form_box_data['form_id'] = $this->form_details['form_id'];
-            $count                    = 	$this->exp->table('form_data_count')->insert($form_box_data);
+            $count                    = 	Media::$explorer->table('form_data_count')->insert($form_box_data);
         }
     }
 
@@ -435,10 +433,10 @@ class MasterXLSX extends Media
         }
 
         if (true === $get) {
-            $res = $this->exp->table('pub_trim')->select('head_trim,foot_trim,delivered_size')->where('pub_name = ?  AND bind = ? ', $pub, $b)->fetch();
+            $res = Media::$explorer->table('pub_trim')->select('head_trim,foot_trim,delivered_size')->where('pub_name = ?  AND bind = ? ', $pub, $b)->fetch();
             if (null == $res) {
                 $insert = true;
-                $res    = $this->exp->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
+                $res    = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
             }
 
             if (is_object($res)) {

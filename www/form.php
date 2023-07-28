@@ -53,14 +53,14 @@ if (empty($results)) {
 }
 $sort                          = ['SORT_FORMER' => 1, 'SORT_LETTER' => 1];
 
-$result                        = $media->get_drop_form_data($current_form_number, $sort);
+$result                        = $media->getFormDrops($current_form_number, $sort);
 
 foreach ($result as $idx => $form_array) {
     $form_number                                           = $form_array['form_number'];
     // $job_id = $form_array['job_id'];
     $media->job_id                                         = $form_array['job_id'];
 
-    $config                                                = $media->get_drop_details($form_number);
+    $config                                                = $media->getDropDetails($form_number);
 
     $new_forms[$form_number][$form_array['form_letter']][] = [
         'id'         => $form_array['id'],

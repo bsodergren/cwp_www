@@ -6,7 +6,6 @@ namespace CWP\HTML;
 
 use CWP\HTML\Template;
 use CWP\HTML\HTMLForms;
-use coderofsalvation\BrowserStream;
 
 class HTMLDisplay
 {
@@ -15,6 +14,24 @@ class HTMLDisplay
     public static $timeout = 0;
 
     public static $msg     = '';
+
+
+
+    public static $flushdummy;
+
+    public function __construct()
+    {
+        ob_implicit_flush(true);
+        ob_end_flush();
+
+        $flushdummy = '';
+        for ($i = 0; $i < 1200; ++$i) {
+            $flushdummy = $flushdummy.'      ';
+        }
+        self::$flushdummy = $flushdummy;
+
+    }
+
 
     public static function javaRefresh($url, $timeout = 0, $msg = '')
     {
@@ -45,7 +62,10 @@ class HTMLDisplay
     {
         $colorObj = new Colors();
         $contents = $colorObj->getColoredSpan($contents, $color);
-        BrowserStream::put($contents."<br> \n");
+        echo $contents."<br> \n", self::$flushdummy;
+        flush();
+        @ob_flush();
+
     }
 
     public static function echo($value, $exit = 0)

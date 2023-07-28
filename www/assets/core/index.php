@@ -1,15 +1,15 @@
 <?php
-require_once '.config.inc.php';
 
 use CWP\Media\MediaExport;
 use CWP\Zip;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaError;
 use CWP\Media\MediaFileSystem;
-use coderofsalvation\BrowserStream;
 use CWP\Media\Import\PDFImport;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
+
+require_once '.config.inc.php';
 
 
 if (array_key_exists('update_job', $_REQUEST)) {
@@ -49,33 +49,20 @@ foreach ($_REQUEST as $key => $value) {
             break;
         case  'create_xlsx':
             include __LAYOUT_HEADER__;
-            BrowserStream::put("processing for excel ");
+            HTMLDisplay::put("processing for excel");
 
-            BrowserStream::put("Getting array<BR>");
-
+            HTMLDisplay::put("Getting array");
             $media->excelArray();
-            BrowserStream::put("Writing new excel files<BR>");
 
+            HTMLDisplay::put("Writing new excel files");
             $excel = new MediaXLSX($media);
-            BrowserStream::put("Writing new excel files<BR>");
 
+            HTMLDisplay::put("Writing new excel files");
             $excel->writeWorkbooks();
 
             $msg = 'XLSX Files Created';
             break;
 
-        case  'create_slip':
-            include_once __LAYOUT_HEADER__;
-
-            $media->excelArray();
-            $excel = new MediaXLSX($media);
-            $excel->writeMasterWorkbook();
-
-            //$slipsheets = new SlipSheetXLSX($media);
-            //$slipsheets->CreateSlips();
-            ob_flush();
-            $msg = 'Slip file Created';
-            break;
 
         case  'create_zip':
             $xlsx_dir = $media->xlsx_directory;
@@ -91,9 +78,10 @@ foreach ($_REQUEST as $key => $value) {
             if ($msg = $media->delete_xlsx() === null) {
                 if ($msg = $media->delete_zip() === null) {
                     $media->delete_form();
+                    define('TITLE', 'Reimporting Media Drop');
                     include_once __LAYOUT_HEADER__;
                     $import              = new PDFImport();
-                    $import->Import($media->pdf_fullname, $media->job_number);
+                    $import->reImport($media->pdf_fullname, $media->job_number);
                     $msg = 'PDF Reimported';
                 }
             }

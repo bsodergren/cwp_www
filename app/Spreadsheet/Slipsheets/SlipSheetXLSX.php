@@ -26,33 +26,13 @@ class SlipSheetXLSX extends Media
     public function __construct($media, $quiet = false)
     {
         $this->media = $media;
-        $this->exp   = $media->exp;
-        $this->conn  = $media->conn;
-    }
-
-    public function CreateSlips()
-    {
-        $result = $this->conn->fetchAll('SELECT form_number FROM media_forms WHERE job_id = '.$this->media->job_id.'');
-
-        foreach ($result as $data) {
-            $form_number       = $data->form_number;
-            $this->spreadsheet = new Spreadsheet();
-
-            $this->createSlipSheet($this->spreadsheet, $form_number, 0);
-
-            $this->spreadsheet->setActiveSheetIndex(0);
-            $writer            = new Xlsx($this->spreadsheet);
-            $new_xlsx_file     = $this->media->getfilename('slips', $form_number, true);
-            $writer->save($new_xlsx_file);
-            $this->spreadsheet->disconnectWorksheets();
-            unset($this->spreadsheet);
-        }
     }
 
     public function createslipsheet($sheetObj, $form_number, $sheetIndex)
     {
-        $result                   = $this->conn->fetchAll('SELECT * FROM form_data_count WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by form_id ASC');
+        $sql = 'SELECT * FROM form_data_count WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by form_id ASC';
 
+        $result                   = Media::$connection->fetchAll($sql);
         foreach ($result as $id => $row) {
             $slipSheetArray[] = $row;
         }
@@ -93,7 +73,6 @@ class SlipSheetXLSX extends Media
                         case 3:
                             $box = $this->setPackaging($col_A, $row);
                             break;
-                            break;
                         case 4:
                             $this->boxDataBoxes($col_A, $col_B, $row, $box);
                             break;
@@ -104,11 +83,12 @@ class SlipSheetXLSX extends Media
                             $this->boxDataLifts($col_A, $col_B, $row, $box);
                             break;
                         case 7:
-                            // $this->setFormLocation($col_A, $row);
                             break;
                         case 8:
-                            $this->setFormerInfo($col_B, $row);
-                            //  $this->setPcsInfo($col_B, $row);
+                            $this->setFormLocation($col_A, $row);
+
+                            //$this->setFormerInfo($col_B, $row);
+                           $this->setPcsInfo($col_B, $row);
                     }
                     ++$row;
                 }
@@ -170,7 +150,7 @@ class SlipSheetXLSX extends Media
 
     private function setPcsInfo($column, $row)
     {
-        $text = $this->SlipData->count.' pcs';
+        $text = $this->SlipData->former ." ".number_format($this->SlipData->count).' pcs';
         $this->styles->addSheetData($text, $column.$row);
     }
 

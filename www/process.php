@@ -1,15 +1,17 @@
 <?php
-use CWP\HTML\HTMLDisplay;
-use CWP\Media\MediaError;
 /**
  * CWP Media tool
  */
 
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaError;
+
+/**
+ * CWP Media tool.
+ */
 require '.config.inc.php';
 
 define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.php'));
-
-define('TITLE', 'processing');
 
 if (
     __FORM_POST__ == __SCRIPT_NAME__
@@ -20,7 +22,7 @@ if (
 
 $FORM_PROCESS = '';
 if (isset($_POST['FORM_PROCESS'])) {
-    $FORM_PROCESS =  $_POST['FORM_PROCESS'];
+    $FORM_PROCESS = $_POST['FORM_PROCESS'];
     unset($_POST['FORM_PROCESS']);
 }
 if (isset($_POST['divClass'])) {
@@ -31,7 +33,7 @@ if (isset($_POST['divClass'])) {
         $hidden = 0;
     }
 
-    $count        = $explorer->table('media_job')
+    $count = $explorer->table('media_job')
         ->where('job_id', $id) // must be called before update()
         ->update([
             'hidden' => $hidden,
@@ -41,11 +43,12 @@ if (isset($_POST['divClass'])) {
 
 switch (__FORM_POST__) {
     case 'import':
+        define('TITLE', 'Importing PDF File');
         include __LAYOUT_HEADER__;
         // no break
     case 'trim':
     case 'view':
-        case 'paper':
+    case 'paper':
     case 'settings':
     case 'form':
     case 'index':

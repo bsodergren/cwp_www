@@ -1,9 +1,14 @@
 <?php
-namespace CWP\HTML;
-use CWP\HTML\Template;
-use CWP\Media\MediaSettings;
 /**
  * CWP Media tool
+ */
+
+namespace CWP\HTML;
+
+use CWP\Media\MediaSettings;
+
+/**
+ * CWP Media tool.
  */
 
 /*
@@ -14,7 +19,7 @@ class Header extends Template
 {
     public static function display($template = '', $params = [])
     {
-        $path                = '/'.__SCRIPT_NAME__;
+        $path = '/'.__SCRIPT_NAME__;
         if (MediaSettings::isTrue('__FORM_POST__')) {
             $path = '/'.__FORM_POST__;
         }
@@ -35,16 +40,20 @@ class Header extends Template
             $params['DEFAULT_CSS'] = Template::GetHTML('base/header/css');
         }
 
-        $templateObj         = new Template();
-        $params['__MSG__']   = self::displayMsg();
+        $templateObj = new Template();
+        $params['__MSG__'] = self::displayMsg();
 
         echo $templateObj->template('base/header/header', $params);
     }
 
     public static function displayMsg()
     {
-        if (array_key_exists('msg', $GLOBALS['_REQUEST'])) {
-            return Template::GetHTML('base/header/return_msg', ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])]);
+        if (isset($GLOBALS)) {
+            if (is_array($GLOBALS['_REQUEST'])) {
+                if (array_key_exists('msg', $GLOBALS['_REQUEST'])) {
+                    return Template::GetHTML('base/header/return_msg', ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])]);
+                }
+            }
         }
 
         return '';

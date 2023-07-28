@@ -1,49 +1,71 @@
 <?php
+/**
+ * CWP Media tool
+ */
+
 namespace CWP\Media\Import;
 
-use CWP\Utils;
+use CWP\HTML\HTMLDisplay;
 use CWP\Media\Media;
-use CWP\Media\MediaSettings;
+use CWP\Utils;
 use Smalot\PdfParser\Parser;
-use CWP\Media\Import\MediaImport;
-use coderofsalvation\BrowserStream;
-
 
 class PDFImport extends MediaImport
 {
+    public $form = [];
 
-    public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
+    public $job_id;
+
+    private function insertDrop($pdf_file, $update_form)
     {
-        $pdf_filename = basename($pdf_uploaded_file);
-        $base_dir     = dirname($pdf_uploaded_file, 2);
+        $this->processPdf($pdf_file, $this->job_id, $update_form);
 
-        $this->job_id = Media::getJobNumber($pdf_filename, $job_number);
-
-        $this->processPdf($pdf_uploaded_file, $this->job_id, $update_form);
-
-        $pdf          = $this->form;
+        $pdf = $this->form;
         if (count($pdf) < 1) {
             $this->status = 0;
 
             return 0;
         }
-
-        $keyidx       = array_key_first($pdf);
-
-        $this->exp->table('media_job')->where('job_id', $this->job_id)->update(['close' => $pdf[$keyidx]['details']['product'], 'base_dir' => $base_dir]);
+        $noPagess = count($pdf);
+        HTMLDisplay::put('Importing '.$noPagess.' forms', 'red');
+        $keyidx = array_key_first($pdf);
+        $base_dir = dirname($pdf_file, 2);
+        Media::$explorer->table('media_job')->where('job_id',
+            $this->job_id)->update(['close' => $pdf[$keyidx]['details']['product'],
+            'base_dir' => $base_dir]);
 
         foreach ($pdf as $form_number => $form_info) {
-            BrowserStream::put('Importing form '.$form_number.'<BR>');
+            HTMLDisplay::put('Importing form '.$form_number, 'red');
             $this->add_form_details($form_info['details']);
             $this->add_form_data($form_number, $form_info);
         }
 
         $this->status = 1;
+
+        return 1;
     }
 
-    public $form = [];
+    public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
+    {
+        $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
 
-    public $job_id;
+        if (null !== $this->job_id) {
+            return 0;
+        }
+
+        $this->job_id = Media::insertJobNumber($pdf_uploaded_file, $job_number);
+        $this->insertDrop($pdf_uploaded_file, $update_form);
+    }
+
+    public function reImport($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
+    {
+        $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
+        if (null === $this->job_id) {
+            return 0;
+        }
+
+        $this->insertDrop($pdf_uploaded_file, $update_form);
+    }
 
     public function processPdf($pdf_file = '', $media_job_id = '', $form_number = '')
     {
@@ -53,24 +75,23 @@ class PDFImport extends MediaImport
 
         if (file_exists($pdf_file)) {
             $parser = new Parser();
-            $pdf    = $parser->parseFile($pdf_file);
-            $pages  = $pdf->getPages();
+            $pdf = $parser->parseFile($pdf_file);
+            $pages = $pdf->getPages();
 
             if ('' != $form_number) {
                 --$form_number;
                 $page_text = [];
 
-                $text      = $pages[$form_number]->getDataTm();
+                $text = $pages[$form_number]->getDataTm();
                 $page_text = $this->cleanPdfText($text);
 
                 $this->parse_page($page_text);
             } else {
-                $noPagess = count($pages);
-                BrowserStream::put('Importing '.$noPagess.' pages<BR>');
+
                 foreach ($pages as $page) {
                     $page_text = [];
 
-                    $text      = $page->getDataTm();
+                    $text = $page->getDataTm();
 
                     $page_text = $this->cleanPdfText($text);
 
@@ -92,7 +113,7 @@ class PDFImport extends MediaImport
 
     public function parse_page($page_text)
     {
-        $page_count  = count($page_text);
+        $page_count = count($page_text);
 
         $form_number = $this->find_key('run#', $page_text);
         $config_type = $this->find_key('config', $page_text);
@@ -102,57 +123,38 @@ class PDFImport extends MediaImport
         }
 
         if (isset($form_number)) {
-            $this->form[$form_number]['details']['config']      = $config_type;
-            $this->form[$form_number]['details']['bind']        = $this->find_key('bind', $page_text);
+            $this->form[$form_number]['details']['config'] = $config_type;
+            $this->form[$form_number]['details']['bind'] = $this->find_key('bind', $page_text);
 
-            $this->form[$form_number]['details']['count']       = Utils::toint($this->find_key('count', $page_text));
+            $this->form[$form_number]['details']['count'] = Utils::toint($this->find_key('count', $page_text));
 
-            $this->form[$form_number]['details']['product']     = $this->find_key('production', $page_text);
-            $this->form[$form_number]['details']['job_id']      = $this->job_id;
+            $this->form[$form_number]['details']['product'] = $this->find_key('production', $page_text);
+            $this->form[$form_number]['details']['job_id'] = $this->job_id;
             $this->form[$form_number]['details']['form_number'] = $form_number;
 
             for ($idx = 0; $idx <= $page_count; ++$idx) {
                 if (!isset($res)) {
-                    $res         = $this->find_first($form_number, $idx, $page_text);
+                    $res = $this->find_first($form_number, $idx, $page_text);
                     $current_key = key($res);
-                    $idx         = $res[$current_key]['start'];
+                    $idx = $res[$current_key]['start'];
                 } else {
-                    $res2                = $this->find_end($form_number, $res, $page_text);
+                    $res2 = $this->find_end($form_number, $res, $page_text);
                     $form_number_array[] = $res2;
-                    $r_letter            = key($res2);
-                    $idx                 = $res2[$r_letter]['stop'] + 1;
+                    $r_letter = key($res2);
+                    $idx = $res2[$r_letter]['stop'] + 1;
                     unset($res);
                 }
             }
             foreach ($form_number_array as $_ => $letter_array) {
-                $letter             = key($letter_array);
+                $letter = key($letter_array);
 
-                $start              = $letter_array[$letter]['start'];
-                $stop               = $letter_array[$letter]['stop'];
+                $start = $letter_array[$letter]['start'];
+                $stop = $letter_array[$letter]['stop'];
 
                 $form_rows[$letter] = $this->row_data($start, $stop, $page_text);
-
-                /*
-                if ('ABCD' == $letter && MediaSettings::IsTrue('__HALF_FORM_CNT__')) {
-                    $half_count                     = $form_rows[$letter][0]['count'] / 2;
-                    $tmp_row1_array                 = [
-                        'original' => $form_rows[$letter][0]['original'],
-                        'market'   => $form_rows[$letter][0]['market'],
-                        'pub'      => $form_rows[$letter][0]['pub'],
-                        'count'    => $half_count,
-                        'ship'     => $form_rows[$letter][0]['ship'],
-                        'tip'      => $form_rows[$letter][0]['tip'],
-                    ];
-
-                    $form_rows[$letter][0]['count'] = $half_count;
-                    $form_rows[$letter][]           = $tmp_row1_array;
-                    unset($tmp_row1_array);
-                    unset($half_count);
-                }
-                */
             }
 
-            $this->form[$form_number]['forms']                  = $form_rows;
+            $this->form[$form_number]['forms'] = $form_rows;
         }
     }
 
@@ -186,7 +188,7 @@ class PDFImport extends MediaImport
             if (false !== $search) {
                 switch ($value) {
                     case 'run#':
-                        $form_peices    = explode('Run#', $item);
+                        $form_peices = explode('Run#', $item);
 
                         return trim($form_peices[1]);
                         break;
@@ -198,22 +200,22 @@ class PDFImport extends MediaImport
                         break;
 
                     case 'count':
-                        $peices         = explode(':', $item);
+                        $peices = explode(':', $item);
 
                         return Utils::toint(trim($peices[1]));
                         break;
 
                     case 'config':
-                        $peices         = explode(':', $item);
-                        $type           = str_replace(' ', '', $peices[1]);
-                        $type           = $this->getPageCount($type);
+                        $peices = explode(':', $item);
+                        $type = str_replace(' ', '', $peices[1]);
+                        $type = $this->getPageCount($type);
 
                         return trim($type);
                         break;
 
                     case 'bind':
-                        $peices         = explode(':', $item);
-                        $type           = str_replace(' ', '', $peices[1]);
+                        $peices = explode(':', $item);
+                        $type = str_replace(' ', '', $peices[1]);
 
                         return trim($type);
                         break;
@@ -232,11 +234,11 @@ class PDFImport extends MediaImport
 
     public function find_first($form_number, $start, $array)
     {
-        $result    = [];
+        $result = [];
         $row_count = count($array);
-        $array     = array_slice($array, $start, $row_count, true);
+        $array = array_slice($array, $start, $row_count, true);
 
-        $key       = $this->find_key('#'.$form_number, $array, 'key');
+        $key = $this->find_key('#'.$form_number, $array, 'key');
 
         if ($key) {
             $peices = explode('#'.$form_number, $array[$key]);
@@ -249,23 +251,23 @@ class PDFImport extends MediaImport
 
     public function find_end($form_number, $start_array, $array)
     {
-        $result                       = [];
+        $result = [];
 
-        $row_count                    = count($array);
-        $letter                       = key($start_array);
+        $row_count = count($array);
+        $letter = key($start_array);
 
         $start_array[$letter]['stop'] = $row_count - 1;
-        $start                        = $start_array[$letter]['start'] + 1;
-        $array                        = array_slice($array, $start, $row_count, true);
+        $start = $start_array[$letter]['start'] + 1;
+        $array = array_slice($array, $start, $row_count, true);
 
-        $key                          = $this->find_key('#'.$form_number, $array, 'key');
+        $key = $this->find_key('#'.$form_number, $array, 'key');
 
         if (null != $key) {
-            $peices   = explode('#'.$form_number, $array[$key]);
+            $peices = explode('#'.$form_number, $array[$key]);
 
             $t_letter = str_replace(',', '', $peices[1]);
             if (null != $t_letter) {
-                $stop_key                     = $this->find_key($t_letter, $array, 'letter', true);
+                $stop_key = $this->find_key($t_letter, $array, 'letter', true);
                 $start_array[$letter]['stop'] = $stop_key - 1;
             }
         }
@@ -282,24 +284,24 @@ class PDFImport extends MediaImport
             $break = 4;
         }
 
-        $r   = 0;
-        $i   = 0;
+        $r = 0;
+        $i = 0;
         for ($idx = $start; $idx <= $stop; ++$idx) {
             switch ($r) {
                 case 0:
                     $market = $page_text[$idx];
                     break;
                 case 1:
-                    $pub    = $page_text[$idx];
+                    $pub = $page_text[$idx];
                     break;
                 case 2:
-                    $count  = str_replace(',', '', $page_text[$idx]);
+                    $count = str_replace(',', '', $page_text[$idx]);
                     break;
                 case 3:
-                    $ship   = $page_text[$idx];
+                    $ship = $page_text[$idx];
                     break;
                 case 4:
-                    $tip    = $page_text[$idx];
+                    $tip = $page_text[$idx];
                     break;
             }
 
@@ -308,14 +310,14 @@ class PDFImport extends MediaImport
             } else {
                 $row_array = [
                     'original' => $market.' '.$pub.' '.$count.' '.$ship,
-                    'market'   => $market,
-                    'pub'      => $pub,
-                    'count'    => $count,
-                    'ship'     => $ship,
-                    'tip'      => $tip,
+                    'market' => $market,
+                    'pub' => $pub,
+                    'count' => $count,
+                    'ship' => $ship,
+                    'tip' => $tip,
                 ];
-                $r         = 0;
-                $rows[$i]  = $row_array;
+                $r = 0;
+                $rows[$i] = $row_array;
                 ++$i;
             }
         }
@@ -354,7 +356,4 @@ class PDFImport extends MediaImport
                 return 'sheeter';
         }
     }
-
-
-
 }

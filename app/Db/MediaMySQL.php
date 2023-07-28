@@ -1,6 +1,7 @@
 <?php
 namespace CWP\Db;
 use CWP\Db\MediaDb;
+use CWP\Media\Media;
 /**
  * CWP Media tool
  */
@@ -23,7 +24,7 @@ class MediaMySQL extends MediaDb
     public function renameColumn($table, $old, $new)
     {
         $query  = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table."' AND COLUMN_NAME = '".$old."';";
-        $result = $this->conn->queryOne($query);
+        $result = Media::$connection->queryOne($query);
         $query = 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
         return $query;
     }

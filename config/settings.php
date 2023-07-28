@@ -1,14 +1,9 @@
 <?php
-/**
- * CWP Media tool
- */
 
 use CWP\Media\Media;
 
-/**
- * CWP Media tool.
- */
-$table          = $explorer->table('settings');
+
+$table          = Media::$explorer->table('settings');
 $table->order('setting_type ASC');
 $results        = $table->fetchAssoc('id');
 
@@ -32,9 +27,3 @@ if ($results) {
 $const          = get_defined_constants(true);
 
 unset($setting);
-
-if (array_key_exists('job_id', $_REQUEST)) {
-    $job_id = $_REQUEST['job_id'];
-    $job    = $connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
-    $media  = new Media($job);
-}

@@ -5,6 +5,7 @@
 
 namespace CWP;
 
+use CWP\Media\Media;
 use Nette\Utils\FileSystem;
 
 // The Class
@@ -55,7 +56,6 @@ class Zip
 
     public function zip($xlsx_directory, $job_id, $zip_file)
     {
-        global $explorer;
 
         $rootPath = realpath($xlsx_directory);
         $zipPath  = str_replace(basename($zip_file), '', $zip_file);
@@ -81,7 +81,7 @@ class Zip
         // Zip archive will be created only after closing object
         $d        = $zip->close();
         if (true === $d) {
-            $explorer->table('media_job')->where('job_id', $job_id)->update(['zip_exists' => '1']);
+            Media::$explorer->table('media_job')->where('job_id', $job_id)->update(['zip_exists' => '1']);
 
             return 'Zip file created';
         }

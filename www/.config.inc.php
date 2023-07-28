@@ -3,7 +3,6 @@
  * CWP Media tool
  */
 
-ob_start();
 use Camoo\Config\Config;
 use CWP\Bootstrap;
 use Tracy\Debugger;
@@ -19,7 +18,7 @@ require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
 // Debugger::enable();
 
-$boot             = new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.ini'));
+$boot = new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.ini'));
 $boot->definePath('__DATABASE_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'database');
 $boot->directory(__DATABASE_ROOT__);
 $boot->definePath('__SQL_CONFIG_DIR__', __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'configuration');
@@ -37,3 +36,4 @@ require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'boot.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
+require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
