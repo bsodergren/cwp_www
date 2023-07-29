@@ -1,6 +1,5 @@
 <?php
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\MediaProgramUpdate;
 use CWP\Media\Update\AppUpdate;
 
 /**
@@ -16,14 +15,14 @@ if (false !== AppUpdate::$UPDATES_PENDING) {
         $mediaUpdates->getUpdateFiles();
         $mediaUpdates->doUpdates();
 
-        echo HTMLDisplay::JavaRefresh('/index.php', 0);
+        // echo HTMLDisplay::JavaRefresh('/index.php', 0);
         ob_flush();
     } else {
         echo 'There are '.AppUpdate::$UPDATES_PENDING.' Pending <br>';
         ?>
 <form action="/updater/updater.php" method="post">
-    <input type="hidden" name="update" value="1">
-    <button type="submit" name="submit" class="btn active">Update!</button>
+	<input type="hidden" name="update" value="1">
+	<button type="submit" name="submit" class="btn active">Update!</button>
 </form>
 <?php
 
