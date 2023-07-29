@@ -4,6 +4,7 @@
  */
 
 use CWP\HTML\HTMLDisplay;
+use CWP\HTML\Template;
 use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaError;
 use CWP\Media\MediaExport;
@@ -50,16 +51,21 @@ foreach ($_REQUEST as $key => $value) {
             break;
         case 'create_xlsx':
             include __LAYOUT_HEADER__;
-            HTMLDisplay::put('processing for excel');
+            Template::echo('stream/start_page', []);
 
-            HTMLDisplay::put('Getting array');
+            HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'processing for excel']);
+            HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Getting Array']);
+
             $media->excelArray();
 
-            HTMLDisplay::put('Writing new excel files');
+            HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Creating Workbooks']);
             $excel = new MediaXLSX($media);
 
-            HTMLDisplay::put('Writing new excel files');
+            HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Writing Workbooks']);
+
             $excel->writeWorkbooks();
+
+            Template::echo('stream/end_page', []);
 
             $msg = 'XLSX Files Created';
             break;
@@ -74,15 +80,21 @@ foreach ($_REQUEST as $key => $value) {
             break;
 
         case 'refresh_import':
-            HTMLDisplay::$timeout = 3;
+            HTMLDisplay::$timeout = 1;
             if ($msg = null === $media->delete_xlsx()) {
                 if ($msg = null === $media->delete_zip()) {
                     $media->delete_form();
+
                     define('TITLE', 'Reimporting Media Drop');
                     include_once __LAYOUT_HEADER__;
+
+                    Template::echo('stream/start_page', []);
+
                     $import = new PDFImport();
                     $import->reImport($media->pdf_fullname, $media->job_number);
+
                     $msg = 'PDF Reimported';
+                    Template::echo('stream/end_page', []);
                 }
             }
 
@@ -102,11 +114,9 @@ foreach ($_REQUEST as $key => $value) {
             break;
         case 'delete_xlsx':
             $msg = $media->delete_xlsx();
-                //                $media->deleteSlipSheets();
-                $msg = $media->delete_zip();
-                    $msg = 'Zip and excel files removed';
-
-
+            //                $media->deleteSlipSheets();
+            $msg = $media->delete_zip();
+            $msg = 'Zip and excel files removed';
 
             break;
         case 'delete_job':

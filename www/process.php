@@ -4,6 +4,7 @@
  */
 
 use CWP\HTML\HTMLDisplay;
+use CWP\HTML\Template;
 use CWP\Media\MediaError;
 
 /**
@@ -40,11 +41,13 @@ if (isset($_POST['divClass'])) {
         ]);
     exit;
 }
-
+$page_end = '';
 switch (__FORM_POST__) {
     case 'import':
         define('TITLE', 'Importing PDF File');
         include __LAYOUT_HEADER__;
+        template::echo('stream/start_page', []);
+        $page_end = Template::GetHTML('stream/end_page', []);
         // no break
     case 'trim':
     case 'view':
@@ -71,5 +74,6 @@ if (false !== HTMLDisplay::$url) {
 }
 
 if (isset($_POST['FORM_PROCESS'])) {
+    echo $page_end;
     include_once __LAYOUT_FOOTER__;
 }

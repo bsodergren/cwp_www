@@ -1,18 +1,24 @@
 <?php
-namespace CWP\HTML;
-use CWP\Media\MediaSettings;
 /**
  * CWP Media tool
  */
 
+namespace CWP\HTML;
+
+use CWP\Media\MediaSettings;
+use CWP\Media\Update\AppUpdate;
+
+/**
+ * CWP Media tool.
+ */
 class Template
 {
     public static $static_html;
-    public $html           = '';
-    public $header_html    = '';
+    public $html = '';
+    public $header_html = '';
     public $default_params = [];
     public $template;
-    private $test          = 0;
+    private $test = 0;
 
     public function __construct()
     {
@@ -68,7 +74,7 @@ class Template
 
     private function loadTemplate($template)
     {
-        $template      = str_replace('.html', '', $template);
+        $template = str_replace('.html', '', $template);
 
         $template_file = __TEMPLATE_DIR__.'/'.$template.'.html';
 
@@ -86,7 +92,7 @@ class Template
     private function defaults($text)
     {
         preg_match_all('/%%([A-Z_]+)%%/m', $text, $output_array);
-        $params               = [];
+        $params = [];
 
         foreach ($output_array[1] as $n => $def) {
             if (MediaSettings::isSet($def)) {
@@ -102,7 +108,7 @@ class Template
         $params = array_merge($params, $this->default_params);
         if (is_array($params)) {
             foreach ($params as $key => $value) {
-                $key  = '%%'.strtoupper($key).'%%';
+                $key = '%%'.strtoupper($key).'%%';
                 $text = str_replace($key, $value, $text);
             }
 
@@ -115,7 +121,7 @@ class Template
     public function template($template, $params = [])
     {
         $template_text = $this->loadTemplate($template);
-        $html          = $this->parse($template_text, $params);
+        $html = $this->parse($template_text, $params);
 
         // $html = "\n<!-- start $template -->\n" . $html . "\n";
         $this->add($html);
@@ -130,5 +136,19 @@ class Template
         } else {
             $this->html .= $var;
         }
+    }
+
+    public static function VersionText()
+    {
+        global $mediaUpdates;
+
+        // AppUpdate::$CURRENT_VERSION = '1.2.4';
+        $installed = $mediaUpdates->currentVersion();
+        $latest = null;
+        if (AppUpdate::$CURRENT_VERSION != $mediaUpdates->currentVersion()) {
+            $latest = AppUpdate::$CURRENT_VERSION;
+        }
+
+        return [$installed, $latest];
     }
 }

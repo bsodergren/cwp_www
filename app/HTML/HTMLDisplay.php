@@ -5,6 +5,9 @@
 
 namespace CWP\HTML;
 
+use CWP\Media\MediaSettings;
+use Sinergi\BrowserDetector\Browser;
+
 /*
  * CWP Media tool
  */
@@ -56,13 +59,26 @@ class HTMLDisplay
         echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
     }
 
-    public static function put($contents, $color = null)
+    public static function pushhtml($template, $params = [])
     {
-        $colorObj = new Colors();
-        $contents = $colorObj->getColoredSpan($contents, $color);
-        echo $contents."<br> \n", self::$flushdummy;
+        $contents = Template::GetHTML($template, $params);
+        self::push($contents);
+    }
+
+    public static function push($contents)
+    {
+        echo $contents, self::$flushdummy;
         flush();
         @ob_flush();
+    }
+
+    public static function put($contents, $color = null)
+    {
+        if (null !== $color) {
+            $colorObj = new Colors();
+            $contents = $colorObj->getColoredSpan($contents, $color);
+        }
+        self::push($contents."<br> \n");
     }
 
     public static function echo($value, $exit = 0)
@@ -96,11 +112,17 @@ class HTMLDisplay
 
     public static function draw_excelLink($excel_file)
     {
+        $browser = new Browser();
+
         $relativePath = substr($excel_file, strlen(__HTTP_ROOT__) + 1);
         $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
         if (false == self::is_404($url)) {
             return false;
+        }
+        if ('57.0.2987.98' == $browser->getVersion()) {
+            return false;
+
         }
 
         return 'ms-excel:ofe|u|'.$url;

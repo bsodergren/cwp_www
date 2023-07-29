@@ -1,10 +1,14 @@
 <?php
-namespace CWP\HTML;
 /**
  * CWP Media tool
  */
 
-use CWP\HTML\Template;
+namespace CWP\HTML;
+
+/*
+ * CWP Media tool
+ */
+
 use CWP\Media\Update\AppUpdate;
 use Sinergi\BrowserDetector\Browser;
 
@@ -12,19 +16,29 @@ class Navbar extends Template
 {
     public static function display($template = '', $params = [])
     {
-        $templateObj                             = new Template();
+        $templateObj = new Template();
 
-        $nav_link_html                           = '';
-        $dropddown_menu_text                     = '';
-        $dropdown_link_html                      = '';
-        $nav_list_dir                            = 'list';
+        $nav_link_html = '';
+        $dropddown_menu_text = '';
+        $dropdown_link_html = '';
+        $nav_list_dir = 'list';
 
-        $browser                                 = new Browser();
+        $browser = new Browser();
         if ('57.0.2987.98' != $browser->getVersion()) {
             $nav_list_dir = 'dropdown';
+
+            [$installed,$latest] = self::VersionText();
+            // $installed = $installed;
+            $installed = '<span class="position-absolute top-100 start-0 translate-middle opacity-50 badge fs-6 rounded-pill bg-success">'.$installed.'</span>';
+
+            if (null != $latest) {
+                $latest = '<span class="position-absolute top-0 start-0 translate-middle badge fs-6 rounded-pill bg-danger">'.$latest.'</span>';
+            }
+
+            $params['VERSION_INFO'] = $installed.$latest;
         }
-        $nav_links_array                         = array_merge(__DEV_LINKS__, __NAVBAR_LINKS__);
-        foreach ($nav_links_array as $text =>  $url) {
+        $nav_links_array = array_merge(__DEV_LINKS__, __NAVBAR_LINKS__);
+        foreach ($nav_links_array as $text => $url) {
             if (is_array($url)) {
                 $dropddown_menu_text = $text;
 
@@ -40,20 +54,19 @@ class Navbar extends Template
 
             $nav_link_html .= $templateObj->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text]);
         }
-
         if ('57.0.2987.98' == $browser->getVersion()) {
             define('__FOOTER_NAV_HTML__', $dropdown_link_html);
         }
 
-        $params['NAVBAR_MENU_HTML']              = $templateObj->template('base/navbar/'.$nav_list_dir.'/navbar_menu', [
-            'NAV_BAR_LINKS'  => $nav_link_html,
+        $params['NAVBAR_MENU_HTML'] = $templateObj->template('base/navbar/'.$nav_list_dir.'/navbar_menu', [
+            'NAV_BAR_LINKS' => $nav_link_html,
             'DROPDOWN_LINKS' => $dropdown_link_html,
-            'DROPDOWN_TEXT'  => $dropddown_menu_text,
+            'DROPDOWN_TEXT' => $dropddown_menu_text,
         ]);
 
         if (false !== AppUpdate::$UPDATES_PENDING) {
-            $params['NAVBAR_UPDATES_HTML']         = $templateObj->template('base/navbar/updates', [
-            'VERSION_UPDATES'  => AppUpdate::$UPDATES_PENDING]);
+            $params['NAVBAR_UPDATES_HTML'] = $templateObj->template('base/navbar/updates', [
+            'VERSION_UPDATES' => AppUpdate::$UPDATES_PENDING]);
         }
 
         return $templateObj->template('base/navbar/navbar', $params);

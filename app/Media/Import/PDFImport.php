@@ -26,16 +26,21 @@ class PDFImport extends MediaImport
 
             return 0;
         }
+
         $noPagess = count($pdf);
-        HTMLDisplay::put('Importing '.$noPagess.' forms', 'red');
+        HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing '.$noPagess.' forms']);
+
         $keyidx = array_key_first($pdf);
         $base_dir = dirname($pdf_file, 2);
+
         Media::$explorer->table('media_job')->where('job_id',
-            $this->job_id)->update(['close' => $pdf[$keyidx]['details']['product'],
-            'base_dir' => $base_dir]);
+            $this->job_id)->update([
+                'close' => $pdf[$keyidx]['details']['product'],
+                'base_dir' => $base_dir,
+            ]);
 
         foreach ($pdf as $form_number => $form_info) {
-            HTMLDisplay::put('Importing form '.$form_number, 'red');
+            HTMLDisplay::pushhtml('stream/import/file_msg', ['TEXT' => 'Importing form '.$form_number]);
             $this->add_form_details($form_info['details']);
             $this->add_form_data($form_number, $form_info);
         }
@@ -87,7 +92,6 @@ class PDFImport extends MediaImport
 
                 $this->parse_page($page_text);
             } else {
-
                 foreach ($pages as $page) {
                     $page_text = [];
 
@@ -191,19 +195,16 @@ class PDFImport extends MediaImport
                         $form_peices = explode('Run#', $item);
 
                         return trim($form_peices[1]);
-                        break;
 
                     case 'production':
                         $printer_peices = explode(':', $item);
 
                         return trim(str_replace('PRINTER', '', $printer_peices[1]));
-                        break;
 
                     case 'count':
                         $peices = explode(':', $item);
 
                         return Utils::toint(trim($peices[1]));
-                        break;
 
                     case 'config':
                         $peices = explode(':', $item);
@@ -211,21 +212,18 @@ class PDFImport extends MediaImport
                         $type = $this->getPageCount($type);
 
                         return trim($type);
-                        break;
 
                     case 'bind':
                         $peices = explode(':', $item);
                         $type = str_replace(' ', '', $peices[1]);
 
                         return trim($type);
-                        break;
 
                     case 'letter':
                         return $k;
-                        break;
+
                     case 'key':
                         return $k;
-                        break;
                 }
                 break;
             }
@@ -330,28 +328,18 @@ class PDFImport extends MediaImport
         switch ($config_type) {
             case '2+2pgs4out':
                 return '4pg';
-                break;
             case '2+4pgs2out':
                 return '6pg';
-                break;
             case '4pgs4out':
                 return '4pg';
-                break;
-
             case '4+2pgs2out':
                 return '6pg';
-                break;
             case '6pgs2out':
                 return '6pg';
-                break;
-
             case '4+4pgs2out':
                 return '8pg';
-                break;
             case '8pgs2out':
                 return '8pg';
-                break;
-
             default:
                 return 'sheeter';
         }

@@ -25,6 +25,7 @@ class AppUpdate extends MediaUpdate
     //  public $builder_exec       = __ROOT_BIN_DIR__.\DIRECTORY_SEPARATOR.'builder.exe';
     public $patcher_exec = __BIN_DIR__.\DIRECTORY_SEPARATOR.'patcher.exe';
     public static $UPDATES_PENDING;
+    public static $CURRENT_VERSION;
 
     public function init()
     {
@@ -34,6 +35,7 @@ class AppUpdate extends MediaUpdate
             $this->zip_url = $this->gitRaw.'versions/';
 
             $current = trim($this->get_content($this->updateUrl));
+            self::$CURRENT_VERSION = $current;
             $this->installed = trim(file_get_contents(__VERSION_FILE__));
             self::$UPDATES_PENDING = false;
             if ($current > $this->installed) {
