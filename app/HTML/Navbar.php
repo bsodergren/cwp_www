@@ -28,14 +28,12 @@ class Navbar extends Template
             $nav_list_dir = 'dropdown';
 
             [$installed,$latest] = self::VersionText();
-            // $installed = $installed;
-            $installed = '<span class="position-absolute top-100 start-0 translate-middle opacity-50 badge fs-6 rounded-pill bg-success">'.$installed.'</span>';
-
+            $version_html = $templateObj->template('base/navbar/version_current', ['VERSION' => $installed]);
             if (null != $latest) {
-                $latest = '<span class="position-absolute top-0 start-0 translate-middle badge fs-6 rounded-pill bg-danger">'.$latest.'</span>';
+                $version_html .= $templateObj->template('base/navbar/version_latest', ['VERSION' => $latest]);
             }
 
-            $params['VERSION_INFO'] = $installed.$latest;
+            $params['VERSION_INFO'] = $version_html;
         }
         $nav_links_array = array_merge(__DEV_LINKS__, __NAVBAR_LINKS__);
         foreach ($nav_links_array as $text => $url) {

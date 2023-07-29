@@ -142,7 +142,6 @@ class Template
     {
         global $mediaUpdates;
 
-        // AppUpdate::$CURRENT_VERSION = '1.2.4';
         $installed = $mediaUpdates->currentVersion();
         $latest = null;
         if (AppUpdate::$CURRENT_VERSION != $mediaUpdates->currentVersion()) {

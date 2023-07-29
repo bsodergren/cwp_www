@@ -23,15 +23,16 @@ class Footer extends Template
         $templateObj = new Template();
 
         [$installed,$latest] = self::VersionText();
+        $version_html = $templateObj->template('base/footer/version_current', ['VERSION' => $installed]);
         if (null != $latest) {
-            $latest = '<li class="nav-item text-white bg-success rounded-pill"><span class="nav-link">'.$latest.'</span><li>';
+            $version_html .= $templateObj->template('base/footer/version_latest', ['VERSION' => $latest]);
         }
+
         if (MediaSettings::isSet('__FOOTER_NAV_HTML__')) {
             $params['FOOT_NAV_PANEL'] = $templateObj->template(
                 'base/footer/settings_nav',
                 ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__,
-                'CURRENT_VERSION' => $installed,
-                'LASTEST_VERSION' => $latest,
+                'VERSIONS_HTML' => $version_html,
                 ]
             );
         }
