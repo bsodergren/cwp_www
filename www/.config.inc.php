@@ -17,8 +17,8 @@ define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
 // Debugger::enable();
-
 $boot = new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.ini'));
+
 $boot->definePath('__DATABASE_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'database');
 $boot->directory(__DATABASE_ROOT__);
 $boot->definePath('__SQL_CONFIG_DIR__', __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'configuration');

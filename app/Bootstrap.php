@@ -16,9 +16,8 @@ class Bootstrap
     public function __construct(Config $Config)
     {
         $this->Config   = $Config;
-        self::$CONFIG   = $Config;
+        self::$CONFIG   = $Config->all();
         $this->define('__DRIVE_LETTER__', $this->getDriveLetter());
-
         $this->define('__NO_UPDATES__', $this->skipProgramUpdates());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->definePath('__VERSION_FILE__', $this->getVersionFile());

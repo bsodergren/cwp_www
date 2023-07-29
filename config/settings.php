@@ -4,6 +4,7 @@
  */
 
 use CWP\Media\Media;
+use CWP\Media\MediaSettings;
 
 $table = Media::$explorer->table('settings');
 $table->order('setting_type ASC');
@@ -42,7 +43,10 @@ foreach ($setting['lang'] as $key => $array) {
         define($key, $array['value']);
     }
 }
-foreach ($setting['local'] as $key => $array) {
+
+foreach ($setting['local'] as $key => $array)
+{
+    MediaSettings::configEmail($key);
     if (!defined($key)) {
         define($key, $array['value']);
     }
