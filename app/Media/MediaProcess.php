@@ -1,6 +1,11 @@
 <?php
-namespace CWP;
 /**
+ * CWP Media tool
+ */
+
+namespace CWP\Media;
+
+/*
  * CWP Media tool
  */
 
@@ -9,7 +14,7 @@ use Nette\Utils\Callback;
 use Nette\Utils\FileSystem;
 use Symfony\Component\Process\Process;
 
-class exec
+class MediaProcess
 {
     public $executable;
     public $optArray = [];
@@ -18,18 +23,16 @@ class exec
 
     // public $optArray = [];
 
-    public $cmdArgs  = [];
+    public $cmdArgs = [];
 
     public function __construct()
     {
-        $this->cmdArgs    = [];
-
+        $this->cmdArgs = [];
     }
 
     public function command($exec)
     {
-
-        $this->executable =  FileSystem::normalizePath($exec);
+        $this->executable = FileSystem::normalizePath($exec);
     }
 
     public function option($arg, $value = null)
@@ -39,7 +42,7 @@ class exec
 
     private function createCmd()
     {
-        $this->cmdArgs[] =  $this->executable;
+        $this->cmdArgs[] = $this->executable;
         foreach ($this->optArray as $k => $arg) {
             $this->cmdArgs[] = $arg['opt'];
             if (null !== $arg['value']) {
@@ -52,7 +55,7 @@ class exec
     {
         $this->getCommand();
 
-        $callback            = Callback::check([$this, 'callback']);
+        $callback = Callback::check([$this, 'callback']);
 
         $this->ExecProcess->start();
         $this->ExecProcess->wait($callback);
@@ -61,18 +64,16 @@ class exec
     public function getCommand()
     {
         $this->createCmd();
-        $this->ExecProcess             = new Process($this->cmdArgs);
+        $this->ExecProcess = new Process($this->cmdArgs);
         $this->ExecProcess->setTimeout(60000);
 
         return $this->ExecProcess->getCommandLine();
-
     }
-
 
     public function cleanPdf($pdf_file)
     {
-        $qdf_cmd        = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
-        $pdf_file       = FileSystem::normalizePath($pdf_file);
+        $qdf_cmd = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
+        $pdf_file = FileSystem::normalizePath($pdf_file);
         HTMLDisplay::put('Waiting for PDF for finish');
 
         $this->command($qdf_cmd);
@@ -83,8 +84,6 @@ class exec
         //  dd($process->getCommand());
         $this->run();
     }
-
-
 
     public function callback($type, $buffer): void
     {

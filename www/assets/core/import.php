@@ -5,16 +5,16 @@
 
 require_once '.config.inc.php';
 
-use CWP\exec;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaFileSystem;
+use CWP\Media\MediaProcess;
 use Nette\Utils\FileSystem;
 
-HTMLDisplay::$timeout  = 10;
-HTMLDisplay::$url      = 'import.php';
+HTMLDisplay::$timeout = 10;
+HTMLDisplay::$url = 'import.php';
 
-$error                 = false;
+$error = false;
 // Store errors here
 $fileExtensionsAllowed = ['pdf'];
 // These will be the only file extensions allowed
@@ -30,14 +30,14 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['mail_file'])) {
         list($fullFile, $imap_id) = explode('|', $_POST['mail_file']);
 
-        $fileName                 = basename($fullFile);
-        $fileSize                 = filesize($fullFile);
-        $fileTmpName              = $fullFile;
+        $fileName = basename($fullFile);
+        $fileSize = filesize($fullFile);
+        $fileTmpName = $fullFile;
 
-        $imap                     = imap_open(__IMAP_HOST__.__IMAP_FOLDER__, __IMAP_USER__, __IMAP_PASSWD__);
+        $imap = imap_open(__IMAP_HOST__.__IMAP_FOLDER__, __IMAP_USER__, __IMAP_PASSWD__);
     } else {
-        $fileName    = $_FILES['the_file']['name'];
-        $fileSize    = $_FILES['the_file']['size'];
+        $fileName = $_FILES['the_file']['name'];
+        $fileSize = $_FILES['the_file']['size'];
         $fileTmpName = $_FILES['the_file']['tmp_name'];
     }
 
@@ -45,8 +45,8 @@ if (isset($_POST['submit'])) {
         HTMLDisplay::put("<span class='p-3 text-danger'> no File selected </span> ");
         $error = true;
     } else {
-        $f             = explode('.', $fileName);
-        $f             = end($f);
+        $f = explode('.', $fileName);
+        $f = end($f);
         $fileExtension = strtolower($f);
     }
 
@@ -67,13 +67,13 @@ if (isset($_POST['submit'])) {
     HTMLDisplay::$url = 'import.php';
 
     if (false == $error) {
-        HTMLDisplay::$url         = 'index.php';
-        HTMLDisplay::$timeout     = 1;
+        HTMLDisplay::$url = 'index.php';
+        HTMLDisplay::$timeout = 1;
 
-        $media_closing            = '/'.basename($fileName, '.pdf');
-        $locations                = new MediaFileSystem($fileName, $job_number);
-        $pdf_directory            = $locations->getDirectory('pdf', true);
-        $pdf_file                 = $pdf_directory.'/'.basename($fileName);
+        $media_closing = '/'.basename($fileName, '.pdf');
+        $locations = new MediaFileSystem($fileName, $job_number);
+        $pdf_directory = $locations->getDirectory('pdf', true);
+        $pdf_file = $pdf_directory.'/'.basename($fileName);
 
         if (file_exists($pdf_file)) {
             FileSystem::delete($pdf_file);
@@ -87,8 +87,8 @@ if (isset($_POST['submit'])) {
             }
 
             if ($didUpload) {
-                $pdf_file       = FileSystem::normalizePath($pdf_file);
-                $process        = new exec();
+                $pdf_file = FileSystem::normalizePath($pdf_file);
+                $process = new MediaProcess();
                 $process->cleanPdf($pdf_file);
 
                 //  sleep(5);
@@ -106,7 +106,7 @@ if (isset($_POST['submit'])) {
             HTMLDisplay::put('File already was uploaded');
         } // end if
 
-        $MediaImport              = new PDFImport();
+        $MediaImport = new PDFImport();
         $MediaImport->Import($pdf_file, $job_number);
 
         if ($MediaImport->status < 1) {
