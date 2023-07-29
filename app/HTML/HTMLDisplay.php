@@ -1,21 +1,21 @@
 <?php
-namespace CWP\HTML;
 /**
  * CWP Media tool
  */
 
-use CWP\HTML\Template;
-use CWP\HTML\HTMLForms;
+namespace CWP\HTML;
+
+/*
+ * CWP Media tool
+ */
 
 class HTMLDisplay
 {
-    public static $url     = false;
+    public static $url = false;
 
     public static $timeout = 0;
 
-    public static $msg     = '';
-
-
+    public static $msg = '';
 
     public static $flushdummy;
 
@@ -29,9 +29,7 @@ class HTMLDisplay
             $flushdummy = $flushdummy.'      ';
         }
         self::$flushdummy = $flushdummy;
-
     }
-
 
     public static function javaRefresh($url, $timeout = 0, $msg = '')
     {
@@ -50,7 +48,7 @@ class HTMLDisplay
         }
 
         if ($timeout > 0) {
-            $timeout    = $timeout * 1000;
+            $timeout = $timeout * 1000;
             $update_inv = $timeout / 100;
             Template::echo('progress_bar', ['SPEED' => $update_inv]);
         }
@@ -65,7 +63,6 @@ class HTMLDisplay
         echo $contents."<br> \n", self::$flushdummy;
         flush();
         @ob_flush();
-
     }
 
     public static function echo($value, $exit = 0)
@@ -82,9 +79,9 @@ class HTMLDisplay
         self::put($var);
     }
 
-    public function draw_checkbox($name, $value, $text = 'Face Trim',$template='elements/checkbox')
+    public function draw_checkbox($name, $value, $text = 'Face Trim', $template = 'elements/checkbox')
     {
-        return HTMLForms::draw_checkbox($name, $value, $text,$template);
+        return HTMLForms::draw_checkbox($name, $value, $text, $template);
     }
 
     public function draw_radio($name, $value)
@@ -100,15 +97,38 @@ class HTMLDisplay
     public static function draw_excelLink($excel_file)
     {
         $relativePath = substr($excel_file, strlen(__HTTP_ROOT__) + 1);
-        $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+
+        if (false == self::is_404($url)) {
+            return false;
+        }
+
         return 'ms-excel:ofe|u|'.$url;
     }
 
     public static function getPdfLink($pdf_file)
     {
-
         $relativePath = substr($pdf_file, strlen(__HTTP_ROOT__) + 1);
-        $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+
+        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+
+        if (false == self::is_404($url)) {
+            return false;
+        }
+
+        $url = 'onclick="event.stopPropagation(); OpenNewWindow(\''.$url.'\')"';
+
         return $url;
+    }
+
+    public static function is_404($url)
+    {
+        $url = str_replace(' ', '%20', $url);
+        file_get_contents($url);
+        if (key_exists('4', $http_response_header)) {
+            return true;
+        }
+
+        return false;
     }
 }

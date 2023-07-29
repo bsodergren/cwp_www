@@ -75,9 +75,9 @@ if (isset($_POST['submit'])) {
         $pdf_directory = $locations->getDirectory('pdf', true);
         $pdf_file = $pdf_directory.'/'.basename($fileName);
 
-        if (file_exists($pdf_file)) {
-            FileSystem::delete($pdf_file);
-        }
+        //        if (file_exists($pdf_file)) {
+        //            FileSystem::delete($pdf_file);
+        //        }
 
         if (!file_exists($pdf_file)) {
             $didUpload = move_uploaded_file($fileTmpName, $pdf_file);

@@ -17,7 +17,6 @@ use CWP\Utils;
  */
 class Media
 {
-
     public static $explorer;
     public static $connection;
     public $exp;
@@ -51,8 +50,6 @@ class Media
 
     public function __construct($MediaDB = '')
     {
-
-
         if (is_object($MediaDB)) {
             $array = get_object_vars($MediaDB);
             unset($MediaDB);
@@ -70,7 +67,6 @@ class Media
             $this->getDirectories();
         }
     }
-
 
     private function getSectionLetter($section_array)
     {
@@ -219,6 +215,7 @@ class Media
     {
         return $this->mediaLoc->getDirectory($type, $create_dir);
     }
+
     public static function set_exists($value, $field, $job_id)
     {
         if (0 == $value) {
@@ -394,8 +391,8 @@ class Media
         $this->delete_form();
         $this->deleteFromDatabase('media_job');
 
-        MediaFileSystem::delete($this->pdf_file);
-        MediaFileSystem::delete($this->pdf_tmp_file);
+        //   MediaFileSystem::delete($this->pdf_file);
+        //   MediaFileSystem::delete($this->pdf_tmp_file);
         MediaFileSystem::delete($this->base_dir);
     }
 
@@ -423,10 +420,10 @@ class Media
         $msg = null;
         if (true == $this->xlsx) {
             $msg = MediaFileSystem::delete($this->xlsx_directory);
-            if (null === $msg) {
-                self::set_exists(0, 'xlsx', $this->job_id);
-                $this->xlsx = false;
-            }
+            // if (null === $msg) {
+            self::set_exists(0, 'xlsx', $this->job_id);
+            $this->xlsx = false;
+            // }
         }
 
         return $msg;
@@ -437,10 +434,10 @@ class Media
         $msg = null;
         if (true == $this->zip) {
             $msg = MediaFileSystem::delete($this->zip_directory);
-            if (null === $msg) {
-                self::set_exists(0, 'zip', $this->job_id);
-                $this->zip = false;
-            }
+            // if (null === $msg) {
+            self::set_exists(0, 'zip', $this->job_id);
+            $this->zip = false;
+            // }
         }
 
         return $msg;
@@ -519,7 +516,6 @@ class Media
         ]);
 
         return self::$explorer->getInsertId();
-
     }
 
     public static function getJobNumber($pdf_filename, $job_number = null)
@@ -529,14 +525,14 @@ class Media
 
         $job_table = self::$explorer->table('media_job');
         $job_table->where('pdf_file = ?', $pdf_filename);
-        if($job_number !== null){
+        if (null !== $job_number) {
             $job_table->where('job_number = ?', $job_number);
         }
-
 
         foreach ($job_table as $u) {
             $job_id = $u->job_id;
         }
+
         return $job_id;
     }
 }

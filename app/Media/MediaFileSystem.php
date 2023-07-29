@@ -24,7 +24,7 @@ class MediaFileSystem
     public function __construct($pdf_file = null, $job_number = null)
     {
         $this->job_number = $job_number;
-        $this->pdf_file   = $pdf_file;
+        $this->pdf_file = $pdf_file;
     }
 
     public function getFilename($type = '', $form_number = '', $create_dir = '')
@@ -40,8 +40,8 @@ class MediaFileSystem
             return false;
         }
 
-        $file      = basename($this->pdf_file, '.pdf');
-        $filename  = $this->job_number.'_'.$file;
+        $file = basename($this->pdf_file, '.pdf');
+        $filename = $this->job_number.'_'.$file;
 
         if ('xlsx' == strtolower($type)) {
             $filename = $filename.'_FM'.$form_number.'.xlsx';
@@ -64,8 +64,8 @@ class MediaFileSystem
             $directory = $this->__directory($type, $create_dir);
         }
 
-        $filename  = $directory.\DIRECTORY_SEPARATOR.$filename;
-        $filename  = FileSystem::normalizePath($filename);
+        $filename = $directory.\DIRECTORY_SEPARATOR.$filename;
+        $filename = FileSystem::normalizePath($filename);
 
         return $filename;
     }
@@ -78,7 +78,7 @@ class MediaFileSystem
             $output_filename = \DIRECTORY_SEPARATOR.$this->__filename();
         }
 
-        $directory       = $output_filename;
+        $directory = $output_filename;
 
         if ('xlsx' == strtolower($type)) {
             $directory .= __XLSX_DIRECTORY__;
@@ -89,7 +89,7 @@ class MediaFileSystem
         }
 
         if ('pdf' == strtolower($type)) {
-            $directory .= __PDF_UPLOAD_DIR__;
+            $directory = __PDF_UPLOAD_DIR__;
         }
         if ('zip' == strtolower($type)) {
             $directory .= __ZIP_FILE_DIR__;
@@ -100,15 +100,17 @@ class MediaFileSystem
         }
 
         if (defined('__MEDIA_FILES_DIR__')) {
-            if (is_dir(__MEDIA_FILES_DIR__)) {
-                $directory       = __MEDIA_FILES_DIR__.$directory;
+            if (__MEDIA_FILES_DIR__ != '') {
+                if (!is_dir(__MEDIA_FILES_DIR__)) {
+                    FileSystem::createDir(__MEDIA_FILES_DIR__, 511);
+                }
+                $directory = __MEDIA_FILES_DIR__.$directory;
             } else {
-                $directory       = __FILES_DIR__.$directory;
+                $directory = __FILES_DIR__.$directory;
             }
         } else {
-            $directory       = __FILES_DIR__.$directory;
+            $directory = __FILES_DIR__.$directory;
         }
-
 
         $this->directory = FileSystem::normalizePath($directory);
 
@@ -133,9 +135,9 @@ class MediaFileSystem
 
         try {
             if (false == filesystem::rename($old, $new)) {
-                throw new  InvalidStateException();
+                throw new InvalidStateException();
             }
-        } catch ( InvalidStateException $e) {
+        } catch (InvalidStateException $e) {
             $msg = $e->getMessage();
         }
 
