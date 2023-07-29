@@ -10,7 +10,7 @@ use RecursiveDirectoryIterator;
 
 class Utils
 {
-    public static function get_filelist($directory, $ext = 'log', $skip_files = 0)
+    public static function get_filelist($directory, $ext = 'log', $basename = false)
     {
         $files_array = [];
 
@@ -23,10 +23,8 @@ class Utils
                 $filename = $file->getPathname();
                 $filename = FileSystem::normalizePath($filename);
                 if (preg_match('/('.$ext.')$/', $filename)) {
-                    if (1 == $skip_files) {
-                        if (!self::skipFile($filename)) {
-                            $files_array[] = $filename;
-                        }
+                    if (true == $basename) {
+                            $files_array[] = basename($filename);
                     } else {
                         $files_array[] = $filename;
                     }

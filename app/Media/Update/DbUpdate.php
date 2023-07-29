@@ -9,6 +9,7 @@ namespace CWP\Media\Update;
  * CWP Media tool
  */
 
+use CWP\Media\MediaSetup;
 use CWP\Utils;
 use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
@@ -17,35 +18,35 @@ class DbUpdate extends MediaUpdate
 {
     public $table_name;
 
-    public $refresh    = false;
+    public $refresh = false;
 
     public function versionUpdate($file)
     {
-        $new_table     = [];
-        $update_data   = [];
-        $new_data      = [];
+        $new_table = [];
+        $update_data = [];
+        $new_data = [];
         $rename_column = [];
-        $new_column    = [];
-        $reset_table   = [];
-        $delete_data   = [];
+        $new_column = [];
+        $reset_table = [];
+        $delete_data = [];
 
         include_once $file;
 
-        $updates       = [
-            'resetTable'    => $reset_table,
-            'newTable'      => $new_table,
+        $updates = [
+            'resetTable' => $reset_table,
+            'newTable' => $new_table,
             'updateColumns' => $rename_column,
-            'newColumn'     => $new_column,
-            'newData'       => $new_data,
-            'updateData'    => $update_data,
-            'deleteData'    => $delete_data,
+            'newColumn' => $new_column,
+            'newData' => $new_data,
+            'updateData' => $update_data,
+            'deleteData' => $delete_data,
         ];
 
         foreach ($updates as $classmethod => $data_array) {
             $this->$classmethod($data_array);
         }
 
-        $filename      = basename($file);
+        $filename = basename($file);
 
         if ($this->check_tableExists('updates')) {
             $this->newData(['updates' => ['update_filename' => $filename]]);
@@ -58,7 +59,7 @@ class DbUpdate extends MediaUpdate
     {
         if (is_array($new_data)) {
             foreach ($new_data as $table => $new_data_vals) {
-                $u             = $this->conn->query('INSERT INTO '.$table.' ?', $new_data_vals);
+                $u = $this->conn->query('INSERT INTO '.$table.' ?', $new_data_vals);
                 $this->refresh = true;
             }
         }
@@ -173,8 +174,8 @@ class DbUpdate extends MediaUpdate
             foreach ($update_data as $table => $updates) {
                 foreach ($updates as $where => $data) {
                     foreach ($data as $key => $update_array) {
-                        $query         = 'UPDATE '.$table.' ';
-                        $query         = $query.'SET ';
+                        $query = 'UPDATE '.$table.' ';
+                        $query = $query.'SET ';
                         foreach ($update_array as $field => $value) {
                             $field_array[] = $field." = '".$value."'";
                         }
@@ -182,7 +183,7 @@ class DbUpdate extends MediaUpdate
                         $query .= implode(',', $field_array);
                         unset($field_array);
                         $query .= ' WHERE '.$where." = '".$key."'";
-                        $result        = $this->conn->query($query);
+                        $result = $this->conn->query($query);
                         $this->refresh = true;
                     }
                 }
@@ -195,7 +196,7 @@ class DbUpdate extends MediaUpdate
         if (is_array($delete_data)) {
             foreach ($delete_data as $table => $updates) {
                 foreach ($updates as $data => $val) {
-                    $queryArr      = [];
+                    $queryArr = [];
 
                     if (is_array($val)) {
                         if (!is_int($data)) {
@@ -206,7 +207,7 @@ class DbUpdate extends MediaUpdate
                         $data = $val;
                     }
 
-                    $pre_query     = 'DELETE FROM '.$table.' WHERE ';
+                    $pre_query = 'DELETE FROM '.$table.' WHERE ';
                     foreach ($data as $field => $value) {
                         if (!is_int($field)) {
                             if (!isset($where)) {
@@ -224,8 +225,8 @@ class DbUpdate extends MediaUpdate
                     if (count($queryArr) > 0) {
                         $query = $pre_query.implode(' AND ', $queryArr);
                     }
-                    $queryArr      = [];
-                    $queries       = explode(';', $query);
+                    $queryArr = [];
+                    $queries = explode(';', $query);
                     foreach ($queries as $q) {
                         if (str_contains($q, 'DELETE')) {
                             $result = $this->conn->query($q);
@@ -237,31 +238,30 @@ class DbUpdate extends MediaUpdate
         }
     }
 
-    public function checkDbUpdates($refresh)
+    public function checkDbUpdates()
     {
-        if ($this->check_tableExists('updates')) {
-            $skip_file_array              = [];
-            $rows                         = $this->conn->fetchAll('SELECT * FROM updates');
-            foreach ($rows as $k => $arr) {
-                $skip_file_array[] = $arr['update_filename'];
-            }
-            $version_updates_skipSkipFile = 0;
+        $updated_array = [];
+
+        $rows = $this->conn->fetchAll('SELECT * FROM updates');
+        foreach ($rows as $k => $arr) {
+            $updated_array[] = $arr['update_filename'];
         }
-        $updates_array = Utils::get_filelist(__SQL_UPDATES_DIR__, 'php', $version_updates_skipSkipFile);
+
+        $updates_array = Utils::get_filelist(__SQL_UPDATES_DIR__, 'php', true);
         sort($updates_array);
-        if (count($updates_array) >= 1) {
-            $this->refresh   = $refresh;
-            sort($updates_array);
-            foreach ($updates_array as $k => $file) {
-                $filename = basename($file);
-                if (!in_array($filename, $skip_file_array)) {
-                    $this->versionUpdate($file);
-                }
+
+        $updates = array_diff($updates_array, $updated_array);
+
+        if (count($updates) >= 1) {
+            MediaSetup::header('Found '.count($updates).' updates');
+
+            foreach ($updates as $k => $file) {
+                MediaSetup::message('Updating to  '.basename($file, '.php').' update');
+                $filename = __SQL_UPDATES_DIR__.\DIRECTORY_SEPARATOR.$file;
+                $this->versionUpdate($filename);
             }
-
-            $refresh         = $this->refresh;
+            MediaSetup::footer(0);
+            exit;
         }
-
-        return $refresh;
     }
 }
