@@ -6,6 +6,7 @@
 namespace CWP\HTML;
 
 use CWP\Media\MediaSettings;
+use CWP\Media\Update\AppUpdate;
 
 /**
  * CWP Media tool.
@@ -41,6 +42,12 @@ class Header extends Template
         }
 
         $templateObj = new Template();
+
+        if (false !== AppUpdate::$UPDATES_PENDING) {
+            $params['UPDATES_HTML'] = $templateObj->template('base/header/updates', [
+            'VERSION_UPDATES' => AppUpdate::$UPDATES_PENDING]);
+        }
+
         $params['__MSG__'] = self::displayMsg();
 
         echo $templateObj->template('base/header/header', $params);

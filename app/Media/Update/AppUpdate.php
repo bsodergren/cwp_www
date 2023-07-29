@@ -30,8 +30,8 @@ class AppUpdate extends MediaUpdate
     public function init()
     {
         if (__NO_UPDATES__ === false) {
-            $this->updateUrl = $this->gitRaw.'current.txt?432=432';
-            $this->versionUrl = $this->gitRaw.'version.txt?432=432';
+            $this->updateUrl = $this->gitRaw.'current.txt';
+            $this->versionUrl = $this->gitRaw.'version.txt';
             $this->zip_url = $this->gitRaw.'versions/';
 
             $current = trim($this->get_content($this->updateUrl));

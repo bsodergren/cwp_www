@@ -62,10 +62,7 @@ class Navbar extends Template
             'DROPDOWN_TEXT' => $dropddown_menu_text,
         ]);
 
-        if (false !== AppUpdate::$UPDATES_PENDING) {
-            $params['NAVBAR_UPDATES_HTML'] = $templateObj->template('base/navbar/updates', [
-            'VERSION_UPDATES' => AppUpdate::$UPDATES_PENDING]);
-        }
+
 
         return $templateObj->template('base/navbar/navbar', $params);
     }
