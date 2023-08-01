@@ -25,7 +25,7 @@ class HTMLDisplay
     public function __construct()
     {
         ob_implicit_flush(true);
-        ob_end_flush();
+        @ob_end_flush();
 
         $flushdummy = '';
         for ($i = 0; $i < 1200; ++$i) {

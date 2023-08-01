@@ -9,7 +9,6 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\HTML\HTMLDisplay;
 use CWP\Media\Media;
 use CWP\Spreadsheet\Media\MediaXLSX;
 
@@ -22,9 +21,8 @@ class Form extends MediaProcess
         $this->form_number = $req['form_number'];
 
         $method = $req['submit'];
-$this->updateForm($req);
+        $this->updateForm($req);
         $this->$method();
-
     }
 
     public function updateForm($req)
@@ -55,18 +53,19 @@ $this->updateForm($req);
             }
         }
     }
+
     public function Edit()
     {
-        HTMLDisplay::$url = '/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number.'';
-        HTMLDisplay::$timeout = 0;
+        $this->url = '/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number.'';
+        $this->timeout = 0;
     }
 
     public function Save()
     {
         // if (true == array_key_exists('view', $_REQUEST)) {
         //     if ('save' == $_REQUEST['view']) {
-        HTMLDisplay::$url = '/index.php';
-        define('REFRESH_MSG', 'Form finished');
+        $this->url = '/index.php';
+        $this->msg = 'Form finished';
 
         $this->media->excelArray();
         $excel = new MediaXLSX($this->media, true);
@@ -109,6 +108,6 @@ $this->updateForm($req);
         if ($next_form_number < 0) {
             $next_form_number = 1;
         }
-        HTMLDisplay::$url = '/form.php?job_id='.$this->job_id.'&form_number='.$next_form_number.'';
+        $this->url = '/form.php?job_id='.$this->job_id.'&form_number='.$next_form_number.'';
     }
 }

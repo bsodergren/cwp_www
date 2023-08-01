@@ -1,29 +1,30 @@
 <?php
-namespace CWP\Process;
 /**
  * CWP Media tool
  */
 
-use CWP\Zip;
-use CWP\HTML\Template;
+namespace CWP\Process;
+
+/*
+ * CWP Media tool
+ */
+
 use CWP\HTML\HTMLDisplay;
+use CWP\HTML\Template;
+use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaError;
 use CWP\Media\MediaExport;
-use CWP\Process\MediaProcess;
 use CWP\Media\MediaFileSystem;
-use CWP\Media\Import\PDFImport;
 use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Zip;
 
 class Index extends MediaProcess
 {
-
-
     public function run($req)
     {
-
         $method = key($req['submit']);
 
-       $this->$method();
+        $this->$method();
     }
 
     public function email_zip()
@@ -43,6 +44,8 @@ class Index extends MediaProcess
 
     public function create_xlsx()
     {
+        define('TITLE', 'Writing Excel files');
+
         include __LAYOUT_HEADER__;
         Template::echo('stream/start_page', []);
 
@@ -120,9 +123,8 @@ class Index extends MediaProcess
         $this->url = '/delete_job.php?job_id='.$this->job_id;
     }
 
-    public function update_job( $job_number)
+    public function update_job($job_number)
     {
-
         if (6 != strlen($job_number)) {
             MediaError::msg('warning', 'There was a problem <br> the job number was incorrect');
         }
@@ -144,6 +146,3 @@ class Index extends MediaProcess
         exit;
     }
 }
-
-
-
