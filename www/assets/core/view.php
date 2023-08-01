@@ -12,25 +12,25 @@ use Symfony\Component\Finder\Finder;
 
 require_once '.config.inc.php';
 
-$form_number      = $_REQUEST['form_number'];
+$form_number = $_REQUEST['form_number'];
 
 if (key_exists('action', $_REQUEST)) {
     if ('update' == $_REQUEST['action']) {
         define('TITLE', 'Updating excel sheet');
         include_once __LAYOUT_HEADER__;
         $media->excelArray($form_number);
-
-        $excel            = new MediaXLSX($media);
+        $media->deleteFromDatabase('form_data_count', $form_number);
+        $excel = new MediaXLSX($media);
         $excel->writeWorkbooks();
 
         ob_flush();
-        $msg              = 'XLSX Files Created';
+        $msg = 'XLSX Files Created';
         define('REFRESH_MSG', $msg);
         HTMLDisplay::$url = '/view.php?job_id='.$job_id.'&form_number='.$form_number;
     }
 
     if ('send' == $_REQUEST['action']) {
-        $finder                    = new Finder();
+        $finder = new Finder();
 
         $finder->files()->in($media->xlsx_directory)->name('*.xlsx')->notName('~*')->sortByName(true);
 
@@ -43,14 +43,14 @@ if (key_exists('action', $_REQUEST)) {
             [$text_form,$text_number] = explode('FM', $output_array[1]);
 
             if ($form_number == $text_number) {
-                $pdf_file       = $file->getRealPath();
+                $pdf_file = $file->getRealPath();
             }
         }
 
-        $sendto                    = $_POST['mailto'];
-        $sendname                  = $_POST['rcpt_name'];
+        $sendto = $_POST['mailto'];
+        $sendname = $_POST['rcpt_name'];
 
-        $mail                      = new MediaMailer();
+        $mail = new MediaMailer();
         $mail->recpt($sendto, $sendname);
 
         $mail->attachment($pdf_file);
@@ -58,8 +58,8 @@ if (key_exists('action', $_REQUEST)) {
         $mail->Body(Template::GetHTML('mail/body', ['PRODUCT_NAME' => $product, 'JOB_NUMBER' => $job_number]));
         $mail->mail();
 
-        $msg                       = 'XLSX File emailed';
+        $msg = 'XLSX File emailed';
         define('REFRESH_MSG', $msg);
-        HTMLDisplay::$url          = '/view.php?job_id='.$job_id.'&form_number='.$form_number;
+        HTMLDisplay::$url = '/view.php?job_id='.$job_id.'&form_number='.$form_number;
     }
 }

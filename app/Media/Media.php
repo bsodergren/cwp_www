@@ -406,7 +406,7 @@ class Media
         }
     }
 
-    private function deleteFromDatabase($table, $form_number = '')
+    public function deleteFromDatabase($table, $form_number = '')
     {
         $table_obj = self::$explorer->table($table);
         if ('' != $form_number) {
@@ -420,6 +420,7 @@ class Media
         $msg = null;
         if (true == $this->xlsx) {
             $msg = MediaFileSystem::delete($this->xlsx_directory);
+            $this->deleteFromDatabase('form_data_count');
             // if (null === $msg) {
             self::set_exists(0, 'xlsx', $this->job_id);
             $this->xlsx = false;
