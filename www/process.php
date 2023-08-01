@@ -3,9 +3,11 @@
  * CWP Media tool
  */
 
-use CWP\HTML\HTMLDisplay;
 use CWP\HTML\Template;
+use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaError;
+use CWP\Process\MediaProcess;
+
 
 /**
  * CWP Media tool.
@@ -14,6 +16,7 @@ require '.config.inc.php';
 
 define('__FORM_POST__', basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.php'));
 
+/*
 if (
     __FORM_POST__ == __SCRIPT_NAME__
     || __FORM_POST__ == ''
@@ -26,6 +29,8 @@ if (isset($_POST['FORM_PROCESS'])) {
     $FORM_PROCESS = $_POST['FORM_PROCESS'];
     unset($_POST['FORM_PROCESS']);
 }
+*/
+
 if (isset($_POST['divClass'])) {
     list($k, $id) = explode('_', $_POST['row_id']);
     if (str_contains($_POST['divClass'], 'show')) {
@@ -41,39 +46,9 @@ if (isset($_POST['divClass'])) {
         ]);
     exit;
 }
-$page_end = '';
-switch (__FORM_POST__) {
-    case 'import':
-        define('TITLE', 'Importing PDF File');
-        include __LAYOUT_HEADER__;
-        template::echo('stream/start_page', []);
-        $page_end = Template::GetHTML('stream/end_page', []);
-        // no break
-    case 'trim':
-    case 'view':
-    case 'paper':
-    case 'settings':
-    case 'form':
-    case 'index':
-        require_once __INC_CORE_DIR__.'/'.__FORM_POST__.'.php';
-        break;
-    case 'form_edit':
-    case 'mail':
-        require_once __INC_CORE_DIR__.'/'.__FORM_POST__.'.php';
-        exit;
-    default:
-        break;
-}
 
-if (!defined('REFRESH_MSG')) {
-    define('REFRESH_MSG', '');
-}
+$procesClass = 'CWP\\Process\\'.ucfirst(__FORM_POST__);
 
-if (false !== HTMLDisplay::$url) {
-    echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, REFRESH_MSG);
-}
-
-if (isset($_POST['FORM_PROCESS'])) {
-    echo $page_end;
-    include_once __LAYOUT_FOOTER__;
-}
+$mediaProcess = new $procesClass($media);
+$mediaProcess->run($_REQUEST);
+$mediaProcess->reload();

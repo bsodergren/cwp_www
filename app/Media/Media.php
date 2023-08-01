@@ -110,6 +110,7 @@ class Media
                     //     $partArray[$key] = $value;
                     //     break;
                     // no break
+                    break;
                 case 'pub':
                     $trimData = MediaPublication::getTrimData($value, $bind);
                     foreach ($trimData as $tKey => $tValue) {

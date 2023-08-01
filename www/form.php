@@ -3,9 +3,9 @@
  * CWP Media tool
  */
 
+use CWP\HTML\HTMLDisplay;
 use CWP\HTML\Template;
 use CWP\Media\Media;
-use CWP\Media\MediaDisplay;
 use CWP\Media\MediaSettings;
 
 /**
@@ -14,7 +14,7 @@ use CWP\Media\MediaSettings;
 require_once '.config.inc.php';
 
 define('TITLE', 'Form Editor');
-$display                       = new MediaDisplay();
+$display                       = new HTMLDisplay();
 // $media = new Media();
 // $template = new Template();
 
@@ -81,11 +81,17 @@ foreach ($new_forms as $form_number => $parts) {
     $next_button           = 'Next';
 
     if ($current_form_number != $first_form) {
-        $page_form_html .= template::GetHTML('/form/page_links', [
-            'PAGE_CLASS'       => ' btn-info',
-            'PAGE_FORM_URL'    => __URL_PATH__.'/form.php?job_id='.$media->job_id.'&form_number='.$prev_form_number,
-            'PAGE_FORM_NUMBER' => 'Previous',
+
+        $dropdown_links .= template::GetHTML('/form/page_form_submit', [
+            'PAGE_CLASS'   => ' btn-info',
+            'BUTTON_VALUE' => "Previous",
         ]);
+
+        // $dropdown_links .= template::GetHTML('/form/page_links', [
+        //     'PAGE_CLASS'       => ' btn-info',
+        //     'PAGE_FORM_URL'    => __URL_PATH__.'/form.php?job_id='.$media->job_id.'&form_number='.$prev_form_number,
+        //     'PAGE_FORM_NUMBER' => 'Previous',
+        // ]);
     }
 
     $form_part             = '';
@@ -143,13 +149,17 @@ foreach ($new_forms as $form_number => $parts) {
         // $previous_form_html =' ';
         $next_form_number = $current_form_number;
     } else {
-        $page_form_html .= Template::GetHTML('/form/page_links', [
-            'PAGE_CLASS'       => ' btn-warning',
-            'PAGE_FORM_URL'    => __URL_PATH__.'/update.php?job_id='.$media->job_id,
-            'PAGE_FORM_NUMBER' => 'Update',
+        $page_form_html .= template::GetHTML('/form/page_form_submit', [
+            'PAGE_CLASS'   => ' btn-success',
+            'BUTTON_VALUE' => 'Save',
         ]);
+        // $page_form_html .= Template::GetHTML('/form/page_links', [
+        //     'PAGE_CLASS'       => ' btn-warning',
+        //     'PAGE_FORM_URL'    => __URL_PATH__.'/update.php?job_id='.$media->job_id,
+        //     'PAGE_FORM_NUMBER' => 'Update',
+        // ]);
     }
-    $page_form_html .= template::GetHTML('/form/page_form_submit', [
+    $dropdown_links .= template::GetHTML('/form/page_form_submit', [
         'PAGE_CLASS'   => $form_btn_class,
         'BUTTON_VALUE' => $next_button,
     ]);
@@ -172,8 +182,10 @@ foreach ($new_forms as $form_number => $parts) {
 }
 
 $form_html['NEXT_FORM_NUMBER'] = $next_form_number;
+$form_html['PREV_FORM_NUMBER'] = $prev_form_number;
+
 $form_html['JOB_ID']           = $media->job_id;
-$form_html['NEXT_VIEW']        = $next_view;
+//$form_html['NEXT_VIEW']        = $next_view;
 $form_html['FORM_BODY_HTML']   = $letter_html;
 $form_html['FORM_BUTTONS']     = $dropdown_links;
 $form_html['FORM_LIST_HTML']   = $page_form_html;

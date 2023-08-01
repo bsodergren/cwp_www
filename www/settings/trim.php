@@ -141,9 +141,12 @@ foreach ($pub_array as $bind => $row) {
             ]
         );
 
+        $pub_checkbox = HTMLForms::draw_checkbox( 'trim_'.$u['id'].'_delete', 0,'',);
+
         $textbox_html .= Template::GetHTML('trim/pub_list', [
             'PUBLICATION' => $pub_name,
             'PUB_ID'=>$idx,
+            'PUB_CHECKBOX' => $pub_checkbox,
             //'BIND' => $bind,
             //'BIND_NAME' => $bind_name,
             'TEXT_HEAD' => $head_html,

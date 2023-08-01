@@ -77,14 +77,14 @@ if ($cnt > 0) {
         }
         $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process.php ';
 
-        $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('process', '', 'Process PDF Form', '', $class_normal.$pdisabled.$tooltip.'process"');
+        $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('submit[process]', '', 'Process PDF Form', '', $class_normal.$pdisabled.$tooltip.'process"');
         // $form->input_submit('actSubmit', '', 'View Forms', '', class_normal.$rowdisabled);
 
         if (true == Media::get_exists('xlsx', $row['job_id'])) {
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('view_xlsx', '', 'view xlsx', '', $class_create.$tooltip.'view_xlsx"');
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_xlsx', '', 'delete xlsx', '', $class_delete.$tooltip.'delete_xlsx"');
+            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[view_xlsx]', '', 'view xlsx', '', $class_create.$tooltip.'view_xlsx"');
+            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_xlsx]', '', 'delete xlsx', '', $class_delete.$tooltip.'delete_xlsx"');
         } else {
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_xlsx', '', 'create xlsx', '', $class_create.$pdisabled.$tooltip.'create_xlsx"');
+            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[create_xlsx]', '', 'create xlsx', '', $class_create.$pdisabled.$tooltip.'create_xlsx"');
         }
 
         if (true == Media::get_exists('xlsx', $row['job_id'])) {
@@ -93,24 +93,24 @@ if ($cnt > 0) {
 
         if (__SHOW_ZIP__ == true) {
             if (is_file($zip_file)) {
-                $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_zip', '', 'delete zip', '', $class_delete.$tooltip.'delete_zip"');
+                $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_zip]', '', 'delete zip', '', $class_delete.$tooltip.'delete_zip"');
             } else {
                 if (true == Media::get_exists('xlsx', $row['job_id'])) {
                     $zdisabled = '';
                 }
 
-                $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_zip', '', 'create zip', '', $class_create.$zdisabled.$tooltip.'create_zip"');
+                $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[create_zip]', '', 'create zip', '', $class_create.$zdisabled.$tooltip.'create_zip"');
             }
             if (__SHOW_MAIL__ == true) {
                 if (is_file($zip_file)) {
-                    $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('email_zip', '', 'email zip', '', $class_create.$tooltip.'email_zip"');
+                    $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[email_zip]', '', 'email zip', '', $class_create.$tooltip.'email_zip"');
                 }
             }
         }
         //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('export_job', '', 'Export Job', '', $class_create.$tooltip.'export"');
 
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('refresh_import', '', 'refresh import', '', $class_create.$tooltip.'refresh_import"');
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('delete_job', '', 'delete job', '', $class_delete.$tooltip.'delete_job"');
+        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[refresh_import]', '', 'refresh import', '', $class_create.$tooltip.'refresh_import"');
+        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_job]', '', 'delete job', '', $class_delete.$tooltip.'delete_job"');
         $replacement['FORM_CLOSE'] = $form->close();
         $template->template('index/job', $replacement);
     }

@@ -45,6 +45,7 @@ public function getPubList($ids)
             $res = Media::$explorer->table('pub_trim')->select('head_trim,foot_trim,delivered_size')->where('pub_name = ?  AND bind = ? ', $pub, $b)->fetch();
             if (null == $res) {
                 $insert = true;
+
                 $res    = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
             }
 

@@ -9,6 +9,7 @@ use CWP\HTML\HTMLDisplay;
 use CWP\Media\Media;
 use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Calculator;
+use CWP\Spreadsheet\LarrySheets\LarrySheetsXLSX;
 use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
 use CWP\Utils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -47,6 +48,7 @@ class MediaXLSX extends Media
             // $data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
             $slipSheet = new SlipSheetXLSX($this->media);
+            $larrySheet = new LarrySheetsXLSX($this->media);
             $s_idx = 0;
 
             $this->media->get_form_configuration($dataArray['details']);
@@ -98,6 +100,7 @@ class MediaXLSX extends Media
             }
 
             $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
+            $larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
 
             $sheetIndex = $this->spreadsheet->getIndex(
                 $this->spreadsheet->getSheetByName('Worksheet')
@@ -124,7 +127,6 @@ class MediaXLSX extends Media
         }
 
         $pub_value = $this->form_details['pub'];
-
         $this->trim_details = MediaPublication::getTrimData($pub_value, $this->form_details['bind']);
         $head_trim = $this->trim_details['head_trim'];
         $foot_trim = $this->trim_details['foot_trim'];
@@ -244,15 +246,24 @@ class MediaXLSX extends Media
 
     public function addFormBoxData()
     {
+        $fields = [
+            'form_number',
+            'form_letter',
+            'count',
+            'job_id',
+            'market',
+            'pub',
+            'bind',
+            'former',
+        ];
+
         $form_box_data = $this->box;
-        $form_box_data['form_number'] = $this->form_details['form_number'];
-        $form_box_data['form_letter'] = $this->form_details['form_letter'];
-        $form_box_data['count'] = $this->form_details['count'];
-        $form_box_data['job_id'] = $this->form_details['job_id'];
-        $form_box_data['market'] = $this->form_details['market'];
-        $form_box_data['pub'] = $this->form_details['pub'];
-        $form_box_data['bind'] = $this->form_details['bind'];
-        $form_box_data['former'] = $this->form_details['former'];
+
+        foreach ($this->form_details as $key => $value) {
+            if (in_array($key, $fields)) {
+                $form_box_data[$key] = $value;
+            }
+        }
 
         $count = Media::$explorer->table('form_data_count')
             ->where('form_id', $this->form_details['form_id'])
