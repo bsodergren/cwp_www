@@ -18,3 +18,4 @@ www/updater/download/
 config/boot.php
 database/using_mysql.db
 www/updater/update.log
+www/updater/update.log
