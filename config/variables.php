@@ -25,7 +25,7 @@ $nav_bar_links    = [
     ],
 ];
 if (__NO_UPDATES__ == false) {
-    $nav_bar_links['Settings']['Update']         = '/updater/updater.php';
+    $nav_bar_links['Settings']['Update']         = '/updater/update.php';
 }
 
 define('__NAVBAR_LINKS__', $nav_bar_links);

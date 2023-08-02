@@ -58,7 +58,7 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     // This call will only simulate an update.
     // Set the first argument (simulate) to "false" to install the update
     // i.e. Media::$AutoUpdate->update(false);
-//    $result = Media::$AutoUpdate->update(__SIMULATE_UPDATES__);
+    $result = Media::$AutoUpdate->update(__SIMULATE_UPDATES__);
 
     if (true === $result) {
         echo 'Update simulation successful<br>';
