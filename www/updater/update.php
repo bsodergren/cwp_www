@@ -27,7 +27,7 @@ $update->setCache($cache, 3600);
 if (false === $update->checkUpdate()) {
     exit('Could not check for updates! See log file for details.');
 }
-
+dd($update);
 if ($update->newVersionAvailable()) {
     // Install new update
     echo 'New Version: '.$update->getLatestVersion().'<br>';
