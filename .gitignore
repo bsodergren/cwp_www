@@ -22,3 +22,4 @@ www/updater/update.log
 update.log
 cache/*
 AppUpdates/previous.txt
+delete.txt
