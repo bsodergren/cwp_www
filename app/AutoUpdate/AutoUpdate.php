@@ -464,7 +464,6 @@ class AutoUpdate {
             // Read update file from update server
             if (function_exists('curl_version') && $this->isValidUrl($updateFile)) {
                 $update = $this->downloadCurl($updateFile, $timeout);
-                dd($update);
 
                 if ($update === false) {
                     $this->log->error(sprintf('Could not download update file "%s" via curl!', $updateFile));
@@ -590,15 +589,21 @@ class AutoUpdate {
      */
     protected function downloadCurl(string $url, int $timeout = 10)
     {
+
+        // $curl = curl_init();
+        // curl_setopt($curl, CURLOPT_URL, $url);
+        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, 0);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->sslVerifyHost ? 2 : 0);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->sslVerifyHost);
+        // curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+        // curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        // $update = curl_exec($curl);
+
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-//        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->sslVerifyHost ? 2 : 0);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->sslVerifyHost);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, \CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, \CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curl, \CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curl, \CURLOPT_URL, $url);
         $update = curl_exec($curl);
         dd($curl,$update);
 
