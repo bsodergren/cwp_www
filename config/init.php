@@ -3,9 +3,11 @@
  * CWP Media tool
  */
 
-use CWP\Media\Media;
-use CWP\HTML\Template;
+use CWP\AutoUpdate\AutoUpdate;
 use CWP\HTML\HTMLDisplay;
+use CWP\HTML\Template;
+use CWP\Media\Media;
+use Monolog\Logger;
 
 $__test_nav_links = __PUBLIC_ROOT__.'/test_navlinks.php';
 
@@ -27,5 +29,17 @@ if (function_exists('apache_setenv')) {
     apache_setenv('dont-vary', '1');
 }
 
+define('__UPDATE_CURRENT_VER__',trim(file_get_contents(__UPDATE_CURRENT_FILE__)));
+Media::$AutoUpdate = new AutoUpdate(__UPDATE_TMP_DIR__, __PUBLIC_ROOT__, 60);
+Media::$AutoUpdate->setCurrentVersion(__UPDATE_CURRENT_VER__);
+Media::$AutoUpdate->setUpdateUrl(__UPDATE_URL__);
+
+$logger = new Logger('default');
+$logger->pushHandler(new Monolog\Handler\StreamHandler(__UPDATE_LOG_FILE__));
+Media::$AutoUpdate->setLogger($logger);
+
+// Cache (optional but recommended)
+$cache = new \CWP\Cache\File(__UPDATE_CACHE_DIR__);
+Media::$AutoUpdate->setCache($cache, 3600);
 
 new HTMLDisplay();

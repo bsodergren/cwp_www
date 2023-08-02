@@ -5,6 +5,7 @@
 
 namespace CWP\HTML;
 
+use CWP\Media\Media;
 use CWP\Media\MediaSettings;
 use CWP\Media\Update\AppUpdate;
 
@@ -142,10 +143,10 @@ class Template
     {
         global $mediaUpdates;
 
-        $installed = $mediaUpdates->currentVersion();
+        $installed = __UPDATE_CURRENT_VER__;
         $latest = null;
-        if (AppUpdate::$CURRENT_VERSION != $mediaUpdates->currentVersion()) {
-            $latest = AppUpdate::$CURRENT_VERSION;
+        if (Media::$AutoUpdate->getLatestVersion() != __UPDATE_CURRENT_VER__) {
+            $latest = Media::$AutoUpdate->getLatestVersion();
         }
 
         return [$installed, $latest];

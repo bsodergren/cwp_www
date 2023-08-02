@@ -1,52 +1,33 @@
 <?php
 
-use CWP\AutoUpdate\AutoUpdate;
-use CWP\HTML\HTMLDisplay;
-use CWP\Media\Update\AppUpdate;
 use Monolog\Logger;
+use CWP\Media\Media;
+use CWP\HTML\HTMLDisplay;
 use Nette\Utils\FileSystem;
+use CWP\AutoUpdate\AutoUpdate;
 
 /**
  * CWP Media tool.
  */
 require '../.config.inc.php';
 
-$url = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/AppUpdates';
-
-$downloadTmpDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/temp');
-$cachempDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/cache');
-$currentFile = FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt');
-
-$currentVersion = trim(file_get_contents($currentFile));
 
 
-$update = new AutoUpdate($downloadTmpDir, __PUBLIC_ROOT__, 60);
-$update->setCurrentVersion($currentVersion);
-$update->setUpdateUrl($url);
-
-$logger = new Logger('default');
-$logger->pushHandler(new Monolog\Handler\StreamHandler(__DIR__.'/update.log'));
-$update->setLogger($logger);
-
-// Cache (optional but recommended)
-$cache = new \CWP\Cache\File($cachempDir);
-$update->setCache($cache, 3600);
-
-if (false === $update->checkUpdate()) {
+if (false === Media::$AutoUpdate->checkUpdate()) {
     exit('Could not check for updates! See log file for details.');
 }
-if ($update->newVersionAvailable()) {
+if (Media::$AutoUpdate->newVersionAvailable()) {
     // Install new update
-    echo 'New Version: '.$update->getLatestVersion().'<br>';
+    echo 'New Version: '.Media::$AutoUpdate->getLatestVersion().'<br>';
     echo 'Installing Updates: <br>';
     echo '<pre>';
     var_dump(array_map(function ($version) {
         return (string) $version;
-    }, $update->getVersionsToUpdate()));
+    }, Media::$AutoUpdate->getVersionsToUpdate()));
     echo '</pre>';
 
     // Optional - empty log file
-    $f = @fopen(__DIR__.'/update.log', 'rb+');
+    $f = @fopen(__UPDATE_LOG_FILE__, 'rb+');
     if (false !== $f) {
         ftruncate($f, 0);
         fclose($f);
@@ -60,7 +41,7 @@ if ($update->newVersionAvailable()) {
     }
 
 
-    $update->onEachUpdateFinish('eachUpdateFinishCallback');
+    Media::$AutoUpdate->onEachUpdateFinish('eachUpdateFinishCallback');
 
     // Optional Callback function - on each version update
     function onAllUpdateFinishCallbacks($updatedVersions)
@@ -72,12 +53,12 @@ if ($update->newVersionAvailable()) {
         }
         echo '</ul>';
     }
-    $update->setOnAllUpdateFinishCallbacks('onAllUpdateFinishCallbacks');
+    Media::$AutoUpdate->setOnAllUpdateFinishCallbacks('onAllUpdateFinishCallbacks');
 
     // This call will only simulate an update.
     // Set the first argument (simulate) to "false" to install the update
-    // i.e. $update->update(false);
-    $result = $update->update(__SIMULATE_UPDATES__);
+    // i.e. Media::$AutoUpdate->update(false);
+//    $result = Media::$AutoUpdate->update(__SIMULATE_UPDATES__);
 
     if (true === $result) {
         echo 'Update simulation successful<br>';
@@ -86,7 +67,7 @@ if ($update->newVersionAvailable()) {
 
         if ($result = AutoUpdate::ERROR_SIMULATE) {
             echo '<pre>';
-            var_dump($update->getSimulationResults());
+            var_dump(Media::$AutoUpdate->getSimulationResults());
             echo '</pre>';
         }
     }
@@ -95,7 +76,7 @@ if ($update->newVersionAvailable()) {
 }
 
 echo 'Log:<br>';
-echo nl2br(file_get_contents(__DIR__.'/update.log'));
+echo nl2br(file_get_contents(__UPDATE_LOG_FILE__));
 
 exit;
 
