@@ -26,10 +26,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             'ZipStream\\' => 10,
         ),
-        'V' => 
-        array (
-            'VisualAppeal\\' => 13,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php81\\' => 23,
@@ -82,8 +78,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
-            'Desarrolla2\\Test\\Cache\\' => 23,
-            'Desarrolla2\\Cache\\' => 18,
         ),
         'C' => 
         array (
@@ -100,10 +94,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
-        ),
-        'VisualAppeal\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/visualappeal/php-auto-update/src',
         ),
         'Symfony\\Polyfill\\Php81\\' => 
         array (
@@ -248,14 +238,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
         ),
-        'Desarrolla2\\Test\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/desarrolla2/cache/test',
-        ),
-        'Desarrolla2\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/desarrolla2/cache/src',
-        ),
         'Composer\\XdebugHandler\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/xdebug-handler/src',
@@ -313,10 +295,13 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'CWP\\AdvancedFilesystemIterator' => __DIR__ . '/../..' . '/app/Zip.php',
+        'CWP\\AutoUpdate' => __DIR__ . '/../..' . '/app/AutoUpdate.php',
         'CWP\\Bootstrap' => __DIR__ . '/../..' . '/app/Bootstrap.php',
         'CWP\\Db\\MediaDb' => __DIR__ . '/../..' . '/app/Db/MediaDb.php',
         'CWP\\Db\\MediaMySQL' => __DIR__ . '/../..' . '/app/Db/MediaMySQL.php',
         'CWP\\Db\\MediaSqlite' => __DIR__ . '/../..' . '/app/Db/MediaSqlite.php',
+        'CWP\\Exceptions\\DownloadException' => __DIR__ . '/../..' . '/app/Exceptions/DownloadException.php',
+        'CWP\\Exceptions\\ParserException' => __DIR__ . '/../..' . '/app/Exceptions/ParserException.php',
         'CWP\\GroupSorter' => __DIR__ . '/../..' . '/app/GroupSorter.php',
         'CWP\\HTML\\Colors' => __DIR__ . '/../..' . '/app/HTML/Colors.php',
         'CWP\\HTML\\Footer' => __DIR__ . '/../..' . '/app/HTML/Footer.php',

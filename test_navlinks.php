@@ -4,5 +4,6 @@
  */
 
 define('__DEV_LINKS__', [
-        'Test'         => '/test.php',
+    'Test' => '/test.php',
+    'update' => '/updater/update.php',
 ]);

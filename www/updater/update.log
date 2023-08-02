@@ -1,0 +1,8 @@
+[2023-08-02T04:08:41.188201-05:00] default.NOTICE: Checking for a new update... [] []
+[2023-08-02T04:08:41.191963-05:00] default.DEBUG: Get new updates from https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions//update.json [] []
+[2023-08-02T04:08:41.306328-05:00] default.ERROR: Could not download update "https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions//update.json" via curl: SSL certificate problem: unable to get local issuer certificate! [] []
+[2023-08-02T04:08:41.306534-05:00] default.ERROR: Could not download update file "https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions//update.json" via curl! [] []
+[2023-08-02T04:09:47.641571-05:00] default.NOTICE: Checking for a new update... [] []
+[2023-08-02T04:09:47.645651-05:00] default.DEBUG: Get new updates from https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions//update.json [] []
+[2023-08-02T04:09:47.787604-05:00] default.ERROR: Could not download update "https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions//update.json" via curl: SSL certificate problem: unable to get local issuer certificate! [] []
+[2023-08-02T04:09:47.787738-05:00] default.ERROR: Could not download update file "https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions//update.json" via curl! [] []

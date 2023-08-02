@@ -8,10 +8,13 @@ $baseDir = dirname($vendorDir);
 return array(
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'CWP\\AdvancedFilesystemIterator' => $baseDir . '/app/Zip.php',
+    'CWP\\AutoUpdate' => $baseDir . '/app/AutoUpdate.php',
     'CWP\\Bootstrap' => $baseDir . '/app/Bootstrap.php',
     'CWP\\Db\\MediaDb' => $baseDir . '/app/Db/MediaDb.php',
     'CWP\\Db\\MediaMySQL' => $baseDir . '/app/Db/MediaMySQL.php',
     'CWP\\Db\\MediaSqlite' => $baseDir . '/app/Db/MediaSqlite.php',
+    'CWP\\Exceptions\\DownloadException' => $baseDir . '/app/Exceptions/DownloadException.php',
+    'CWP\\Exceptions\\ParserException' => $baseDir . '/app/Exceptions/ParserException.php',
     'CWP\\GroupSorter' => $baseDir . '/app/GroupSorter.php',
     'CWP\\HTML\\Colors' => $baseDir . '/app/HTML/Colors.php',
     'CWP\\HTML\\Footer' => $baseDir . '/app/HTML/Footer.php',
