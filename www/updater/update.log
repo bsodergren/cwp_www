@@ -88,3 +88,5 @@
 [2023-08-02T04:24:50.371490-05:00] default.DEBUG: Get new updates from https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions/update.json [] []
 [2023-08-02T04:24:51.427353-05:00] default.NOTICE: Checking for a new update... [] []
 [2023-08-02T04:24:51.432729-05:00] default.DEBUG: Get new updates from https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions/update.json [] []
+[2023-08-02T04:26:07.490270-05:00] default.NOTICE: Checking for a new update... [] []
+[2023-08-02T04:26:07.493311-05:00] default.DEBUG: Get new updates from https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions/update.json [] []
