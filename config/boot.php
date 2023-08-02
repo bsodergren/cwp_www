@@ -26,5 +26,5 @@ Media::$explorer = $explorer;
 
 ( new DbUpdate($connection) )->checkDbUpdates();
 
-$mediaUpdates = new AppUpdate($connection);
-$mediaUpdates->init();
+// $mediaUpdates = new AppUpdate($connection);
+// $mediaUpdates->init();

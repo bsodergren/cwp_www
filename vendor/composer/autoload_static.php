@@ -8,8 +8,8 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
@@ -25,6 +25,10 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'Z' => 
         array (
             'ZipStream\\' => 10,
+        ),
+        'V' => 
+        array (
+            'VisualAppeal\\' => 13,
         ),
         'S' => 
         array (
@@ -62,6 +66,7 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         ),
         'M' => 
         array (
+            'Monolog\\' => 8,
             'Matrix\\' => 7,
         ),
         'L' => 
@@ -77,6 +82,8 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
+            'Desarrolla2\\Test\\Cache\\' => 23,
+            'Desarrolla2\\Cache\\' => 18,
         ),
         'C' => 
         array (
@@ -93,6 +100,10 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'VisualAppeal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/visualappeal/php-auto-update/src',
         ),
         'Symfony\\Polyfill\\Php81\\' => 
         array (
@@ -172,7 +183,7 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         ),
         'Psr\\Log\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/log/src',
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -207,6 +218,10 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
@@ -232,6 +247,14 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'Doctrine\\Common\\Annotations\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
+        ),
+        'Desarrolla2\\Test\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/desarrolla2/cache/test',
+        ),
+        'Desarrolla2\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/desarrolla2/cache/src',
         ),
         'Composer\\XdebugHandler\\' => 
         array (
@@ -260,6 +283,17 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
     );
 
     public static $prefixesPsr0 = array (
+        'v' => 
+        array (
+            'vierbergenlars\\SemVer\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/vierbergenlars/php-semver/src',
+            ),
+            'vierbergenlars\\LibJs\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/vierbergenlars/php-semver/src',
+            ),
+        ),
         'S' => 
         array (
             'Smalot\\PdfParser\\' => 
@@ -294,19 +328,31 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'CWP\\Media\\Import\\MediaImport' => __DIR__ . '/../..' . '/app/Media/Import/MediaImport.php',
         'CWP\\Media\\Import\\PDFImport' => __DIR__ . '/../..' . '/app/Media/Import/PDFImport.php',
         'CWP\\Media\\Media' => __DIR__ . '/../..' . '/app/Media/Media.php',
-        'CWP\\Media\\MediaDisplay' => __DIR__ . '/../..' . '/app/Media/MediaDisplay.php',
         'CWP\\Media\\MediaError' => __DIR__ . '/../..' . '/app/Media/MediaError.php',
         'CWP\\Media\\MediaExport' => __DIR__ . '/../..' . '/app/Media/MediaExport.php',
         'CWP\\Media\\MediaFileSystem' => __DIR__ . '/../..' . '/app/Media/MediaFileSystem.php',
         'CWP\\Media\\MediaLogger' => __DIR__ . '/../..' . '/app/Media/MediaLogger.php',
         'CWP\\Media\\MediaMailer' => __DIR__ . '/../..' . '/app/Media/MediaMailer.php',
+        'CWP\\Media\\MediaProcess' => __DIR__ . '/../..' . '/app/Media/MediaProcess.php',
         'CWP\\Media\\MediaPublication' => __DIR__ . '/../..' . '/app/Media/MediaPublication.php',
         'CWP\\Media\\MediaSettings' => __DIR__ . '/../..' . '/app/Media/MediaSettings.php',
+        'CWP\\Media\\MediaSetup' => __DIR__ . '/../..' . '/app/Media/MediaSetup.php',
         'CWP\\Media\\Update\\AppUpdate' => __DIR__ . '/../..' . '/app/Media/Update/AppUpdate.php',
         'CWP\\Media\\Update\\DbUpdate' => __DIR__ . '/../..' . '/app/Media/Update/DbUpdate.php',
         'CWP\\Media\\Update\\MediaUpdate' => __DIR__ . '/../..' . '/app/Media/Update/MediaUpdate.php',
         'CWP\\Media\\log' => __DIR__ . '/../..' . '/app/Media/MediaLogger.php',
+        'CWP\\Process\\Form' => __DIR__ . '/../..' . '/app/Process/Form.php',
+        'CWP\\Process\\Form_Edit' => __DIR__ . '/../..' . '/app/Process/Form_Edit.php',
+        'CWP\\Process\\Import' => __DIR__ . '/../..' . '/app/Process/Import.php',
+        'CWP\\Process\\Index' => __DIR__ . '/../..' . '/app/Process/Index.php',
+        'CWP\\Process\\Mail' => __DIR__ . '/../..' . '/app/Process/Mail.php',
+        'CWP\\Process\\MediaProcess' => __DIR__ . '/../..' . '/app/Process/MediaProcess.php',
+        'CWP\\Process\\Settings' => __DIR__ . '/../..' . '/app/Process/Settings.php',
+        'CWP\\Process\\Trim' => __DIR__ . '/../..' . '/app/Process/Trim.php',
+        'CWP\\Process\\View' => __DIR__ . '/../..' . '/app/Process/View.php',
         'CWP\\Spreadsheet\\Calculator' => __DIR__ . '/../..' . '/app/Spreadsheet/Calculator.php',
+        'CWP\\Spreadsheet\\LarrySheets\\LarrySheetsXLSX' => __DIR__ . '/../..' . '/app/Spreadsheet/LarrySheets/LarrySheetsXLSX.php',
+        'CWP\\Spreadsheet\\LarrySheets\\LarrySheetsXLSX_Styles' => __DIR__ . '/../..' . '/app/Spreadsheet/LarrySheets/LarrySheetsXLSX_Styles.php',
         'CWP\\Spreadsheet\\MasterList\\MasterXLSX' => __DIR__ . '/../..' . '/app/Spreadsheet/MasterList/MasterXLSX.php',
         'CWP\\Spreadsheet\\MasterList\\MasterXLSX_Styles' => __DIR__ . '/../..' . '/app/Spreadsheet/MasterList/MasterXLSX_Styles.php',
         'CWP\\Spreadsheet\\Media\\MediaXLSX' => __DIR__ . '/../..' . '/app/Spreadsheet/Media/MediaXLSX.php',
@@ -317,7 +363,6 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'CWP\\Spreadsheet\\styles' => __DIR__ . '/../..' . '/app/Spreadsheet/Styles.php',
         'CWP\\Utils' => __DIR__ . '/../..' . '/app/Utils.php',
         'CWP\\Zip' => __DIR__ . '/../..' . '/app/Zip.php',
-        'CWP\\exec' => __DIR__ . '/../..' . '/app/Exec.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'Nette\\Bridges\\CacheDI\\CacheExtension' => __DIR__ . '/..' . '/nette/caching/src/Bridges/CacheDI/CacheExtension.php',
@@ -412,6 +457,7 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'Nette\\Utils\\IHtmlString' => __DIR__ . '/..' . '/nette/utils/src/compatibility.php',
         'Nette\\Utils\\Image' => __DIR__ . '/..' . '/nette/utils/src/Utils/Image.php',
         'Nette\\Utils\\ImageException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
+        'Nette\\Utils\\ImageType' => __DIR__ . '/..' . '/nette/utils/src/Utils/ImageType.php',
         'Nette\\Utils\\Json' => __DIR__ . '/..' . '/nette/utils/src/Utils/Json.php',
         'Nette\\Utils\\JsonException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'Nette\\Utils\\ObjectHelpers' => __DIR__ . '/..' . '/nette/utils/src/Utils/ObjectHelpers.php',
@@ -470,6 +516,11 @@ class ComposerStaticInitd9104c37b5faaa7283942daa46fd686b
         'Tracy\\SessionStorage' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Session/SessionStorage.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
+        'vierbergenlars\\SemVer\\Internal\\Comparator' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',
+        'vierbergenlars\\SemVer\\Internal\\Exports' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',
+        'vierbergenlars\\SemVer\\Internal\\G' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',
+        'vierbergenlars\\SemVer\\Internal\\Range' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',
+        'vierbergenlars\\SemVer\\Internal\\SemVer' => __DIR__ . '/..' . '/vierbergenlars/php-semver/src/vierbergenlars/SemVer/internal.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
