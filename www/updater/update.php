@@ -35,7 +35,6 @@ $update->setCache($cache, 3600);
 if (false === $update->checkUpdate()) {
     exit('Could not check for updates! See log file for details.');
 }
-
 if ($update->newVersionAvailable()) {
     // Install new update
     echo 'New Version: '.$update->getLatestVersion().'<br>';
@@ -78,7 +77,7 @@ if ($update->newVersionAvailable()) {
     // This call will only simulate an update.
     // Set the first argument (simulate) to "false" to install the update
     // i.e. $update->update(false);
-    $result = $update->update();
+    $result = $update->update(__SIMULATE_UPDATES__);
 
     if (true === $result) {
         echo 'Update simulation successful<br>';

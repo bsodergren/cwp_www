@@ -17,6 +17,7 @@ class Bootstrap
     {
         $this->Config   = $Config;
         self::$CONFIG   = $Config->all();
+        $this->define('__SIMULATE_UPDATES__', $this->isDebugSet());
         $this->define('__DRIVE_LETTER__', $this->getDriveLetter());
         $this->define('__NO_UPDATES__', $this->skipProgramUpdates());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
@@ -68,6 +69,11 @@ class Bootstrap
         $this->definePath('__DEFAULT_TABLES_DIR__', $database_files);
     }
 
+
+    private function isDebugSet()
+    {
+        return $this->Config['application']['debug'];
+    }
     private function getUsrBin()
     {
         return __DRIVE_LETTER__.$this->Config['server']['bin_dir'];
