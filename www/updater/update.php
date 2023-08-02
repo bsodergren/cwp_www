@@ -4,15 +4,19 @@ use CWP\AutoUpdate\AutoUpdate;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\Update\AppUpdate;
 use Monolog\Logger;
+use Nette\Utils\FileSystem;
 
 /**
  * CWP Media tool.
  */
 require '../.config.inc.php';
 
-$url = 'https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions';
+$url = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/updates';
 
-$update = new AutoUpdate(__PUBLIC_ROOT__.'/temp', __PUBLIC_ROOT__, 60);
+$downloadTmpDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/temp');
+$cachempDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/cache');
+
+$update = new AutoUpdate($downloadTmpDir, __PUBLIC_ROOT__, 60);
 $update->setCurrentVersion('1.3.1');
 $update->setUpdateUrl($url);
 
@@ -21,13 +25,13 @@ $logger->pushHandler(new Monolog\Handler\StreamHandler(__DIR__.'/update.log'));
 $update->setLogger($logger);
 
 // Cache (optional but recommended)
-$cache = new \CWP\Cache\File(__DIR__.'/cache');
+$cache = new \CWP\Cache\File($cachempDir);
 $update->setCache($cache, 3600);
 
 if (false === $update->checkUpdate()) {
     exit('Could not check for updates! See log file for details.');
 }
-dd($update);
+
 if ($update->newVersionAvailable()) {
     // Install new update
     echo 'New Version: '.$update->getLatestVersion().'<br>';
