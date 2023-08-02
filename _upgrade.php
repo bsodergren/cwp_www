@@ -11,7 +11,7 @@ if (file_exists($delete_file)) {
 
     foreach ($fileArray as $file) {
         if (file_exists(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.$file)) {
-            dump(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.$file);
+            unlink(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.$file);
         }
     }
 }
