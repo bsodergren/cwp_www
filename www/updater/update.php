@@ -11,7 +11,7 @@ use Nette\Utils\FileSystem;
  */
 require '../.config.inc.php';
 
-$url = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/updates';
+$url = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/AppUpdates';
 
 $downloadTmpDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/temp');
 $cachempDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/cache');
