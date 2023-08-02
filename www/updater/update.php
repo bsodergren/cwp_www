@@ -11,7 +11,8 @@ use CWP\AutoUpdate\AutoUpdate;
  */
 require '../.config.inc.php';
 
-
+define('TITLE', 'Media Updater');
+include_once __LAYOUT_HEADER__;
 
 if (false === Media::$AutoUpdate->checkUpdate()) {
     exit('Could not check for updates! See log file for details.');
@@ -20,11 +21,6 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     // Install new update
     echo 'New Version: '.Media::$AutoUpdate->getLatestVersion().'<br>';
     echo 'Installing Updates: <br>';
-    echo '<pre>';
-    var_dump(array_map(function ($version) {
-        return (string) $version;
-    }, Media::$AutoUpdate->getVersionsToUpdate()));
-    echo '</pre>';
 
     // Optional - empty log file
     $f = @fopen(__UPDATE_LOG_FILE__, 'rb+');
@@ -75,13 +71,14 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     echo 'Current Version is up to date<br>';
 }
 
-echo 'Log:<br>';
-echo nl2br(file_get_contents(__UPDATE_LOG_FILE__));
+include_once __LAYOUT_FOOTER__;
+
+//echo 'Log:<br>';
+//echo nl2br(file_get_contents(__UPDATE_LOG_FILE__));
 
 exit;
 
-define('TITLE', 'Media Updater');
-include_once __LAYOUT_HEADER__;
+
 
 if (false !== AppUpdate::$UPDATES_PENDING) {
     if (key_exists('update', $_POST)) {
@@ -105,5 +102,4 @@ if (false !== AppUpdate::$UPDATES_PENDING) {
     echo HTMLDisplay::JavaRefresh('/index.php', 3);
 }
 
-include_once __LAYOUT_FOOTER__;
 ?>
