@@ -108,7 +108,7 @@ class AutoUpdate {
      *
      * @var bool
      */
-    private $sslVerifyHost = true;
+    private $sslVerifyHost = false;
 
     /**
      * Url to the update folder on the server.
@@ -464,6 +464,7 @@ class AutoUpdate {
             // Read update file from update server
             if (function_exists('curl_version') && $this->isValidUrl($updateFile)) {
                 $update = $this->downloadCurl($updateFile, $timeout);
+                dd($update);
 
                 if ($update === false) {
                     $this->log->error(sprintf('Could not download update file "%s" via curl!', $updateFile));
@@ -483,6 +484,7 @@ class AutoUpdate {
 
             // Parse update file
             $updateFileExtension = substr(strrchr($this->updateFile, '.'), 1);
+
             switch ($updateFileExtension) {
                 case 'ini':
                     $versions = parse_ini_string($update, true);
@@ -499,6 +501,7 @@ class AutoUpdate {
                     break;
                 case 'json':
                     $versions = (array) json_decode($update, false);
+
                     if (!is_array($versions)) {
                         $this->log->error('Unable to parse json update file!');
 
@@ -590,11 +593,14 @@ class AutoUpdate {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+//        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->sslVerifyHost ? 2 : 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->sslVerifyHost);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         $update = curl_exec($curl);
+        dd($curl,$update);
 
         $success = true;
         if (curl_error($curl)) {

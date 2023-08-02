@@ -10,10 +10,10 @@ use Monolog\Logger;
  */
 require '../.config.inc.php';
 
-$url = 'https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions/';
+$url = 'https://github.com/bsodergren/cwp_www/raw/main/www/updater/updater_versions';
 
 $update = new AutoUpdate(__PUBLIC_ROOT__.'/temp', __PUBLIC_ROOT__, 60);
-$update->setCurrentVersion('0.1.0');
+$update->setCurrentVersion('1.3.1');
 $update->setUpdateUrl($url);
 
 $logger = new Logger('default');
