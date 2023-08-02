@@ -17,7 +17,7 @@ $downloadTmpDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/temp');
 $cachempDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/cache');
 
 $update = new AutoUpdate($downloadTmpDir, __PUBLIC_ROOT__, 60);
-$update->setCurrentVersion('1.3.1');
+$update->setCurrentVersion('1.3.5');
 $update->setUpdateUrl($url);
 
 $logger = new Logger('default');
@@ -52,8 +52,11 @@ if ($update->newVersionAvailable()) {
     // Optional Callback function - on each version update
     function eachUpdateFinishCallback($updatedVersion)
     {
+
         echo '<h3>CALLBACK for version '.$updatedVersion.'</h3>';
     }
+
+
     $update->onEachUpdateFinish('eachUpdateFinishCallback');
 
     // Optional Callback function - on each version update
