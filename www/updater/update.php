@@ -15,9 +15,13 @@ $url = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/AppUpdates';
 
 $downloadTmpDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/temp');
 $cachempDir = FileSystem::normalizePath(__PUBLIC_ROOT__.'/cache');
+$currentFile = FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt');
+
+$currentVersion = trim(file_get_contents($currentFile));
+
 
 $update = new AutoUpdate($downloadTmpDir, __PUBLIC_ROOT__, 60);
-$update->setCurrentVersion('1.3.5');
+$update->setCurrentVersion($currentVersion);
 $update->setUpdateUrl($url);
 
 $logger = new Logger('default');
