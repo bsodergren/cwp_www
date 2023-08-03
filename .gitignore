@@ -23,4 +23,5 @@ update.log
 cache/*
 AppUpdates/previous.txt
 delete.txt
-vendor
+vendor/composer/installed.php
+vendor/composer/installed.json

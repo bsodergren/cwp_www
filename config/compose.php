@@ -65,6 +65,14 @@ function disable_ob() {
         apache_setenv('dont-vary', '1');
     }
 }
+
+
+function composerHeader()
+{
+echo " <script>";
+echo " setTimeout(function () { window.location.href = 'index.php'; }, 5);";
+echo " </script>";
+}
 function flushDummy()
 {
     $flushdummy = '';
@@ -98,17 +106,14 @@ function runComposer()
     );
 
      $process = proc_open($cmd, $descriptorspec, $pipes);
-
-    header('Location: /index.php');
-    exit;
 }
 
 if (!is_dir(__COMPOSER_DIR__)) {
-    header("Content-type: text/plain");
-
     // tell php to automatically flush after every output
     // including lines of output produced by shell commands
     disable_ob();
     runComposer();
+    composerHeader();
+
     exit;
 }
