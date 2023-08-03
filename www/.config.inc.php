@@ -14,8 +14,6 @@ define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 define('__CWP_SOURCE__', __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'bsodergren\cwp_media\src');
 define('__CONFIG_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Configuration');
 
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'compose.php';
-
 // set_include_path(get_include_path().PATH_SEPARATOR.__COMPOSER_DIR__);
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
