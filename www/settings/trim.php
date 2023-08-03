@@ -2,7 +2,7 @@
 use CWP\HTML\HTMLDisplay;
 use CWP\HTML\HTMLForms;
 use CWP\HTML\Template;
-use CWP\Utils;
+use CWP\Utils\Utils;
 
 require_once '../.config.inc.php';
 
