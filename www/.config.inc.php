@@ -13,6 +13,10 @@ define('__HTTP_ROOT__', dirname(__FILE__, 1));
 define('__CONFIG_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'config');
 define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 
+require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'composer.php';
+
+
+
 // set_include_path(get_include_path().PATH_SEPARATOR.__COMPOSER_DIR__);
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 

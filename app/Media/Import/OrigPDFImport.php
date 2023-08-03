@@ -10,7 +10,7 @@ use CWP\Media\Media;
 use CWP\Utils;
 use Smalot\PdfParser\Parser;
 
-class PDFImport extends MediaImport
+class OrigPDFImport extends MediaImport
 {
     public $form = [];
 
@@ -82,7 +82,6 @@ class PDFImport extends MediaImport
             $parser = new Parser();
             $pdf = $parser->parseFile($pdf_file);
             $pages = $pdf->getPages();
-
             if ('' != $form_number) {
                 --$form_number;
                 $page_text = [];
@@ -98,25 +97,40 @@ class PDFImport extends MediaImport
                     $text = $page->getDataTm();
 
                     $page_text = $this->cleanPdfText($text);
-
+                    //                    $array = unpack('cchars/nint', $page_text[1]);
                     $this->parse_page($page_text);
                 }
             }
         }
     }
 
+    public function hex2str($hex)
+    {
+        $str = '';
+        for ($i = 0; $i < strlen($hex); $i += 2) {
+            $str .= chr(hexdec(substr($hex, $i, 2)));
+        }
+
+        return $str;
+    }
+
     public function cleanPdfText($text)
     {
         foreach ($text as $n => $row) {
+            $array = unpack('ch', $row[1]);
+
             // $page_text[$n] = trim(str_replace("&","and", $row[1]));
             $page_text[$n] = trim($row[1]);
         }
+        dump(['original', $text]);
+
         return $page_text;
     }
 
     public function parse_page($page_text)
     {
         $page_count = count($page_text);
+        dd($page_text);
 
         $form_number = $this->find_key('run#', $page_text);
         $config_type = $this->find_key('config', $page_text);

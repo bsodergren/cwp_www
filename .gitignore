@@ -8,7 +8,7 @@ database/cwp_sqlite.db
 www/php_errors.log
 .config.true
 Media Load Flags/*
-cwp
+vendor/*
 www/.files
 **/php_errors.log
 .gitignore
@@ -23,3 +23,4 @@ update.log
 cache/*
 AppUpdates/previous.txt
 delete.txt
+vendor

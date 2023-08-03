@@ -17,7 +17,6 @@ define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 $nav_bar_links    = [
     'Home'         => '/index.php',
     'Import'       => '/import.php',
-    'Update'         => '/updater/update.php',
     'Trim Sizes'   => '/settings/trim.php',
     'Settings'     => [
         'Paper'          => '/paper.php',
