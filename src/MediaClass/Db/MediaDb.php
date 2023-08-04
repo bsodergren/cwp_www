@@ -50,7 +50,7 @@ class MediaDb
 
     public function change_column($table_name, $name, $type)
     {
-        $this->updateStructure($table_name,$name,$type)
+        $this->updateStructure($table_name, $name, $type);
     }
 
     public function reset_table($table)
