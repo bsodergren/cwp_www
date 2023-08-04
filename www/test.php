@@ -3,42 +3,49 @@
  * CWP Media tool
  */
 
-use CWP\Media\Import\OrigPDFImport;
-use CWP\Media\Import\PDFImport;
 use CWP\Media\Media;
-use Fpdi\FPDI;
-use Fpdi\fpdi_pdf_parser ;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use Spatie\Dropbox\Client;
+use Spatie\FlysystemDropbox\DropboxAdapter;
 
 /**
  * CWP Media tool.
  */
-$origpdf = 'D:\development\cwp_app\public\www\files\media\pdf\0323-C_RunSheets_Itasca-orig.pdf';
-$newpdf = 'D:\development\cwp_app\public\www\files\media\pdf\0323-C_RunSheets_Itasca.pdf';
-
 require_once '.config.inc.php';
 define('TITLE', 'Form Editor');
 
 include_once __LAYOUT_HEADER__;
-/*
-$pdf = new fpdi_pdf_parser($newpdf);
-$pdf->setPageNo(1);
-dd($pdf->getContent());
 
-// get the page count
-$pageCount = $pdf->setSourceFile($newpdf);
+$adapter = new LocalFilesystemAdapter(
+    // Determine root directory
+    __PROJECT_ROOT__
+);
 
-// iterate through all pages
+// $appKey = 'm2xqkk0ojabhluo';
+// $appSecret = 'fcy77exrlrh03g1';
 
-for ($pageNo = 1; $pageNo <= $pageCount; ++$pageNo) {
-    // import a page
-    $templateId = $pdf->importPage($pageNo);
-    dd(get_class_methods($pdf));
+$client = new Client(__DROPBOX_AUTH_TOKEN__);
+$adapter = new DropboxAdapter($client);
+$filesystem = new Filesystem($adapter);
+$path = '.';
+try {
+    $listing = $filesystem->listContents($path, 0);
+
+    /** @var \League\Flysystem\StorageAttributes $item */
+    foreach ($listing as $item) {
+        $path = $item->path();
+        if ($item instanceof FileAttributes) {
+            echo $path.'<br>';
+            // handle the file
+        } elseif ($item instanceof DirectoryAttributes) {
+            // handle the directory
+            echo $path.'<br>';
+        }
+    }
+} catch (FilesystemException $exception) {
+    // handle the error
 }
-*/
-
-$procpdf = new PDFImport();
-$procpdf->processPdf($newpdf, 1, 1);
-//$procpdf = new OrigPDFImport();
-//$procpdf->processPdf($origpdf, 1, 1);
-// dd($procpdf->form);
-// RUN SHEETS

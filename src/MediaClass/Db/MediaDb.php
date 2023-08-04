@@ -1,15 +1,19 @@
 <?php
-namespace CWP\Db;
-
-use CWP\Media\Media;
 /**
  * CWP Media tool
  */
 
+namespace CWP\Db;
+
+use CWP\Media\Media;
+
+/**
+ * CWP Media tool.
+ */
 class MediaDb
 {
-
     public $conn;
+    public $tableTmpName = 'sqlb_temp_table_1';
 
     public function __construct($parent, $conn)
     {
@@ -42,6 +46,11 @@ class MediaDb
         $query = $this->createColumn($table, $column, $type);
 
         return $this->conn->queryOne($query);
+    }
+
+    public function change_column($table_name, $name, $type)
+    {
+        $this->updateStructure($table_name,$name,$type)
     }
 
     public function reset_table($table)

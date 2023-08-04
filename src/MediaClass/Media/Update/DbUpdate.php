@@ -29,13 +29,16 @@ class DbUpdate extends MediaUpdate
         $new_column = [];
         $reset_table = [];
         $delete_data = [];
+        $change_column = [];
+        $test = false;
 
         include_once $file;
 
         $updates = [
             'resetTable' => $reset_table,
             'newTable' => $new_table,
-            'updateColumns' => $rename_column,
+            'renameColumns' => $rename_column,
+            'changeColumn' => $change_column,
             'newColumn' => $new_column,
             'newData' => $new_data,
             'updateData' => $update_data,
@@ -48,10 +51,14 @@ class DbUpdate extends MediaUpdate
 
         $filename = basename($file);
 
-        if ($this->check_tableExists('updates')) {
-            $this->newData(['updates' => ['update_filename' => $filename]]);
+        if (false === $test) {
+            if ($this->check_tableExists('updates')) {
+                $this->newData(['updates' => ['update_filename' => $filename]]);
+            } else {
+                $this->setSkipFile($file);
+            }
         } else {
-            $this->setSkipFile($file);
+            exit;
         }
     }
 
@@ -123,7 +130,7 @@ class DbUpdate extends MediaUpdate
         }
     }
 
-    public function updateColumns($rename_column)
+    public function renameColumns($rename_column)
     {
         if (is_array($rename_column)) {
             foreach ($rename_column as $table_name => $column) {
@@ -132,6 +139,23 @@ class DbUpdate extends MediaUpdate
                     if ($this->dbClassObj->check_columnExists($table_name, $old)) {
                         if (!$this->dbClassObj->check_columnExists($table_name, $new)) {
                             $this->dbClassObj->rename_column($table_name, $old, $new);
+                            $this->refresh = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function changecolumn($change_column)
+    {
+        if (is_array($change_column)) {
+            foreach ($change_column as $table_name => $column) {
+                $this->set($table_name);
+                foreach ($column as $i => $changeArr) {
+                    foreach ($changeArr as $field => $value) {
+                        if ($this->dbClassObj->check_columnExists($table_name, $field)) {
+                            $this->dbClassObj->change_column($table_name, $field, $value);
                             $this->refresh = true;
                         }
                     }
@@ -237,6 +261,7 @@ class DbUpdate extends MediaUpdate
             }
         }
     }
+
 
     public function checkDbUpdates()
     {
