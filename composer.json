@@ -1,4 +1,9 @@
 {
+    "autoload": {
+        "psr-4": {
+            "CWP\\": "src/MediaClass/"
+        }
+    },
     "require-dev": {
         "symfony/var-dumper": "^6.2",
         "friendsofphp/php-cs-fixer": "^3.22"
@@ -33,6 +38,6 @@
         "nette/finder": "^3.0",
         "composer/semver": "^3.3",
         "vierbergenlars/php-semver": "^3.0",
-        "monolog/monolog": "^2.9",
-        "bsodergren/cwp_media": "^2.0"    }
+        "monolog/monolog": "^2.9"
+    }
 }

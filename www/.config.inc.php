@@ -10,9 +10,12 @@ use Tracy\Debugger;
 define('__PROJECT_ROOT__', dirname(__FILE__, 3));
 define('__PUBLIC_ROOT__', dirname(__FILE__, 2));
 define('__HTTP_ROOT__', dirname(__FILE__, 1));
+
 define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
-define('__CWP_SOURCE__', __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'bsodergren\cwp_media\src');
+define('__CWP_SOURCE__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'src');
 define('__CONFIG_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Configuration');
+
+require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'composer.php';
 
 // set_include_path(get_include_path().PATH_SEPARATOR.__COMPOSER_DIR__);
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
@@ -22,6 +25,7 @@ $boot = new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.in
 
 $boot->definePath('__DATABASE_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'database');
 $boot->directory(__DATABASE_ROOT__);
+
 $boot->definePath('__SQL_CONFIG_DIR__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Database');
 $boot->definePath('__SQL_UPDATES_DIR__', __SQL_CONFIG_DIR__.\DIRECTORY_SEPARATOR.'updates');
 
