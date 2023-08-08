@@ -45,7 +45,7 @@ class MediaLogger
         return $err_array;
     }
 
-    private static function get_caller_info()
+    public static function get_caller_info()
     {
         $trace = debug_backtrace();
 

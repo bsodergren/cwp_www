@@ -48,17 +48,11 @@ class Index extends MediaProcess
 
         include __LAYOUT_HEADER__;
         Template::echo('stream/start_page', []);
-
-        HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'processing for excel']);
-        HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Getting Array']);
-
+        HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
         $this->media->excelArray();
 
-        HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Creating Workbooks']);
+
         $excel = new MediaXLSX($this->media);
-
-        HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Writing Workbooks']);
-
         $excel->writeWorkbooks();
 
         Template::echo('stream/end_page', []);

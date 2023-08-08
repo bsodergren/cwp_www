@@ -12,6 +12,7 @@ namespace CWP\Media\Update;
 use CWP\Db\MediaMySQL;
 use CWP\Db\MediaSqlite;
 use CWP\Media\Bootstrap;
+use CWP\Media\Media;
 
 class MediaUpdate
 {
@@ -24,15 +25,17 @@ class MediaUpdate
 
     public object $dbClassObj;
 
-    public function __construct($db_conn)
+    public function __construct()
     {
-        $this->conn = $db_conn;
+        //$this->conn = Media::$connection;
 
-        if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
-            $this->dbClassObj = new MediaMySQL($this, $db_conn);
+        if ('mysql' == Bootstrap::$CONFIG['db']['type'])
+        {
+            $this->dbClassObj = new MediaMySQL($this);
         }
-        if ('sqlite' == Bootstrap::$CONFIG['db']['type']) {
-            $this->dbClassObj = new MediaSqlite($this, $db_conn);
+        if ('sqlite' == Bootstrap::$CONFIG['db']['type'])
+        {
+            $this->dbClassObj = new MediaSqlite($this);
         }
     }
 }

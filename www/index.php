@@ -38,9 +38,9 @@ if ($cnt > 0) {
 
         $replacement['FORM_OPEN_HTML'] = $form->open('', '', __URL_PATH__.'/process.php', 'post', '', $hidden);
 
-        $class_create = 'class="btn btn-success"';
-        $class_delete = 'class="btn btn-danger"';
-        $class_normal = 'class="btn btn-primary"';
+        $class_create = 'class="btn buttonClass ';// btn-success"';
+        $class_delete = 'class="btn buttonClass ';// btn-danger"';
+        $class_normal = 'class="btn buttonClass ';// btn-primary"';
 
         $num_of_forms = $media->number_of_forms();
 

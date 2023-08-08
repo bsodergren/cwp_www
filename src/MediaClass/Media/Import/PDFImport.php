@@ -21,22 +21,20 @@ class PDFImport extends MediaImport
         $this->processPdf($pdf_file, $this->job_id, $update_form);
 
         $pdf = $this->form;
-        if (count($pdf) < 1) {
-            $this->status = 0;
 
-            return 0;
+        if (count($pdf) < 1) {
+            $this->deleteFromDatabase('media_job');
+            $this->status = 2;
+            return 2;
         }
 
         $noPagess = count($pdf);
         HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing '.$noPagess.' forms']);
 
         $keyidx = array_key_first($pdf);
-        $base_dir = dirname($pdf_file, 2);
-
         Media::$explorer->table('media_job')->where('job_id',
             $this->job_id)->update([
                 'close' => $pdf[$keyidx]['details']['product'],
-                'base_dir' => $base_dir,
             ]);
 
         foreach ($pdf as $form_number => $form_info) {
@@ -53,12 +51,13 @@ class PDFImport extends MediaImport
     public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
     {
         $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
-
         if (null !== $this->job_id) {
             return 0;
         }
 
+
         $this->job_id = Media::insertJobNumber($pdf_uploaded_file, $job_number);
+
         $this->insertDrop($pdf_uploaded_file, $update_form);
     }
 
@@ -79,9 +78,11 @@ class PDFImport extends MediaImport
         }
 
         if (file_exists($pdf_file)) {
+
             $parser = new Parser();
             $pdf = $parser->parseFile($pdf_file);
             $pages = $pdf->getPages();
+
 
             if ('' != $form_number) {
                 --$form_number;
@@ -98,7 +99,6 @@ class PDFImport extends MediaImport
                     $text = $page->getDataTm();
 
                     $page_text = $this->cleanPdfText($text);
-
                     $this->parse_page($page_text);
                 }
             }
@@ -111,6 +111,7 @@ class PDFImport extends MediaImport
             // $page_text[$n] = trim(str_replace("&","and", $row[1]));
             $page_text[$n] = trim($row[1]);
         }
+
         return $page_text;
     }
 

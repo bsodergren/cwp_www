@@ -9,8 +9,10 @@ namespace CWP\Media\Update;
  * CWP Media tool
  */
 
-use CWP\Media\MediaSetup;
+use CWP\Media\Media;
 use CWP\Utils\Utils;
+use CWP\Media\MediaDebug;
+use CWP\Media\MediaSetup;
 use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
 
@@ -66,32 +68,16 @@ class DbUpdate extends MediaUpdate
     {
         if (is_array($new_data)) {
             foreach ($new_data as $table => $new_data_vals) {
-                $u = $this->conn->query('INSERT INTO '.$table.' ?', $new_data_vals);
+                $u = Media::$connection->query('INSERT INTO '.$table.' ?', $new_data_vals);
                 $this->refresh = true;
             }
         }
     }
 
-    public function query($query)
+    public function __call($method, $args )
     {
-        try {
-            $result = $this->conn->fetch($query);
+        dd(["call",$method, $args]);
 
-            return $result;
-        } catch (\PDOException   $e) {
-            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
-        }
-    }
-
-    public function queryOne($query)
-    {
-        try {
-            $result = $this->conn->fetchField($query);
-
-            return $result;
-        } catch (\PDOException   $e) {
-            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
-        }
     }
 
     public function check_tableExists($table_name = '')
@@ -126,7 +112,7 @@ class DbUpdate extends MediaUpdate
     {
         $sql_file = FileSystem::normalizePath(__DEFAULT_TABLES_DIR__.'/cwp_table_'.$table_name.'.sql');
         if (file_exists($sql_file)) {
-            Helpers::loadFromFile($this->conn, $sql_file);
+            Helpers::loadFromFile(Media::$connection, $sql_file);
         }
     }
 
@@ -207,7 +193,7 @@ class DbUpdate extends MediaUpdate
                         $query .= implode(',', $field_array);
                         unset($field_array);
                         $query .= ' WHERE '.$where." = '".$key."'";
-                        $result = $this->conn->query($query);
+                        $result = Media::$connection->query($query);
                         $this->refresh = true;
                     }
                 }
@@ -253,7 +239,7 @@ class DbUpdate extends MediaUpdate
                     $queries = explode(';', $query);
                     foreach ($queries as $q) {
                         if (str_contains($q, 'DELETE')) {
-                            $result = $this->conn->query($q);
+                            $result = Media::$connection->query($q);
                         }
                     }
                     $this->refresh = true;
@@ -267,7 +253,7 @@ class DbUpdate extends MediaUpdate
     {
         $updated_array = [];
 
-        $rows = $this->conn->fetchAll('SELECT * FROM updates');
+        $rows = Media::$connection->fetchAll('SELECT * FROM updates');
         foreach ($rows as $k => $arr) {
             $updated_array[] = $arr['update_filename'];
         }

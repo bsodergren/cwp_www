@@ -74,7 +74,6 @@ class MediaExec
     {
         $qdf_cmd = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
         $pdf_file = FileSystem::normalizePath($pdf_file);
-        HTMLDisplay::put('Waiting for PDF for finish');
 
         $this->command($qdf_cmd);
         $this->option($pdf_file);

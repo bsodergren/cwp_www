@@ -5,7 +5,6 @@
 
 use CWP\Media\Media;
 use CWP\Media\MediaSetup;
-use CWP\Media\Update\AppUpdate;
 use CWP\Media\Update\DbUpdate;
 use Nette\Caching\Storages\DevNullStorage;
 use Nette\Database\Connection;
@@ -24,7 +23,4 @@ $explorer = new Explorer($connection, $structure, $conventions, $storage);
 Media::$connection = $connection;
 Media::$explorer = $explorer;
 
-( new DbUpdate($connection) )->checkDbUpdates();
-
-// $mediaUpdates = new AppUpdate($connection);
-// $mediaUpdates->init();
+( new DbUpdate() )->checkDbUpdates();

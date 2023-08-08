@@ -1,23 +1,24 @@
 <?php
-
-use CWP\Media\MediaError;
 /**
  * CWP Media tool
  */
 
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaError;
+
 require '.config.inc.php';
+
 $refer_script = basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.php');
-
-
-
-if (    $refer_script == __SCRIPT_NAME__) {
+if (__SCRIPT_NAME__ == $refer_script) {
     MediaError::msg('info', $refer_script.'< >'.__SCRIPT_NAME__, 0);
 }
-if ('' == $refer_script) {
-    $refer_script =  "index";
-}
-define('__FORM_POST__', $refer_script);
+if (null === $refer_script || $refer_script == '') {
+    MediaError::msg('info', "referer not set", 0);
+    echo HTMLDisplay::JavaRefresh('/index.php', 0);
 
+}
+
+define('__FORM_POST__', $refer_script);
 
 
 if (isset($_POST['divClass'])) {
@@ -39,4 +40,5 @@ if (isset($_POST['divClass'])) {
 $procesClass = 'CWP\\Process\\'.ucfirst(__FORM_POST__);
 $mediaProcess = new $procesClass($media);
 $mediaProcess->run($_REQUEST);
+
 $mediaProcess->reload();

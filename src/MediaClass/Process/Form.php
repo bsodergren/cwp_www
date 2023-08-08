@@ -19,10 +19,13 @@ class Form extends MediaProcess
     public function run($req)
     {
         $this->form_number = $req['form_number'];
-
-        $method = $req['submit'];
+        $method = str_replace(' ', '', $req['submit']);
         $this->updateForm($req);
-        $this->$method();
+        if (method_exists($this, $method)) {
+            $this->$method();
+        } else {
+            dd($method);
+        }
     }
 
     public function updateForm($req)
@@ -60,7 +63,7 @@ class Form extends MediaProcess
         $this->timeout = 0;
     }
 
-    public function Save()
+    public function SaveForm()
     {
         // if (true == array_key_exists('view', $_REQUEST)) {
         //     if ('save' == $_REQUEST['view']) {

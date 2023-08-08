@@ -81,7 +81,7 @@ class Bootstrap
     {
         return __HTTP_ROOT__.\DIRECTORY_SEPARATOR."files";
     }
-    
+
     private function skipProgramUpdates()
     {
         global $_SERVER;
@@ -105,6 +105,6 @@ class Bootstrap
 
     private function getURL()
     {
-        return $this->Config['server']['url_root'];
+        return ""; //$this->Config['server']['url_root'];
     }
 }

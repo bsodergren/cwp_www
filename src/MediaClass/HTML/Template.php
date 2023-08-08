@@ -7,7 +7,6 @@ namespace CWP\HTML;
 
 use CWP\Media\Media;
 use CWP\Media\MediaSettings;
-use CWP\Media\Update\AppUpdate;
 
 /**
  * CWP Media tool.
@@ -75,6 +74,7 @@ class Template
 
     private function loadTemplate($template)
     {
+        $html = '';
         $template = str_replace('.html', '', $template);
 
         $template_file = __TEMPLATE_DIR__.'/'.$template.'.html';
@@ -87,7 +87,8 @@ class Template
             $template_text = file_get_contents($template_file);
         }
 
-        return $template_text.\PHP_EOL;
+        //  $html = "\n<!-- end $template -->\n";
+        return $template_text.$html.\PHP_EOL;
     }
 
     private function defaults($text)
@@ -124,7 +125,6 @@ class Template
         $template_text = $this->loadTemplate($template);
         $html = $this->parse($template_text, $params);
 
-        // $html = "\n<!-- start $template -->\n" . $html . "\n";
         $this->add($html);
 
         return $html;
@@ -145,7 +145,7 @@ class Template
 
         $installed = __UPDATE_CURRENT_VER__;
         $latest = null;
-        if (Media::$AutoUpdate->getLatestVersion() != __UPDATE_CURRENT_VER__) {
+        if (__UPDATE_CURRENT_VER__ != Media::$AutoUpdate->getLatestVersion()) {
             $latest = Media::$AutoUpdate->getLatestVersion();
         }
 

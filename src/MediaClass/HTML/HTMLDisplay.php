@@ -14,6 +14,7 @@ use Sinergi\BrowserDetector\Browser;
 
 class HTMLDisplay
 {
+
     public static $url = false;
 
     public static $timeout = 0;
@@ -50,17 +51,19 @@ class HTMLDisplay
             $url = $url.$sep.'msg='.$msg;
         }
 
-        if ($timeout > 0) {
-            $timeout = $timeout * 1000;
-            $update_inv = $timeout / 100;
-            Template::echo('progress_bar', ['SPEED' => $update_inv]);
-        }
+        // if ($timeout > 0) {
+        //     $timeout = $timeout * 1000;
+        //     $update_inv = $timeout / 100;
+        //     Template::echo('progress_bar', ['SPEED' => $update_inv]);
+        // }
 
         echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
     }
 
     public static function pushhtml($template, $params = [])
     {
+        $params["MSG_CLASS"] = MSG_CLASS;
+        $params["HEADER_CLASS"] = HEADER_CLASS;
         $contents = Template::GetHTML($template, $params);
         self::push($contents);
     }

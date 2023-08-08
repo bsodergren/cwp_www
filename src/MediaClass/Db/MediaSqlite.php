@@ -5,6 +5,8 @@
 
 namespace CWP\Db;
 
+use CWP\Media\Media;
+
 /**
  * CWP Media tool.
  */
@@ -12,88 +14,194 @@ namespace CWP\Db;
 /**
  * CWP Media tool.
  */
-class MediaSqlite extends MediaDb
+class MediaSqlite extends MediaDb implements MediaDbAbstract
 {
-    public function checkTable($table)
+    public function __call($method, $args)
     {
-        return "SELECT name FROM sqlite_master WHERE type='table' AND name='".$table."'";
+        $method = strtolower($method);
+        switch ($method) {
+            case 'insert':
+            case 'update':
+            case 'drop':
+            case 'alter':
+            case 'create':
+                case 'delete':
+
+                $this->query($args[0]);
+                break;
+            default:
+                dd('Method '.$method.' not found');
+                break;
+        }
     }
 
-    public function checkColumn($table, $column)
+    public function query($query)
     {
-        return "SELECT 1 FROM pragma_table_info('".$table."') where name='".$column."'";
+        try {
+            Media::$connection->beginTransaction();
+            $result = Media::$connection->query($query);
+            Media::$connection->commit();
+
+            return $result;
+        } catch (\PDOException   $e) {
+            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
+        }
     }
 
-    public function renameColumn($table, $old, $new)
+    public function fetch($query)
     {
-        return 'ALTER TABLE '.$table." RENAME COLUMN '".$old."'  TO '".$new."';";
+        try {
+            return Media::$connection->fetch($query);
+        } catch (\PDOException   $e) {
+            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
+        }
     }
 
-    public function createColumn($table, $column, $type)
+    public function fetchOne($query)
     {
-        return 'ALTER TABLE '.$table.' ADD '.$column.' '.$type.';';
+        try {
+            return Media::$connection->fetchField($query);
+        } catch (\PDOException   $e) {
+            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
+        }
     }
 
-    public function getOrigSQL($table_name)
+    public function check_tableExists($table)
     {
-        return 'SELECT sql FROM "main".sqlite_master WHERE tbl_name = "'.$table_name.'" and type = "table"';
+        $query = "SELECT name FROM sqlite_master WHERE type='table' AND name='".$table."'";
+
+        return $this->fetchOne($query);
     }
 
-    public function createTempTable($tableSQL, $field, $type)
+    public function check_columnExists($table, $column)
     {
-        $tableSQL = preg_replace('/(.*")([a-zA-Z_]+)("\s+\()(.*)/', '$1'.$this->tableTmpName.'$3', $tableSQL);
-        $tableSQL = preg_replace('/(\s+"'.$field.'"\s+)([A-Za-z]+)(.*),/m', '$1 '.$type.' $3,', $tableSQL);
+        $query = "SELECT 1 FROM pragma_table_info('".$table."') where name='".$column."'";
+
+        return $this->fetchOne($query);
+    }
+
+    public function rename_Column($table, $old, $new)
+    {
+        $query = 'ALTER TABLE '.$table." RENAME COLUMN '".$old."'  TO '".$new."';";
+
+        return $this->alter($query);
+    }
+
+    public function create_Column($table, $column, $type)
+    {
+        $query = 'ALTER TABLE '.$table.' ADD '.$column.' '.$type.';';
+
+        return $this->alter($query);
+    }
+
+    public function reset_table($table_name)
+    {
+        $this->delete('DELETE FROM '.$table_name.'; UPDATE sqlite_sequence SET seq = 0 WHERE name="'.$table_name.'"');
+    }
+
+    public function change_column($table_name, $name, $type)
+    {
+        $tableSQL = $this->getOrigSQL($table_name);
+        $fields = $this->getColumns($tableSQL);
+
+        $this->createTempTable($tableSQL, $name, $type);
+        $this->copyTable($table_name, $fields);
+        $this->dropTable($table_name);
+        $this->renameTmpTable($table_name);
+    }
+
+    private function cleanTableSQL($tableSQL)
+    {
+        $sep = "\n\t";
+
+        $tableSQL = trim(str_replace("\n", '\x', $tableSQL));
+        $tableSQL = preg_replace("/\s{2,}/", ' ', $tableSQL);
+        $tableSQL = trim(str_replace("\t", ' ', $tableSQL));
+        $tableSQL = trim(str_replace("\x", "\n", $tableSQL));
+        $sql_array = explode("\n", $tableSQL);
+
+        $start_query = $sql_array[0];
+        $sql_array = array_reverse($sql_array);
+        array_pop($sql_array);
+        $sql_array = array_reverse($sql_array);
+        $fieldsList = '';
+        $endQuery = [];
+
+        foreach ($sql_array as $row) {
+            if (str_contains($row, ')')) {
+                $endQuery[] = $row;
+                continue;
+            }
+            $fieldsList .= trim($row);
+        }
+
+        $fieldsList = str_replace(',', ",\n", $fieldsList);
+
+        $fieldsListAr = explode("\n", $fieldsList);
+        array_walk($fieldsListAr, function (&$value, $key) {
+            $value = trim($value);
+            if (!str_contains($value, '"')) {
+                $value = preg_replace("/([a-zA-Z_]+)\s+(.*)/", '"$1" $2', $value);
+            }
+        });
+
+        $end_str = implode($sep, $endQuery);
+        $fieldsList = implode($sep, $fieldsListAr);
+        $tableSQL = $start_query.$sep.$fieldsList.$sep.$end_str;
 
         return $tableSQL;
     }
 
-    public function copyTable($OrigTable, $fields = [])
+    private function getOrigSQL($table_name)
     {
-        $field_list = implode('","', $fields);
-        $sql = 'INSERT INTO "main"."'.$this->tableTmpName.'"'.\PHP_EOL.' (';
-        $sql .= '"'.$field_list.'"';
-        $sql .= ') '.\PHP_EOL.'SELECT '.\PHP_EOL;
-        $sql .= '"'.$field_list.'"'.\PHP_EOL;
-        $sql .= 'FROM "main"."'.$OrigTable.'"';
+        $tableSQL = $this->fetchOne('SELECT sql FROM "main".sqlite_master WHERE tbl_name = "'.$table_name.'" and type = "table"');
 
-        return $sql;
+        return $this->cleanTableSQL($tableSQL);
     }
 
-    public function getColumns($tableSQL)
+    private function createTempTable($tableSQL, $field, $type)
+    {
+        $tableSQL = preg_replace('/(.*")([a-zA-Z_]+)("\s+\()(.*)/', '$1'.$this->tableTmpName.'$3', $tableSQL);
+        $tableSQL = preg_replace('/(\s+"'.$field.'"\s+)([A-Za-z]+)(.*),/m', '$1'.$type.'$3,', $tableSQL);
+
+        if (null !== $this->check_tableExists($this->tableTmpName)) {
+            $this->dropTable($this->tableTmpName);
+        }
+        $this->create($tableSQL);
+    }
+
+    private function copyTable($OrigTable, $fields = [])
+    {
+        $sep = ' ';
+        array_walk($fields, function (&$value, $key) {
+            $value = trim($value);
+            $value = '"'.$value.'"';
+        });
+        $field_list = implode(',', $fields);
+
+        $sql[] = 'INSERT INTO "main"."'.$this->tableTmpName.'"';
+        $sql[] = '('.$field_list.')';
+        $sql[] = 'SELECT';
+        $sql[] = $field_list;
+        $sql[] = 'FROM "main"."'.$OrigTable.'"';
+        $query = implode($sep, $sql);
+        $this->insert($query);
+    }
+
+    private function getColumns($tableSQL)
     {
         preg_match_all('/"([a-zA-Z_]+)"\s+([A-Za-z]+).*,/m', $tableSQL, $output_array);
 
         return $output_array[1];
     }
 
-    public function dropTable($table_name)
+    private function dropTable($table_name)
     {
-        return 'DROP TABLE "main"."'.$table_name.'"';
+        $this->drop('DROP TABLE "main"."'.$table_name.'"');
     }
 
-    public function renameTmpTable($table_name)
+    private function renameTmpTable($table_name)
     {
-        return 'ALTER TABLE "main"."'.$this->tableTmpName.'" RENAME TO "'.$table_name.'"';
-    }
-
-    public function updateStructure($table_name,$name,$type)
-    {
-        $sql = $this->getOrigSQL($table_name);
-        $tableSQL = $this->conn->queryOne($sql);
-        $fields = $this->getColumns($tableSQL);
-
-        $sqlArr[] = $this->createTempTable($tableSQL, $name, $type);
-        $sqlArr[] = $this->copyTable($table_name, $fields);
-        $sqlArr[] = $this->dropTable($table_name);
-        $sqlArr[] = $this->renameTmpTable($table_name);
-
-        foreach ($sqlArr as $sql) {
-            $this->conn->queryOne($sql);
-            //    echo '<pre>'.$sql.'</pre></br>';
-        }
-    }
-    public function resetTable($table_name)
-    {
-        return 'DELETE FROM '.$table_name.'; UPDATE sqlite_sequence SET seq = 0 WHERE name="'.$table_name.'"';
+        $this->alter('ALTER TABLE "main"."'.$this->tableTmpName.'" RENAME TO "'.$table_name.'"');
     }
 }

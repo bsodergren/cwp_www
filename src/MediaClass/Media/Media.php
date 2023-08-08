@@ -513,11 +513,15 @@ class Media
 
     public static function insertJobNumber($pdf_filename, $job_number)
     {
+        $base_dir = dirname($pdf_filename, 2);
         $pdf_filename = basename($pdf_filename);
+
 
         self::$explorer->table('media_job')->insert([
             'job_number' => $job_number,
             'pdf_file' => $pdf_filename,
+            'base_dir' => $base_dir,
+
         ]);
 
         return self::$explorer->getInsertId();
@@ -537,7 +541,8 @@ class Media
         foreach ($job_table as $u) {
             $job_id = $u->job_id;
         }
-
         return $job_id;
     }
+
+
 }

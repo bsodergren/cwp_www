@@ -1,4 +1,18 @@
-<label class="input-group-text" for="inputGroupSelect%%SELECT_NAME%%">%%SELECT_DESC%%</label>
-<select name="%%SELECT_NAME%%" class="form-select" id="inputGroupSelect%%SELECT_NAME%%">
-    %%SELECT_OPTIONS%%
-</select>
+<div class="input-group mt-1">
+    <label class="input-group-text" for="pdfFilename">Job Name</label>
+    <select name="mail_file" class="form-select" id="pdfFilename">
+        <option value="">-- select one -- </option>
+        %%SELECT_OPTIONS%%
+    </select>
+</div>
+<div class="input-group mt-1">
+    <label class="input-group-text" for="jobNumbers">Job Number</label>
+    <select name="mail_job_number" class="form-select" id="jobNumbers">
+
+        <option value="">-- select one -- </option>
+    </select>
+
+    %%JS_SELECT%%
+
+
+</div>

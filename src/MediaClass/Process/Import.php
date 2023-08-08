@@ -49,12 +49,24 @@ class Import extends MediaProcess
             $job_number = $_POST['job_number'];
         }
 
-        if (isset($_POST['mail_job_number'])) {
-            $job_number = $_POST['mail_job_number'];
+        if (!isset($job_number)) {
+            if (isset($_POST['mail_job_number'])) {
+                $job_number = $_POST['mail_job_number'];
+            }
+
+            if (isset($_POST['text_job_number'])) {
+                if ('' != $_POST['text_job_number']) {
+                    $job_number = $_POST['text_job_number'];
+                }
+            }
         }
 
-        if (isset($_POST['mail_file'])) {
+        if (isset($_POST['mail_file'])
+        && '' == $_FILES['the_file']['name']) {
             list($fullFile, $imap_id) = explode('|', $_POST['mail_file']);
+
+            $location = new MediaFileSystem();
+            $fullFile = $location->getDirectory('upload', true).\DIRECTORY_SEPARATOR.$fullFile;
 
             $fileName = basename($fullFile);
             $fileSize = filesize($fullFile);
@@ -94,12 +106,13 @@ class Import extends MediaProcess
 
         if (false == $this->error) {
             $this->url = 'index.php';
-            $this->timeout = 1;
+            $this->timeout = 2;
 
-            $media_closing = '/'.basename($fileName, '.pdf');
+            // $media_closing = '/'.basename($fileName, '.pdf');
             $locations = new MediaFileSystem($fileName, $job_number);
             $pdf_directory = $locations->getDirectory('pdf', true);
-            $pdf_file = $pdf_directory.'/'.basename($fileName);
+
+            $pdf_file = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
 
             //        if (file_exists($pdf_file)) {
             //            FileSystem::delete($pdf_file);
@@ -117,27 +130,25 @@ class Import extends MediaProcess
                     $process = new MediaExec();
                     $process->cleanPdf($pdf_file);
 
-                    //  sleep(5);
 
-                    HTMLDisplay::put('The file '.basename($fileName).' has been uploaded');
-                    HTMLDisplay::put('Job number '.$job_number.'');
-
-                    if (isset($imap)) {
-                        imap_setflag_full($imap, $imap_id, '\\Seen');
-                    }
                 } else {
                     HTMLDisplay::put('An error occurred. Please contact the administrator.');
                 } // end if
             } else {
                 HTMLDisplay::put('File already was uploaded');
             } // end if
-
+                if (isset($imap)) {
+                    imap_setflag_full($imap, $imap_id, '\\Seen');
+                }
             $MediaImport = new PDFImport();
             $MediaImport->Import($pdf_file, $job_number);
 
-            if ($MediaImport->status < 1) {
-                HTMLDisplay::put("<span class='p-3 text-danger'>File failed to process</span>");
-                HTMLDisplay::put("<span class='p-3 text-danger'>Will have to run Refresh Import </span>");
+            if ($MediaImport->status == 0) {
+                HTMLDisplay::put("<span class='p-3 text-danger'>something went wrong</span>");
+                HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');
+            }
+            if ($MediaImport->status == 2) {
+                HTMLDisplay::put("<span class='p-3 text-danger'>File failed</span>");
                 HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');
             }
         }

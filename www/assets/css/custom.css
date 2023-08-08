@@ -1,4 +1,4 @@
-#RedHead,
+/* #RedHead,
 .RedHead {
     border: 0px solid #1C6EA4;
     background-color: #1ABB17;
@@ -8,28 +8,28 @@
     font-size: 22px;
     font-weight: bold;
 /*    background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-*/
-    border-bottom: 2px solid #444444;
-}
 
+    border-bottom: 2px solid #444444;
+} */
+/*
 
 table.blueTable {
     border: 0px solid #1C6EA4;
-/*    background-color: #EEEEEE;*/
+/*    background-color: #EEEEEE;
     width: 100%;
     border-bottom: 2px solid #444444;
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
-}
+} */
 
 
-
+/*
 table.blueTable td,
 table.blueTable th {
     border: 0px solid #AAAAAA;
-    /*	padding: 3px 2px;*/
-}
+    /*	padding: 3px 2px;
+} */
 
 table.blueTable tbody td {
     font-size: 18px;
@@ -43,10 +43,10 @@ table.blueTable thead {
    /* background: #1C6EA4;
 */
 /*    background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-*/
-    border-bottom: 2px solid #444444;
-}
+    border-bottom: 2px solid #444444;*/
 
+}
+/*
 table.blueTable thead th {
     font-size: 22px;
     font-weight: bold;
@@ -61,4 +61,35 @@ div.container-letter  {
 }
   div.container-letter>div.alt:nth-of-type(odd) {
     background: #aad1c0;
+  } */
+
+
+  .btn-outline-success {
+    box-shadow:inset 0px 1px 3px 0px #91b8b3;
+    text-shadow:inset 0px -1px 0px #2b665e;
+  }
+  .btn-outline-success:checked,.btn-outline-success:active {
+    box-shadow:inset 0px 1px 3px 0px #91b8b3;
+    text-shadow:inset 0px -1px 0px #2b665e;
+  }
+  .buttonClass {
+    font-size:15px;
+    font-family:Arial;
+    width:140px;
+    height:50px;
+    border-width:1px;
+    color:#fff;
+    border-color:#566963;
+    font-weight:bold;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    box-shadow:inset 0px 1px 3px 0px #91b8b3;
+    text-shadow:inset 0px -1px 0px #2b665e;
+    background:linear-gradient(#768d87, #6c7c7c);
+  }
+
+  .buttonClass:hover {
+    background: linear-gradient(#6c7c7c, #768d87);
   }

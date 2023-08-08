@@ -15,48 +15,21 @@ class MediaDb
     public $conn;
     public $tableTmpName = 'sqlb_temp_table_1';
 
-    public function __construct($parent, $conn)
+    public function __construct($class)
     {
-        $this->conn = $parent;
+        $this->conn = $class;
     }
 
-    public function check_tableExists($table = '')
-    {
-        $query = $this->checkTable($table);
+public function __call($method,$args)
+{
+   // $method = str_replace('_', '', $method);
+    if(method_exists($this,$method)){
+        $this->$method(...$args);
 
-        return $this->conn->queryOne($query);
     }
+    dd("Nope");
 
-    public function check_columnExists($table, $column)
-    {
-        $query = $this->checkColumn($table, $column);
+}
 
-        return $this->conn->queryOne($query);
-    }
 
-    public function rename_column($table, $old, $new)
-    {
-        $query = $this->renameColumn($table, $old, $new);
-
-        return $this->conn->queryOne($query);
-    }
-
-    public function create_column($table, $column, $type)
-    {
-        $query = $this->createColumn($table, $column, $type);
-
-        return $this->conn->queryOne($query);
-    }
-
-    public function change_column($table_name, $name, $type)
-    {
-        $this->updateStructure($table_name, $name, $type);
-    }
-
-    public function reset_table($table)
-    {
-        $query = $this->resetTable($table);
-
-        return $this->conn->queryOne($query);
-    }
 }
