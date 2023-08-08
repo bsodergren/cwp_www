@@ -20,7 +20,7 @@ require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'composer.php';
 // set_include_path(get_include_path().PATH_SEPARATOR.__COMPOSER_DIR__);
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
-Debugger::enable();
+//Debugger::enable();
 
 // Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
 // Debugger::$logSeverity = \E_WARNING | \E_NOTICE;
