@@ -70,7 +70,8 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
 } else {
     echo 'Current Version is up to date<br>';
 }
-
+echo 'All up to date';
+echo HTMLDisplay::JavaRefresh('/index.php', 3);
 include_once __LAYOUT_FOOTER__;
 
 //echo 'Log:<br>';
