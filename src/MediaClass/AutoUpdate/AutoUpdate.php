@@ -448,7 +448,7 @@ class AutoUpdate {
         // Reset previous updates
         $this->latestVersion = '0.0.0';
         $this->updates       = [];
-
+$this->cache->clear();
         $versions = $this->cache->get('update-versions');
 
         // Create absolute url to update file
@@ -456,7 +456,6 @@ class AutoUpdate {
         if (!empty($this->branch)) {
             $updateFile .= '.' . $this->branch;
         }
-
         // Check if cache is empty
         if ($versions === null || $versions === false) {
             $this->log->debug(sprintf('Get new updates from %s', $updateFile));
@@ -480,8 +479,10 @@ class AutoUpdate {
                 }
             }
 
+
             // Parse update file
             $updateFileExtension = substr(strrchr($this->updateFile, '.'), 1);
+
 
             switch ($updateFileExtension) {
                 case 'ini':
@@ -599,7 +600,6 @@ class AutoUpdate {
         $update = curl_exec($curl);
 
 
-
         $success = true;
         if (curl_error($curl)) {
             $success = false;
@@ -610,7 +610,6 @@ class AutoUpdate {
             ));
         }
         curl_close($curl);
-
         return ($success === true) ? $update : false;
     }
 

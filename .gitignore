@@ -26,3 +26,4 @@ delete.txt
 vendor/**
 vendor/*
 vendor/composer/installed.json
+current.txt
