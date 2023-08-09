@@ -144,10 +144,12 @@ class Template
         global $mediaUpdates;
 
         $installed = __UPDATE_CURRENT_VER__;
-        $latest = null;
-        if (__UPDATE_CURRENT_VER__ != Media::$AutoUpdate->getLatestVersion()) {
-            $latest = Media::$AutoUpdate->getLatestVersion();
-        }
+        // $latest = null;
+        //  if (__UPDATE_CURRENT_VER__ != Media::$AutoUpdate->getLatestVersion()) {
+         Media::$AutoUpdate->getLatestVersion();
+         $latest = Media::$AutoUpdate->checkUpdate();
+        //  }
+
 
         return [$installed, $latest];
     }

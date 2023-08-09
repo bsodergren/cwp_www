@@ -456,7 +456,6 @@ class AutoUpdate {
         if (!empty($this->branch)) {
             $updateFile .= '.' . $this->branch;
         }
-
         // Check if cache is empty
         if ($versions === null || $versions === false) {
             $this->log->debug(sprintf('Get new updates from %s', $updateFile));
@@ -479,6 +478,7 @@ class AutoUpdate {
                     throw new DownloadException($updateFile);
                 }
             }
+
 
             // Parse update file
             $updateFileExtension = substr(strrchr($this->updateFile, '.'), 1);
@@ -537,6 +537,7 @@ class AutoUpdate {
                 ];
             }
         }
+        dd($versions);
 
         // Sort versions to install
         usort($this->updates, static function ($a, $b) {
@@ -610,7 +611,6 @@ class AutoUpdate {
             ));
         }
         curl_close($curl);
-
         return ($success === true) ? $update : false;
     }
 

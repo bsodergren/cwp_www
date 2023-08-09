@@ -9,7 +9,6 @@ namespace CWP\HTML;
  * CWP Media tool
  */
 
-use CWP\Media\Update\AppUpdate;
 use Sinergi\BrowserDetector\Browser;
 
 class Navbar extends Template
@@ -52,6 +51,14 @@ class Navbar extends Template
 
             $nav_link_html .= $templateObj->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text]);
         }
+        $dropdown_link_html .= $templateObj->template(
+            'base/navbar/'.$nav_list_dir.'/navbar_item',
+            ['DROPDOWN_TEXT' => $latest]
+        );
+        $dropdown_link_html .= $templateObj->template(
+            'base/navbar/'.$nav_list_dir.'/navbar_item',
+            ['DROPDOWN_TEXT' => $installed]
+        );
         if ('57.0.2987.98' == $browser->getVersion()) {
             define('__FOOTER_NAV_HTML__', $dropdown_link_html);
         }
@@ -61,8 +68,6 @@ class Navbar extends Template
             'DROPDOWN_LINKS' => $dropdown_link_html,
             'DROPDOWN_TEXT' => $dropddown_menu_text,
         ]);
-
-
 
         return $templateObj->template('base/navbar/navbar', $params);
     }

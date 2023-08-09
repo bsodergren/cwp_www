@@ -48,7 +48,7 @@ class MediaXLSX extends Media
             // $data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
             $slipSheet = new SlipSheetXLSX($this->media);
-           // $larrySheet = new LarrySheetsXLSX($this->media);
+            $larrySheet = new LarrySheetsXLSX($this->media);
             $s_idx = 0;
 
             $this->media->get_form_configuration($dataArray['details']);
@@ -101,7 +101,7 @@ class MediaXLSX extends Media
             }
 
             $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
-          //  $larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
+            $larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
 
             $sheetIndex = $this->spreadsheet->getIndex(
                 $this->spreadsheet->getSheetByName('Worksheet')
