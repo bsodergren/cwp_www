@@ -101,7 +101,7 @@ class MediaXLSX extends Media
             }
 
             $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
-            $larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
+            //$larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
 
             $sheetIndex = $this->spreadsheet->getIndex(
                 $this->spreadsheet->getSheetByName('Worksheet')

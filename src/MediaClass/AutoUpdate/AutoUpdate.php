@@ -448,7 +448,7 @@ class AutoUpdate {
         // Reset previous updates
         $this->latestVersion = '0.0.0';
         $this->updates       = [];
-
+$this->cache->clear();
         $versions = $this->cache->get('update-versions');
 
         // Create absolute url to update file
@@ -482,6 +482,7 @@ class AutoUpdate {
 
             // Parse update file
             $updateFileExtension = substr(strrchr($this->updateFile, '.'), 1);
+
 
             switch ($updateFileExtension) {
                 case 'ini':
@@ -537,7 +538,6 @@ class AutoUpdate {
                 ];
             }
         }
-        dd($versions);
 
         // Sort versions to install
         usort($this->updates, static function ($a, $b) {
@@ -598,7 +598,6 @@ class AutoUpdate {
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         $update = curl_exec($curl);
-
 
 
         $success = true;
