@@ -99,11 +99,11 @@ function push($contents)
 
 function runComposer()
 {
-    $composer_exe = 'php '.__PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'bin'.\DIRECTORY_SEPARATOR.'composer.phar';
+    $composer_exe = __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'php'.\DIRECTORY_SEPARATOR.'php '.__PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'bin'.\DIRECTORY_SEPARATOR.'composer.phar';
     $composer_cmd = ' update';
     $cmd = $composer_exe.$composer_cmd;
     $cmd = prepareWindowsCommandLine($cmd, []);
-    push('running composer'.$composer_cmd);
+    push('running composer '.$composer_cmd);
 
     chdir(__PUBLIC_ROOT__);
     $descriptorspec = [
