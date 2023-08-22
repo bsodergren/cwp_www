@@ -118,6 +118,7 @@ if (true == is_dir($media->xlsx_directory)) {
         $params['SHEET_LIST_HTML'] = '';
         foreach ($sheet_names as $sheet_index => $sheet_name) {
             if ('Quick Sheet' == $sheet_name) {
+                $quicksheet_index = $sheet_index;
                 $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
                     'PAGE_FORM_URL' => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&file_id='.$file_id.'&sheet_id='.$sheet_index.'&quicksheet=1',
                     'PAGE_FORM_NUMBER' => 'quicksheet',
@@ -128,6 +129,7 @@ if (true == is_dir($media->xlsx_directory)) {
                 ]);
                 continue;
             }
+
 
             $class = 'enabled';
             if ($sheet_id == $sheet_index) {
@@ -189,7 +191,6 @@ if (true == is_dir($media->xlsx_directory)) {
         $writer = IOFactory::createWriter($spreadsheet, 'Html');
 
         $writer->setSheetIndex($sheet_id);
-
         $custom_css = $writer->generateStyles(true);
 
         $rep_array = [
@@ -201,12 +202,22 @@ if (true == is_dir($media->xlsx_directory)) {
             ' height:30pt' => ' height:25pt',
             ' height:35pt' => ' height:30pt',
             'tr { height:15pt }' => 'tr { height:0pt }',
-            'page-break-before: always;' => 'display: none; page-break-before: always; page-break-after: auto;',
-            'page-break-after: always;' => 'page-break-after: auto;',
-            '@media screen {' => '@media screen {'."\n".'.header { display: none; }',
-            '@media print {' => '@media print {'."\n".'.header {  }
-        ',
+            // 'page-break-before: always;' => 'display: none; page-break-before: always; page-break-after: auto;',
+            // 'page-break-after: always;' => 'page-break-after: auto;',
+            // '@media screen {' => '@media screen {'."\n".'.header { display: none; }',
+            // '@media print {' => '@media print {'."\n".'.header {  }
+        // ',
         ];
+
+if ($quicksheet_index != $sheet_id) {
+    $rep_array['page-break-before: always;'] = 'display: none; page-break-before: always; page-break-after: auto;';
+    $rep_array['page-break-after: always;'] = 'page-break-after: auto;';
+    $rep_array['@media screen {'] = '@media screen {'."\n".'.header { display: none; }';
+    $rep_array['@media print {'] = '@media print {'."\n".'.header {  }
+    ';
+}
+
+
 
         foreach ($rep_array as $find => $replace) {
             $custom_css = str_replace($find, $replace, $custom_css);

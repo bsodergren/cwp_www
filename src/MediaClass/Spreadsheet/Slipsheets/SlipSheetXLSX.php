@@ -33,11 +33,44 @@ class SlipSheetXLSX extends Media
         $sql = 'SELECT * FROM form_data_count WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by form_id ASC';
 
         $result                   = Media::$connection->fetchAll($sql);
-        foreach ($result as $id => $row) {
+        foreach ($result as $id => $row)
+        {
+            /*
+            +"id": 1320
+            +"form_id": 3107
+            +"job_id": 21
+            +"packaging": "small cartons"
+            +"full_boxes": 2
+            +"layers_last_box": 2500
+            +"lifts_last_layer": 900
+            +"lift_size": 1250
+            +"lifts_per_layer": 2
+            +"form_number": "2"
+            +"count": 5900
+            +"layers_per_skid": null
+            +"market": "FAIRFIELD/WESTCHESTER"
+            +"former": "Front"
+            +"form_letter": "A"
+            +"pub": "THE WEEK"
+            +"bind": "SHS"
+            +"max_skid": "17500"
+            */
+        //     $data = [
+        //         'pub'=>$row->pub,
+        //         'former'=>$row->former,
+        //     'full_boxes'=>$row->full_boxes,
+        //     'packaging'=>$row->packaging,
+        //     'lifts_last_layer'=>$row->lifts_last_layer,
+        //     'layers_last_box'=>$row->layers_last_box,
+
+        // ];
+
             $slipSheetArray[] = $row;
+
         }
 
         $sheets                   = array_chunk($slipSheetArray, 6);
+
 
         $worksheet_title          = 'Quick Sheet';
 
@@ -50,8 +83,10 @@ class SlipSheetXLSX extends Media
 
         $this->styles->sheetCommon();
         $this->styles->setColWidths($this->styles->Columns);
+
         $SlipSheetSize            = count($this->styles->rowHeight);
         $rowOffset                = $SlipSheetSize * 3;
+
         $row                      = 1;
         $lineIdx                  = 1;
         foreach ($sheets as $pageNo => $page) {
@@ -63,6 +98,7 @@ class SlipSheetXLSX extends Media
 
             foreach ($page as $k => $v) {
                 $this->SlipData = $v;
+             //   dd($this->SlipData);
                 for ($lineIdx = 1; $lineIdx <= $SlipSheetSize; ++$lineIdx) {
                     switch ($lineIdx) {
                         case 1:
@@ -85,10 +121,10 @@ class SlipSheetXLSX extends Media
                         case 7:
                             break;
                         case 8:
-                            $this->setFormLocation($col_A, $row);
+                           // $this->setFormLocation($col_A, $row);
 
                             //$this->setFormerInfo($col_B, $row);
-                           $this->setPcsInfo($col_B, $row);
+                        //   $this->setPcsInfo($col_B, $row);
                     }
                     ++$row;
                 }
@@ -105,6 +141,7 @@ class SlipSheetXLSX extends Media
                     $col_B = 'C';
                 }
             }
+
         }
     }
 

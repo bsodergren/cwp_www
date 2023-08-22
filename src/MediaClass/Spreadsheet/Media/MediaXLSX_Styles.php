@@ -93,21 +93,49 @@ class MediaXLSX_Styles extends styles
         $this->setBorder(['cell' => Styles::row('A', 10),  'border' => 'right']);
         $this->setBorder(['cell' => Styles::row('B', 10),  'border' => 'bottom']);
         $this->setNumberCode(Styles::row('B', 16), '#,##0');
-
         $this->setNumberCode(Styles::row('B', 21), '#,##0');
+        $this->setNumberCode(Styles::row('D', 17), '#,##0');
+
         $this->setShrink(Styles::row('B', 7));
         $this->setPageBreak(Styles::row('A', 27));
+        // $indent_rows = [13, 14, 15, 16, 17, 18, 19, 20, 21];
+        // foreach ($indent_rows as $row) {
+        //     $cell = Styles::row('C', $row);
+        //     $this->setAlign($cell,'H','R');
+        //     $cell = Styles::row('D', $row);
+        //     $this->setAlign($cell,'H','R');
+        // }
+
+        $r = 1;
+        foreach($this->rowHeight as $n)
+        {
+            $col       = Styles::row('E', $r);
+            $this->setCellText($col, $r);
+            $this->setSize(['cell' => $col, 'size' => '8']);
+            $r++;
+        }
+
+
+
+
     }
-    public function addSheetData($value, $text, $row)
+    public function addSheetData($value, $text, $row,$col='A')
     {
-        $textCell = Styles::row('A', $row);
+        if($col == 'A'){
+            $col2 = 'B';
+        }
+        if($col == 'C'){
+            $col2 = 'D';
+        }
+
+        $textCell = Styles::row($col, $row);
         $this->setCellText($textCell, $text);
         $this->setBorder($textCell);
 
-        $valCell  = Styles::row('B', $row);
+        $valCell  = Styles::row($col2, $row);
         $this->setAlign($valCell, 'H');
         $this->setCellText($valCell, $value);
-        $this->setBorder($valCell);
+       // $this->setBorder($valCell);
     }
 
     public function setRowHeights()
@@ -213,7 +241,13 @@ class MediaXLSX_Styles extends styles
             $this->addFormText($form);
 
             foreach ($sheet_labels as $key => $val) {
-                $this->addSheetData($val[0], $val[1], $key);
+            if (str_contains($key, '_')) {
+                [$row,$col] = explode('_', $key);
+            } else {
+                $row = $key;
+                $col = 'A';
+            }
+                $this->addSheetData($val[0], $val[1], $row,$col);
             }
         }
     }

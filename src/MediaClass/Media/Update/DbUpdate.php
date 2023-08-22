@@ -33,8 +33,13 @@ class DbUpdate extends MediaUpdate
         $delete_data = [];
         $change_column = [];
         $test = false;
+        $inactive = false;
 
         include_once $file;
+
+if (true === $inactive) {
+    exit;
+}
 
         $updates = [
             'resetTable' => $reset_table,
