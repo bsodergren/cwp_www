@@ -106,14 +106,14 @@ class MediaXLSX_Styles extends styles
         //     $this->setAlign($cell,'H','R');
         // }
 
-        $r = 1;
-        foreach($this->rowHeight as $n)
-        {
-            $col       = Styles::row('E', $r);
-            $this->setCellText($col, $r);
-            $this->setSize(['cell' => $col, 'size' => '8']);
-            $r++;
-        }
+        // $r = 1;
+        // foreach($this->rowHeight as $n)
+        // {
+        //     $col       = Styles::row('E', $r);
+        //     $this->setCellText($col, $r);
+        //     $this->setSize(['cell' => $col, 'size' => '8']);
+        //     $r++;
+        // }
 
 
 
