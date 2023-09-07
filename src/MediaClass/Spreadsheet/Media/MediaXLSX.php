@@ -5,21 +5,17 @@
 
 namespace CWP\Spreadsheet\Media;
 
-use CWP\Utils;
-use Tracy\Debugger;
-use CWP\Media\Media;
 use CWP\HTML\HTMLDisplay;
+use CWP\Media\Media;
 use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Calculator;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
 use CWP\Spreadsheet\LarrySheets\LarrySheetsXLSX;
 use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
 use CWP\Spreadsheet\XLSXWriter;
 use CWP\Utils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class MediaXLSX extends Media
 {
@@ -51,12 +47,11 @@ class MediaXLSX extends Media
         $calc = new Calculator($this->media);
 
         foreach ($this->xlsx_array as $form_number => $dataArray) {
-
             $data = $dataArray['forms'];
             // $data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
             $slipSheet = new SlipSheetXLSX($this->media);
-         //   $larrySheet = new LarrySheetsXLSX($this->media);
+            //   $larrySheet = new LarrySheetsXLSX($this->media);
             $s_idx = 0;
 
             $this->media->get_form_configuration($dataArray['details']);
@@ -169,7 +164,6 @@ class MediaXLSX extends Media
         $sheetObj->addSheet($myWorkSheet, $sheet_index);
         $sheet = $sheetObj->getSheet($sheet_index);
 
-
         $sheet->getHeaderFooter()->setOddHeader('&36&B '.__LANG_MEDIA_LOAD_FLAG);
         $sheet->getHeaderFooter()->setOddFooter('&L&B'.__LANG_MEDIA_LOAD_FLAG.'&RPage &P of &N');
 
@@ -190,7 +184,7 @@ class MediaXLSX extends Media
 
         $packageMethod = str_replace(' ', '_', $this->box['packaging']);
         $this->sheet_labels = [];
-        $form= $this->$packageMethod($form);
+        $form = $this->$packageMethod($form);
         $this->getLabels();
 
         $styles->createPage($form, $this->sheet_labels, __PAGES_PER_XLSX__);
