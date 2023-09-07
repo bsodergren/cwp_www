@@ -28,3 +28,4 @@ vendor/*
 vendor/composer/installed.json
 current.txt
 database/cwp_sqlite.bk
+database/cwp_sqlite.db-journal
