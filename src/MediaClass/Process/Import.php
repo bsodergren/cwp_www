@@ -127,10 +127,10 @@ class Import extends MediaProcess
 
                 if ($didUpload) {
                     $pdf_file = FileSystem::normalizePath($pdf_file);
+                 
                     $process = new MediaExec();
+                    
                     $process->cleanPdf($pdf_file);
-
-
                 } else {
                     HTMLDisplay::put('An error occurred. Please contact the administrator.');
                 } // end if
@@ -142,11 +142,11 @@ class Import extends MediaProcess
                 }
             $MediaImport = new PDFImport();
             $MediaImport->Import($pdf_file, $job_number);
-
             if ($MediaImport->status == 0) {
                 HTMLDisplay::put("<span class='p-3 text-danger'>something went wrong</span>");
                 HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');
             }
+
             if ($MediaImport->status == 2) {
                 HTMLDisplay::put("<span class='p-3 text-danger'>File failed</span>");
                 HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');

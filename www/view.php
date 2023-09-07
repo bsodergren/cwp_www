@@ -17,7 +17,7 @@ if ('email' == $_REQUEST['action']) {
     define('TITLE', 'Email excel zip file');
     require_once __LAYOUT_HEADER__;
     $template->render('view/mail_form', [
-        '__FORM_URL__' => '/process.php',
+        '__FORM_URL__' => __URL_PATH__.'/process.php',
         'FORM_NUMBER' => $_REQUEST['form_number'],
         'JOB_ID' => $_REQUEST['job_id']]);
     require_once __LAYOUT_FOOTER__;

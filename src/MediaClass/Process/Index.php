@@ -53,8 +53,8 @@ class Index extends MediaProcess
 
 
         $excel = new MediaXLSX($this->media);
-        $excel->writeWorkbooks();
 
+        $excel->writeWorkbooks();
         Template::echo('stream/end_page', []);
 
         $this->msg = 'XLSX Files Created';

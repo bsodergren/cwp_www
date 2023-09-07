@@ -27,3 +27,4 @@ vendor/**
 vendor/*
 vendor/composer/installed.json
 current.txt
+database/cwp_sqlite.bk

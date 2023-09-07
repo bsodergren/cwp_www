@@ -97,15 +97,41 @@ function push($contents)
     @ob_flush();
 }
 
+
+function composerCmd()
+{
+
+    global $_SERVER;
+	
+	$php_exe = __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'php'.\DIRECTORY_SEPARATOR.'php.exe ';
+	$composer_exe = __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'bin'.\DIRECTORY_SEPARATOR.'composer.phar ';
+	
+	if(!file_exists($php_exe)){
+		$php_exe = '';
+	}
+	
+	if(!file_exists($composer_exe)){
+		$composer_exe = 'composer ';
+	}
+       
+    $cmd = $php_exe . $composer_exe . ' update';
+    
+	 if (str_contains(strtolower($_SERVER['OS']), 'windows')) {
+			$cmd = prepareWindowsCommandLine($cmd, []);
+        }
+
+
+    push('running composer '.$cmd);
+
+return $cmd;
+}
+
 function runComposer()
 {
-    $composer_exe = __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'php'.\DIRECTORY_SEPARATOR.'php '.__PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'bin'.\DIRECTORY_SEPARATOR.'composer.phar';
-    $composer_cmd = ' update';
-    $cmd = $composer_exe.$composer_cmd;
-    $cmd = prepareWindowsCommandLine($cmd, []);
-    push('running composer '.$composer_cmd);
 
+$cmd = composerCmd();
     chdir(__PUBLIC_ROOT__);
+	
     $descriptorspec = [
         ['pipe', 'r'],
         ['pipe', 'w'],

@@ -25,9 +25,9 @@ $nav_bar_links    = [
         'Local Settings' => '/settings/local.php',
     ],
 ];
-if (__NO_UPDATES__ == false) {
+//if (__NO_UPDATES__ == false) {
     $nav_bar_links['Settings']['Update']         = '/updater/update.php';
-}
+//}
 
 define('__NAVBAR_LINKS__', $nav_bar_links);
 

@@ -18,6 +18,7 @@ class PDFImport extends MediaImport
 
     private function insertDrop($pdf_file, $update_form)
     {
+    
         $this->processPdf($pdf_file, $this->job_id, $update_form);
 
         $pdf = $this->form;
@@ -31,6 +32,7 @@ class PDFImport extends MediaImport
         $noPagess = count($pdf);
         HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing '.$noPagess.' forms']);
 
+
         $keyidx = array_key_first($pdf);
         Media::$explorer->table('media_job')->where('job_id',
             $this->job_id)->update([
@@ -42,7 +44,6 @@ class PDFImport extends MediaImport
             $this->add_form_details($form_info['details']);
             $this->add_form_data($form_number, $form_info);
         }
-
         $this->status = 1;
 
         return 1;
@@ -51,13 +52,13 @@ class PDFImport extends MediaImport
     public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
     {
         $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
+     
         if (null !== $this->job_id) {
             return 0;
         }
 
 
         $this->job_id = Media::insertJobNumber($pdf_uploaded_file, $job_number);
-
         $this->insertDrop($pdf_uploaded_file, $update_form);
     }
 

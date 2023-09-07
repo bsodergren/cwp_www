@@ -48,6 +48,7 @@ class Bootstrap
         $this->define($const, $value);
     }
 
+    
     public function getDatabase()
     {
         if ('mysql' == $this->Config['db']['type']) {
@@ -74,6 +75,10 @@ class Bootstrap
     }
     private function getUsrBin()
     {
+        if(!key_exists('OS',$_SERVER)) {
+            return '/usr/bin';
+        }
+        
         return __PROJECT_ROOT__.DIRECTORY_SEPARATOR."bin";
     }
 
@@ -96,6 +101,10 @@ class Bootstrap
     private function getDriveLetter()
     {
         global $_SERVER;
+
+        if(!key_exists('OS',$_SERVER)) {
+            return '';
+        }
         if (str_contains(strtolower($_SERVER['OS']), 'windows')) {
             return substr(__DIR__, 0, 2);
         }
@@ -105,6 +114,6 @@ class Bootstrap
 
     private function getURL()
     {
-        return ""; //$this->Config['server']['url_root'];
+        return $this->Config['server']['url_root'];
     }
 }

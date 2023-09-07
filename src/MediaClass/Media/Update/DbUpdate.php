@@ -47,8 +47,11 @@ class DbUpdate extends MediaUpdate
             'deleteData' => $delete_data,
         ];
 
+
         foreach ($updates as $classmethod => $data_array) {
+
             $this->$classmethod($data_array);
+         
         }
 
         $filename = basename($file);
@@ -270,6 +273,7 @@ class DbUpdate extends MediaUpdate
                 MediaSetup::message('Updating to  '.basename($file, '.php').' update');
                 $filename = __SQL_UPDATES_DIR__.\DIRECTORY_SEPARATOR.$file;
                 $this->versionUpdate($filename);
+
             }
             MediaSetup::footer(0);
             exit;

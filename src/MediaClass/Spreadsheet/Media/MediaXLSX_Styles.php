@@ -4,8 +4,11 @@
  */
 
 namespace CWP\Spreadsheet\Media;
+
+use Tracy\Debugger;
 use CWP\Media\Media;
-use CWP\Spreadsheet\styles;
+use CWP\HTML\HTMLDisplay;
+use CWP\Spreadsheet\Styles;
 
 /**
  * CWP Media tool.
@@ -14,7 +17,7 @@ use CWP\Spreadsheet\styles;
 /**
  * CWP Media tool.
  */
-class MediaXLSX_Styles extends styles
+class MediaXLSX_Styles extends Styles
 {
     public $obj;
     public $rowHeight = [
@@ -48,8 +51,7 @@ class MediaXLSX_Styles extends styles
 
     public function sheetCommon()
     {
-
-        $merg_rows   = [6, 7, 8, 9, 10];
+        $merg_rows = [6, 7, 8, 9, 10];
 
         foreach ($merg_rows as $row) {
             $cell = Styles::row('B', $row).':'.Styles::row('C', $row);
@@ -62,16 +64,16 @@ class MediaXLSX_Styles extends styles
             $this->setIndent($cell);
         }
 
-        $sql         = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
+        $sql = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
 
-        $result      = Media::$connection->fetchAll($sql);
+        $result = Media::$connection->fetchAll($sql);
         foreach ($result as $k => $val) {
-            $col       = Styles::row($val['ecol'], $val['erow']);
-            $text      = $val['text'];
-            $bold      = $val['bold'];
+            $col = Styles::row($val['ecol'], $val['erow']);
+            $text = $val['text'];
+            $bold = $val['bold'];
             $font_size = $val['font_size'];
-            $h_align   = $val['h_align'];
-            $v_align   = $val['v_align'];
+            $h_align = $val['h_align'];
+            $v_align = $val['v_align'];
 
             if (isset($text)) {
                 $this->setCellText($col, $text);
@@ -98,13 +100,14 @@ class MediaXLSX_Styles extends styles
         $this->setShrink(Styles::row('B', 7));
         $this->setPageBreak(Styles::row('A', 27));
     }
+
     public function addSheetData($value, $text, $row)
     {
         $textCell = Styles::row('A', $row);
         $this->setCellText($textCell, $text);
         $this->setBorder($textCell);
 
-        $valCell  = Styles::row('B', $row);
+        $valCell = Styles::row('B', $row);
         $this->setAlign($valCell, 'H');
         $this->setCellText($valCell, $value);
         $this->setBorder($valCell);
@@ -155,23 +158,23 @@ class MediaXLSX_Styles extends styles
 
         if (0 != $form['del_size']) {
             $deliveryInst[$trim_cell] = ['text' => 'Delivered Size', 'value' => $form['del_size']];
-            $trim_cell                = 25;
+            $trim_cell = 25;
         }
 
         if (0 != $form['foot_trim']) {
             $deliveryInst[$trim_cell] = ['text' => 'Foot Trim', 'value' => $form['foot_trim']];
-            $trim_cell                = 24;
+            $trim_cell = 24;
         }
         if (0 != $form['head_trim']) {
             $deliveryInst[$trim_cell] = ['text' => 'Head Trim', 'value' => $form['head_trim']];
         }
 
-        if (is_array($deliveryInst)) {
+        if (isset($deliveryInst) && is_array($deliveryInst)) {
             $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 26),  'border' => 'outline']);
 
             foreach ($deliveryInst as $row => $data) {
-                $cellA          = Styles::row('A', $row);
-                $cellB          = Styles::row('B', $row);
+                $cellA = Styles::row('A', $row);
+                $cellB = Styles::row('B', $row);
 
                 $this->setHeight(['cell' => Styles::row(null, $row), 'height' => 18]);
 
@@ -189,9 +192,9 @@ class MediaXLSX_Styles extends styles
         }
 
         if (true == $form['bindery_trim']) {
-            $row            = 24;
+            $row = 24;
 
-            $cell           = Styles::row('A', $row).':'.Styles::row('D', $row);
+            $cell = Styles::row('A', $row).':'.Styles::row('D', $row);
             $this->setMerge($cell);
 
             // $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 24),  'border' => 'outline']);

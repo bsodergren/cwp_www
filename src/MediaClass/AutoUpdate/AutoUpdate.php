@@ -208,7 +208,7 @@ class AutoUpdate {
         // Init cache
         $this->cache = new NotCache();
 
-        ini_set('max_execution_time', $maxExecutionTime);
+       // ini_set('max_execution_time', $maxExecutionTime);
     }
 
     /**

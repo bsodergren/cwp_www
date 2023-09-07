@@ -56,7 +56,6 @@ class MediaExec
         $this->getCommand();
 
         $callback = Callback::check([$this, 'callback']);
-
         $this->ExecProcess->start();
         $this->ExecProcess->wait($callback);
     }
@@ -80,7 +79,6 @@ class MediaExec
         $this->option('--pages', '.');
         $this->option('1-z', '--');
         $this->option('--replace-input');
-        //  dd($process->getCommand());
         $this->run();
     }
 
