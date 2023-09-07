@@ -30,7 +30,7 @@ if (function_exists('apache_setenv')) {
 }
 
 define('__UPDATE_CURRENT_VER__', trim(file_get_contents(__UPDATE_CURRENT_FILE__)));
-Media::$AutoUpdate = new AutoUpdate(__UPDATE_TMP_DIR__, __PUBLIC_ROOT__, 60);
+Media::$AutoUpdate = new AutoUpdate(__UPDATE_TMP_DIR__, __PUBLIC_ROOT__, 600);
 Media::$AutoUpdate->setCurrentVersion(__UPDATE_CURRENT_VER__);
 Media::$AutoUpdate->setUpdateUrl(__UPDATE_URL__);
 
