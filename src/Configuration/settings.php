@@ -1,8 +1,9 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
 
+use CWP\Media\Bootstrap;
 use CWP\Media\Media;
 use CWP\Media\MediaSettings;
 
@@ -43,10 +44,14 @@ foreach ($setting['lang'] as $key => $array) {
         define($key, $array['value']);
     }
 }
-
-foreach ($setting['local'] as $key => $array)
-{
+if (key_exists('media_files', Bootstrap::$CONFIG['server'])) {
+    if (true == Bootstrap::$CONFIG['server']['media_files']) {
+        define('__MEDIA_FILES_DIR__', Bootstrap::$CONFIG['server']['media_files']);
+    }
+}
+foreach ($setting['local'] as $key => $array) {
     MediaSettings::configEmail($key);
+
     if (!defined($key)) {
         define($key, $array['value']);
     }
