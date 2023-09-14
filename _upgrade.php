@@ -70,4 +70,4 @@ if (!function_exists('runComposer')) {
 }
 // tell php to automatically flush after every output
 // including lines of output produced by shell commands
-runComposer();
+//runComposer();
