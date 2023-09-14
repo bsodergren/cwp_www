@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
 
 use CWP\HTML\HTMLDisplay;
@@ -63,7 +63,7 @@ if ($cnt > 0) {
 
         $replacement['TEXT_CLOSE'] = $text_close;
 
-        $replacement['TEXT_CLOSE_URL'] =  $pdf_url;
+        $replacement['TEXT_CLOSE_URL'] = $pdf_url;
         $replacement['NUM_OF_FORMS'] = $num_of_forms;
 
         $rowdisabled = ' disabled';
