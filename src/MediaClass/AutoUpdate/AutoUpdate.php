@@ -373,7 +373,15 @@ class AutoUpdate {
 
         return $this;
     }
-
+/**
+     * Get the name of the latest version.
+     *
+     * @return string
+     */
+    public function getInstallDir(): string
+    {
+        return $this->installDir;
+    }
     /**
      * Get the name of the latest version.
      *

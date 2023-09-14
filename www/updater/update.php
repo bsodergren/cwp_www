@@ -5,6 +5,7 @@ use CWP\Media\Media;
 use CWP\HTML\HTMLDisplay;
 use Nette\Utils\FileSystem;
 use CWP\AutoUpdate\AutoUpdate;
+use Symfony\Component\Process\Process;
 
 /**
  * CWP Media tool.
@@ -32,8 +33,23 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     // Optional Callback function - on each version update
     function eachUpdateFinishCallback($updatedVersion)
     {
+        $installDir = Media::$AutoUpdate->getInstallDir();
 
-        echo '<h3>CALLBACK for version '.$updatedVersion.'</h3>';
+        $updatescript = $installDir."update.sh";
+        $contents = "#!/bin/bash";
+        $contents = $contents . "\n";
+        $contents = $contents . 'for i in *; do new=${i//\\/\/}; newd=$(dirname "$new"); mkdir -p "$newd"; mv "$i" "$new"; done';
+
+        file_put_contents( $updatescript ,$contents);
+        chmod( $updatescript ,0775);
+        $ExecProcess = new Process([$updatescript]);
+        $ExecProcess->run(function ($type, $buffer): void {
+            if (Process::ERR === $type) {
+                echo 'ERR > '.$buffer;
+            } else {
+                echo 'OUT > '.$buffer;
+            }
+        });
     }
 
 
@@ -54,8 +70,10 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     // This call will only simulate an update.
     // Set the first argument (simulate) to "false" to install the update
     // i.e. Media::$AutoUpdate->update(false);
-    $result = Media::$AutoUpdate->update(__SIMULATE_UPDATES__);
-
+    $result = Media::$AutoUpdate->update(true,false);
+    echo '<pre>';
+    var_dump(Media::$AutoUpdate->getSimulationResults());
+    echo '</pre>';
     if (true === $result) {
         echo 'Update simulation successful<br>';
     } else {
@@ -71,7 +89,7 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     echo 'Current Version is up to date<br>';
 }
 echo 'All up to date';
-echo HTMLDisplay::JavaRefresh('/index.php', 3);
+//echo HTMLDisplay::JavaRefresh('/index.php', 3);
 include_once __LAYOUT_FOOTER__;
 
 //echo 'Log:<br>';
@@ -99,7 +117,7 @@ if (false !== AppUpdate::$UPDATES_PENDING) {
 
     }
 } else {
-    echo 'All up to date';
+    //echo 'All up to date';
     echo HTMLDisplay::JavaRefresh('/index.php', 3);
 }
 

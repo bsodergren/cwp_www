@@ -31,3 +31,4 @@ database/cwp_sqlite.bk
 database/cwp_sqlite.db-journal
 database_/cwp_sqlite.bk
 database_/cwp_sqlite.db
+temp/
