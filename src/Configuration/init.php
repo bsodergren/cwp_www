@@ -25,23 +25,7 @@ if ($dd->isBot()) {
   $botInfo = $dd->getBot();
 } else {
   $aa = [
-    $dd->isSmartphone(),
-$dd->isFeaturePhone(),
-$dd->isTablet(),
-$dd->isPhablet(),
-$dd->isConsole(),
-$dd->isPortableMediaPlayer(),
-$dd->isCarBrowser(),
-$dd->isTV(),
-$dd->isSmartDisplay(),
-$dd->isSmartSpeaker(),
-$dd->isCamera(),
-$dd->isWearable(),
-$dd->isPeripheral(),
-    
-    $dd->getClient() // holds information about browser, feed reader, media player, ...
-  , $dd->getOs()
-  ,$dd->getDeviceName()
+  $dd->getDeviceName()
   ,$dd->getBrandName()
   ,$dd->getModel()];
 }
