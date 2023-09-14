@@ -52,15 +52,15 @@ class MediaDevice
             if ('Windows' == $os->getName()) {
                 return 'DESKTOP';
             } elseif ('iOS' == $os->getName()) {
-                return  'MOBILE_EDGE';
+                return  'MOBILE';
             }
         } elseif ('Chrome' == $browser->getName()) {
             if ('Windows' == $os->getName()) {
-                return 'APP';
+                return 'APPLICATION';
             }
         } elseif ('Safari' == $browser->getName()) {
             if ('iOS' == $os->getName()) {
-                return 'MOBILE_SAFARI';
+                return 'MOBILE';
             }
         }
 

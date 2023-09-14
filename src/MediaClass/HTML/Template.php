@@ -77,12 +77,17 @@ class Template
         $html = '';
         $template = str_replace('.html', '', $template);
 
-        $template_file = __TEMPLATE_DIR__.'/'.$template.'.html';
+        $template_file = __TEMPLATE_DIR__.'/'.strtolower(__DEVICE__).'/'.$template.'.html';
 
         if (!file_exists($template_file)) {
-            // use default template directory
-            $template_text = '<h1>NO TEMPLATE FOUND<br>';
-            $template_text .= 'FOR <pre>'.$template.'</pre></h1> <br>';
+            $template_file = __TEMPLATE_DIR__.'/application/'.$template.'.html';
+            if (!file_exists($template_file)) {
+                // use default template directory
+                $template_text = '<h1>NO TEMPLATE FOUND<br>';
+                $template_text .= 'FOR <pre>'.$template.'</pre></h1> <br>';
+            } else {
+                $template_text = file_get_contents($template_file);
+            }
         } else {
             $template_text = file_get_contents($template_file);
         }
@@ -146,11 +151,11 @@ class Template
         $installed = __UPDATE_CURRENT_VER__;
         // $latest = null;
         //  if (__UPDATE_CURRENT_VER__ != Media::$AutoUpdate->getLatestVersion()) {
-            Media::$AutoUpdate->checkUpdate();
-            $latest = Media::$AutoUpdate->getLatestVersion();
-            if($latest == '0.0.0'){
-                $latest = null;
-            }
+        Media::$AutoUpdate->checkUpdate();
+        $latest = Media::$AutoUpdate->getLatestVersion();
+        if ('0.0.0' == $latest) {
+            $latest = null;
+        }
 
         // $latest =
         //  }

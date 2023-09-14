@@ -1,3 +1,8 @@
 <?php
-use CWP\HTML\Header;
-Header::Display();
+
+$ClassName = ucfirst(strtolower(__DEVICE__));
+$className = 'CWP\\HTML\\'.$ClassName .'\\Header';
+if (class_exists($className))
+{
+    $className::Display();
+}

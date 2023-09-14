@@ -6,7 +6,6 @@
 namespace CWP\HTML;
 
 use CWP\Media\MediaSettings;
-use Sinergi\BrowserDetector\Browser;
 
 /*
  * CWP Media tool
@@ -115,7 +114,6 @@ class HTMLDisplay
 
     public static function draw_excelLink($excel_file)
     {
-        $browser = new Browser();
 
         $relativePath = substr($excel_file, strlen(__HTTP_ROOT__) + 1);
         $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
@@ -123,7 +121,7 @@ class HTMLDisplay
         if (false == self::is_404($url)) {
             return false;
         }
-        if ('57.0.2987.98' == $browser->getVersion()) {
+        if ("APP" == __DEVICE__) {
             return false;
 
         }

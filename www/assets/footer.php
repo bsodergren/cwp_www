@@ -1,4 +1,8 @@
 <?php
-use CWP\HTML\Footer;
+$ClassName = ucfirst(strtolower(__DEVICE__));
+$className = 'CWP\\HTML\\'.$ClassName .'\\Footer';
+if (class_exists($className))
+{
+    $className::Display();
+}
 
-Footer::display();

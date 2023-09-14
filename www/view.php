@@ -6,12 +6,12 @@
 require_once '.config.inc.php';
 
 use CWP\HTML\Header;
-use CWP\HTML\HTMLDisplay;
 use CWP\HTML\Template;
+use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaError;
 use CWP\Spreadsheet\XLSXViewer;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Finder\Finder;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if ('email' == $_REQUEST['action']) {
     define('TITLE', 'Email excel zip file');

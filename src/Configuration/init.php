@@ -11,12 +11,8 @@ use CWP\Utils\MediaDevice;
 use CWP\AutoUpdate\AutoUpdate;
 
 
-// define("__DEVICE__",);
-// define("__DEVICE__","desktop");
-
-
 (new MediaDevice())->run();
-dd(MediaDevice::$DEVICE);
+define("__DEVICE__",MediaDevice::$DEVICE);
 
 $__test_nav_links = __PUBLIC_ROOT__.'/test_navlinks.php';
 
@@ -51,4 +47,4 @@ Media::$AutoUpdate->setLogger($logger);
 $cache = new \CWP\Cache\File(__UPDATE_CACHE_DIR__);
 Media::$AutoUpdate->setCache($cache, 3600);
 
-new HTMLDisplay();
+// new HTMLDisplay();
