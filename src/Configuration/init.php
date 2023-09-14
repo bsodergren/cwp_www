@@ -8,29 +8,21 @@ use CWP\HTML\HTMLDisplay;
 use CWP\HTML\Template;
 use CWP\Media\Media;
 use Monolog\Logger;
-use DeviceDetector\ClientHints;
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\AbstractDeviceParser;
 
-AbstractDeviceParser::setVersionTruncation(AbstractDeviceParser::VERSION_TRUNCATION_NONE);
+use Sinergi\BrowserDetector\Browser;
+use Sinergi\BrowserDetector\Os;
+use Sinergi\BrowserDetector\Device;
 
-$userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-$clientHints = ClientHints::factory($_SERVER); // client hints are optional
+$device = new Device();
+$os = new Os();
+$browser = new Browser();
 
-$dd = new DeviceDetector($userAgent, $clientHints);
-$dd->parse();
 
-if ($dd->isBot()) {
-  // handle bots,spiders,crawlers,...
-  $botInfo = $dd->getBot();
-} else {
-  $aa = [
-  $dd->getDeviceName()
-  ,$dd->getBrandName()
-  ,$dd->getModel()];
-}
+dd($browser->getName(),$os->getName(),$device->getName());
+// define("__DEVICE__",);
+// define("__DEVICE__","desktop");
 
-dd($aa);
+
 
 $__test_nav_links = __PUBLIC_ROOT__.'/test_navlinks.php';
 

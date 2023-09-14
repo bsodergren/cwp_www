@@ -9,7 +9,6 @@ namespace CWP\HTML;
  * CWP Media tool
  */
 
-use Sinergi\BrowserDetector\Browser;
 
 class Navbar extends Template
 {
@@ -24,8 +23,7 @@ class Navbar extends Template
         $dropdown_divider = null;
         [$installed,$latest] = self::VersionText();
 
-        $browser = new Browser();
-        if ('57.0.2987.98' != $browser->getVersion()) {
+        if (__DEVICE__ == "desktop") {
             $nav_list_dir = 'dropdown';
             $dropdown_divider = '  <li><hr class="dropdown-divider"></li>';
         }
@@ -49,7 +47,7 @@ class Navbar extends Template
             $nav_link_html .= $templateObj->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text]);
         }
 
-        if ('57.0.2987.98' == $browser->getVersion()) {
+        if (__DEVICE__ == "smartphone") {
             define('__FOOTER_NAV_HTML__', $dropdown_link_html);
         }
         $dropdown_link_html .= $dropdown_divider;
@@ -58,7 +56,7 @@ class Navbar extends Template
             $dropdown_link_html .= $templateObj->template(
                 'base/navbar/'.$nav_list_dir.'/navbar_item',
                 ['DROPDOWN_TEXT' => 'New! '.$latest]);
-                if ('57.0.2987.98' != $browser->getVersion()) {
+                if (__DEVICE__ == "desktop") {
             $latest_version_html = $templateObj->template('base/footer/version_latest', ['VERSION' => $latest]);
                 }
         }
