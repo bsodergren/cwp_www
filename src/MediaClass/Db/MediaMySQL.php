@@ -14,12 +14,50 @@ use CWP\Media\Media;
 /**
  * CWP Media tool.
  */
-class MediaMySQL extends MediaDb
+class MediaMySQL extends MediaDb implements MediaDbAbstract
 {
     private $fieldTranslate = [
         ['TEXT' => 'VARCHAR(255)'],
     ];
 
+    public function query($query)
+    {
+        try {
+            $result = Media::$connection->query($query);
+
+            return $result;
+        } catch (\PDOException   $e) {
+            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
+        }
+    }
+
+    public function fetch($query)
+    {
+        try {
+            return Media::$connection->fetch($query);
+        } catch (\PDOException   $e) {
+            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
+        }
+    }
+
+    public function fetchOne($query)
+    {
+        try {
+            return Media::$connection->fetchField($query);
+        } catch (\PDOException   $e) {
+            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
+        }
+    }
+
+    public function queryExists($query)
+    {
+        try {
+            $result = Media::$connection->query($query);
+            return $result->getRowCount();
+        } catch (\PDOException   $e) {
+            echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
+        }
+    }
     private function sanitizeFields($type)
     {
         foreach ($this->fieldTranslate as $x => $fields) {
@@ -31,41 +69,46 @@ class MediaMySQL extends MediaDb
         return $type;
     }
 
-    public function checkColumn($table, $column)
+    public function check_columnExists($table, $column)
     {
-        return 'SHOW COLUMNS FROM '.$table." LIKE '%".$column."%'";
+        $query = 'SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "'.$table.'" AND COLUMN_NAME = "'.$column.'";';
+       return $this->queryExists($query);
     }
 
-    public function checkTable($table)
+    public function check_tableExists($table)
     {
-        return "SELECT count(*) FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
+        $query = "SELECT count(*) FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
+        return $this->queryExists($query);
     }
 
-    public function renameColumn($table, $old, $new)
+    public function rename_column($table, $old, $new)
     {
         $query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table."' AND COLUMN_NAME = '".$old."';";
-        $result = Media::$connection->queryOne($query);
+        $result = $this->fetchOne($query);
         $query = 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
-
-        return $query;
+        $result = $this->query($query);
+        return $result;
     }
 
-    public function updateStructure($table_name, $name, $type)
+    public function change_column($table_name, $name, $type)
     {
         $type = $this->sanitizeFields($type);
         $query = 'ALTER TABLE `'.$table_name.'` CHANGE `'.$name.'` `'.$name.'` '.$type.';';
-        $result = Media::$connection->queryOne($query);
+        $result = $this->query($query);
     }
 
-    public function createColumn($table, $column, $type)
+    public function create_column($table, $column, $type)
     {
         $type = $this->sanitizeFields($type);
+        $query = 'ALTER TABLE '.$table.' ADD `'.$column.'` '.$type.';';
+        
+        $result = $this->query($query);
 
-        return 'ALTER TABLE '.$table.' ADD '.$column.' '.$type.';';
     }
 
-    public function resetTable($table_name)
+    public function reset_Table($table_name)
     {
-        return 'TRUNCATE `'.$table_name.'`; ';
+        $query = 'TRUNCATE `'.$table_name.'`; ';
+        $result = $this->query($query);
     }
 }

@@ -517,14 +517,15 @@ class Media
         $pdf_filename = basename($pdf_filename);
 
 
-        self::$explorer->table('media_job')->insert([
+        $query = 'INSERT INTO `media_job` ?';
+
+        self::$connection->query($query, [
             'job_number' => $job_number,
             'pdf_file' => $pdf_filename,
             'base_dir' => $base_dir,
-
         ]);
 
-        return self::$explorer->getInsertId();
+        return self::$connection->getInsertId();
     }
 
     public static function getJobNumber($pdf_filename, $job_number = null)

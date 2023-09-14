@@ -56,8 +56,6 @@ class PDFImport extends MediaImport
         if (null !== $this->job_id) {
             return 0;
         }
-
-
         $this->job_id = Media::insertJobNumber($pdf_uploaded_file, $job_number);
         $this->insertDrop($pdf_uploaded_file, $update_form);
     }

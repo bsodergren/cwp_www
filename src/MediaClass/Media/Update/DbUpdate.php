@@ -25,10 +25,10 @@ class DbUpdate extends MediaUpdate
     public function versionUpdate($file)
     {
         $new_table = [];
-        $update_data = [];
-        $new_data = [];
         $rename_column = [];
         $new_column = [];
+        $new_data = [];
+        $update_data = [];
         $reset_table = [];
         $delete_data = [];
         $change_column = [];
@@ -37,9 +37,9 @@ class DbUpdate extends MediaUpdate
 
         include_once $file;
 
-if (true === $inactive) {
-    exit;
-}
+        if (true === $inactive) {
+            exit;
+        }
 
         $updates = [
             'resetTable' => $reset_table,
@@ -52,9 +52,7 @@ if (true === $inactive) {
             'deleteData' => $delete_data,
         ];
 
-
         foreach ($updates as $classmethod => $data_array) {
-
             $this->$classmethod($data_array);
          
         }
@@ -126,12 +124,16 @@ if (true === $inactive) {
 
     public function renameColumns($rename_column)
     {
+        
         if (is_array($rename_column)) {
             foreach ($rename_column as $table_name => $column) {
+               
                 $this->set($table_name);
                 foreach ($column as $old => $new) {
+
                     if ($this->dbClassObj->check_columnExists($table_name, $old)) {
                         if (!$this->dbClassObj->check_columnExists($table_name, $new)) {
+
                             $this->dbClassObj->rename_column($table_name, $old, $new);
                             $this->refresh = true;
                         }
@@ -195,12 +197,12 @@ if (true === $inactive) {
                         $query = 'UPDATE '.$table.' ';
                         $query = $query.'SET ';
                         foreach ($update_array as $field => $value) {
-                            $field_array[] = $field." = '".$value."'";
+                            $field_array[] = '`'.$field."` = '".$value."'";
                         }
 
                         $query .= implode(',', $field_array);
                         unset($field_array);
-                        $query .= ' WHERE '.$where." = '".$key."'";
+                        $query .= ' WHERE `'.$where."` = '".$key."'";
                         $result = Media::$connection->query($query);
                         $this->refresh = true;
                     }
@@ -234,9 +236,9 @@ if (true === $inactive) {
                             if ($field != $where) {
                                 $where = $field;
                             }
-                            $queryArr[] = $where." = '".$value."' ";
+                            $queryArr[] = '`'.$where."` = '".$value."' ";
                         } else {
-                            $query .= $pre_query.$where." = '".$value."'; ";
+                            $query .= $pre_query.'`'.$where."` = '".$value."'; ";
                         }
                     }
                     unset($where);
