@@ -373,7 +373,8 @@ class AutoUpdate {
 
         return $this;
     }
-/**
+
+    /**
      * Get the name of the latest version.
      *
      * @return string

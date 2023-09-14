@@ -1,10 +1,8 @@
 <?php
 
-use Monolog\Logger;
-use CWP\Media\Media;
-use CWP\HTML\HTMLDisplay;
-use Nette\Utils\FileSystem;
 use CWP\AutoUpdate\AutoUpdate;
+use CWP\HTML\HTMLDisplay;
+use CWP\Media\Media;
 use Symfony\Component\Process\Process;
 
 /**
@@ -35,13 +33,13 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     {
         $installDir = Media::$AutoUpdate->getInstallDir();
 
-        $updatescript = $installDir."update.sh";
-        $contents = "#!/bin/bash";
-        $contents = $contents . "\n";
-        $contents = $contents . 'for i in *; do new=${i//\\/\/}; newd=$(dirname "$new"); mkdir -p "$newd"; mv "$i" "$new"; done';
+        $updatescript = $installDir.'update.sh';
+        $contents = '#!/bin/bash';
+        $contents = $contents."\n";
+        $contents = $contents.'for i in *; do new=${i//\\/\/}; newd=$(dirname "$new"); mkdir -p "$newd"; mv "$i" "$new"; done';
 
-        file_put_contents( $updatescript ,$contents);
-        chmod( $updatescript ,0775);
+        file_put_contents($updatescript, $contents);
+        chmod($updatescript, 0775);
         $ExecProcess = new Process([$updatescript]);
         $ExecProcess->run(function ($type, $buffer): void {
             if (Process::ERR === $type) {
@@ -51,7 +49,6 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
             }
         });
     }
-
 
     Media::$AutoUpdate->onEachUpdateFinish('eachUpdateFinishCallback');
 
@@ -70,7 +67,7 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     // This call will only simulate an update.
     // Set the first argument (simulate) to "false" to install the update
     // i.e. Media::$AutoUpdate->update(false);
-    $result = Media::$AutoUpdate->update(true,false);
+    $result = Media::$AutoUpdate->update(true, false);
     echo '<pre>';
     var_dump(Media::$AutoUpdate->getSimulationResults());
     echo '</pre>';
@@ -89,15 +86,13 @@ if (Media::$AutoUpdate->newVersionAvailable()) {
     echo 'Current Version is up to date<br>';
 }
 echo 'All up to date';
-//echo HTMLDisplay::JavaRefresh('/index.php', 3);
+// echo HTMLDisplay::JavaRefresh('/index.php', 3);
 include_once __LAYOUT_FOOTER__;
 
-//echo 'Log:<br>';
-//echo nl2br(file_get_contents(__UPDATE_LOG_FILE__));
+// echo 'Log:<br>';
+// echo nl2br(file_get_contents(__UPDATE_LOG_FILE__));
 
 exit;
-
-
 
 if (false !== AppUpdate::$UPDATES_PENDING) {
     if (key_exists('update', $_POST)) {
@@ -117,7 +112,7 @@ if (false !== AppUpdate::$UPDATES_PENDING) {
 
     }
 } else {
-    //echo 'All up to date';
+    // echo 'All up to date';
     echo HTMLDisplay::JavaRefresh('/index.php', 3);
 }
 
