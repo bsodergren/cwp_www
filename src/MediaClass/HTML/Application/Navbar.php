@@ -1,11 +1,11 @@
 <?php
-
+/**
+ * CWP Media tool
+ */
 
 namespace CWP\HTML\Application;
 
 use CWP\HTML\Template;
-
-
 
 class Navbar extends Template
 {
@@ -20,7 +20,6 @@ class Navbar extends Template
         $dropdown_divider = null;
         [$installed,$latest] = self::VersionText();
 
-   
         $nav_links_array = array_merge(__DEV_LINKS__, __NAVBAR_LINKS__);
 
         foreach ($nav_links_array as $text => $url) {
@@ -40,16 +39,15 @@ class Navbar extends Template
             $nav_link_html .= $templateObj->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text]);
         }
 
-            define('__FOOTER_NAV_HTML__', $dropdown_link_html);
+        define('__FOOTER_NAV_HTML__', $dropdown_link_html);
+
         $dropdown_link_html .= $dropdown_divider;
         $latest_version_html = '';
         if (null != $latest) {
             $dropdown_link_html .= $templateObj->template(
                 'base/navbar/'.$nav_list_dir.'/navbar_item',
                 ['DROPDOWN_TEXT' => 'New! '.$latest]);
-                if (__DEVICE__ == "desktop") {
             $latest_version_html = $templateObj->template('base/footer/version_latest', ['VERSION' => $latest]);
-                }
         }
 
         $dropdown_link_html .= $templateObj->template(
