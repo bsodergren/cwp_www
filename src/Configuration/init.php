@@ -3,26 +3,20 @@
  * CWP Media tool
  */
 
-use CWP\AutoUpdate\AutoUpdate;
-use CWP\HTML\HTMLDisplay;
-use CWP\HTML\Template;
-use CWP\Media\Media;
 use Monolog\Logger;
-
-use Sinergi\BrowserDetector\Browser;
-use Sinergi\BrowserDetector\Os;
-use Sinergi\BrowserDetector\Device;
-
-$device = new Device();
-$os = new Os();
-$browser = new Browser();
+use CWP\Media\Media;
+use CWP\HTML\Template;
+use CWP\HTML\HTMLDisplay;
+use CWP\Utils\MediaDevice;
+use CWP\AutoUpdate\AutoUpdate;
 
 
-dd($browser->getName(),$os->getName(),$device->getName());
 // define("__DEVICE__",);
 // define("__DEVICE__","desktop");
 
 
+(new MediaDevice())->run();
+dd(MediaDevice::$DEVICE);
 
 $__test_nav_links = __PUBLIC_ROOT__.'/test_navlinks.php';
 
