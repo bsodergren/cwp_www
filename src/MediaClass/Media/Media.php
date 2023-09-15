@@ -25,6 +25,8 @@ class Media
 
     public static $CurrentVersion;
 
+    public static $MediaAppUpdater;
+
     public $exp;
 
     public $conn;

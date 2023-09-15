@@ -23,7 +23,10 @@ $explorer = new Explorer($connection, $structure, $conventions, $storage);
 
 Media::$connection = $connection;
 Media::$explorer = $explorer;
-Media::$VersionUpdate = (new MediaAppUpdater)->isUpdate();
-Media::$CurrentVersion = (new MediaAppUpdater)->current;
+
+$appUpdate = new MediaAppUpdater();
+Media::$VersionUpdate = $appUpdate->isUpdate();
+Media::$CurrentVersion = $appUpdate->current;
+Media::$MediaAppUpdater = $appUpdate;
 
 ( new DbUpdate() )->checkDbUpdates();
