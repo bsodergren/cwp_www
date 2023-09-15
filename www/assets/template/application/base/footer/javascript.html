@@ -1,6 +1,12 @@
  <!-- <script src="%%__URL_LAYOUT__%%/js/jquery-3.4.1.min.js"></script> -->
 
 <script type="text/javascript">
+$(function() {
+    setInterval(function(){
+        $('.auto_refresh').load('test.php');
+    },3000);
+});
+
   document.querySelectorAll("#job_number").forEach(function(node) {
     node.ondblclick = function() {
       var val = this.innerHTML;

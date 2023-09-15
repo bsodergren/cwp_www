@@ -17,15 +17,7 @@ use Spatie\FlysystemDropbox\DropboxAdapter;
  * CWP Media tool.
  */
 require_once '.config.inc.php';
-define('TITLE', 'Form Editor');
-
-include_once __LAYOUT_HEADER__;
-
-
-$update = new MediaAppUpdater();
-
-echo $update->isUpdate();
-
+echo  Media::$VersionUpdate;
 
 
 // $adapter = new LocalFilesystemAdapter(
