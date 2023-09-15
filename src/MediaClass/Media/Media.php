@@ -17,7 +17,6 @@ use CWP\Utils\Utils;
  */
 class Media
 {
-    public static $AutoUpdate;
     public static $explorer;
     public static $connection;
 
@@ -27,9 +26,6 @@ class Media
 
     public static $MediaAppUpdater;
 
-    public $exp;
-
-    public $conn;
 
     private $mediaLoc;
 
