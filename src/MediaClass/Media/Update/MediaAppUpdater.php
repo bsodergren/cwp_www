@@ -71,7 +71,7 @@ class MediaAppUpdater
     {
         $ExecProcess = new Process(['composer','-d',__PUBLIC_ROOT__,'update']);
         $callback = Callback::check([$this, 'callback']);
-        $ExecProcess->start();
-        $ExecProcess->wait($callback);
+
+        $ExecProcess->run($callback,['HOME'=>$_ENV['HOME']]);
     }
 }
