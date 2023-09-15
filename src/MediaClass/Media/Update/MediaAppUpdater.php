@@ -55,11 +55,9 @@ class MediaAppUpdater
 
     public function callback($type, $buffer): void
     {
-        if (Process::ERR === $type) {
-             HTMLDisplay::put('ERR > '.$buffer.'<br>', 'red');
-        } else {
-             HTMLDisplay::put('OUT > '.$buffer.'<br>', 'green');
-        }
+
+             HTMLDisplay::put($buffer.'<br>', 'green');
+
     }
     public function getUpdate()
     {
