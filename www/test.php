@@ -16,7 +16,6 @@ use Spatie\FlysystemDropbox\DropboxAdapter;
  * CWP Media tool.
  */
 require_once '.config.inc.php';
-echo Media::$VersionUpdate;
 
 // $adapter = new LocalFilesystemAdapter(
 //     // Determine root directory
