@@ -54,9 +54,6 @@ class MediaAppUpdater
 
     public function getUpdate()
     {
-
         dd(__PUBLIC_ROOT__);
-
-
     }
 }
