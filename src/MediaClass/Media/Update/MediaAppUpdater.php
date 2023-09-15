@@ -2,7 +2,10 @@
 
 namespace CWP\Media\Update;
 
+use CWP\HTML\HTMLDisplay;
+use Nette\Utils\Callback;
 use Nette\Utils\FileSystem;
+use Symfony\Component\Process\Process;
 
 class MediaAppUpdater
 {
@@ -51,9 +54,20 @@ class MediaAppUpdater
         }
 
     }
-
+    public function callback($type, $buffer): void
+    {
+        if (Process::ERR === $type) {
+             HTMLDisplay::put('ERR > '.$buffer.'<br>', 'red');
+        } else {
+             HTMLDisplay::put('OUT > '.$buffer.'<br>', 'green');
+        }
+    }
     public function getUpdate()
     {
-        dd(__PUBLIC_ROOT__);
+
+        $ExecProcess = new Process(['git','pull']);
+        $callback = Callback::check([$this, 'callback']);
+        $ExecProcess->start();
+        $ExecProcess->wait($callback);
     }
 }
