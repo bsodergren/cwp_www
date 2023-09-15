@@ -1,9 +1,9 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool
  */
 
-namespace CWP\HTML\Application;
+namespace CWP\HTML\Desktop;
 
 use CWP\HTML\HTMLDocument;
 use CWP\HTML\Template;
@@ -22,7 +22,6 @@ class Header extends HTMLDocument
         $params['UPDATES_HTML'] = self::_headerVersionUpdates();
         $params['__MSG__'] = self::displayMsg();
 
-        $html = Template::GetHTML('base/header/header', $params);
-        dd($html);
+        echo Template::GetHTML('base/header/header', $params);
     }
 }

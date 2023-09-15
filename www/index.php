@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool
  */
 
 use CWP\HTML\HTMLDisplay;

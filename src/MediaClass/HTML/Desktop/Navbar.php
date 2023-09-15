@@ -1,12 +1,11 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool
  */
 
 namespace CWP\HTML\Desktop;
 
 use CWP\HTML\HTMLDocument;
-use CWP\HTML\Template;
 use CWP\HTML\Template;
 
 class Navbar extends HTMLDocument
