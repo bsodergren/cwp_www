@@ -44,6 +44,9 @@ class MediaAppUpdater
     {
 
 
+
+
+
         dd($this->latest,$this->current );
 
 
