@@ -2,6 +2,7 @@
 
 namespace CWP\HTML;
 
+use CWP\Media\Media;
 use CWP\Media\MediaSettings;
 
 class HTMLDocument
@@ -45,14 +46,15 @@ class HTMLDocument
 
     public function NavbarLatestVersion()
     {
-        [$installed,$latest] = Template::VersionText();
+        $latest = Media::$VersionUpdate;
+        $installed = Media::$CurrentVersion;
         $dropdown_link_html = $this->template->template(
             'base/navbar/'.$this->nav_list_dir.'/navbar_item',
             ['DROPDOWN_TEXT' => 'Version '.$installed]
         );
 
         $latest_version_html = '';
-        if (null != $latest) {
+        if (null !== $latest) {
             $dropdown_link_html .= $this->template->template(
                 'base/navbar/'.$this->nav_list_dir.'/navbar_item',
                 ['DROPDOWN_TEXT' => 'New! '.$latest]);
@@ -105,7 +107,9 @@ class HTMLDocument
 
     public function footerVersionUpdates()
     {
-        [$installed,$latest] = Template::VersionText();
+        $latest = Media::$VersionUpdate;
+        $installed = Media::$CurrentVersion;
+
         $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed]);
         if (null != $latest) {
             $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest]);

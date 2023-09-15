@@ -21,7 +21,10 @@ class Media
     public static $explorer;
     public static $connection;
 
-    public static $template;
+    public static $VersionUpdate;
+
+    public static $CurrentVersion;
+
     public $exp;
 
     public $conn;

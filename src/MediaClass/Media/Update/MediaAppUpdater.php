@@ -37,6 +37,7 @@ class MediaAppUpdater
     public function currentVersion()
     {
         $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
+
     }
     public function getLastest()
     {
@@ -47,13 +48,11 @@ class MediaAppUpdater
     {
 
         if($this->latest > $this->current){
-            echo "Update";
-            $this->getUpdate();
-        } else {
-            echo "No update";
+            return $this->latest;
         }
-
+        return null;
     }
+
     public function callback($type, $buffer): void
     {
         if (Process::ERR === $type) {
