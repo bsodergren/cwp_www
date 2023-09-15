@@ -22,6 +22,7 @@ class Header extends HTMLDocument
         $params['UPDATES_HTML'] = self::_headerVersionUpdates();
         $params['__MSG__'] = self::displayMsg();
 
-        echo Template::GetHTML('base/header/header', $params);
+        $html = Template::GetHTML('base/header/header', $params);
+        dd($html);
     }
 }
