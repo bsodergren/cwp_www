@@ -76,7 +76,9 @@ class MediaAppUpdater
         $callback = Callback::check([$this, 'callback']);
 
         $this->process->command('composer');
-        $this->process->option('-d',__PUBLIC_ROOT__,'update');
+        $this->process->option('-d');
+        $this->process->option(__PUBLIC_ROOT__);
+        $this->process->option('update');
 
         $this->process->exec($callback,['HOME'=>__HOME__]);
     }
