@@ -14,6 +14,8 @@ if(Media::$VersionUpdate !== null){
     Media::$MediaAppUpdater->getUpdate();
     Media::$MediaAppUpdater->composerUpdate();
 
+}else {
+    echo "All up  to date";
 }
 
 // echo HTMLDisplay::JavaRefresh('/index.php', 3);
