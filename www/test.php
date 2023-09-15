@@ -24,8 +24,7 @@ include_once __LAYOUT_HEADER__;
 
 $update = new MediaAppUpdater();
 
-echo $update->currentVersion();
-echo $update->getLastest();
+echo $update->isUpdate();
 
 
 

@@ -37,18 +37,17 @@ class MediaAppUpdater
     }
     public function getLastest()
     {
-        $this->latest = $this->get_content(self::GIT_VERSION);
+        $this->latest = trim($this->get_content(self::GIT_VERSION));
     }
 
     public function isUpdate()
     {
 
-
-
-
-
-        dd($this->latest,$this->current );
-
+        if($this->latest > $this->current){
+            echo "Update";
+        } else {
+            echo "No update";
+        }
 
     }
 }
