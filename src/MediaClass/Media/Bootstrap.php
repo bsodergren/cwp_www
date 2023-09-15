@@ -15,12 +15,14 @@ class Bootstrap
 
     public function __construct(Config $Config)
     {
+
         $this->Config = $Config;
         self::$CONFIG = $Config->all();
         $this->define('__DRIVE_LETTER__', $this->getDriveLetter());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->definePath('__FILES_DIR__', $this->getFileStorage());
         $this->define('__URL_PATH__', $this->getURL());
+        $this->define('__HOME__',dirname($_SERVER['DOCUMENT_ROOT'], 2));
     }
 
     public function directory($path)

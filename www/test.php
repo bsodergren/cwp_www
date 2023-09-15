@@ -19,7 +19,6 @@ use Spatie\FlysystemDropbox\DropboxAdapter;
 require_once '.config.inc.php';
 echo  Media::$VersionUpdate;
 
-
 // $adapter = new LocalFilesystemAdapter(
 //     // Determine root directory
 //     __PROJECT_ROOT__
