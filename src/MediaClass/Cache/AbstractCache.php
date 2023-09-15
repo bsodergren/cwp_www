@@ -1,9 +1,9 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
-//declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace CWP\Cache;
 
@@ -18,9 +18,9 @@ use Traversable;
  */
 abstract class AbstractCache implements CacheInterface
 {
+    use Packing;
     use PrefixOption;
     use TtlOption;
-    use Packing;
 
     /**
      * Make a clone of this object.
@@ -74,8 +74,8 @@ abstract class AbstractCache implements CacheInterface
      */
     protected function assertKey($key): void
     {
-        if (!is_string($key)) {
-            $type = (is_object($key) ? $key::class.' ' : '').gettype($key);
+        if (!\is_string($key)) {
+            $type = (\is_object($key) ? $key::class.' ' : '').\gettype($key);
             throw new InvalidArgumentException("Expected key to be a string, not $type");
         }
 
@@ -94,9 +94,9 @@ abstract class AbstractCache implements CacheInterface
      */
     protected function assertIterable($subject, $msg): void
     {
-        $iterable = function_exists('is_iterable')
+        $iterable = \function_exists('is_iterable')
             ? is_iterable($subject)
-            : is_array($subject) || $subject instanceof \Traversable;
+            : \is_array($subject) || $subject instanceof \Traversable;
 
         if (!$iterable) {
             throw new InvalidArgumentException($msg);
@@ -146,7 +146,7 @@ abstract class AbstractCache implements CacheInterface
         $packed = [];
 
         foreach ($values as $key => $value) {
-            $id = $this->keyToId(is_int($key) ? (string) $key : $key);
+            $id = $this->keyToId(\is_int($key) ? (string) $key : $key);
             $packed[$id] = $this->pack($value);
         }
 
@@ -175,7 +175,7 @@ abstract class AbstractCache implements CacheInterface
         $success = true;
 
         foreach ($values as $key => $value) {
-            $success = $this->set(is_int($key) ? (string) $key : $key, $value, $ttl) && $success;
+            $success = $this->set(\is_int($key) ? (string) $key : $key, $value, $ttl) && $success;
         }
 
         return $success;
@@ -223,8 +223,8 @@ abstract class AbstractCache implements CacheInterface
             $ttl = $endTime->getTimestamp() - $reference->getTimestamp();
         }
 
-        if (!is_int($ttl)) {
-            $type = (is_object($ttl) ? $ttl::class.' ' : '').gettype($ttl);
+        if (!\is_int($ttl)) {
+            $type = (\is_object($ttl) ? $ttl::class.' ' : '').\gettype($ttl);
             throw new InvalidArgumentException("ttl should be of type int or DateInterval, not $type");
         }
 
@@ -244,7 +244,7 @@ abstract class AbstractCache implements CacheInterface
             return isset($this->ttl) ? time() + $this->ttl : null;
         }
 
-        if (is_int($ttl)) {
+        if (\is_int($ttl)) {
             return time() + (isset($this->ttl) ? min($ttl, $this->ttl) : $ttl);
         }
 
@@ -254,7 +254,7 @@ abstract class AbstractCache implements CacheInterface
             return isset($this->ttl) ? min($timestamp, time() + $this->ttl) : $timestamp;
         }
 
-        $type = (is_object($ttl) ? $ttl::class.' ' : '').gettype($ttl);
+        $type = (\is_object($ttl) ? $ttl::class.' ' : '').\gettype($ttl);
         throw new InvalidArgumentException("ttl should be of type int or DateInterval, not $type");
     }
 }

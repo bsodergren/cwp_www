@@ -1,13 +1,11 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Updater\Db;
 
 use CWP\Core\Media;
-use CWP\Updater\Db\MediaDb;
-use CWP\Updater\Db\MediaDbAbstract;
 
 /**
  * CWP Media tool.
@@ -28,7 +26,6 @@ class MediaSqlite extends MediaDb implements MediaDbAbstract
             case 'alter':
             case 'create':
             case 'delete':
-
                 $this->query($args[0]);
                 break;
             default:

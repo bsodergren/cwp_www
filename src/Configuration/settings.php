@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 use CWP\Core\Bootstrap;
@@ -28,7 +28,7 @@ if ($results) {
 
 foreach ($setting['local'] as $key => $array) {
     if (null !== $array['require']) {
-        if (key_exists($array['require'], $setting['local'])) {
+        if (array_key_exists($array['require'], $setting['local'])) {
             if (true == $setting['local'][$array['require']]['value']
             ) {
                 $setting['local'][$key]['value'] = $array['value'];
@@ -44,7 +44,7 @@ foreach ($setting['lang'] as $key => $array) {
         define($key, $array['value']);
     }
 }
-if (key_exists('media_files', Bootstrap::$CONFIG['server'])) {
+if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {
     if (true == Bootstrap::$CONFIG['server']['media_files']) {
         define('__MEDIA_FILES_DIR__', Bootstrap::$CONFIG['server']['media_files']);
     }

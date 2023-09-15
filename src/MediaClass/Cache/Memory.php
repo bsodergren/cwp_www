@@ -1,15 +1,6 @@
 <?php
-
-/*
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+/**
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -20,16 +11,16 @@ use CWP\Cache\Packer\PackerInterface;
 use CWP\Cache\Packer\SerializePacker;
 
 /**
- * Memory
+ * Memory.
  */
 class Memory extends AbstractCache
 {
     /**
-     * Limit the amount of entries
+     * Limit the amount of entries.
+     *
      * @var int
      */
-    protected $limit = PHP_INT_MAX;
-
+    protected $limit = \PHP_INT_MAX;
 
     /**
      * @var array
@@ -41,12 +32,9 @@ class Memory extends AbstractCache
      */
     protected $cacheTtl = [];
 
-
     /**
      * Create the default packer for this cache implementation.
-     * {@internal NopPacker might fail PSR-16, as cached objects would change}
-     *
-     * @return PackerInterface
+     * {@internal NopPacker might fail PSR-16, as cached objects would change}.
      */
     protected static function createDefaultPacker(): PackerInterface
     {
@@ -63,24 +51,24 @@ class Memory extends AbstractCache
     {
         $clone = clone $this;
 
-        $clone->cache = & $this->cache;
-        $clone->cacheTtl = & $this->cacheTtl;
+        $clone->cache = &$this->cache;
+        $clone->cacheTtl = &$this->cacheTtl;
 
         return $clone;
     }
 
     /**
-     * Set the max number of items
+     * Set the max number of items.
      *
      * @param int $limit
      */
     protected function setLimitOption($limit)
     {
-        $this->limit = (int)$limit ?: PHP_INT_MAX;
+        $this->limit = (int) $limit ?: \PHP_INT_MAX;
     }
 
     /**
-     * Get the max number of items
+     * Get the max number of items.
      *
      * @return int
      */
@@ -89,10 +77,6 @@ class Memory extends AbstractCache
         return $this->limit;
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function get($key, $default = null)
     {
         if (!$this->has($key)) {
@@ -104,9 +88,6 @@ class Memory extends AbstractCache
         return $this->unpack($this->cache[$id]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($key)
     {
         $id = $this->keyToId($key);
@@ -117,18 +98,16 @@ class Memory extends AbstractCache
 
         if ($this->cacheTtl[$id] <= time()) {
             unset($this->cache[$id], $this->cacheTtl[$id]);
+
             return false;
         }
 
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set($key, $value, $ttl = null)
     {
-        if (count($this->cache) >= $this->limit) {
+        if (\count($this->cache) >= $this->limit) {
             $deleteKey = key($this->cache);
             unset($this->cache[$deleteKey], $this->cacheTtl[$deleteKey]);
         }
@@ -136,14 +115,11 @@ class Memory extends AbstractCache
         $id = $this->keyToId($key);
 
         $this->cache[$id] = $this->pack($value);
-        $this->cacheTtl[$id] = $this->ttlToTimestamp($ttl) ?? PHP_INT_MAX;
+        $this->cacheTtl[$id] = $this->ttlToTimestamp($ttl) ?? \PHP_INT_MAX;
 
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($key)
     {
         $id = $this->keyToId($key);
@@ -152,9 +128,6 @@ class Memory extends AbstractCache
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear()
     {
         $this->cache = [];

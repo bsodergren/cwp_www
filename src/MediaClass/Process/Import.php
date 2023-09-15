@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -9,13 +9,13 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\Media\MediaExec;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
+use CWP\Media\Import\PDFImport;
+use CWP\Media\MediaExec;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 use Nette\Utils\FileSystem;
-use CWP\Media\Import\PDFImport;
-use CWP\Filesystem\MediaFileSystem;
 
 class Import extends MediaProcess
 {
@@ -27,7 +27,7 @@ class Import extends MediaProcess
 
     public function header()
     {
-        define('TITLE', 'Importing PDF File');
+        \define('TITLE', 'Importing PDF File');
         MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         $this->page_end = Template::GetHTML('stream/end_page', []);
@@ -89,7 +89,7 @@ class Import extends MediaProcess
             $fileExtension = strtolower($f);
         }
 
-        if (!in_array($fileExtension, $this->fileExtensionsAllowed)) {
+        if (!\in_array($fileExtension, $this->fileExtensionsAllowed)) {
             HTMLDisplay::put('This file extension is not allowed. Please upload a PDF file');
             $this->error = true;
         }
@@ -143,12 +143,12 @@ class Import extends MediaProcess
             }
             $MediaImport = new PDFImport();
             $MediaImport->Import($pdf_file, $job_number);
-            if ($MediaImport->status == 0) {
+            if (0 == $MediaImport->status) {
                 HTMLDisplay::put("<span class='p-3 text-danger'>something went wrong</span>");
                 HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');
             }
 
-            if ($MediaImport->status == 2) {
+            if (2 == $MediaImport->status) {
                 HTMLDisplay::put("<span class='p-3 text-danger'>File failed</span>");
                 HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');
             }

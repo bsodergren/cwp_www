@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Utils;
@@ -93,7 +93,7 @@ class Utils
             $float = '000';
             $digits = $output_array[1];
             $digits = str_replace('-', '', $digits);
-            if (array_key_exists(2, $output_array)) {
+            if (\array_key_exists(2, $output_array)) {
                 if ('' == $output_array[2]) {
                     $digits = 0;
                     $output_array[2] = $output_array[1];
@@ -112,7 +112,7 @@ class Utils
 
     public static function floatToFrac($f)
     {
-        $f = floatval($f);
+        $f = (float) $f;
 
         // keep the original sign so that the numerator could be converted later
         $is_negative = ($f < 0);
@@ -131,18 +131,18 @@ class Utils
             $flt = 0;
         }
         do {
-            $len = strlen($flt);
+            $len = \strlen($flt);
 
-            $val = $int * pow(10, $len) + $flt;
+            $val = $int * 10 ** $len + $flt;
             $flt = substr($flt, 0, -1);
-        } while ($val > intval($val));
+        } while ($val > (int) $val);
 
         if ($is_negative) {
             $val *= -1;
         }
 
-        $num = intval($val);
-        $den = pow(10, $len);
+        $num = (int) $val;
+        $den = 10 ** $len;
         $f = new Fraction($num, $den);
         $string = str_replace(' ', '-', $f->toString());
 

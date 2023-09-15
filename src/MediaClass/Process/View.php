@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -9,22 +9,21 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaMailer;
+use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Process\MediaProcess;
-use CWP\Spreadsheet\XLSXViewer;
-use CWP\Spreadsheet\Media\MediaXLSX;
 use Symfony\Component\Finder\Finder;
 
 class View extends MediaProcess
 {
     public $form_number;
     public $page_end;
+
     public function header()
     {
-        define('TITLE', 'Updating excel sheet');
+        \define('TITLE', 'Updating excel sheet');
         MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         $this->page_end = Template::GetHTML('stream/end_page', []);

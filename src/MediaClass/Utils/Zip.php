@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Utils;
@@ -31,7 +31,7 @@ class AdvancedFilesystemIterator extends \ArrayIterator
         }
 
         $this->uasort(function (\SplFileInfo $a, \SplFileInfo $b) use ($method) {
-            return is_string($a->$method()) ? strnatcmp($a->$method(), $b->$method()) : $b->$method() - $a->$method();
+            return \is_string($a->$method()) ? strnatcmp($a->$method(), $b->$method()) : $b->$method() - $a->$method();
         });
 
         return $this;
@@ -71,7 +71,7 @@ class Zip
             if (!$file->isDir()) {
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($rootPath) + 1);
+                $relativePath = substr($filePath, \strlen($rootPath) + 1);
                 // Add current file to archive
                 $zip->addFile($filePath, $relativePath);
             }
@@ -90,7 +90,7 @@ class Zip
 
     public function exportZip($pdf_file, $jsonFile)
     {
-        $zipPath = dirname($pdf_file, 2).'/Export';
+        $zipPath = \dirname($pdf_file, 2).'/Export';
         FileSystem::createDir($zipPath);
 
         $zip_file = $zipPath.'/export.zip';

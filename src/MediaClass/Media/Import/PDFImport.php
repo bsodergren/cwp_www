@@ -1,12 +1,12 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Media\Import;
 
-use CWP\HTML\HTMLDisplay;
 use CWP\Core\Media;
+use CWP\HTML\HTMLDisplay;
 use CWP\Utils\Utils;
 use Smalot\PdfParser\Parser;
 
@@ -18,20 +18,19 @@ class PDFImport extends MediaImport
 
     private function insertDrop($pdf_file, $update_form)
     {
-
         $this->processPdf($pdf_file, $this->job_id, $update_form);
 
         $pdf = $this->form;
 
-        if (count($pdf) < 1) {
+        if (\count($pdf) < 1) {
             $this->deleteFromDatabase('media_job');
             $this->status = 2;
+
             return 2;
         }
 
-        $noPagess = count($pdf);
+        $noPagess = \count($pdf);
         HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing '.$noPagess.' forms']);
-
 
         $keyidx = array_key_first($pdf);
         Media::$explorer->table('media_job')->where(
@@ -79,11 +78,9 @@ class PDFImport extends MediaImport
         }
 
         if (file_exists($pdf_file)) {
-
             $parser = new Parser();
             $pdf = $parser->parseFile($pdf_file);
             $pages = $pdf->getPages();
-
 
             if ('' != $form_number) {
                 --$form_number;
@@ -118,7 +115,7 @@ class PDFImport extends MediaImport
 
     public function parse_page($page_text)
     {
-        $page_count = count($page_text);
+        $page_count = \count($page_text);
 
         $form_number = $this->find_key('run#', $page_text);
         $config_type = $this->find_key('config', $page_text);
@@ -174,7 +171,7 @@ class PDFImport extends MediaImport
                 $item = trim(str_replace(',', '', $item));
                 if ('letter' == $value) {
                     preg_match('/^[ABCD,]+\b/', $item, $matches);
-                    if (count($matches) > 0) {
+                    if (\count($matches) > 0) {
                         if ($matches[0] == trim($needle)) {
                             $search = true;
                         } else {
@@ -234,8 +231,8 @@ class PDFImport extends MediaImport
     public function find_first($form_number, $start, $array)
     {
         $result = [];
-        $row_count = count($array);
-        $array = array_slice($array, $start, $row_count, true);
+        $row_count = \count($array);
+        $array = \array_slice($array, $start, $row_count, true);
 
         $key = $this->find_key('#'.$form_number, $array, 'key');
 
@@ -252,12 +249,12 @@ class PDFImport extends MediaImport
     {
         $result = [];
 
-        $row_count = count($array);
+        $row_count = \count($array);
         $letter = key($start_array);
 
         $start_array[$letter]['stop'] = $row_count - 1;
         $start = $start_array[$letter]['start'] + 1;
-        $array = array_slice($array, $start, $row_count, true);
+        $array = \array_slice($array, $start, $row_count, true);
 
         $key = $this->find_key('#'.$form_number, $array, 'key');
 

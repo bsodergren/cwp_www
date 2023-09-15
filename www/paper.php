@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use CWP\HTML\HTMLForms;
@@ -9,9 +9,10 @@ use CWP\Template\Template;
 require_once '.config.inc.php';
 define('TITLE', 'Paper Editor');
 use CWP\Utils\MediaDevice;
+
 MediaDevice::getHeader();
 
-$form_url                       = __URL_HOME__.'/process.php';
+$form_url = __URL_HOME__.'/process.php';
 define('__FORM_URL__', $form_url);
 
 /*
@@ -41,18 +42,18 @@ function display_array_as_row($array)
 }
 */
 
-$paper_type                     = $explorer->table('paper_type');
+$paper_type = $explorer->table('paper_type');
 // $paper_type->limit(4);
 foreach ($paper_type as $paper) {
     $header_param['PAPER_INFO'] = $paper->paper_wieght.' '.$paper->paper_size.' '.$paper->pages;
 
     foreach ($paper->related('paper_count', 'paper_id') as $paper_details) {
-        $row_params           = [];
-        $row_html             =  '';
-        $i              = 0;
+        $row_params = [];
+        $row_html = '';
+        $i = 0;
         foreach ($paper_details as $key => $val) {
             if ('id' == $key) {
-                $row_id         = $val;
+                $row_id = $val;
                 continue;
             }
             if ('paper_id' == $key) {
@@ -61,7 +62,7 @@ foreach ($paper_type as $paper) {
             ++$i;
             $text_params = [
                 'FRONT_LABEL' => $key,
-                'FRONT_NAME'  => $row_id.'['.$key.']',
+                'FRONT_NAME' => $row_id.'['.$key.']',
                 'FRONT_VALUE' => $val,
             ];
             $row_params['ROWS'] .= Template::GetHTML('paper/text_row', $text_params);
@@ -75,10 +76,10 @@ foreach ($paper_type as $paper) {
                             'class' => 'form-control',
                         ]);
                         */
-                        if(0 == $i % 3){
-                            $row_html       .= template::GetHTML('paper/row', $row_params);
-                            $row_params     = [];
-                        }
+            if (0 == $i % 3) {
+                $row_html .= template::GetHTML('paper/row', $row_params);
+                $row_params = [];
+            }
         }
 
         $header_param['ROWS'] = $row_html;
@@ -87,8 +88,8 @@ foreach ($paper_type as $paper) {
 }
 
 echo Template::GetHTML('paper/main', ['FORM_URL' => $form_url,
-'PAPER_BODY_HTML'                                => $row_header_html,
-'FORM_BUTTON'                                    => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Update publications']),
+'PAPER_BODY_HTML' => $row_header_html,
+'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Update publications']),
 ]);
 // $results        = $paper_type->fetchAll();
 

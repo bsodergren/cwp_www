@@ -1,25 +1,15 @@
 <?php
-
-/*
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+/**
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
 
 namespace CWP\Cache;
 
-use CWP\Cache\AbstractFile;
+use CWP\Cache\File\BasicFilename;
 use CWP\Cache\Packer\PackerInterface;
 use CWP\Cache\Packer\SerializePacker;
-use CWP\Cache\File\BasicFilename;
 
 /**
  * Cache file as PHP script.
@@ -28,8 +18,6 @@ class PhpFile extends AbstractFile
 {
     /**
      * Create the default packer for this cache implementation.
-     *
-     * @return PackerInterface
      */
     protected static function createDefaultPacker(): PackerInterface
     {
@@ -37,9 +25,7 @@ class PhpFile extends AbstractFile
     }
 
     /**
-     * Get the filename callable
-     *
-     * @return callable
+     * Get the filename callable.
      */
     protected function getFilenameOption(): callable
     {
@@ -51,30 +37,23 @@ class PhpFile extends AbstractFile
     }
 
     /**
-     * Create a PHP script returning the cached value
-     *
-     * @param mixed    $value
-     * @param int|null $ttl
-     * @return string
+     * Create a PHP script returning the cached value.
      */
     public function createScript($value, ?int $ttl): string
     {
         $macro = var_export($value, true);
 
-        if (strpos($macro, 'stdClass::__set_state') !== false) {
+        if (str_contains($macro, 'stdClass::__set_state')) {
             $macro = preg_replace_callback("/('([^'\\\\]++|''\\.)')|stdClass::__set_state/", $macro, function ($match) {
                 return empty($match[1]) ? '(object)' : $match[1];
             });
         }
 
-        return $ttl !== null
+        return null !== $ttl
             ? "<?php return time() < {$ttl} ? {$macro} : false;"
             : "<?php return {$macro};";
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($key, $default = null)
     {
         $cacheFile = $this->getFilename($key);
@@ -85,20 +64,14 @@ class PhpFile extends AbstractFile
 
         $packed = include $cacheFile;
 
-        return $packed === false ? $default : $this->unpack($packed);
+        return false === $packed ? $default : $this->unpack($packed);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($key)
     {
-        return $this->get($key) !== null;
+        return null !== $this->get($key);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set($key, $value, $ttl = null)
     {
         $cacheFile = $this->getFilename($key);

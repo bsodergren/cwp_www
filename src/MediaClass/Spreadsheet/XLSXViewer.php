@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Spreadsheet;
 
@@ -12,14 +15,13 @@ class XLSXViewer
         global $_REQUEST,$_SERVER;
 
         $form_number = '';
-        if(key_exists('form_number', $_REQUEST)) {
+        if (\array_key_exists('form_number', $_REQUEST)) {
             $form_number = $_REQUEST['form_number'];
         }
 
         $media->excelArray($form_number);
         $excel = new MediaXLSX($media, true);
 
-        echo HTMLDisplay::JavaRefresh("/view.php?".$_SERVER['QUERY_STRING'], 0);
+        echo HTMLDisplay::JavaRefresh('/view.php?'.$_SERVER['QUERY_STRING'], 0);
     }
-
 }

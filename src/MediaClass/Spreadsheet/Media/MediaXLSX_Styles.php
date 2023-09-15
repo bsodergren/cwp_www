@@ -1,13 +1,11 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Spreadsheet\Media;
 
-use Tracy\Debugger;
 use CWP\Core\Media;
-use CWP\HTML\HTMLDisplay;
 use CWP\Spreadsheet\Styles;
 
 /**
@@ -116,17 +114,14 @@ class MediaXLSX_Styles extends Styles
         //     $this->setSize(['cell' => $col, 'size' => '8']);
         //     $r++;
         // }
-
-
-
-
     }
+
     public function addSheetData($value, $text, $row, $col = 'A')
     {
-        if($col == 'A') {
+        if ('A' == $col) {
             $col2 = 'B';
         }
-        if($col == 'C') {
+        if ('C' == $col) {
             $col2 = 'D';
         }
 
@@ -134,7 +129,7 @@ class MediaXLSX_Styles extends Styles
         $this->setCellText($textCell, $text);
         $this->setBorder($textCell);
 
-        $valCell  = Styles::row($col2, $row);
+        $valCell = Styles::row($col2, $row);
         $this->setAlign($valCell, 'H');
         $this->setCellText($valCell, $value);
         // $this->setBorder($valCell);
@@ -142,7 +137,7 @@ class MediaXLSX_Styles extends Styles
 
     public function setRowHeights()
     {
-        $hn = count($this->rowHeight);
+        $hn = \count($this->rowHeight);
         for ($i = 0; $i < $hn; ++$i) {
             $this->setHeight(['cell' => Styles::row(null, $i + 1), 'height' => $this->rowHeight[$i]]);
         }
@@ -177,7 +172,7 @@ class MediaXLSX_Styles extends Styles
 
         $this->setCellText(Styles::row('B', 10), $form['packaging']);
 
-        if (key_exists('skid_count', $form)) {
+        if (\array_key_exists('skid_count', $form)) {
             $this->setCellText(Styles::row('D', 8), $form['skid_count']);
         }
 
@@ -196,7 +191,7 @@ class MediaXLSX_Styles extends Styles
             $deliveryInst[$trim_cell] = ['text' => 'Head Trim', 'value' => $form['head_trim']];
         }
 
-        if (isset($deliveryInst) && is_array($deliveryInst)) {
+        if (isset($deliveryInst) && \is_array($deliveryInst)) {
             $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 26),  'border' => 'outline']);
 
             foreach ($deliveryInst as $row => $data) {

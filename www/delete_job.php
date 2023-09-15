@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use CWP\HTML\HTMLDisplay;
@@ -20,6 +20,7 @@ if (array_key_exists('actSubmit', $_REQUEST)) {
 }
 
 use CWP\Utils\MediaDevice;
+
 MediaDevice::getHeader();
 $form_url = __URL_PATH__.'/delete_job.php';
 

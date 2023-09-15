@@ -1,14 +1,6 @@
 <?php
 /**
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -16,7 +8,7 @@
 namespace CWP\Cache\File;
 
 /**
- * Create a path for a key
+ * Create a path for a key.
  */
 class BasicFilename
 {
@@ -27,8 +19,6 @@ class BasicFilename
 
     /**
      * BasicFilename constructor.
-     *
-     * @param string $format
      */
     public function __construct(string $format)
     {
@@ -36,9 +26,7 @@ class BasicFilename
     }
 
     /**
-     * Get the format
-     *
-     * @return string
+     * Get the format.
      */
     public function getFormat(): string
     {
@@ -46,10 +34,7 @@ class BasicFilename
     }
 
     /**
-     * Create the path for a key
-     *
-     * @param string $key
-     * @return string
+     * Create the path for a key.
      */
     public function __invoke(string $key): string
     {
@@ -57,9 +42,7 @@ class BasicFilename
     }
 
     /**
-     * Cast to string
-     *
-     * @return string
+     * Cast to string.
      */
     public function __toString(): string
     {

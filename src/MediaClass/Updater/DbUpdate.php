@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Updater;
@@ -10,9 +10,8 @@ namespace CWP\Updater;
  */
 
 use CWP\Core\Media;
-use CWP\Utils\Utils;
-use CWP\Core\MediaDebug;
 use CWP\Core\MediaSetup;
+use CWP\Utils\Utils;
 use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
 
@@ -54,7 +53,6 @@ class DbUpdate extends MediaUpdate
 
         foreach ($updates as $classmethod => $data_array) {
             $this->$classmethod($data_array);
-
         }
 
         $filename = basename($file);
@@ -72,7 +70,7 @@ class DbUpdate extends MediaUpdate
 
     public function newData($new_data)
     {
-        if (is_array($new_data)) {
+        if (\is_array($new_data)) {
             foreach ($new_data as $table => $new_data_vals) {
                 $u = Media::$connection->query('INSERT INTO '.$table.' ?', $new_data_vals);
                 $this->refresh = true;
@@ -82,8 +80,7 @@ class DbUpdate extends MediaUpdate
 
     public function __call($method, $args)
     {
-        dd(["call",$method, $args]);
-
+        dd(['call', $method, $args]);
     }
 
     public function check_tableExists($table_name = '')
@@ -93,7 +90,7 @@ class DbUpdate extends MediaUpdate
 
     public function newTable($new_table)
     {
-        if (is_array($new_table)) {
+        if (\is_array($new_table)) {
             foreach ($new_table as $table_name) {
                 $this->set($table_name);
                 if (!$this->check_tableExists($table_name)) {
@@ -124,16 +121,12 @@ class DbUpdate extends MediaUpdate
 
     public function renameColumns($rename_column)
     {
-
-        if (is_array($rename_column)) {
+        if (\is_array($rename_column)) {
             foreach ($rename_column as $table_name => $column) {
-
                 $this->set($table_name);
                 foreach ($column as $old => $new) {
-
                     if ($this->dbClassObj->check_columnExists($table_name, $old)) {
                         if (!$this->dbClassObj->check_columnExists($table_name, $new)) {
-
                             $this->dbClassObj->rename_column($table_name, $old, $new);
                             $this->refresh = true;
                         }
@@ -145,7 +138,7 @@ class DbUpdate extends MediaUpdate
 
     public function changecolumn($change_column)
     {
-        if (is_array($change_column)) {
+        if (\is_array($change_column)) {
             foreach ($change_column as $table_name => $column) {
                 $this->set($table_name);
                 foreach ($column as $i => $changeArr) {
@@ -162,7 +155,7 @@ class DbUpdate extends MediaUpdate
 
     public function newColumn($new_column)
     {
-        if (is_array($new_column)) {
+        if (\is_array($new_column)) {
             foreach ($new_column as $table_name => $column) {
                 $this->set($table_name);
                 foreach ($column as $field => $type) {
@@ -177,7 +170,7 @@ class DbUpdate extends MediaUpdate
 
     public function resettable($reset_table)
     {
-        if (is_array($reset_table)) {
+        if (\is_array($reset_table)) {
             foreach ($reset_table as $table_name) {
                 $this->set($table_name);
                 if ($this->dbClassObj->check_tableExists($table_name)) {
@@ -190,7 +183,7 @@ class DbUpdate extends MediaUpdate
 
     public function updateData($update_data)
     {
-        if (is_array($update_data)) {
+        if (\is_array($update_data)) {
             foreach ($update_data as $table => $updates) {
                 foreach ($updates as $where => $data) {
                     foreach ($data as $key => $update_array) {
@@ -213,13 +206,13 @@ class DbUpdate extends MediaUpdate
 
     public function deleteData($delete_data)
     {
-        if (is_array($delete_data)) {
+        if (\is_array($delete_data)) {
             foreach ($delete_data as $table => $updates) {
                 foreach ($updates as $data => $val) {
                     $queryArr = [];
 
-                    if (is_array($val)) {
-                        if (!is_int($data)) {
+                    if (\is_array($val)) {
+                        if (!\is_int($data)) {
                             $where = $data;
                         } else {
                             $where = $val[0];
@@ -229,7 +222,7 @@ class DbUpdate extends MediaUpdate
 
                     $pre_query = 'DELETE FROM '.$table.' WHERE ';
                     foreach ($data as $field => $value) {
-                        if (!is_int($field)) {
+                        if (!\is_int($field)) {
                             if (!isset($where)) {
                                 $where = $field;
                             }
@@ -242,7 +235,7 @@ class DbUpdate extends MediaUpdate
                         }
                     }
                     unset($where);
-                    if (count($queryArr) > 0) {
+                    if (\count($queryArr) > 0) {
                         $query = $pre_query.implode(' AND ', $queryArr);
                     }
                     $queryArr = [];
@@ -258,7 +251,6 @@ class DbUpdate extends MediaUpdate
         }
     }
 
-
     public function checkDbUpdates()
     {
         $updated_array = [];
@@ -273,14 +265,13 @@ class DbUpdate extends MediaUpdate
 
         $updates = array_diff($updates_array, $updated_array);
 
-        if (count($updates) >= 1) {
-            MediaSetup::header('Found '.count($updates).' updates');
+        if (\count($updates) >= 1) {
+            MediaSetup::header('Found '.\count($updates).' updates');
 
             foreach ($updates as $k => $file) {
                 MediaSetup::message('Updating to  '.basename($file, '.php').' update');
                 $filename = __SQL_UPDATES_DIR__.\DIRECTORY_SEPARATOR.$file;
                 $this->versionUpdate($filename);
-
             }
             MediaSetup::footer(0);
             exit;

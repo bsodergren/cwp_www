@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Media;
@@ -10,15 +10,14 @@ use Nette\Utils\FileSystem;
 
 class MediaExport
 {
-    public $mediaArray  = [];
+    public $mediaArray = [];
     public $formNumbers = [];
     public $json_file = '';
     public $media;
 
-
     public function __construct($media)
     {
-        $this->media      = $media;
+        $this->media = $media;
         $this->mediaArray = $media->MediaArray;
     }
 
@@ -68,9 +67,9 @@ class MediaExport
 
     private function cleanFormData($formNumber)
     {
-        $data['Front'] =    $this->mediaArray[$formNumber]['Front'];
-        if (key_exists('Back', $this->mediaArray[$formNumber])) {
-            $data['Back'] =    $this->mediaArray[$formNumber]['Back'];
+        $data['Front'] = $this->mediaArray[$formNumber]['Front'];
+        if (\array_key_exists('Back', $this->mediaArray[$formNumber])) {
+            $data['Back'] = $this->mediaArray[$formNumber]['Back'];
         }
 
         foreach ($data as $former => $letterArray) {
@@ -102,37 +101,35 @@ class MediaExport
 
     public function exportJsonData()
     {
-        $this->json_file      = __TEMP_DIR__ . DIRECTORY_SEPARATOR . basename($this->getPDF(), '.pdf'). ".json";
+        $this->json_file = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($this->getPDF(), '.pdf').'.json';
 
-        $forms          = $this->getFormList();
-        $formData       = [
-            'pdf_file'   => $this->getPDF(),
+        $forms = $this->getFormList();
+        $formData = [
+            'pdf_file' => $this->getPDF(),
             'product' => $this->mediaArray[$this->getFirstKey()]['product'],
             'job_number' => $this->getJobNumber(),
-            'forms'      => [],
+            'forms' => [],
         ];
 
         foreach ($forms as $formNumber) {
             $formData['forms'][$formNumber] = [
                 'product' => $this->getProduct($formNumber),
-                'count'   => $this->getCount($formNumber),
-                'config'  => $this->getFormConfig($formNumber),
-                'bind'    => $this->getFormBind($formNumber),
+                'count' => $this->getCount($formNumber),
+                'config' => $this->getFormConfig($formNumber),
+                'bind' => $this->getFormBind($formNumber),
                 'form_number' => $formNumber,
-                'form'    => $this->getFormData($formNumber),
+                'form' => $this->getFormData($formNumber),
             ];
         }
 
         $jsonString = json_encode($formData);
         FileSystem::write($this->json_file, $jsonString);
-
     }
-
 
     public function exportZip()
     {
         $this->exportJsonData();
-        $zip            = new Zip();
+        $zip = new Zip();
         $zip->exportZip($this->getPDF(), $this->json_file);
     }
 }

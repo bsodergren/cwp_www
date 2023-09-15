@@ -1,13 +1,15 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\HTML;
 
 use CWP\Template\Template;
 
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
-
 class HTMLForms
 {
     public static function formInput($template, $params)
@@ -18,7 +20,7 @@ class HTMLForms
     public static function draw_select($name, $text, $options = [], $style = null)
     {
         $option_html = '';
-        if (count($options) > 0) {
+        if (\count($options) > 0) {
             foreach ($options as $optiontext => $value) {
                 $option_html .= Template::GetHTML('elements/select/option', ['OPTION_VALUE' => $value, 'OPTION_TEXT' => $optiontext]);
             }
@@ -36,7 +38,7 @@ class HTMLForms
     {
         global $pub_keywords;
 
-        $checked       = '';
+        $checked = '';
 
         $current_value = $value;
 
@@ -44,9 +46,9 @@ class HTMLForms
             $checked = 'checked';
         }
 
-        $params        = [
-            'NAME'    => $name,
-            'TEXT'    => $text,
+        $params = [
+            'NAME' => $name,
+            'TEXT' => $text,
             'CHECKED' => $checked,
         ];
 
@@ -59,16 +61,17 @@ class HTMLForms
 
         foreach ($value as $option) {
             $params = [
-                'NAME'    => $name,
-                'VALUE'   => $option['value'],
-                'TEXT'    => $option['text'],
-                'CLASS'   => $option['class'],
+                'NAME' => $name,
+                'VALUE' => $option['value'],
+                'TEXT' => $option['text'],
+                'CLASS' => $option['class'],
                 'CHECKED' => $option['checked'],
             ];
 
             $html .= self::formInput('elements/radio', $params);
             // $html .= '<input type="radio" class="' . $option["class"] . '" name="' . $name . '" value="' . $option["value"] . '" ' . $option['checked'] . '>' . $option['text'] . ' '.PHP_EOL;
         }
+
         // $html = $html . "<br>"."\n";
         return $html;
     }
@@ -83,7 +86,7 @@ class HTMLForms
         $params['TEXT_NAME'] = $name;
 
         foreach (array_keys($options) as $key) {
-            $array_key          = 'TEXT_'.strtoupper($key);
+            $array_key = 'TEXT_'.strtoupper($key);
             if ('label' == $key) {
                 $params[$array_key] = 'aria-label="'.$options['label'].'"';
                 continue;

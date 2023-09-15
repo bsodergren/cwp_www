@@ -1,16 +1,13 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use CWP\Core\Media;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
-use CWP\Filesystem\MediaFileSystem;
 
-/**
- * CWP Media tool.
- */
 require_once '.config.inc.php';
 
 define('TITLE', APP_NAME);

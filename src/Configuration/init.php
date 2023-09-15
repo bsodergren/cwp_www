@@ -1,12 +1,11 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
+use CWP\Core\Media;
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
-use CWP\Core\Media;
-
 
 $template = new Template();
 

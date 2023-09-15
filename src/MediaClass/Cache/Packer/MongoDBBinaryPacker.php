@@ -1,23 +1,14 @@
 <?php
 /**
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Cache\Packer;
 
-use CWP\Cache\Packer\PackerInterface;
 use MongoDB\BSON\Binary;
 
 /**
- * Pack as BSON binary
+ * Pack as BSON binary.
  *
  * @todo Don't use serialize when packer chain is here.
  */
@@ -29,9 +20,9 @@ class MongoDBBinaryPacker implements PackerInterface
     protected $options;
 
     /**
-     * SerializePacker constructor
+     * SerializePacker constructor.
      *
-     * @param array $options  Any options to be provided to unserialize()
+     * @param array $options Any options to be provided to unserialize()
      */
     public function __construct(array $options = ['allowed_classes' => true])
     {
@@ -39,7 +30,7 @@ class MongoDBBinaryPacker implements PackerInterface
     }
 
     /**
-     * Get cache type (might be used as file extension)
+     * Get cache type (might be used as file extension).
      *
      * @return string
      */
@@ -49,9 +40,8 @@ class MongoDBBinaryPacker implements PackerInterface
     }
 
     /**
-     * Pack the value
+     * Pack the value.
      *
-     * @param mixed $value
      * @return string
      */
     public function pack($value)
@@ -60,18 +50,20 @@ class MongoDBBinaryPacker implements PackerInterface
     }
 
     /**
-     * Unpack the value
+     * Unpack the value.
      *
      * @param string $packed
+     *
      * @return string
+     *
      * @throws \UnexpectedValueException if he value can't be unpacked
      */
     public function unpack($packed)
     {
         if (!$packed instanceof Binary) {
-            throw new \InvalidArgumentException("packed value should be BSON binary");
+            throw new \InvalidArgumentException('packed value should be BSON binary');
         }
 
-        return unserialize((string)$packed, $this->options);
+        return unserialize((string) $packed, $this->options);
     }
 }

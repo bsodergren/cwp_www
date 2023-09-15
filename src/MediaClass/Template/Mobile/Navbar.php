@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Template\Mobile;
 
@@ -18,7 +21,7 @@ class Navbar extends Template
         [$installed,$latest] = self::VersionText();
 
         foreach (__NAVBAR_LINKS__ as $text => $url) {
-            if (is_array($url)) {
+            if (\is_array($url)) {
                 $dropddown_menu_text = $text;
 
                 foreach ($url as $dropdown_text => $dropdown_url) {

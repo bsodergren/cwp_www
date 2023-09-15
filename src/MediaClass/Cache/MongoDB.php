@@ -1,30 +1,21 @@
 <?php
-
-/*
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+/**
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
 
 namespace CWP\Cache;
 
-use CWP\Cache\Packer\PackerInterface;
-use CWP\Cache\Packer\MongoDBBinaryPacker;
 use CWP\Cache\Option\InitializeTrait as InitializeOption;
-use MongoDB\Collection;
+use CWP\Cache\Packer\MongoDBBinaryPacker;
+use CWP\Cache\Packer\PackerInterface;
 use MongoDB\BSON\UTCDatetime as BSONUTCDateTime;
+use MongoDB\Collection;
 use MongoDB\Driver\Exception\RuntimeException as MongoDBRuntimeException;
 
 /**
- * MongoDB cache implementation
+ * MongoDB cache implementation.
  */
 class MongoDB extends AbstractCache
 {
@@ -36,9 +27,7 @@ class MongoDB extends AbstractCache
     protected $collection;
 
     /**
-     * Class constructor
-     *
-     * @param Collection $collection
+     * Class constructor.
      */
     public function __construct(Collection $collection)
     {
@@ -54,11 +43,8 @@ class MongoDB extends AbstractCache
         $this->collection->createIndex(['ttl' => 1], ['expireAfterSeconds' => 0]);
     }
 
-
     /**
      * Create the default packer for this cache implementation.
-     *
-     * @return PackerInterface
      */
     protected static function createDefaultPacker(): PackerInterface
     {
@@ -69,11 +55,12 @@ class MongoDB extends AbstractCache
      * Get filter for key and ttl.
      *
      * @param string|iterable $key
+     *
      * @return array
      */
     protected function filter($key)
     {
-        if (is_array($key)) {
+        if (\is_array($key)) {
             $key = ['$in' => $key];
         }
 
@@ -81,13 +68,13 @@ class MongoDB extends AbstractCache
             '_id' => $key,
             '$or' => [
                 ['ttl' => ['$gt' => new BSONUTCDateTime($this->currentTimestamp() * 1000)]],
-                ['ttl' => null]
-            ]
+                ['ttl' => null],
+            ],
         ];
     }
 
     /**
-     * {@inheritdoc }
+     * {@inheritdoc}
      */
     public function get($key, $default = null)
     {
@@ -102,9 +89,6 @@ class MongoDB extends AbstractCache
         return isset($data) ? $this->unpack($data['value']) : $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMultiple($keys, $default = null)
     {
         $idKeyPairs = $this->mapKeysToIds($keys);
@@ -133,7 +117,7 @@ class MongoDB extends AbstractCache
     }
 
     /**
-     * {@inheritdoc }
+     * {@inheritdoc}
      */
     public function has($key)
     {
@@ -145,11 +129,11 @@ class MongoDB extends AbstractCache
             return false;
         }
 
-        return $count  > 0;
+        return $count > 0;
     }
 
     /**
-     * {@inheritdoc }
+     * {@inheritdoc}
      */
     public function set($key, $value, $ttl = null)
     {
@@ -158,7 +142,7 @@ class MongoDB extends AbstractCache
         $item = [
             '_id' => $id,
             'ttl' => $this->getTtlBSON($ttl),
-            'value' => $this->pack($value)
+            'value' => $this->pack($value),
         ];
 
         try {
@@ -170,9 +154,6 @@ class MongoDB extends AbstractCache
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setMultiple($values, $ttl = null)
     {
         $this->assertIterable($values, 'values not iterable');
@@ -185,7 +166,7 @@ class MongoDB extends AbstractCache
         $items = [];
 
         foreach ($values as $key => $value) {
-            $id = $this->keyToId(is_int($key) ? (string)$key : $key);
+            $id = $this->keyToId(\is_int($key) ? (string) $key : $key);
 
             $items[] = [
                 'replaceOne' => [
@@ -193,10 +174,10 @@ class MongoDB extends AbstractCache
                     [
                         '_id' => $id,
                         'ttl' => $bsonTtl,
-                        'value' => $this->pack($value)
+                        'value' => $this->pack($value),
                     ],
-                    [ 'upsert' => true ]
-                ]
+                    ['upsert' => true],
+                ],
             ];
         }
 
@@ -209,9 +190,6 @@ class MongoDB extends AbstractCache
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($key)
     {
         $id = $this->keyToId($key);
@@ -225,9 +203,6 @@ class MongoDB extends AbstractCache
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function deleteMultiple($keys)
     {
         $idKeyPairs = $this->mapKeysToIds($keys);
@@ -243,9 +218,6 @@ class MongoDB extends AbstractCache
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear()
     {
         try {
@@ -259,12 +231,10 @@ class MongoDB extends AbstractCache
         return true;
     }
 
-
     /**
-     * Get TTL as Date type BSON object
+     * Get TTL as Date type BSON object.
      *
-     * @param null|int|\DateInterval $ttl
-     * @return BSONUTCDatetime|null
+     * @param int|\DateInterval|null $ttl
      */
     protected function getTtlBSON($ttl): ?BSONUTCDatetime
     {

@@ -1,13 +1,13 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $fileHeaderComment = <<<'EOF'
-CWP Media tool
+CWP Media tool for load flags
 EOF;
 
 return (new PhpCsFixer\Config())->setRules([
@@ -18,23 +18,23 @@ return (new PhpCsFixer\Config())->setRules([
 
     // '@PHP71Migration' => true,
     // '@PHPUnit75Migration:risky' => true,
-     '@Symfony'                                               => true,
-    // '@Symfony:risky'                                         => true,
+     '@Symfony' => true,
+     '@Symfony:risky' => true,
 
-    'protected_to_private'                                    => false,
-    'native_constant_invocation'                              => ['strict' => false],
-    'nullable_type_declaration_for_default_null_value'        => ['use_nullable_type_declaration' => false],
-    'no_superfluous_phpdoc_tags'                              => ['remove_inheritdoc' => true],
-    'phpdoc_add_missing_param_annotation'                     => true,
-    'header_comment'                                          => ['header' => $fileHeaderComment,
-    'comment_type'                                                         => 'PHPDoc', 'location' => 'after_open', 'separate' => 'bottom'],
-    'modernize_strpos'                                        => true,
-    'get_class_to_class_keyword'                              => true,
-    'braces'                                                  => [
-        'allow_single_line_closure'                   => true,
+    'protected_to_private' => false,
+    'native_constant_invocation' => ['strict' => false],
+    'nullable_type_declaration_for_default_null_value' => ['use_nullable_type_declaration' => false],
+    'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => true],
+    'phpdoc_add_missing_param_annotation' => true,
+    'header_comment' => ['header' => $fileHeaderComment,
+    'comment_type' => 'PHPDoc', 'location' => 'after_open', 'separate' => 'bottom'],
+    'modernize_strpos' => true,
+    'get_class_to_class_keyword' => true,
+    'braces' => [
+        'allow_single_line_closure' => true,
         'position_after_functions_and_oop_constructs' => 'same'],
 
-    'binary_operator_spaces'                                  => [
+    'binary_operator_spaces' => [
         'operators' => [
           //  '=>'  => 'align_single_space_by_scope',
           //  '='   => 'align_single_space_by_scope',
@@ -190,7 +190,7 @@ $rules = [
 ];
 */
 
-$finder            = Finder::create()
+$finder = Finder::create()
     ->in([
         __DIR__,
     ])

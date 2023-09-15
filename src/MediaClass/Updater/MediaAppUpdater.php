@@ -1,17 +1,18 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Updater;
 
-use CWP\Core\MediaSettings;
-use CWP\Media\MediaExec;
 use CWP\HTML\HTMLDisplay;
+use CWP\Media\MediaExec;
 use Nette\Utils\Callback;
 use Nette\Utils\FileSystem;
-use Symfony\Component\Process\Process;
 
 class MediaAppUpdater
 {
-    public const GIT_VERSION = "https://raw.githubusercontent.com/bsodergren/cwp_www/main/current.txt";
+    public const GIT_VERSION = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/current.txt';
 
     public $latest;
     public $current;
@@ -19,11 +20,10 @@ class MediaAppUpdater
 
     public function __construct()
     {
-        define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
+        \define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
         $this->getLastest();
         $this->currentVersion();
         $this->process = new MediaExec();
-
     }
 
     public function get_content($URL)
@@ -38,15 +38,16 @@ class MediaAppUpdater
 
         return $data;
     }
+
     public function currentVersion()
     {
-        if(__DEBUG__ == true) {
+        if (__DEBUG__ == true) {
             $this->current = '1.2.3';
         } else {
             $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
         }
-
     }
+
     public function getLastest()
     {
         $this->latest = trim($this->get_content(self::GIT_VERSION));
@@ -54,26 +55,25 @@ class MediaAppUpdater
 
     public function isUpdate()
     {
-
-        if($this->latest > $this->current) {
+        if ($this->latest > $this->current) {
             return $this->latest;
         }
+
         return null;
     }
 
     public function callback($type, $buffer): void
     {
-
         HTMLDisplay::put(nl2br($buffer), 'green');
-
     }
+
     public function getUpdate()
     {
         $callback = Callback::check([$this, 'callback']);
         $this->process->command('git');
         $this->process->option('pull');
-        if(__DEBUG__ == true) {
-            echo  $this->process->getCommand();
+        if (__DEBUG__ == true) {
+            echo $this->process->getCommand();
         } else {
             $this->process->run($callback);
         }
@@ -87,8 +87,8 @@ class MediaAppUpdater
         $this->process->option('-d');
         $this->process->option(__PUBLIC_ROOT__);
         $this->process->option('update');
-        if(__DEBUG__ == true) {
-            echo  $this->process->getCommand();
+        if (__DEBUG__ == true) {
+            echo $this->process->getCommand();
         } else {
             $this->process->exec($callback, ['HOME' => __HOME__]);
         }

@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Media\Import;
 
@@ -16,6 +19,5 @@ class MediaImport extends Media
 
     public function __construct()
     {
-
     }
 }

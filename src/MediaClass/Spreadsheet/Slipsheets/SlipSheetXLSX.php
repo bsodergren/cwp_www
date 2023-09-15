@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Spreadsheet\Slipsheets;
@@ -10,9 +10,7 @@ namespace CWP\Spreadsheet\Slipsheets;
  */
 
 use CWP\Core\Media;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class SlipSheetXLSX extends Media
 {
@@ -32,7 +30,7 @@ class SlipSheetXLSX extends Media
     {
         $sql = 'SELECT * FROM form_data_count WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by form_id ASC';
 
-        $result                   = Media::$connection->fetchAll($sql);
+        $result = Media::$connection->fetchAll($sql);
         foreach ($result as $id => $row) {
             /*
             +"id": 1320
@@ -65,34 +63,32 @@ class SlipSheetXLSX extends Media
             // ];
 
             $slipSheetArray[] = $row;
-
         }
 
-        $sheets                   = array_chunk($slipSheetArray, 6);
+        $sheets = array_chunk($slipSheetArray, 6);
 
+        $worksheet_title = 'Quick Sheet';
 
-        $worksheet_title          = 'Quick Sheet';
-
-        $myWorkSheet              = new Worksheet($sheetObj, $worksheet_title);
+        $myWorkSheet = new Worksheet($sheetObj, $worksheet_title);
         $sheetObj->addSheet($myWorkSheet, $sheetIndex);
-        $SlipSheet                = $sheetObj->getSheet($sheetIndex);
+        $SlipSheet = $sheetObj->getSheet($sheetIndex);
 
-        $this->styles             = new SlipSheetXLSX_Styles($SlipSheet);
-        $this->styles->totalPages = count($sheets);
+        $this->styles = new SlipSheetXLSX_Styles($SlipSheet);
+        $this->styles->totalPages = \count($sheets);
 
         $this->styles->sheetCommon();
         $this->styles->setColWidths($this->styles->Columns);
 
-        $SlipSheetSize            = count($this->styles->rowHeight);
-        $rowOffset                = $SlipSheetSize * 3;
+        $SlipSheetSize = \count($this->styles->rowHeight);
+        $rowOffset = $SlipSheetSize * 3;
 
-        $row                      = 1;
-        $lineIdx                  = 1;
+        $row = 1;
+        $lineIdx = 1;
         foreach ($sheets as $pageNo => $page) {
             $col_A = 'A';
             $col_B = 'C';
 
-            $row   = $rowOffset * $pageNo;
+            $row = $rowOffset * $pageNo;
             ++$row;
 
             foreach ($page as $k => $v) {
@@ -122,14 +118,14 @@ class SlipSheetXLSX extends Media
                         case 8:
                             // $this->setFormLocation($col_A, $row);
 
-                            //$this->setFormerInfo($col_B, $row);
+                            // $this->setFormerInfo($col_B, $row);
                             //   $this->setPcsInfo($col_B, $row);
                     }
                     ++$row;
                 }
 
                 if (2 == $k) {
-                    $row   = $rowOffset * $pageNo;
+                    $row = $rowOffset * $pageNo;
                     ++$row;
                     $col_A = 'E';
                     $col_B = 'G';
@@ -140,7 +136,6 @@ class SlipSheetXLSX extends Media
                     $col_B = 'C';
                 }
             }
-
         }
     }
 
@@ -154,15 +149,15 @@ class SlipSheetXLSX extends Media
     {
         if ('half' == $this->SlipData->packaging) {
             $text = 'Half Skid';
-            $box  = 'Box';
+            $box = 'Box';
         }
         if ('full' == $this->SlipData->packaging) {
             $text = 'Full Skid';
-            $box  = 'Box';
+            $box = 'Box';
         }
         if (str_contains($this->SlipData->packaging, 'cartons')) {
             $text = $this->SlipData->packaging;
-            $box  = 'Cartons';
+            $box = 'Cartons';
         }
 
         $this->styles->addSheetData(ucwords($text), $column.$row);
@@ -180,13 +175,13 @@ class SlipSheetXLSX extends Media
 
     private function setFormerInfo($column, $row)
     {
-        $text           = $this->SlipData->former;
+        $text = $this->SlipData->former;
         $this->styles->addSheetData($text, $column.$row);
     }
 
     private function setPcsInfo($column, $row)
     {
-        $text = $this->SlipData->former ." ".number_format($this->SlipData->count).' pcs';
+        $text = $this->SlipData->former.' '.number_format($this->SlipData->count).' pcs';
         $this->styles->addSheetData($text, $column.$row);
     }
 

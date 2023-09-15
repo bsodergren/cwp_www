@@ -1,10 +1,13 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Template;
 
 use CWP\Core\Media;
-use CWP\Utils\MediaDevice;
 use CWP\Core\MediaSettings;
+use CWP\Utils\MediaDevice;
 
 class HTMLDocument
 {
@@ -18,7 +21,7 @@ class HTMLDocument
 
     public static function __callStatic($method, $args)
     {
-        $new = new HTMLDocument();
+        $new = new self();
         $method = str_replace('_', '', $method);
 
         return $new->$method();
@@ -27,7 +30,7 @@ class HTMLDocument
     public function NavbarDropDown()
     {
         foreach (__NAVBAR_LINKS__ as $text => $url) {
-            if (is_array($url)) {
+            if (\is_array($url)) {
                 $dropddown_menu_text = $text;
 
                 foreach ($url as $dropdown_text => $dropdown_url) {
@@ -118,8 +121,8 @@ class HTMLDocument
     public static function displayMsg()
     {
         if (isset($GLOBALS)) {
-            if (is_array($GLOBALS['_REQUEST'])) {
-                if (array_key_exists('msg', $GLOBALS['_REQUEST'])) {
+            if (\is_array($GLOBALS['_REQUEST'])) {
+                if (\array_key_exists('msg', $GLOBALS['_REQUEST'])) {
                     return Template::GetHTML('base/header/return_msg', ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])], false);
                 }
             }

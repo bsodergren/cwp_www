@@ -1,10 +1,10 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
-use CWP\HTML\HTMLDisplay;
 use CWP\Core\MediaError;
+use CWP\HTML\HTMLDisplay;
 
 require '.config.inc.php';
 
@@ -12,14 +12,12 @@ $refer_script = basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.p
 if (__SCRIPT_NAME__ == $refer_script) {
     MediaError::msg('info', $refer_script.'< >'.__SCRIPT_NAME__, 0);
 }
-if (null === $refer_script || $refer_script == '') {
-    MediaError::msg('info', "referer not set", 0);
+if (null === $refer_script || '' == $refer_script) {
+    MediaError::msg('info', 'referer not set', 0);
     echo HTMLDisplay::JavaRefresh('/index.php', 0);
-
 }
 
 define('__FORM_POST__', $refer_script);
-
 
 if (isset($_POST['divClass'])) {
     list($k, $id) = explode('_', $_POST['row_id']);

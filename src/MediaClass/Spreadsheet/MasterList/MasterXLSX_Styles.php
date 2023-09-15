@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Spreadsheet\MasterList;
@@ -49,8 +49,7 @@ class MasterXLSX_Styles extends styles
 
     public function sheetCommon()
     {
-
-        $merg_rows   = [6, 7, 8, 9, 10];
+        $merg_rows = [6, 7, 8, 9, 10];
 
         foreach ($merg_rows as $row) {
             $cell = Styles::row('B', $row).':'.Styles::row('C', $row);
@@ -63,16 +62,16 @@ class MasterXLSX_Styles extends styles
             $this->setIndent($cell);
         }
 
-        $sql         = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
+        $sql = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
 
-        $result      = Media::$connection->fetchAll($sql);
+        $result = Media::$connection->fetchAll($sql);
         foreach ($result as $k => $val) {
-            $col       = Styles::row($val['ecol'], $val['erow']);
-            $text      = $val['text'];
-            $bold      = $val['bold'];
+            $col = Styles::row($val['ecol'], $val['erow']);
+            $text = $val['text'];
+            $bold = $val['bold'];
             $font_size = $val['font_size'];
-            $h_align   = $val['h_align'];
-            $v_align   = $val['v_align'];
+            $h_align = $val['h_align'];
+            $v_align = $val['v_align'];
 
             if (isset($text)) {
                 $this->setCellText($col, $text);
@@ -105,7 +104,7 @@ class MasterXLSX_Styles extends styles
         $this->setCellText($textCell, $text);
         $this->setBorder($textCell);
 
-        $valCell  = Styles::row('B', $row);
+        $valCell = Styles::row('B', $row);
         $this->setAlign($valCell, 'H');
         $this->setCellText($valCell, $value);
         $this->setBorder($valCell);
@@ -113,7 +112,7 @@ class MasterXLSX_Styles extends styles
 
     public function setRowHeights()
     {
-        $hn = count($this->rowHeight);
+        $hn = \count($this->rowHeight);
         for ($i = 0; $i < $hn; ++$i) {
             $this->setHeight(['cell' => Styles::row(null, $i + 1), 'height' => $this->rowHeight[$i]]);
         }
@@ -148,7 +147,7 @@ class MasterXLSX_Styles extends styles
 
         $this->setCellText(Styles::row('B', 10), $form['packaging']);
 
-        if (key_exists('skid_count', $form)) {
+        if (\array_key_exists('skid_count', $form)) {
             $this->setCellText(Styles::row('D', 8), $form['skid_count']);
         }
 
@@ -169,23 +168,23 @@ class MasterXLSX_Styles extends styles
             $trim_cell = 26;
             if (0 != $form['del_size']) {
                 $deliveryInst[$trim_cell] = ['text' => 'Delivered Size', 'value' => $form['del_size']];
-                $trim_cell                = 25;
+                $trim_cell = 25;
             }
 
             if (0 != $form['foot_trim']) {
                 $deliveryInst[$trim_cell] = ['text' => 'Foot Trim', 'value' => $form['foot_trim']];
-                $trim_cell                = 24;
+                $trim_cell = 24;
             }
             if (0 != $form['head_trim']) {
                 $deliveryInst[$trim_cell] = ['text' => 'Head Trim', 'value' => $form['head_trim']];
             }
 
-            if (is_array($deliveryInst)) {
+            if (\is_array($deliveryInst)) {
                 $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 26),  'border' => 'outline']);
 
                 foreach ($deliveryInst as $row => $data) {
-                    $cellA          = Styles::row('A', $row);
-                    $cellB          = Styles::row('B', $row);
+                    $cellA = Styles::row('A', $row);
+                    $cellB = Styles::row('B', $row);
 
                     $this->setHeight(['cell' => Styles::row(null, $row), 'height' => 18]);
 

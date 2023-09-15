@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Updater\Db;
@@ -23,15 +23,11 @@ class MediaDb
     public function __call($method, $args)
     {
         // $method = str_replace('_', '', $method);
-        if(method_exists($this, $method)) {
+        if (method_exists($this, $method)) {
             dd($method);
 
             $this->$method(...$args);
-
         }
         // dd("Nope");
-
     }
-
-
 }

@@ -1,11 +1,16 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Updater\Db;
 
 interface MediaDbAbstract
 {
     public function query($query);
+
     public function fetch($query);
+
     public function fetchOne($query);
 
     public function check_tableExists($table);
@@ -19,5 +24,4 @@ interface MediaDbAbstract
     public function change_column($table_name, $name, $type);
 
     public function reset_table($table);
-
 }

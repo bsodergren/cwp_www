@@ -1,4 +1,8 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
+
 use CWP\HTML\HTMLDisplay;
 use CWP\HTML\HTMLForms;
 use CWP\Template\Template;
@@ -7,11 +11,12 @@ use CWP\Utils\Utils;
 require_once '../.config.inc.php';
 
 define('TITLE', 'Media Settings');
-//$template = new Template();
+// $template = new Template();
 use CWP\Utils\MediaDevice;
+
 MediaDevice::getHeader();
 
-//$header_html = Template::GetHTML("trim/table_head", []);
+// $header_html = Template::GetHTML("trim/table_head", []);
 
 $null_style = 'background-color : #94f9b2;';
 
@@ -25,14 +30,13 @@ foreach ($results as $k => $u) {
     $pub_array[$u['bind']][$u['id']] = $u;
 }
 
-
 function showDecimals($var, $size = false)
 {
-    if(__SHOW_DECIMAL__ == true) {
-        if ($var == '') {
+    if (__SHOW_DECIMAL__ == true) {
+        if ('' == $var) {
             $var = null;
         } else {
-            if ($size == true) {
+            if (true == $size) {
                 $var = Utils::DelSizeToFloat($var);
             } else {
                 $var = utils::fracToFloat($var);
@@ -43,15 +47,13 @@ function showDecimals($var, $size = false)
     return $var;
 }
 
-
-
-$idx=0;
+$idx = 0;
 foreach ($pub_array as $bind => $row) {
     $bind_name = utils::bindtype($bind);
-    $table_pub_head = Template::GetHTML('trim/table_pub_head', ['BIND_NAME'=>$bind_name]);
+    $table_pub_head = Template::GetHTML('trim/table_pub_head', ['BIND_NAME' => $bind_name]);
 
     foreach ($row as $k => $u) {
-        $idx++;
+        ++$idx;
         $pub_name = str_replace('_', ' ', $u['pub_name']);
         $pub_name = ucwords($pub_name);
         $bind_name = utils::bindtype($u['bind']);
@@ -61,7 +63,7 @@ foreach ($pub_array as $bind => $row) {
         $foot_style = '';
         $size_style = '';
 
-        if ($u['head_trim'] === null) {
+        if (null === $u['head_trim']) {
             $head_text = 'Head Trim';
             $head_style = $null_style;
             $u['head_trim'] = 0;
@@ -70,7 +72,7 @@ foreach ($pub_array as $bind => $row) {
         }
         $head_value = showDecimals($u['head_trim']);
 
-        if ($u['foot_trim'] === null) {
+        if (null === $u['foot_trim']) {
             $foot_text = 'Foot Trim';
             $u['foot_trim'] = 0;
             $foot_style = $null_style;
@@ -80,7 +82,7 @@ foreach ($pub_array as $bind => $row) {
 
         $foot_value = showDecimals($u['foot_trim']);
 
-        if ($u['face_trim'] === null) {
+        if (null === $u['face_trim']) {
             $face_trim = 'Face Trim';
             $u['face_trim'] = 0;
             $face_trim = $null_style;
@@ -89,16 +91,13 @@ foreach ($pub_array as $bind => $row) {
         }
         $face_value = showDecimals($u['face_trim']);
 
-        if ($u['delivered_size'] === null) {
+        if (null === $u['delivered_size']) {
             $size_text = 'Delivered Size';
             $size_style = $null_style;
         } else {
             $size_text = $u['delivered_size'];
-            $size_value = showDecimals($size_text,true);
+            $size_value = showDecimals($size_text, true);
         }
-
-
-
 
         $head_html = HTMLForms::draw_text(
             'trim_'.$u['id'].'_head',
@@ -106,7 +105,7 @@ foreach ($pub_array as $bind => $row) {
                 'label' => $head_text,
                 'placeholder' => $head_text,
                 'style' => $head_style,
-                'value' => $head_value ,
+                'value' => $head_value,
                 'class' => 'form-control',
             ]
         );
@@ -142,19 +141,18 @@ foreach ($pub_array as $bind => $row) {
             ]
         );
 
-        $pub_checkbox = HTMLForms::draw_checkbox( 'trim_'.$u['id'].'_delete', 0,'',);
+        $pub_checkbox = HTMLForms::draw_checkbox('trim_'.$u['id'].'_delete', 0, '');
 
         $textbox_html .= Template::GetHTML('trim/pub_list', [
             'PUBLICATION' => $pub_name,
-            'PUB_ID'=>$idx,
+            'PUB_ID' => $idx,
             'PUB_CHECKBOX' => $pub_checkbox,
-            //'BIND' => $bind,
-            //'BIND_NAME' => $bind_name,
+            // 'BIND' => $bind,
+            // 'BIND_NAME' => $bind_name,
             'TEXT_HEAD' => $head_html,
             'TEXT_FOOT' => $foot_html,
             'TEXT_FACE' => $face_html,
             'TEXT_SIZE' => $size_html,
-
         ]);
     }
     $pubhtml_list .= Template::GetHTML('trim/pub_cat', [
@@ -168,7 +166,7 @@ $pub_list .= Template::GetHTML('trim/form/form', [
     'HIDDEN' => HTMLDisplay::draw_hidden('trim_update', 'update'),
     'FORM_HEAD' => $header_html,
     'FORM_FIELDS' => $pubhtml_list,
-    'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT'=>'Update publications']),
+    'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Update publications']),
 ]);
 
 $bind_type = ['PFS', 'PFM', 'PFL', 'SHS'];
@@ -192,15 +190,15 @@ $addpub_html = Template::GetHTML('trim/new_pub', [
     'TEXT_SIZE' => HTMLForms::draw_text('delivered_size', ['label' => 'delivered_ size', 'placeholder' => '8-1/2 x 10-3/4', 'style' => $null_style, 'class' => 'form-control']),
 ]);
 
-$header_html = Template::GetHTML('trim/table_head', ['BIND_FIELD'=>'<div class="col-sm fs-6 text-nowrap">Bind Style</div>']);
+$header_html = Template::GetHTML('trim/table_head', ['BIND_FIELD' => '<div class="col-sm fs-6 text-nowrap">Bind Style</div>']);
 
 $new_html = Template::GetHTML('trim/form/form', [
     'HIDDEN' => HTMLDisplay::draw_hidden('trim_add', 'add'),
     'FORM_HEAD' => $header_html,
     'FORM_FIELDS' => $addpub_html,
-    'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT'=>'Add new publication']),
+    'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Add new publication']),
 ]);
 
-$template->render('trim/main', ['PUB_LIST' => $pub_list, 'NEW_PUB'=>$new_html]);
+$template->render('trim/main', ['PUB_LIST' => $pub_list, 'NEW_PUB' => $new_html]);
 
 MediaDevice::getFooter();

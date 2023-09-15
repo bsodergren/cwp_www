@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -19,10 +19,10 @@ class Trim extends MediaProcess
         $form = new Formr('bootstrap4');
 
         if ($form->submitted()) {
-            if (array_key_exists('trim_update', $_POST)) {
+            if (\array_key_exists('trim_update', $_POST)) {
                 $this->trim_update();
             }
-            if (array_key_exists('trim_add', $_POST)) {
+            if (\array_key_exists('trim_add', $_POST)) {
                 $this->trim_add();
             }
         }
@@ -49,9 +49,9 @@ class Trim extends MediaProcess
             }
         }
 
-        if (count($deleteData) > 0) {
+        if (\count($deleteData) > 0) {
             foreach ($deleteData as $key) {
-                if (key_exists($key, $updateData)) {
+                if (\array_key_exists($key, $updateData)) {
                     unset($updateData[$key]);
                 }
                 $count = Media::$explorer->table('pub_trim')->where('id', $key)->delete();

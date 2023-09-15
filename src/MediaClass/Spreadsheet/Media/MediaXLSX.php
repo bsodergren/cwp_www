@@ -1,12 +1,12 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Spreadsheet\Media;
 
-use CWP\HTML\HTMLDisplay;
 use CWP\Core\Media;
+use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Calculator;
 use CWP\Spreadsheet\LarrySheets\LarrySheetsXLSX;
@@ -318,7 +318,7 @@ class MediaXLSX extends Media
         $form_box_data = $this->box;
 
         foreach ($this->form_details as $key => $value) {
-            if (in_array($key, $fields)) {
+            if (\in_array($key, $fields)) {
                 $form_box_data[$key] = $value;
             }
         }

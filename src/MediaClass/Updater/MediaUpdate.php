@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Updater;
@@ -9,8 +9,8 @@ namespace CWP\Updater;
  * CWP Media tool
  */
 
-use CWP\Core\Media;
 use CWP\Core\Bootstrap;
+use CWP\Core\Media;
 use CWP\Updater\Db\MediaMySQL;
 use CWP\Updater\Db\MediaSqlite;
 
@@ -27,7 +27,7 @@ class MediaUpdate
 
     public function __construct()
     {
-        //$this->conn = Media::$connection;
+        // $this->conn = Media::$connection;
 
         if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
             $this->dbClassObj = new MediaMySQL($this);

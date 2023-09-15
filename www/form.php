@@ -1,12 +1,12 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
-use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
 use CWP\Core\Media;
 use CWP\Core\MediaSettings;
+use CWP\HTML\HTMLDisplay;
+use CWP\Template\Template;
 
 /**
  * CWP Media tool.
@@ -19,6 +19,7 @@ $display = new HTMLDisplay();
 // $template = new Template();
 
 use CWP\Utils\MediaDevice;
+
 MediaDevice::getHeader();
 
 $row_html = '';

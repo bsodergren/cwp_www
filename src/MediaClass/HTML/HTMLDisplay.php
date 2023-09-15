@@ -1,12 +1,12 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\HTML;
 
-use CWP\Template\Template;
 use CWP\Core\MediaSettings;
+use CWP\Template\Template;
 
 /*
  * CWP Media tool
@@ -61,8 +61,8 @@ class HTMLDisplay
 
     public static function pushhtml($template, $params = [])
     {
-        $params["MSG_CLASS"] = MSG_CLASS;
-        $params["HEADER_CLASS"] = HEADER_CLASS;
+        $params['MSG_CLASS'] = MSG_CLASS;
+        $params['HEADER_CLASS'] = HEADER_CLASS;
         $contents = Template::GetHTML($template, $params);
         self::push($contents);
     }
@@ -114,16 +114,14 @@ class HTMLDisplay
 
     public static function draw_excelLink($excel_file)
     {
-
-        $relativePath = substr($excel_file, strlen(__HTTP_ROOT__) + 1);
+        $relativePath = substr($excel_file, \strlen(__HTTP_ROOT__) + 1);
         $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
         if (false == self::is_404($url)) {
             return false;
         }
-        if ("APPLICATION" == __DEVICE__) {
+        if ('APPLICATION' == __DEVICE__) {
             return false;
-
         }
 
         return 'ms-excel:ofe|u|'.$url;
@@ -131,7 +129,7 @@ class HTMLDisplay
 
     public static function getPdfLink($pdf_file)
     {
-        $relativePath = substr($pdf_file, strlen(__HTTP_ROOT__) + 1);
+        $relativePath = substr($pdf_file, \strlen(__HTTP_ROOT__) + 1);
 
         $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
@@ -148,34 +146,32 @@ class HTMLDisplay
     {
         $url = str_replace(' ', '%20', $url);
         file_get_contents($url);
-        if (key_exists('4', $http_response_header)) {
+        if (\array_key_exists('4', $http_response_header)) {
             return true;
         }
 
         return false;
     }
 
-
-
     public function display_table_rows($array, $letter)
     {
-        $html             = '';
-        $start            = '';
-        $end              = '';
-        $row_template     = new Template();
+        $html = '';
+        $start = '';
+        $end = '';
+        $row_template = new Template();
 
         foreach ($array as $part) {
             if ('' == $start) {
                 $start = $part['id'];
             }
 
-            $end         = $part['id'];
+            $end = $part['id'];
 
             $check_front = '';
-            $check_back  = '';
+            $check_back = '';
 
-            $classFront  = 'Front'.$letter;
-            $classBack   = 'Back'.$letter;
+            $classFront = 'Front'.$letter;
+            $classBack = 'Back'.$letter;
 
             if ('Back' == $part['former']) {
                 $check_back = 'checked';
@@ -186,23 +182,22 @@ class HTMLDisplay
             $radio_check = '';
 
             if ('4pg' == $part['config']) {
-                $value       = [
+                $value = [
                     'Front' => ['value' => 'Front', 'checked' => $check_front, 'text' => 'Front', 'class' => $classFront],
-                    'Back'  => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
+                    'Back' => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
                 ];
                 $radio_check = $this->draw_radio('former_'.$part['id'], $value);
             }
 
-            $facetrim    = MediaSettings::isFacetrim($part);
+            $facetrim = MediaSettings::isFacetrim($part);
 
-
-            $array       = [
-                'MARKET'      => $part['market'],
+            $array = [
+                'MARKET' => $part['market'],
                 'PUBLICATION' => $part['pub'],
-                'COUNT'       => $part['count'],
-                'SHIP'        => $part['ship'],
-                'RADIO_BTNS'  => $radio_check,
-                'FACE_TRIM'   => $this->draw_checkbox('facetrim_'.$part['id'], $facetrim, 'Face Trim'),
+                'COUNT' => $part['count'],
+                'SHIP' => $part['ship'],
+                'RADIO_BTNS' => $radio_check,
+                'FACE_TRIM' => $this->draw_checkbox('facetrim_'.$part['id'], $facetrim, 'Face Trim'),
               //  'NO_TRIM'     => $this->draw_checkbox('nobindery_'.$part['id'], $nobindery, 'No Trimmers'),
             ];
 
@@ -210,14 +205,14 @@ class HTMLDisplay
         }
 
         $AllCheckBoxFront = 'all'.$classFront;
-        $AllCheckBoxBack  = 'all'.$classBack;
+        $AllCheckBoxBack = 'all'.$classBack;
         if ($end > $start + 1 && '' != $radio_check) {
             $radio_check_array = [
-                'LETTER'           => $letter,
+                'LETTER' => $letter,
                 'ALLCHECKBOXFRONT' => $AllCheckBoxFront,
-                'ALLCHECKBOXBACK'  => $AllCheckBoxBack,
-                'CLASSFRONT'       => $classFront,
-                'CLASSBACK'        => $classBack,
+                'ALLCHECKBOXBACK' => $AllCheckBoxBack,
+                'CLASSFRONT' => $classFront,
+                'CLASSBACK' => $classBack,
             ];
             $row_template->template('form/all_parts', $radio_check_array);
         }

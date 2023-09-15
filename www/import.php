@@ -1,13 +1,13 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use CWP\Core\Media;
+use CWP\Filesystem\MediaFileSystem;
+use CWP\Media\Mail\EmailImport;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Media\Mail\EmailImport;
-use CWP\Filesystem\MediaFileSystem;
 
 /**
  * CWP Media tool.
@@ -26,30 +26,23 @@ $params = [];
 $upload_params = [];
 $pdf_select_options = [];
 
-if (1 == __IMAP_ENABLE__)
-{
+if (1 == __IMAP_ENABLE__) {
     /* try to connect */
     $import = new EmailImport();
     $emails = $import->search();
 
     if ($emails) {
-
-        foreach ($emails as $i => $m)
-        {
+        foreach ($emails as $i => $m) {
             $import->mailId = $m;
             $import->hasAttachment();
         }
         $import->moveAttachments();
         $import->getJobNumbers();
-        $mail_import_card['FIRST_FORM']=$import->drawSelectBox();
+        $mail_import_card['FIRST_FORM'] = $import->drawSelectBox();
         $params['EMAIL_IMPORT_HTML'] = template::GetHTML('/import/form_card', $mail_import_card);
-
     }
 
-
-
-
-//    dd($import->attachments);
+    //    dd($import->attachments);
 }
 //	echo $output;
 

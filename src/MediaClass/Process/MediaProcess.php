@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -12,13 +12,13 @@ class MediaProcess
     public object $media;
     public $job_id;
 
-    public $url = "/index.php";
-    public $msg = "";
-    public $timeout = "0";
+    public $url = '/index.php';
+    public $msg = '';
+    public $timeout = '0';
 
     public function __construct($media)
     {
-        if (is_object($media)) {
+        if (\is_object($media)) {
             $this->media = $media;
             $this->job_id = $media->job_id;
         }
@@ -26,7 +26,7 @@ class MediaProcess
 
     public function run($req)
     {
-        $class = get_called_class();
+        $class = static::class;
         (new $class())->run($req);
     }
 

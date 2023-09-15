@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 // // declare(strict_types=1);
@@ -27,7 +27,6 @@ class NotCache extends AbstractCache
     {
         return true;
     }
-
 
     public function get(string $key, mixed $default = null): mixed
     {

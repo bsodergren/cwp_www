@@ -1,14 +1,6 @@
 <?php
 /**
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -18,19 +10,20 @@ namespace CWP\Cache\Option;
 use CWP\Cache\Exception\InvalidArgumentException;
 
 /**
- * TTL option
+ * TTL option.
  */
 trait TtlTrait
 {
     /**
      * @var int|null
      */
-    protected $ttl = null;
+    protected $ttl;
 
     /**
-     * Set the maximum time to live (ttl)
+     * Set the maximum time to live (ttl).
      *
-     * @param int|null $value  Seconds or null to live forever
+     * @param int|null $value Seconds or null to live forever
+     *
      * @throws InvalidArgumentException
      */
     protected function setTtlOption(?int $value): void
@@ -43,9 +36,7 @@ trait TtlTrait
     }
 
     /**
-     * Get the maximum time to live (ttl)
-     *
-     * @return int|null
+     * Get the maximum time to live (ttl).
      */
     protected function getTtlOption(): ?int
     {

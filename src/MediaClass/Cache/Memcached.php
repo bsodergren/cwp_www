@@ -1,15 +1,6 @@
 <?php
-
-/*
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+/**
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -17,12 +8,12 @@
 namespace CWP\Cache;
 
 use CWP\Cache\Exception\InvalidArgumentException;
-use CWP\Cache\Packer\PackerInterface;
 use CWP\Cache\Packer\NopPacker;
+use CWP\Cache\Packer\PackerInterface;
 use Memcached as MemcachedServer;
 
 /**
- * Memcached
+ * Memcached.
  */
 class Memcached extends AbstractCache
 {
@@ -31,19 +22,13 @@ class Memcached extends AbstractCache
      */
     protected $server;
 
-    /**
-     * @param MemcachedServer $server
-     */
     public function __construct(MemcachedServer $server)
     {
         $this->server = $server;
     }
 
-
     /**
-     * Create the default packer for this cache implementation
-     *
-     * @return PackerInterface
+     * Create the default packer for this cache implementation.
      */
     protected static function createDefaultPacker(): PackerInterface
     {
@@ -51,59 +36,49 @@ class Memcached extends AbstractCache
     }
 
     /**
-     * Validate the key
+     * Validate the key.
      *
      * @param string $key
-     * @return void
+     *
      * @throws InvalidArgumentException
      */
     protected function assertKey($key): void
     {
         parent::assertKey($key);
 
-        if (strlen($key) > 250) {
-            throw new InvalidArgumentException("Key to long, max 250 characters");
+        if (\strlen($key) > 250) {
+            throw new InvalidArgumentException('Key to long, max 250 characters');
         }
     }
 
     /**
-     * Pack all values and turn keys into ids
-     *
-     * @param iterable $values
-     * @return array
+     * Pack all values and turn keys into ids.
      */
     protected function packValues(iterable $values): array
     {
         $packed = [];
 
         foreach ($values as $key => $value) {
-            $this->assertKey(is_int($key) ? (string)$key : $key);
+            $this->assertKey(\is_int($key) ? (string) $key : $key);
             $packed[$key] = $this->pack($value);
         }
 
         return $packed;
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function get($key, $default = null)
     {
         $this->assertKey($key);
 
         $data = $this->server->get($key);
 
-        if ($this->server->getResultCode() !== MemcachedServer::RES_SUCCESS) {
+        if (MemcachedServer::RES_SUCCESS !== $this->server->getResultCode()) {
             return $default;
         }
 
         return $this->unpack($data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($key)
     {
         $this->assertKey($key);
@@ -111,12 +86,9 @@ class Memcached extends AbstractCache
 
         $result = $this->server->getResultCode();
 
-        return $result === MemcachedServer::RES_SUCCESS;
+        return MemcachedServer::RES_SUCCESS === $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set($key, $value, $ttl = null)
     {
         $this->assertKey($key);
@@ -124,7 +96,7 @@ class Memcached extends AbstractCache
         $packed = $this->pack($value);
         $ttlTime = $this->ttlToMemcachedTime($ttl);
 
-        if ($ttlTime === false) {
+        if (false === $ttlTime) {
             return $this->delete($key);
         }
 
@@ -133,30 +105,24 @@ class Memcached extends AbstractCache
         return $success;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($key)
     {
         $this->server->delete($this->keyToId($key));
 
         $result = $this->server->getResultCode();
 
-        return $result === MemcachedServer::RES_SUCCESS || $result === MemcachedServer::RES_NOTFOUND;
+        return MemcachedServer::RES_SUCCESS === $result || MemcachedServer::RES_NOTFOUND === $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMultiple($keys, $default = null)
     {
         $this->assertIterable($keys, 'keys not iterable');
-        $keysArr = is_array($keys) ? $keys : iterator_to_array($keys, false);
+        $keysArr = \is_array($keys) ? $keys : iterator_to_array($keys, false);
         array_walk($keysArr, [$this, 'assertKey']);
 
         $result = $this->server->getMulti($keysArr);
 
-        if ($result === false) {
+        if (false === $result) {
             return false;
         }
 
@@ -169,9 +135,6 @@ class Memcached extends AbstractCache
         return $items;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setMultiple($values, $ttl = null)
     {
         $this->assertIterable($values, 'values not iterable');
@@ -179,29 +142,27 @@ class Memcached extends AbstractCache
         $packed = $this->packValues($values);
         $ttlTime = $this->ttlToMemcachedTime($ttl);
 
-        if ($ttlTime === false) {
+        if (false === $ttlTime) {
             return $this->server->deleteMulti(array_keys($packed));
         }
 
         return $this->server->setMulti($packed, $ttlTime);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear()
     {
         return $this->server->flush();
     }
-
 
     /**
      * Convert ttl to timestamp or seconds.
      *
      * @see http://php.net/manual/en/memcached.expiration.php
      *
-     * @param null|int|\DateInterval $ttl
+     * @param int|\DateInterval|null $ttl
+     *
      * @return int|null
+     *
      * @throws InvalidArgumentException
      */
     protected function ttlToMemcachedTime($ttl)

@@ -1,30 +1,19 @@
 <?php
-
-/*
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+/**
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
 
 namespace CWP\Cache\Packer;
 
-use CWP\Cache\Packer\PackerInterface;
-
 /**
- * Don't pack, just straight passthrough
+ * Don't pack, just straight passthrough.
  */
 class NopPacker implements PackerInterface
 {
     /**
-     * Get cache type (might be used as file extension)
+     * Get cache type (might be used as file extension).
      *
      * @return string
      */
@@ -34,10 +23,7 @@ class NopPacker implements PackerInterface
     }
 
     /**
-     * Pack the value
-     *
-     * @param mixed $value
-     * @return mixed
+     * Pack the value.
      */
     public function pack($value)
     {
@@ -45,10 +31,7 @@ class NopPacker implements PackerInterface
     }
 
     /**
-     * Unpack the value
-     *
-     * @param mixed $packed
-     * @return mixed
+     * Unpack the value.
      */
     public function unpack($packed)
     {

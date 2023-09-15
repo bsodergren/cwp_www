@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Browser;
 
@@ -26,7 +29,7 @@ class UserAgent
      */
     public function setUserAgentString($userAgentString)
     {
-        $this->userAgentString = (string)$userAgentString;
+        $this->userAgentString = (string) $userAgentString;
 
         return $this;
     }

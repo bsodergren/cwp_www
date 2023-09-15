@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -10,12 +10,8 @@ namespace CWP\Process;
  */
 
 use CWP\Core\Media;
-use CWP\Template\Template;
-use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaMailer;
-use CWP\Spreadsheet\XLSXViewer;
-use CWP\Spreadsheet\Media\MediaXLSX;
-use Symfony\Component\Finder\Finder;
+use CWP\Template\Template;
 
 class Mail extends MediaProcess
 {

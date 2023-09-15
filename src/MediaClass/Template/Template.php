@@ -1,12 +1,12 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Template;
 
-use CWP\Utils\MediaDevice;
 use CWP\Core\MediaSettings;
+use CWP\Utils\MediaDevice;
 
 /**
  * CWP Media tool.
@@ -77,10 +77,9 @@ class Template
 
     private function loadTemplate($template)
     {
-
         $template_file = MediaDevice::getTemplateFile($template);
-        if($template_file !== null) {
-            return file_get_contents($template_file) . PHP_EOL;
+        if (null !== $template_file) {
+            return file_get_contents($template_file).\PHP_EOL;
         }
 
         if (true == $this->error) {
@@ -89,7 +88,6 @@ class Template
         } else {
             $template_text = '';
         }
-
 
         return $template_text.\PHP_EOL;
     }
@@ -101,7 +99,7 @@ class Template
 
         foreach ($output_array[1] as $n => $def) {
             if (MediaSettings::isSet($def)) {
-                $params[$def] = constant($def);
+                $params[$def] = \constant($def);
             }
         }
         $this->default_params = $params;
@@ -111,7 +109,7 @@ class Template
     {
         $this->defaults($text);
         $params = array_merge($params, $this->default_params);
-        if (is_array($params)) {
+        if (\is_array($params)) {
             foreach ($params as $key => $value) {
                 $key = '%%'.strtoupper($key).'%%';
                 $text = str_replace($key, $value, $text);
@@ -135,7 +133,7 @@ class Template
 
     public function add($var)
     {
-        if (is_object($var)) {
+        if (\is_object($var)) {
             $this->html .= $var->html;
         } else {
             $this->html .= $var;

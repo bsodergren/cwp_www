@@ -1,21 +1,21 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 require_once '.config.inc.php';
 
 use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
+use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Spreadsheet\XLSXViewer;
-use Symfony\Component\Finder\Finder;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\Finder\Finder;
 
 if ('email' == $_REQUEST['action']) {
     define('TITLE', 'Email excel zip file');
-MediaDevice::getHeader();
+    MediaDevice::getHeader();
     $template->render('view/mail_form', [
         '__FORM_URL__' => __URL_PATH__.'/process.php',
         'FORM_NUMBER' => $_REQUEST['form_number'],
@@ -130,7 +130,6 @@ if (true == is_dir($media->xlsx_directory)) {
                 continue;
             }
 
-
             $class = 'enabled';
             if ($sheet_id == $sheet_index) {
                 $class = 'disabled';
@@ -209,15 +208,13 @@ if (true == is_dir($media->xlsx_directory)) {
         // ',
         ];
 
-if ($quicksheet_index != $sheet_id) {
-    $rep_array['page-break-before: always;'] = 'display: none; page-break-before: always; page-break-after: auto;';
-    $rep_array['page-break-after: always;'] = 'page-break-after: auto;';
-    $rep_array['@media screen {'] = '@media screen {'."\n".'.header { display: none; }';
-    $rep_array['@media print {'] = '@media print {'."\n".'.header {  }
+        if ($quicksheet_index != $sheet_id) {
+            $rep_array['page-break-before: always;'] = 'display: none; page-break-before: always; page-break-after: auto;';
+            $rep_array['page-break-after: always;'] = 'page-break-after: auto;';
+            $rep_array['@media screen {'] = '@media screen {'."\n".'.header { display: none; }';
+            $rep_array['@media print {'] = '@media print {'."\n".'.header {  }
     ';
-}
-
-
+        }
 
         foreach ($rep_array as $find => $replace) {
             $custom_css = str_replace($find, $replace, $custom_css);

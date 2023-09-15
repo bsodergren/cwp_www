@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Media;
@@ -17,12 +17,12 @@ class MediaMailer
 
     public function __construct()
     {
-        $this->mail                 = new PHPMailer(true);
+        $this->mail = new PHPMailer(true);
     }
 
     public function set($key, $value)
     {
-        $this->$$key    = $value;
+        $this->$$key = $value;
     }
 
     public function attachment($file)
@@ -32,7 +32,7 @@ class MediaMailer
 
     public function subject($text)
     {
-        $this->mail->Subject    = $text;
+        $this->mail->Subject = $text;
     }
 
     public function body($text)
@@ -51,12 +51,12 @@ class MediaMailer
             // Server settings
             //  $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
             $this->mail->isSMTP();                                            // Send using SMTP
-            $this->mail->Host       = 'imap.gmail.com';
-            $this->mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $this->mail->Username   =  __IMAP_USER__;                     // SMTP username
-            $this->mail->Password   = __IMAP_PASSWD__;                               // SMTP password
+            $this->mail->Host = 'imap.gmail.com';
+            $this->mail->SMTPAuth = true;                                   // Enable SMTP authentication
+            $this->mail->Username = __IMAP_USER__;                     // SMTP username
+            $this->mail->Password = __IMAP_PASSWD__;                               // SMTP password
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            // Enable implicit TLS encryption
-            $this->mail->Port       = 465;                                    // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            $this->mail->Port = 465;                                    // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
             $sendname = '';
             // Recipients
             $this->mail->setFrom('bjorn.sodergren@gmail.com', 'Mailer');

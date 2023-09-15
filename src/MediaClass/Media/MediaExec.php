@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Media;
@@ -55,8 +55,8 @@ class MediaExec
     {
         $this->getCommand();
         $this->ExecProcess->run($callback, $env);
-
     }
+
     public function run($callback = null)
     {
         $this->getCommand();

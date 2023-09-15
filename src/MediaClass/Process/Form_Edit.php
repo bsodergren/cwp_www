@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -9,9 +9,9 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\Media\Import\PDFImport;
 use CWP\Core\Media;
 use CWP\Core\MediaError;
+use CWP\Media\Import\PDFImport;
 
 class Form_Edit extends MediaProcess
 {
@@ -24,14 +24,13 @@ class Form_Edit extends MediaProcess
         $this->form_edit['url'] = __URL_PATH__.'/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number;
         $this->form_edit['timeout'] = 0;
 
-        if (key_exists('Reset', $req)) {
+        if (\array_key_exists('Reset', $req)) {
             $this->Reset();
         }
 
-        if (array_key_exists('submit', $req)) {
+        if (\array_key_exists('submit', $req)) {
             $this->Save();
         }
-
 
         // $method = $req['submit'];
         // $this->updateForm($req);
@@ -127,6 +126,5 @@ class Form_Edit extends MediaProcess
         }
 
         MediaError::msg('warning', 'Updated form <br> ', $this->form_edit);
-
     }
 }

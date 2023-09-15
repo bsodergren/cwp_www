@@ -1,13 +1,13 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Template\Application;
 
+use CWP\Core\MediaSettings;
 use CWP\Template\HTMLDocument;
 use CWP\Template\Template;
-use CWP\Core\MediaSettings;
 
 /**
  * CWP Media tool.

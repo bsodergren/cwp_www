@@ -1,14 +1,6 @@
 <?php
 /**
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -37,13 +29,11 @@ class TrieFilename
      */
     protected $hash;
 
-
     /**
      * TrieFilename constructor.
      *
-     * @param string $format
-     * @param int    $levels  The depth of the structure
-     * @param bool   $hash    MD5 hash the key to get a better spread
+     * @param int  $levels The depth of the structure
+     * @param bool $hash   MD5 hash the key to get a better spread
      */
     public function __construct(string $format, int $levels = 1, bool $hash = false)
     {
@@ -53,9 +43,7 @@ class TrieFilename
     }
 
     /**
-     * Get the format
-     *
-     * @return string
+     * Get the format.
      */
     public function getFormat(): string
     {
@@ -63,9 +51,7 @@ class TrieFilename
     }
 
     /**
-     * Get the depth of the structure
-     *
-     * @return int
+     * Get the depth of the structure.
      */
     public function getLevels(): int
     {
@@ -74,20 +60,14 @@ class TrieFilename
 
     /**
      * Will the key be hashed to create the trie.
-     *
-     * @return bool
      */
     public function isHashed(): bool
     {
         return $this->hash;
     }
 
-
     /**
-     * Create the path for a key
-     *
-     * @param string $key
-     * @return string
+     * Create the path for a key.
      */
     public function __invoke(string $key): string
     {
@@ -100,22 +80,20 @@ class TrieFilename
 
         $path = '';
 
-        for ($length = 1; $length <= $this->levels; $length++) {
-            $path .= substr($dirname, 0, $length) . DIRECTORY_SEPARATOR;
+        for ($length = 1; $length <= $this->levels; ++$length) {
+            $path .= substr($dirname, 0, $length).\DIRECTORY_SEPARATOR;
         }
 
-        return $path . $filename;
+        return $path.$filename;
     }
 
     /**
-     * Get a path for all files (using glob)
-     *
-     * @return string
+     * Get a path for all files (using glob).
      */
     protected function wildcardPath(): string
     {
         $filename = sprintf($this->format, '*');
 
-        return str_repeat('*' . DIRECTORY_SEPARATOR, $this->levels) . $filename;
+        return str_repeat('*'.\DIRECTORY_SEPARATOR, $this->levels).$filename;
     }
 }

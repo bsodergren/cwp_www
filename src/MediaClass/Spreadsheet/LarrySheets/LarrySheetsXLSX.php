@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Spreadsheet\LarrySheets;
@@ -45,11 +45,11 @@ class LarrySheetsXLSX extends Media
         $SlipSheet = $sheetObj->getSheet($sheetIndex);
 
         $this->styles = new LarrySheetsXLSX_Styles($SlipSheet);
-        $this->styles->totalPages = count($sheets);
+        $this->styles->totalPages = \count($sheets);
 
         $this->styles->sheetCommon();
         $this->styles->setColWidths($this->styles->Columns);
-        $SlipSheetSize = count($this->styles->rowHeight);
+        $SlipSheetSize = \count($this->styles->rowHeight);
         $rowOffset = $SlipSheetSize * 3;
         $row = 1;
         $lineIdx = 1;

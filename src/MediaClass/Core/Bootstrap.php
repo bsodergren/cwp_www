@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Core;
@@ -15,7 +15,6 @@ class Bootstrap
 
     public function __construct(Config $Config)
     {
-
         $this->Config = $Config;
         self::$CONFIG = $Config->all();
         $this->define('__DEBUG__', $this->isDebugSet());
@@ -24,7 +23,7 @@ class Bootstrap
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->definePath('__FILES_DIR__', $this->getFileStorage());
         $this->define('__URL_PATH__', $this->getURL());
-        $this->define('__HOME__', dirname($_SERVER['DOCUMENT_ROOT'], 2));
+        $this->define('__HOME__', \dirname($_SERVER['DOCUMENT_ROOT'], 2));
     }
 
     public function directory($path)
@@ -39,8 +38,8 @@ class Bootstrap
 
     public function define($const, $value)
     {
-        if (!defined($const)) {
-            define($const, $value);
+        if (!\defined($const)) {
+            \define($const, $value);
         }
     }
 
@@ -71,11 +70,11 @@ class Bootstrap
 
     private function getUsrBin()
     {
-        if (!key_exists('OS', $_SERVER)) {
+        if (!\array_key_exists('OS', $_SERVER)) {
             return '/usr/bin';
         }
 
-        return __PROJECT_ROOT__.DIRECTORY_SEPARATOR.'bin';
+        return __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'bin';
     }
 
     private function getFileStorage()
@@ -87,7 +86,7 @@ class Bootstrap
     {
         global $_SERVER;
 
-        if (!key_exists('OS', $_SERVER)) {
+        if (!\array_key_exists('OS', $_SERVER)) {
             return '';
         }
         if (str_contains(strtolower($_SERVER['OS']), 'windows')) {
@@ -96,10 +95,12 @@ class Bootstrap
 
         return '';
     }
+
     private function isDebugSet()
     {
         return $this->Config['application']['debug'];
     }
+
     private function getURL()
     {
         return $this->Config['server']['url_root'];

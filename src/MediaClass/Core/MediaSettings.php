@@ -1,11 +1,9 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Core;
-
-use CWP\Core\Bootstrap;
 
 /**
  * CWP Media tool.
@@ -51,8 +49,8 @@ class MediaSettings
 
     public static function isTrue($define_name)
     {
-        if (defined($define_name)) {
-            if (true == constant($define_name)) {
+        if (\defined($define_name)) {
+            if (true == \constant($define_name)) {
                 //  MediaUpdate::echo(constant($define_name));
                 return 1;
             }
@@ -63,7 +61,7 @@ class MediaSettings
 
     public static function isSet($define_name)
     {
-        if (defined($define_name)) {
+        if (\defined($define_name)) {
             return 1;
         }
 
@@ -75,9 +73,9 @@ class MediaSettings
         $value_text = '';
         $value_array = json_decode($string, 1);
 
-        if (is_array($value_array)) {
+        if (\is_array($value_array)) {
             foreach ($value_array as $text => $link) {
-                if (is_array($link)) {
+                if (\is_array($link)) {
                     $value_text .= $text." => [,\n";
                     foreach ($link as $text2 => $link2) {
                         $value_text .= "\t $text2 => $link2,\n";
@@ -148,17 +146,17 @@ class MediaSettings
 
     private static function setImapDefine($key, $config_key)
     {
-        if (!key_exists('email', Bootstrap::$CONFIG)) {
+        if (!\array_key_exists('email', Bootstrap::$CONFIG)) {
             return false;
         }
 
-        if (!key_exists($config_key, Bootstrap::$CONFIG['email'])) {
+        if (!\array_key_exists($config_key, Bootstrap::$CONFIG['email'])) {
             return false;
         }
 
-        if (!defined($key)) {
+        if (!\defined($key)) {
             if ('' != Bootstrap::$CONFIG['email'][$config_key]) {
-                define($key, Bootstrap::$CONFIG['email'][$config_key]);
+                \define($key, Bootstrap::$CONFIG['email'][$config_key]);
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -9,16 +9,15 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\Utils\Zip;
 use CWP\Core\MediaError;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
+use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaExport;
+use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Process\MediaProcess;
-use CWP\Media\Import\PDFImport;
-use CWP\Filesystem\MediaFileSystem;
-use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Utils\Zip;
 
 class Index extends MediaProcess
 {
@@ -46,13 +45,12 @@ class Index extends MediaProcess
 
     public function create_xlsx()
     {
-        define('TITLE', 'Writing Excel files');
+        \define('TITLE', 'Writing Excel files');
 
         MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
         $this->media->excelArray();
-
 
         $excel = new MediaXLSX($this->media);
 
@@ -78,7 +76,7 @@ class Index extends MediaProcess
             if ($msg = null === $this->media->delete_zip()) {
                 $this->media->delete_form();
 
-                define('TITLE', 'Reimporting Media Drop');
+                \define('TITLE', 'Reimporting Media Drop');
                 MediaDevice::getHeader();
 
                 Template::echo('stream/start_page', []);
@@ -121,7 +119,7 @@ class Index extends MediaProcess
 
     public function update_job($job_number)
     {
-        if (6 != strlen($job_number)) {
+        if (6 != \strlen($job_number)) {
             MediaError::msg('warning', 'There was a problem <br> the job number was incorrect');
         }
 

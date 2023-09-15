@@ -1,15 +1,6 @@
 <?php
-
-/*
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Julián Gutiérrez <juliangut@gmail.com>
+/**
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -36,8 +27,6 @@ class Redis extends AbstractCache
 
     /**
      * Redis constructor.
-     *
-     * @param PhpRedis $client
      */
     public function __construct(PhpRedis $client)
     {
@@ -46,8 +35,6 @@ class Redis extends AbstractCache
 
     /**
      * Create the default packer for this cache implementation.
-     *
-     * @return PackerInterface
      */
     protected static function createDefaultPacker(): PackerInterface
     {
@@ -55,11 +42,7 @@ class Redis extends AbstractCache
     }
 
     /**
-     * Set multiple (mset) with expire
-     *
-     * @param array    $dictionary
-     * @param int|null $ttlSeconds
-     * @return bool
+     * Set multiple (mset) with expire.
      */
     protected function msetExpire(array $dictionary, ?int $ttlSeconds): bool
     {
@@ -88,9 +71,6 @@ class Redis extends AbstractCache
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($key, $default = null)
     {
         $response = $this->client->get($this->keyToId($key));
@@ -98,9 +78,6 @@ class Redis extends AbstractCache
         return !empty($response) ? $this->unpack($response) : $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMultiple($keys, $default = null)
     {
         $idKeyPairs = $this->mapKeysToIds($keys);
@@ -115,24 +92,18 @@ class Redis extends AbstractCache
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($key)
     {
-        return $this->client->exists($this->keyToId($key)) !== 0;
+        return 0 !== $this->client->exists($this->keyToId($key));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set($key, $value, $ttl = null)
     {
         $id = $this->keyToId($key);
         $packed = $this->pack($value);
 
-        if (!is_string($packed)) {
-            throw new UnexpectedValueException("Packer must create a string for the data");
+        if (!\is_string($packed)) {
+            throw new UnexpectedValueException('Packer must create a string for the data');
         }
 
         $ttlSeconds = $this->ttlToSeconds($ttl);
@@ -146,9 +117,6 @@ class Redis extends AbstractCache
             : $this->client->setex($id, $ttlSeconds, $packed);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setMultiple($values, $ttl = null)
     {
         $this->assertIterable($values, 'values not iterable');
@@ -156,11 +124,11 @@ class Redis extends AbstractCache
         $dictionary = [];
 
         foreach ($values as $key => $value) {
-            $id = $this->keyToId(is_int($key) ? (string)$key : $key);
+            $id = $this->keyToId(\is_int($key) ? (string) $key : $key);
             $packed = $this->pack($value);
 
-            if (!is_string($packed)) {
-                throw new UnexpectedValueException("Packer must create a string for the data");
+            if (!\is_string($packed)) {
+                throw new UnexpectedValueException('Packer must create a string for the data');
             }
 
             $dictionary[$id] = $packed;
@@ -175,29 +143,20 @@ class Redis extends AbstractCache
         return $this->msetExpire($dictionary, $ttlSeconds);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($key)
     {
         $id = $this->keyToId($key);
 
-        return $this->client->del($id) !== false;
+        return false !== $this->client->del($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function deleteMultiple($keys)
     {
         $ids = array_keys($this->mapKeysToIds($keys));
 
-        return empty($ids) || $this->client->del($ids) !== false;
+        return empty($ids) || false !== $this->client->del($ids);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear()
     {
         return $this->client->flushDB();

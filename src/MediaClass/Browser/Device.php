@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Browser;
 
@@ -21,7 +24,7 @@ class Device
     private $userAgent;
 
     /**
-     * @param null|string|UserAgent $userAgent
+     * @param string|UserAgent|null $userAgent
      *
      * @throws \Sinergi\BrowserDetector\InvalidArgumentException
      */
@@ -29,7 +32,7 @@ class Device
     {
         if ($userAgent instanceof UserAgent) {
             $this->setUserAgent($userAgent);
-        } elseif (null === $userAgent || is_string($userAgent)) {
+        } elseif (null === $userAgent || \is_string($userAgent)) {
             $this->setUserAgent(new UserAgent($userAgent));
         } else {
             throw new InvalidArgumentException();
@@ -37,8 +40,6 @@ class Device
     }
 
     /**
-     * @param UserAgent $userAgent
-     *
      * @return $this
      */
     public function setUserAgent(UserAgent $userAgent)
@@ -75,7 +76,7 @@ class Device
      */
     public function setName($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
 
         return $this;
     }

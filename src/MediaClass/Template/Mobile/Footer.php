@@ -1,14 +1,14 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Template\Mobile;
 
-use CWP\Template\Template;
-use CWP\Template\HTMLDocument;
-use CWP\Utils\MediaDevice;
 use CWP\Core\MediaSettings;
+use CWP\Template\HTMLDocument;
+use CWP\Template\Template;
+use CWP\Utils\MediaDevice;
 
 /**
  * CWP Media tool.
@@ -33,12 +33,12 @@ class Footer extends HTMLDocument
         }
 
         $params['JS_FOOTER_SRC'] = MediaDevice::getAssetURL('js', ['js/main.js',
-        "vendor/bootstrap/js/bootstrap.bundle.min.js",
-        "vendor/purecounter/purecounter_vanilla.js",
-        "vendor/glightbox/js/glightbox.min.js",
-        "vendor/swiper/swiper-bundle.min.js",
-        "vendor/aos/aos.js",
-        "vendor/php-email-form/validate.js"
+        'vendor/bootstrap/js/bootstrap.bundle.min.js',
+        'vendor/purecounter/purecounter_vanilla.js',
+        'vendor/glightbox/js/glightbox.min.js',
+        'vendor/swiper/swiper-bundle.min.js',
+        'vendor/aos/aos.js',
+        'vendor/php-email-form/validate.js',
         ]);
 
         $params['END_JAVASCRIPT'] = Template::GetHTML('base/footer/javascript');

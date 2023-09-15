@@ -1,13 +1,13 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Core;
 
-use CWP\Utils\Utils;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Media\MediaPublication;
+use CWP\Utils\Utils;
 
 /**
  * @property mixed $job_id
@@ -27,7 +27,6 @@ class Media
     public static $CurrentVersion;
 
     public static $MediaAppUpdater;
-
 
     private $mediaLoc;
 
@@ -56,13 +55,13 @@ class Media
 
     public function __construct($MediaDB = '')
     {
-        if (is_object($MediaDB)) {
+        if (\is_object($MediaDB)) {
             $array = get_object_vars($MediaDB);
             unset($MediaDB);
             $MediaDB = $array;
         }
 
-        if (is_array($MediaDB)) {
+        if (\is_array($MediaDB)) {
             $this->job_id = (empty($MediaDB['job_id'])) ? '' : $MediaDB['job_id'];
             $this->pdf_file = (empty($MediaDB['pdf_file'])) ? '' : $MediaDB['pdf_file'];
             $this->job_number = (empty($MediaDB['job_number'])) ? '' : $MediaDB['job_number'];
@@ -170,7 +169,7 @@ class Media
         foreach ($this->MediaArray as $form_number => $form_details) {
             $combinded = [];
             $replace = [];
-            if (key_exists('Back', $form_details['forms'])) {
+            if (\array_key_exists('Back', $form_details['forms'])) {
                 $count = 0;
                 $back_forms = $form_details['forms']['Back'];
                 foreach ($back_forms as $letter => $parts) {
@@ -299,7 +298,7 @@ class Media
     private function sortFormDrops($field, $key, $sort, $sort_query = null)
     {
         $add = '';
-        if (array_key_exists($key, $sort)) {
+        if (\array_key_exists($key, $sort)) {
             if (1 == $sort[$key]) {
                 $sort[$key] = 'ASC';
             }
@@ -515,7 +514,7 @@ class Media
 
     public static function insertJobNumber($pdf_filename, $job_number)
     {
-        $base_dir = dirname($pdf_filename, 2);
+        $base_dir = \dirname($pdf_filename, 2);
         $pdf_filename = basename($pdf_filename);
 
         $query = 'INSERT INTO `media_job` ?';

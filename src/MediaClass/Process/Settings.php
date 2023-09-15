@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Process;
@@ -9,15 +9,9 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use Formr\Formr;
 use CWP\Core\Media;
-use CWP\Template\Template;
-use CWP\HTML\HTMLDisplay;
-use CWP\Media\MediaMailer;
 use CWP\Core\MediaSettings;
-use CWP\Spreadsheet\XLSXViewer;
-use CWP\Spreadsheet\Media\MediaXLSX;
-use Symfony\Component\Finder\Finder;
+use Formr\Formr;
 
 class Settings extends MediaProcess
 {
@@ -70,7 +64,7 @@ class Settings extends MediaProcess
                     $pcs = explode('-', $key);
                     $key = $pcs[0];
                     $field = 'setting_value';
-                    if (is_array($value)) {
+                    if (\is_array($value)) {
                         $value = implode(',', $value);
                     }
                     $value = str_ireplace('XX', '', $value);

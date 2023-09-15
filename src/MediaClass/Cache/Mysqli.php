@@ -1,14 +1,6 @@
 <?php
 /**
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -16,9 +8,9 @@
 namespace CWP\Cache;
 
 use CWP\Cache\Option\InitializeTrait;
-use mysqli as Server;
 use CWP\Cache\Packer\PackerInterface;
 use CWP\Cache\Packer\SerializePacker;
+use mysqli as Server;
 
 /**
  * Mysqli cache adapter.
@@ -38,19 +30,15 @@ class Mysqli extends AbstractCache
     /**
      * @var string
      */
-    protected $table  = 'cache';
-
+    protected $table = 'cache';
 
     /**
-     * Class constructor
-     *
-     * @param Server $server
+     * Class constructor.
      */
     public function __construct(Server $server)
     {
         $this->server = $server;
     }
-
 
     /**
      * Initialize table.
@@ -58,19 +46,19 @@ class Mysqli extends AbstractCache
      */
     protected function initialize(): void
     {
-        if ($this->initialized !== false) {
+        if (false !== $this->initialized) {
             return;
         }
 
         $this->query(
-            "CREATE TABLE IF NOT EXISTS `{table}` "
-            . "( `key` VARCHAR(255), `value` BLOB, `ttl` BIGINT UNSIGNED, PRIMARY KEY (`key`) )"
+            'CREATE TABLE IF NOT EXISTS `{table}` '
+            .'( `key` VARCHAR(255), `value` BLOB, `ttl` BIGINT UNSIGNED, PRIMARY KEY (`key`) )'
         );
 
         $this->query(
             "CREATE EVENT IF NOT EXISTS `apply_ttl_{$this->table}` ON SCHEDULE EVERY 1 HOUR DO BEGIN"
-            . " DELETE FROM {table} WHERE `ttl` < UNIX_TIMESTAMP();"
-            . " END"
+            .' DELETE FROM {table} WHERE `ttl` < UNIX_TIMESTAMP();'
+            .' END'
         );
 
         $this->initialized = true;
@@ -78,19 +66,14 @@ class Mysqli extends AbstractCache
 
     /**
      * Create the default packer for this cache implementation.
-     *
-     * @return PackerInterface
      */
     protected static function createDefaultPacker(): PackerInterface
     {
         return new SerializePacker();
     }
 
-
     /**
-     * Set the table name
-     *
-     * @param string $table
+     * Set the table name.
      */
     public function setTableOption(string $table)
     {
@@ -99,19 +82,13 @@ class Mysqli extends AbstractCache
     }
 
     /**
-     * Get the table name
-     *
-     * @return string
+     * Get the table name.
      */
     public function getTableOption(): string
     {
         return $this->table;
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function get($key, $default = null)
     {
         $this->initialize();
@@ -123,14 +100,11 @@ class Mysqli extends AbstractCache
             $this->currentTimestamp()
         );
 
-        $row = $result !== false ? $result->fetch_row() : null;
+        $row = false !== $result ? $result->fetch_row() : null;
 
         return $row ? $this->unpack($row[0]) : $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMultiple($keys, $default = null)
     {
         $idKeyPairs = $this->mapKeysToIds($keys);
@@ -143,8 +117,8 @@ class Mysqli extends AbstractCache
 
         $values = array_fill_keys(array_values($idKeyPairs), $default);
 
-        $placeholders = rtrim(str_repeat('?, ', count($idKeyPairs)), ', ');
-        $paramTypes = str_repeat('s', count($idKeyPairs)) . 'i';
+        $placeholders = rtrim(str_repeat('?, ', \count($idKeyPairs)), ', ');
+        $paramTypes = str_repeat('s', \count($idKeyPairs)).'i';
         $params = array_keys($idKeyPairs);
         $params[] = $this->currentTimestamp();
 
@@ -154,7 +128,7 @@ class Mysqli extends AbstractCache
             ...$params
         );
 
-        while (([$id, $value] = $result->fetch_row())) {
+        while ([$id, $value] = $result->fetch_row()) {
             $key = $idKeyPairs[$id];
             $values[$key] = $this->unpack($value);
         }
@@ -162,9 +136,6 @@ class Mysqli extends AbstractCache
         return $values;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($key)
     {
         $this->initialize();
@@ -181,9 +152,6 @@ class Mysqli extends AbstractCache
         return isset($count) && $count > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set($key, $value, $ttl = null)
     {
         $this->initialize();
@@ -196,12 +164,9 @@ class Mysqli extends AbstractCache
             $this->ttlToTimestamp($ttl)
         );
 
-        return $result !== false;
+        return false !== $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setMultiple($values, $ttl = null)
     {
         $this->assertIterable($values, 'values not iterable');
@@ -217,35 +182,29 @@ class Mysqli extends AbstractCache
         $timeTtl = $this->ttlToTimestamp($ttl);
 
         foreach ($values as $key => $value) {
-            $count++;
-            $params[] = $this->keyToId(is_int($key) ? (string)$key : $key);
+            ++$count;
+            $params[] = $this->keyToId(\is_int($key) ? (string) $key : $key);
             $params[] = $this->pack($value);
             $params[] = $timeTtl;
         }
 
         $query = 'REPLACE INTO {table} (`key`, `value`, `ttl`) VALUES '
-            . rtrim(str_repeat('(?, ?, ?), ', $count), ', ');
+            .rtrim(str_repeat('(?, ?, ?), ', $count), ', ');
 
-        return (bool)$this->query($query, str_repeat('ssi', $count), ...$params);
+        return (bool) $this->query($query, str_repeat('ssi', $count), ...$params);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($key)
     {
         $this->initialize();
 
-        return (bool)$this->query(
+        return (bool) $this->query(
             'DELETE FROM {table} WHERE `key` = ?',
             's',
             $this->keyToId($key)
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function deleteMultiple($keys)
     {
         $idKeyPairs = $this->mapKeysToIds($keys);
@@ -256,44 +215,42 @@ class Mysqli extends AbstractCache
 
         $this->initialize();
 
-        $placeholders = rtrim(str_repeat('?, ', count($idKeyPairs)), ', ');
-        $paramTypes = str_repeat('s', count($idKeyPairs));
+        $placeholders = rtrim(str_repeat('?, ', \count($idKeyPairs)), ', ');
+        $paramTypes = str_repeat('s', \count($idKeyPairs));
 
-        return (bool)$this->query(
+        return (bool) $this->query(
             "DELETE FROM {table} WHERE `key` IN ($placeholders)",
             $paramTypes,
             ...array_keys($idKeyPairs)
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear()
     {
         $this->initialize();
-        return (bool)$this->query('TRUNCATE {table}');
+
+        return (bool) $this->query('TRUNCATE {table}');
     }
 
-
     /**
-     * Query the MySQL server
+     * Query the MySQL server.
      *
      * @param string  $query
      * @param string  $types
      * @param mixed[] $params
+     *
      * @return \mysqli_result|bool
      */
     protected function query($query, $types = '', ...$params)
     {
         $sql = str_replace('{table}', $this->table, $query);
 
-        if ($params === []) {
+        if ([] === $params) {
             $ret = $this->server->query($sql);
         } else {
             $statement = $this->server->prepare($sql);
 
-            if ($statement !== false) {
+            if (false !== $statement) {
                 $statement->bind_param($types, ...$params);
 
                 $ret = $statement->execute();
@@ -304,7 +261,7 @@ class Mysqli extends AbstractCache
         }
 
         if ($this->server->error) {
-            trigger_error($this->server->error . " $sql", E_USER_NOTICE);
+            trigger_error($this->server->error." $sql", \E_USER_NOTICE);
         }
 
         return $ret;

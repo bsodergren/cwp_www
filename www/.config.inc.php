@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool.
+ * CWP Media tool for load flags
  */
 
 use Camoo\Config\Config;
@@ -15,12 +15,12 @@ define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 define('__CWP_SOURCE__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'src');
 define('__CONFIG_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Configuration');
 
-//require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'composer.php';
+// require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'composer.php';
 
 // set_include_path(get_include_path().PATH_SEPARATOR.__COMPOSER_DIR__);
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
- //Debugger::enable();
+// Debugger::enable();
 
 // // Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
 // Debugger::$logSeverity = \E_WARNING | \E_NOTICE;
@@ -34,7 +34,7 @@ require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
 $boot = new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.ini'));
 
-//$boot->definePath('__DATABASE_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'database');
+// $boot->definePath('__DATABASE_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'database');
 
 $boot->definePath('__DATABASE_ROOT__', $boot->Config['db']['path'].\DIRECTORY_SEPARATOR.'database');
 $boot->directory(__DATABASE_ROOT__);
@@ -56,12 +56,10 @@ require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
 
-
 $req_file = $_SERVER['REQUEST_URI'];
-$req =  '?'.$_SERVER['QUERY_STRING'];
-$req_file = str_replace(__URL_PATH__ .'/','',$req_file);
-if($req_file == "")
-{
-    header("Location:  ".__URL_PATH__ . "/index.php");
-    exit();
+$req = '?'.$_SERVER['QUERY_STRING'];
+$req_file = str_replace(__URL_PATH__.'/', '', $req_file);
+if ('' == $req_file) {
+    header('Location:  '.__URL_PATH__.'/index.php');
+    exit;
 }

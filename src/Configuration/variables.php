@@ -1,17 +1,17 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use CWP\Core\Bootstrap;
 
 $debug_string = '';
 
-if(__DEBUG__ == 1){
-    define('__DEBUG_STR__',"<span class='fs-6 text-success'>Debug Enabled ". __DEVICE__."</span>");
+if (__DEBUG__ == 1) {
+    define('__DEBUG_STR__', "<span class='fs-6 text-success'>Debug Enabled ".__DEVICE__.'</span>');
 }
 
-define('APP_NAME', Bootstrap::$CONFIG['application']['name'] );
+define('APP_NAME', Bootstrap::$CONFIG['application']['name']);
 define('APP_ORGANIZATION', 'cwp');
 define('APP_OWNER', 'bjorn');
 

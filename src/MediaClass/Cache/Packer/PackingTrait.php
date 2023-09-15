@@ -1,14 +1,6 @@
 <?php
 /**
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+ * CWP Media tool for load flags
  */
 
 // declare(strict_types=1);
@@ -16,7 +8,7 @@
 namespace CWP\Cache\Packer;
 
 /**
- * Support packing for Caching adapter
+ * Support packing for Caching adapter.
  */
 trait PackingTrait
 {
@@ -25,18 +17,14 @@ trait PackingTrait
      */
     protected $packer;
 
-
     /**
-     * Create the default packer for this cache implementation
-     *
-     * @return PackerInterface
+     * Create the default packer for this cache implementation.
      */
     abstract protected static function createDefaultPacker(): PackerInterface;
 
     /**
      * Set a packer to pack (serialialize) and unpack (unserialize) the data.
      *
-     * @param PackerInterface $packer
      * @return static
      */
     public function withPacker(PackerInterface $packer)
@@ -48,9 +36,7 @@ trait PackingTrait
     }
 
     /**
-     * Get the packer
-     *
-     * @return PackerInterface
+     * Get the packer.
      */
     protected function getPacker(): PackerInterface
     {
@@ -62,9 +48,8 @@ trait PackingTrait
     }
 
     /**
-     * Pack the value
+     * Pack the value.
      *
-     * @param mixed $value
      * @return string|mixed
      */
     protected function pack($value)
@@ -73,10 +58,10 @@ trait PackingTrait
     }
 
     /**
-     * Unpack the data to retrieve the value
+     * Unpack the data to retrieve the value.
      *
      * @param string|mixed $packed
-     * @return mixed
+     *
      * @throws \UnexpectedValueException
      */
     protected function unpack($packed)

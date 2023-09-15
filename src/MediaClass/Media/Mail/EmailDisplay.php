@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Media\Mail;
@@ -28,8 +28,8 @@ class EmailDisplay
         $js_select_options = null;
 
         foreach ($this->attachments as $key => $attachment) {
-            if (key_exists('JobNumber', $attachment)) {
-                if (is_array($attachment['JobNumber'])) {
+            if (\array_key_exists('JobNumber', $attachment)) {
+                if (\is_array($attachment['JobNumber'])) {
                     $option_html = '';
                     foreach ($attachment['JobNumber'] as $number) {
                         $option_html .= trim(template::GetHTML('/import/js_select_options', [

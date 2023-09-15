@@ -1,18 +1,9 @@
 <?php
-
-/*
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+/**
+ * CWP Media tool for load flags
  */
 
-//// declare(strict_types=1);
+// // declare(strict_types=1);
 
 namespace CWP\Cache;
 
@@ -27,14 +18,12 @@ use CWP\Cache\Packer\SerializePacker;
 class File extends AbstractFile
 {
     /**
-     * @var string  'embed', 'file', 'mtime'
+     * @var string 'embed', 'file', 'mtime'
      */
     protected $ttlStrategy = 'embed';
 
     /**
-     * Create the default packer for this cache implementation
-     *
-     * @return PackerInterface
+     * Create the default packer for this cache implementation.
      */
     protected static function createDefaultPacker(): PackerInterface
     {
@@ -42,13 +31,13 @@ class File extends AbstractFile
     }
 
     /**
-     * Set TTL strategy
+     * Set TTL strategy.
      *
      * @param string $strategy
      */
     protected function setTtlStrategyOption($strategy)
     {
-        if (!in_array($strategy, ['embed', 'file', 'mtime'])) {
+        if (!\in_array($strategy, ['embed', 'file', 'mtime'])) {
             throw new InvalidArgumentException("Unknown strategy '$strategy', should be 'embed', 'file' or 'mtime'");
         }
 
@@ -56,54 +45,51 @@ class File extends AbstractFile
     }
 
     /**
-     * Get TTL strategy
-     *
-     * @return string
+     * Get TTL strategy.
      */
     protected function getTtlStrategyOption(): string
     {
         return $this->ttlStrategy;
     }
 
-
     /**
-     * Get the TTL using one of the strategies
+     * Get the TTL using one of the strategies.
      *
-     * @param string $cacheFile
      * @return int
      */
     protected function getTtl(string $cacheFile)
     {
         switch ($this->ttlStrategy) {
             case 'embed':
-                return (int)$this->readLine($cacheFile);
+                return (int) $this->readLine($cacheFile);
             case 'file':
                 return file_exists("$cacheFile.ttl")
-                    ? (int)file_get_contents("$cacheFile.ttl")
-                    : PHP_INT_MAX;
+                    ? (int) file_get_contents("$cacheFile.ttl")
+                    : \PHP_INT_MAX;
             case 'mtime':
-                return $this->ttl > 0 ? filemtime($cacheFile) + $this->ttl : PHP_INT_MAX;
+                return $this->ttl > 0 ? filemtime($cacheFile) + $this->ttl : \PHP_INT_MAX;
         }
 
         throw new \InvalidArgumentException("Invalid TTL strategy '{$this->ttlStrategy}'");
     }
 
     /**
-     * Set the TTL using one of the strategies
+     * Set the TTL using one of the strategies.
      *
      * @param int|null $expiration
      * @param string   $contents
      * @param string   $cacheFile
-     * @return string  The (modified) contents
+     *
+     * @return string The (modified) contents
      */
     protected function setTtl($expiration, $contents, $cacheFile)
     {
         switch ($this->ttlStrategy) {
             case 'embed':
-                $contents = ($expiration ?? PHP_INT_MAX) . "\n" . $contents;
+                $contents = ($expiration ?? \PHP_INT_MAX)."\n".$contents;
                 break;
             case 'file':
-                if ($expiration !== null) {
+                if (null !== $expiration) {
                     file_put_contents("$cacheFile.ttl", $expiration);
                 }
                 break;
@@ -115,10 +101,6 @@ class File extends AbstractFile
         return $contents;
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $key, mixed $default = null): mixed
     {
         $cacheFile = $this->getFilename($key);
@@ -127,14 +109,15 @@ class File extends AbstractFile
             return $default;
         }
 
-        if ($this->ttlStrategy === 'embed') {
+        if ('embed' === $this->ttlStrategy) {
             [$ttl, $packed] = explode("\n", $this->readFile($cacheFile), 2);
         } else {
             $ttl = $this->getTtl($cacheFile);
         }
 
-        if ((int)$ttl <= time()) {
+        if ((int) $ttl <= time()) {
             $this->deleteFile($cacheFile);
+
             return $default;
         }
 
@@ -145,9 +128,6 @@ class File extends AbstractFile
         return $this->unpack($packed);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $key): bool
     {
         $cacheFile = $this->getFilename($key);
@@ -160,22 +140,20 @@ class File extends AbstractFile
 
         if ($ttl <= time()) {
             $this->deleteFile($cacheFile);
+
             return false;
         }
 
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
+    public function set(string $key, mixed $value, int|\DateInterval $ttl = null): bool
     {
         $cacheFile = $this->getFilename($key);
         $packed = $this->pack($value);
 
-        if (!is_string($packed)) {
-            throw new UnexpectedValueException("Packer must create a string for the data to be cached to file");
+        if (!\is_string($packed)) {
+            throw new UnexpectedValueException('Packer must create a string for the data to be cached to file');
         }
 
         $contents = $this->setTtl($this->ttlToTimestamp($ttl), $packed, $cacheFile);

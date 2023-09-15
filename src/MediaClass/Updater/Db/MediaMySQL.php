@@ -1,13 +1,11 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Updater\Db;
 
 use CWP\Core\Media;
-use CWP\Updater\Db\MediaDb;
-use CWP\Updater\Db\MediaDbAbstract;
 
 /**
  * CWP Media tool.
@@ -55,11 +53,13 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
     {
         try {
             $result = Media::$connection->query($query);
+
             return $result->getRowCount();
         } catch (\PDOException   $e) {
             echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
         }
     }
+
     private function sanitizeFields($type)
     {
         foreach ($this->fieldTranslate as $x => $fields) {
@@ -74,12 +74,14 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
     public function check_columnExists($table, $column)
     {
         $query = 'SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "'.$table.'" AND COLUMN_NAME = "'.$column.'";';
+
         return $this->queryExists($query);
     }
 
     public function check_tableExists($table)
     {
         $query = "SELECT count(*) FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
+
         return $this->queryExists($query);
     }
 
@@ -89,6 +91,7 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
         $result = $this->fetchOne($query);
         $query = 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
         $result = $this->query($query);
+
         return $result;
     }
 
@@ -105,7 +108,6 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
         $query = 'ALTER TABLE '.$table.' ADD `'.$column.'` '.$type.';';
 
         $result = $this->query($query);
-
     }
 
     public function reset_Table($table_name)

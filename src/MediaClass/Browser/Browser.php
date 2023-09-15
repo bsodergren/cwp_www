@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Browser;
 
@@ -85,7 +88,7 @@ class Browser
     private $isCompatibilityMode = false;
 
     /**
-     * @param null|string|UserAgent $userAgent
+     * @param string|UserAgent|null $userAgent
      *
      * @throws \Sinergi\BrowserDetector\InvalidArgumentException
      */
@@ -93,7 +96,7 @@ class Browser
     {
         if ($userAgent instanceof UserAgent) {
             $this->setUserAgent($userAgent);
-        } elseif (null === $userAgent || is_string($userAgent)) {
+        } elseif (null === $userAgent || \is_string($userAgent)) {
             $this->setUserAgent(new UserAgent($userAgent));
         } else {
             throw new InvalidArgumentException();
@@ -109,7 +112,7 @@ class Browser
      */
     public function setName($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
 
         return $this;
     }
@@ -137,7 +140,7 @@ class Browser
      */
     public function isBrowser($name)
     {
-        return (0 == strcasecmp($this->getName(), trim($name)));
+        return 0 == strcasecmp($this->getName(), trim($name));
     }
 
     /**
@@ -149,7 +152,7 @@ class Browser
      */
     public function setVersion($version)
     {
-        $this->version = (string)$version;
+        $this->version = (string) $version;
 
         return $this;
     }
@@ -177,7 +180,7 @@ class Browser
      */
     public function setIsRobot($isRobot)
     {
-        $this->isRobot = (bool)$isRobot;
+        $this->isRobot = (bool) $isRobot;
 
         return $this;
     }
@@ -211,7 +214,7 @@ class Browser
      */
     public function setIsChromeFrame($isChromeFrame)
     {
-        $this->isChromeFrame = (bool)$isChromeFrame;
+        $this->isChromeFrame = (bool) $isChromeFrame;
 
         return $this;
     }
@@ -273,8 +276,6 @@ class Browser
     }
 
     /**
-     * @param UserAgent $userAgent
-     *
      * @return $this
      */
     public function setUserAgent(UserAgent $userAgent)

@@ -1,21 +1,13 @@
 <?php
 /**
- * This file is part of the Cache package.
- *
- * Copyright (c) Daniel González
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @author Daniel González <daniel@desarrolla2.com>
- * @author Arnold Daniels <arnold@jasny.net>
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Cache;
 
+use CWP\Cache\Exception\InvalidArgumentException;
 use CWP\Cache\Packer\NopPacker;
 use CWP\Cache\Packer\PackerInterface;
-use CWP\Cache\Exception\InvalidArgumentException;
 
 /**
  * Use multiple cache adapters.
@@ -28,35 +20,29 @@ class Chain extends AbstractCache
     protected $adapters;
 
     /**
-     * Create the default packer for this cache implementation
-     *
-     * @return PackerInterface
+     * Create the default packer for this cache implementation.
      */
     protected static function createDefaultPacker(): PackerInterface
     {
         return new NopPacker();
     }
 
-
     /**
      * Chain constructor.
      *
-     * @param CacheInterface[] $adapters  Fastest to slowest
+     * @param CacheInterface[] $adapters Fastest to slowest
      */
     public function __construct(array $adapters)
     {
         foreach ($adapters as $adapter) {
             if (!$adapter instanceof CacheInterface) {
-                throw new InvalidArgumentException("All adapters should be a cache implementation");
+                throw new InvalidArgumentException('All adapters should be a cache implementation');
             }
         }
 
         $this->adapters = $adapters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set($key, $value, $ttl = null)
     {
         $success = true;
@@ -68,9 +54,6 @@ class Chain extends AbstractCache
         return $success;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setMultiple($values, $ttl = null)
     {
         $success = true;
@@ -82,9 +65,6 @@ class Chain extends AbstractCache
         return $success;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($key, $default = null)
     {
         foreach ($this->adapters as $adapter) {
@@ -98,9 +78,6 @@ class Chain extends AbstractCache
         return $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMultiple($keys, $default = null)
     {
         $this->assertIterable($keys, 'keys are not iterable');
@@ -134,9 +111,6 @@ class Chain extends AbstractCache
         return $values;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($key)
     {
         foreach ($this->adapters as $adapter) {
@@ -148,9 +122,6 @@ class Chain extends AbstractCache
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($key)
     {
         $success = true;
@@ -162,9 +133,6 @@ class Chain extends AbstractCache
         return $success;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function deleteMultiple($keys)
     {
         $success = true;
@@ -176,9 +144,6 @@ class Chain extends AbstractCache
         return $success;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clear()
     {
         $success = true;

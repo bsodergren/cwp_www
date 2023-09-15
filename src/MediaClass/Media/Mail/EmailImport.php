@@ -1,18 +1,18 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Media\Mail;
 
+use CWP\Filesystem\MediaFileSystem;
 use CWP\Media\Mail\Attachment\MediaAttachment;
 use CWP\Media\Mail\Jobnumber\Jobnumber;
-use CWP\Filesystem\MediaFileSystem;
 
 class EmailImport extends EmailDisplay
 {
-    use MediaAttachment;
     use Jobnumber;
+    use MediaAttachment;
 
     public $imap;
     public $mailId = 0;
@@ -56,7 +56,7 @@ class EmailImport extends EmailDisplay
         // $this->attachments = [];
         $this->getStructure();
 
-        if (isset($this->structure->parts) && count($this->structure->parts)) {
+        if (isset($this->structure->parts) && \count($this->structure->parts)) {
             $this->getAttachmentFilename(1);
             $this->getAttachmentName(1);
             $this->getAttachmentFile(1);

@@ -1,10 +1,9 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use CWP\Core\Media;
-use CWP\Media\Update\MediaAppUpdater;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\Filesystem;
@@ -17,7 +16,7 @@ use Spatie\FlysystemDropbox\DropboxAdapter;
  * CWP Media tool.
  */
 require_once '.config.inc.php';
-echo  Media::$VersionUpdate;
+echo Media::$VersionUpdate;
 
 // $adapter = new LocalFilesystemAdapter(
 //     // Determine root directory

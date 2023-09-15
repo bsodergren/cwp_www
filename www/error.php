@@ -3,6 +3,7 @@ require_once '.config.inc.php';
 
 define('TITLE', '404 not found');
 use CWP\Utils\MediaDevice;
+
 MediaDevice::getHeader();
 ?>
 

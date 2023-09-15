@@ -1,4 +1,7 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Browser;
 
@@ -49,7 +52,7 @@ class Os
     private $userAgent;
 
     /**
-     * @param null|string|UserAgent $userAgent
+     * @param string|UserAgent|null $userAgent
      *
      * @throws \Sinergi\BrowserDetector\InvalidArgumentException
      */
@@ -57,7 +60,7 @@ class Os
     {
         if ($userAgent instanceof UserAgent) {
             $this->setUserAgent($userAgent);
-        } elseif (null === $userAgent || is_string($userAgent)) {
+        } elseif (null === $userAgent || \is_string($userAgent)) {
             $this->setUserAgent(new UserAgent($userAgent));
         } else {
             throw new InvalidArgumentException();
@@ -87,7 +90,7 @@ class Os
      */
     public function setName($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
 
         return $this;
     }
@@ -100,11 +103,11 @@ class Os
     public function getVersion()
     {
         if (isset($this->version)) {
-            return (string)$this->version;
+            return (string) $this->version;
         } else {
             OsDetector::detect($this, $this->getUserAgent());
 
-            return (string)$this->version;
+            return (string) $this->version;
         }
     }
 
@@ -117,7 +120,7 @@ class Os
      */
     public function setVersion($version)
     {
-        $this->version = (string)$version;
+        $this->version = (string) $version;
 
         return $this;
     }
@@ -151,12 +154,10 @@ class Os
      */
     public function setIsMobile($isMobile = true)
     {
-        $this->isMobile = (bool)$isMobile;
+        $this->isMobile = (bool) $isMobile;
     }
 
     /**
-     * @param UserAgent $userAgent
-     *
      * @return $this
      */
     public function setUserAgent(UserAgent $userAgent)

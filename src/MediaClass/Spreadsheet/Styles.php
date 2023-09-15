@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Spreadsheet;
@@ -79,7 +79,7 @@ class Styles
         $border = 'outline';
         $style = 'BORDER_THIN';
 
-        if (is_array($array)) {
+        if (\is_array($array)) {
             foreach ($array as $k => $v) {
                 $$k = $v;
             }
@@ -95,11 +95,11 @@ class Styles
         }
 
         foreach ($columns as $id => $data) {
-            if (is_array($data)) {
-                if (key_exists('column', $data)) {
+            if (\is_array($data)) {
+                if (\array_key_exists('column', $data)) {
                     $col = $data['column'];
                 }
-                if (key_exists('width', $data)) {
+                if (\array_key_exists('width', $data)) {
                     $width = $data['width'];
                 } else {
                     $width = $this->colWidth;
@@ -116,7 +116,7 @@ class Styles
     {
         $cellArray[] = $array;
 
-        if (method_exists(get_called_class(), 'RightBlock')) {
+        if (method_exists(static::class, 'RightBlock')) {
             $cell = $this->RightBlock($array['cell']);
             $cellArray[] = ['cell' => $cell, 'size' => $array['size']];
         }
@@ -128,7 +128,7 @@ class Styles
     public function setBold($cell, $bold = 1)
     {
         $cellArray[] = $cell;
-        if (method_exists(get_called_class(), 'RightBlock')) {
+        if (method_exists(static::class, 'RightBlock')) {
             $cellArray[] = $this->RightBlock($cell);
         }
 
@@ -140,7 +140,7 @@ class Styles
 
     public function setAlign($cell, $style = 'H', $align = 'C')
     {
-        if (is_array($cell)) {
+        if (\is_array($cell)) {
             $tmpCellArray = $cell;
             unset($cell);
             foreach ($tmpCellArray as $var => $value) {
@@ -149,7 +149,7 @@ class Styles
         }
 
         $cellArray[] = $cell;
-        if (method_exists(get_called_class(), 'RightBlock')) {
+        if (method_exists(static::class, 'RightBlock')) {
             $cellArray[] = $this->RightBlock($cell);
         }
 
@@ -159,7 +159,7 @@ class Styles
         $replace = ['C' => 'CENTER', 'L' => 'LEFT', 'R' => 'RIGHT', 'T' => 'TOP', 'B' => 'BOTTOM'];
         $align_c = strtr($align, $replace);
 
-        $constant = constant("\PhpOffice\PhpSpreadsheet\Style\Alignment::".strtoupper($style_c).'_'.strtoupper($align_c));
+        $constant = \constant("\PhpOffice\PhpSpreadsheet\Style\Alignment::".strtoupper($style_c).'_'.strtoupper($align_c));
 
         foreach ($cellArray as $n => $cell) {
             if ('H' == $style) {
@@ -174,7 +174,7 @@ class Styles
     public function setMerge($cell)
     {
         $cellArray[] = $cell;
-        if (method_exists(get_called_class(), 'RightBlock')) {
+        if (method_exists(static::class, 'RightBlock')) {
             $cellArray[] = $this->RightBlock($cell);
         }
 
@@ -188,7 +188,7 @@ class Styles
         $styleArray = [
             'borders' => [
                 $border => [
-                    'borderStyle' => constant('\PhpOffice\PhpSpreadsheet\Style\Border::'.$style),
+                    'borderStyle' => \constant('\PhpOffice\PhpSpreadsheet\Style\Border::'.$style),
                     // 'borderStyle' => $style,
                     'color' => ['argb' => '00000000'],
                 ],

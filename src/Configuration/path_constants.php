@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 use CWP\Utils\MediaDevice;
@@ -18,7 +18,5 @@ define('__THEME_DIR__', __LAYOUT_ROOT__.\DIRECTORY_SEPARATOR.'themes');
 define('__UPDATE_CACHE_DIR__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/cache'));
 define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
 
-
 (new MediaDevice())->run();
 define('__DEVICE__', MediaDevice::$DEVICE);
-

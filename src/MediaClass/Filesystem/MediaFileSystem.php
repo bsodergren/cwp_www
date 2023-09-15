@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Filesystem;
@@ -99,7 +99,7 @@ class MediaFileSystem
             $directory = __EMAIL_PDF_UPLOAD_DIR__;
         }
 
-        if (defined('__MEDIA_FILES_DIR__')) {
+        if (\defined('__MEDIA_FILES_DIR__')) {
             if (__MEDIA_FILES_DIR__ != '') {
                 if (!is_dir(__MEDIA_FILES_DIR__)) {
                     FileSystem::createDir(__MEDIA_FILES_DIR__, 511);

@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Utils;
@@ -26,7 +26,7 @@ class GroupSorter
             $group[] = key($numbers);
             unset($numbers[key($numbers)]);
 
-            $remainingCount = count($numbers);
+            $remainingCount = \count($numbers);
 
             // Find the best group size (2, 3, or 4) that minimizes the difference in group sums
 
@@ -67,15 +67,15 @@ class GroupSorter
     {
         $result = [];
 
-        $totalCombinations = pow(2, count($numbers));
+        $totalCombinations = 2 ** \count($numbers);
 
         for ($i = 1; $i < $totalCombinations; ++$i) {
-            $binary = str_pad(decbin($i), count($numbers), '0', \STR_PAD_LEFT);
+            $binary = str_pad(decbin($i), \count($numbers), '0', \STR_PAD_LEFT);
 
             if (substr_count($binary, '1') == $length) {
                 $combination = [];
 
-                for ($j = 0; $j < count($numbers); ++$j) {
+                for ($j = 0; $j < \count($numbers); ++$j) {
                     if ('1' == $binary[$j]) {
                         $combination[] = $numbers[$j];
                     }

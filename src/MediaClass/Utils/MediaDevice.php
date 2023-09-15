@@ -1,29 +1,26 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 namespace CWP\Utils;
 
-use Name;
-use CWP\Browser\Os;
-use CWP\Browser\Device;
 use CWP\Browser\Browser;
-use Nette\Utils\FileSystem;
+use CWP\Browser\Device;
+use CWP\Browser\Os;
 
 class MediaDevice
 {
-    public static $DEVICE = "APPLICATION";
-    public static $default_theme = "application";
+    public static $DEVICE = 'APPLICATION';
+    public static $default_theme = 'application';
+
     public function __construct()
     {
         self::$DEVICE = $this->run();
     }
 
-
     public function run()
     {
-
         $device = new Device();
         $os = new Os();
         $browser = new Browser();
@@ -52,7 +49,7 @@ class MediaDevice
             if ('Windows' == $os->getName()) {
                 return 'DESKTOP';
             } elseif ('iOS' == $os->getName()) {
-                return  'MOBILE';
+                return 'MOBILE';
             }
         } elseif ('Chrome' == $browser->getName()) {
             if ('Windows' == $os->getName()) {
@@ -64,90 +61,75 @@ class MediaDevice
             }
         }
 
-        return [$browser->getName(),$device->getName(),$os->getName()];
+        return [$browser->getName(), $device->getName(), $os->getName()];
     }
 
     private static function getDevicePath()
     {
         $ClassName = ucfirst(strtolower(self::$DEVICE));
-        return 'CWP\\Template\\'.$ClassName;
 
+        return 'CWP\\Template\\'.$ClassName;
     }
 
     public static function getHeader($template = '', $params = [])
     {
-        $className = self::getDevicePath(). '\\Header';
+        $className = self::getDevicePath().'\\Header';
 
         if (class_exists($className)) {
-            return  $className::Display($template, $params);
+            return $className::Display($template, $params);
         }
     }
+
     public static function getNavbar($template = '', $params = [])
     {
-        $className = self::getDevicePath(). '\\Navbar';
+        $className = self::getDevicePath().'\\Navbar';
         if (class_exists($className)) {
-            return  $className::Display($template, $params);
+            return $className::Display($template, $params);
         }
     }
+
     public static function getFooter($template = '', $params = [])
     {
-        $className = self::getDevicePath(). '\\Footer';
+        $className = self::getDevicePath().'\\Footer';
         if (class_exists($className)) {
-            return  $className::Display($template, $params);
+            return $className::Display($template, $params);
         }
     }
-
-
 
     public static function getAssetURL($type, $files)
     {
         $html = null;
 
-        foreach($files as $file) {
-            $filePath = self::getThemepath() . '/'.$file;
+        foreach ($files as $file) {
+            $filePath = self::getThemepath().'/'.$file;
             $url = __URL_LAYOUT__.'/'.strtolower(self::$DEVICE).'/'.$file;
-            if(!file_exists($filePath)) {
-
-                $filePath = self::getDefaultTheme() . '/'.$file;
+            if (!file_exists($filePath)) {
+                $filePath = self::getDefaultTheme().'/'.$file;
                 $url = __URL_LAYOUT__.'/'.strtolower(self::$default_theme).'/'.$file;
-                if(!file_exists($filePath)) {
+                if (!file_exists($filePath)) {
                     $url = null;
                 }
-
             }
-            if($url !== null) {
-                switch($type) {
+            if (null !== $url) {
+                switch ($type) {
                     case 'image':
-
                         $html .= $url;
                         break;
                     case 'css':
-                        $html .= '<link rel="stylesheet" href="'.$url.'">'.PHP_EOL;
+                        $html .= '<link rel="stylesheet" href="'.$url.'">'.\PHP_EOL;
                         break;
                     case 'js':
-                        $html .= '<script src="'.$url.'" crossorigin="anonymous"></script>'.PHP_EOL;
+                        $html .= '<script src="'.$url.'" crossorigin="anonymous"></script>'.\PHP_EOL;
                         break;
                 }
             }
         }
+
         return $html;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public static function getThemePath()
     {
-
         return __THEME_DIR__.'/'.strtolower(self::$DEVICE);
     }
 
@@ -155,7 +137,6 @@ class MediaDevice
     {
         return __THEME_DIR__.'/'.strtolower(self::$default_theme);
     }
-
 
     public static function getTemplateFile($template)
     {
@@ -170,8 +151,5 @@ class MediaDevice
         }
 
         return $template_file;
-
     }
-
-
 }
