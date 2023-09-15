@@ -10,7 +10,7 @@ namespace CWP\Process;
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\HTML\Template;
+use CWP\Template\Template;
 use CWP\Media\MediaMailer;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Spreadsheet\XLSXViewer;

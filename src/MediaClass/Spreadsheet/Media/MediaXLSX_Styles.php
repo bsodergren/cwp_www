@@ -6,7 +6,7 @@
 namespace CWP\Spreadsheet\Media;
 
 use Tracy\Debugger;
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\HTML\HTMLDisplay;
 use CWP\Spreadsheet\Styles;
 

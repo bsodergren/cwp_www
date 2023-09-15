@@ -5,7 +5,7 @@
 
 namespace CWP\Media\Mail;
 
-use CWP\HTML\Template;
+use CWP\Template\Template;
 
 class EmailDisplay
 {

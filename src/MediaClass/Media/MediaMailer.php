@@ -6,7 +6,7 @@
 namespace CWP\Media;
 
 use CWP\HTML\HTMLDisplay;
-use CWP\HTML\Template;
+use CWP\Template\Template;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;

@@ -6,7 +6,7 @@
 namespace CWP\Media\Import;
 
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Utils\Utils;
 use Smalot\PdfParser\Parser;
 
@@ -18,7 +18,7 @@ class PDFImport extends MediaImport
 
     private function insertDrop($pdf_file, $update_form)
     {
-    
+
         $this->processPdf($pdf_file, $this->job_id, $update_form);
 
         $pdf = $this->form;
@@ -52,7 +52,7 @@ class PDFImport extends MediaImport
     public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
     {
         $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
-     
+
         if (null !== $this->job_id) {
             return 0;
         }

@@ -4,7 +4,7 @@
  */
 
 use CWP\HTML\HTMLForms;
-use CWP\HTML\Template;
+use CWP\Template\Template;
 
 require_once '.config.inc.php';
 define('TITLE', 'Paper Editor');

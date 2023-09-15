@@ -3,7 +3,7 @@
  * CWP Media tool
  */
 
-use CWP\Media\Bootstrap;
+use CWP\Core\Bootstrap;
 
 define('APP_NAME', Bootstrap::$CONFIG['application']['name']);
 define('APP_ORGANIZATION', 'cwp');

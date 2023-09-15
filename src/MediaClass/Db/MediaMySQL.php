@@ -5,7 +5,7 @@
 
 namespace CWP\Db;
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 
 /**
  * CWP Media tool.
@@ -101,7 +101,7 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
     {
         $type = $this->sanitizeFields($type);
         $query = 'ALTER TABLE '.$table.' ADD `'.$column.'` '.$type.';';
-        
+
         $result = $this->query($query);
 
     }

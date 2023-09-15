@@ -10,11 +10,11 @@ namespace CWP\Process;
  */
 
 use Formr\Formr;
-use CWP\Media\Media;
-use CWP\HTML\Template;
+use CWP\Core\Media;
+use CWP\Template\Template;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaMailer;
-use CWP\Media\MediaSettings;
+use CWP\Core\MediaSettings;
 use CWP\Spreadsheet\XLSXViewer;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use Symfony\Component\Finder\Finder;

@@ -4,9 +4,9 @@
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\HTML\Template;
-use CWP\Media\Media;
-use CWP\Media\MediaSettings;
+use CWP\Template\Template;
+use CWP\Core\Media;
+use CWP\Core\MediaSettings;
 
 /**
  * CWP Media tool.

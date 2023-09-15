@@ -9,8 +9,8 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\Media\Media;
-use CWP\HTML\Template;
+use CWP\Core\Media;
+use CWP\Template\Template;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaMailer;
 use CWP\Spreadsheet\XLSXViewer;

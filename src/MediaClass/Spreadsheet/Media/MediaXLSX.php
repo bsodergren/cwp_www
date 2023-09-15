@@ -6,7 +6,7 @@
 namespace CWP\Spreadsheet\Media;
 
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Calculator;
 use CWP\Spreadsheet\LarrySheets\LarrySheetsXLSX;

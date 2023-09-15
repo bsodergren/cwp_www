@@ -3,9 +3,9 @@
  * CWP Media tool.
  */
 
-use CWP\Media\Bootstrap;
-use CWP\Media\Media;
-use CWP\Media\MediaSettings;
+use CWP\Core\Bootstrap;
+use CWP\Core\Media;
+use CWP\Core\MediaSettings;
 
 $table = Media::$explorer->table('settings');
 $table->order('setting_type ASC');

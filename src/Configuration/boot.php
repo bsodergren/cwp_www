@@ -3,8 +3,8 @@
  * CWP Media tool
  */
 
-use CWP\Media\Media;
-use CWP\Media\MediaSetup;
+use CWP\Core\Media;
+use CWP\Core\MediaSetup;
 use CWP\Media\Update\DbUpdate;
 use CWP\Media\Update\MediaAppUpdater;
 use Nette\Caching\Storages\DevNullStorage;

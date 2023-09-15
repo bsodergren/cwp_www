@@ -2,7 +2,7 @@
 
 require '../.config.inc.php';
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\HTML\HTMLDisplay;
 
 define('TITLE', 'Media Updater');

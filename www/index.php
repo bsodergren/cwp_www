@@ -4,8 +4,8 @@
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\Media;
-use CWP\Media\MediaFileSystem;
+use CWP\Core\Media;
+use CWP\Filesystem\MediaFileSystem;
 
 /**
  * CWP Media tool.

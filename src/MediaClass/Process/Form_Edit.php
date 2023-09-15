@@ -10,7 +10,7 @@ namespace CWP\Process;
  */
 
 use CWP\Media\Import\PDFImport;
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Media\MediaError;
 
 class Form_Edit extends MediaProcess

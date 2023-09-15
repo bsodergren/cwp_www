@@ -4,7 +4,7 @@
  */
 
 namespace CWP\Spreadsheet\MasterList;
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Spreadsheet\styles;
 
 /**

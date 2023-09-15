@@ -5,7 +5,7 @@
 
 namespace CWP\Db;
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 
 /**
  * CWP Media tool.

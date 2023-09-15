@@ -10,11 +10,11 @@ namespace CWP\Process;
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\HTML\Template;
+use CWP\Template\Template;
 use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaError;
 use CWP\Media\MediaExport;
-use CWP\Media\MediaFileSystem;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Utils\Zip;
 

@@ -4,8 +4,8 @@
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\HTML\Template;
-use CWP\Media\Media;
+use CWP\Template\Template;
+use CWP\Core\Media;
 use CWP\Utils\MediaDevice;
 
 (new MediaDevice())->run();

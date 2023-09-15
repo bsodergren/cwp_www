@@ -35,3 +35,4 @@ database_/cwp_sqlite.db
 temp/
 .gitignore
 .vscode/*.json
+tools/*

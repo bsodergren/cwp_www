@@ -5,7 +5,8 @@
 
 namespace CWP\HTML;
 
-use CWP\Media\MediaSettings;
+use CWP\Template\Template;
+use CWP\Core\MediaSettings;
 
 /*
  * CWP Media tool
@@ -121,7 +122,7 @@ class HTMLDisplay
         if (false == self::is_404($url)) {
             return false;
         }
-        if ("APP" == __DEVICE__) {
+        if ("APPLICATION" == __DEVICE__) {
             return false;
 
         }

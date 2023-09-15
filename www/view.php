@@ -5,7 +5,7 @@
 
 require_once '.config.inc.php';
 
-use CWP\HTML\Template;
+use CWP\Template\Template;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaError;
 use CWP\Utils\MediaDevice;

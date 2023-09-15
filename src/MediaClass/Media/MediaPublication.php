@@ -1,6 +1,8 @@
 <?php
 namespace CWP\Media;
 
+use CWP\Core\Media;
+
 
 class MediaPublication
 {

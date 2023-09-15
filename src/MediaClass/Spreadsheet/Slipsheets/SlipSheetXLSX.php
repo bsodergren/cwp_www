@@ -9,7 +9,7 @@ namespace CWP\Spreadsheet\Slipsheets;
  * CWP Media tool
  */
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

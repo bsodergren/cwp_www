@@ -5,7 +5,7 @@
 
 namespace CWP\Utils;
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use Nette\Utils\FileSystem;
 
 // The Class

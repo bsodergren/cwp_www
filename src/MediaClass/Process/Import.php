@@ -10,10 +10,10 @@ namespace CWP\Process;
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\HTML\Template;
+use CWP\Template\Template;
 use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaExec;
-use CWP\Media\MediaFileSystem;
+use CWP\Filesystem\MediaFileSystem;
 use Nette\Utils\FileSystem;
 
 class Import extends MediaProcess
@@ -127,9 +127,9 @@ class Import extends MediaProcess
 
                 if ($didUpload) {
                     $pdf_file = FileSystem::normalizePath($pdf_file);
-                 
+
                     $process = new MediaExec();
-                    
+
                     $process->cleanPdf($pdf_file);
                 } else {
                     HTMLDisplay::put('An error occurred. Please contact the administrator.');

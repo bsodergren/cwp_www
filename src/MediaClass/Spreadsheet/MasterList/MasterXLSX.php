@@ -5,7 +5,7 @@ namespace CWP\Spreadsheet\MasterList;
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Spreadsheet\Media\MediaXLSX_Styles;
 use CWP\Utils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;

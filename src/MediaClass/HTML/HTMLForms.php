@@ -1,7 +1,7 @@
 <?php
 namespace CWP\HTML;
 
-use CWP\HTML\Template;
+use CWP\Template\Template;
 /**
  * CWP Media tool
  */

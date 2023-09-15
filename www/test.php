@@ -3,7 +3,7 @@
  * CWP Media tool
  */
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Media\Update\MediaAppUpdater;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;

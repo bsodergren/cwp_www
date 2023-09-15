@@ -5,7 +5,7 @@
 
 namespace CWP\Process;
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Media\MediaPublication;
 use CWP\Utils\Utils;
 use Formr\Formr;

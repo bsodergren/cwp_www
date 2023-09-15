@@ -2,7 +2,7 @@
 
 namespace CWP\Media\Import;
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 
 class MediaImport extends Media
 {

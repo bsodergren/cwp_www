@@ -3,7 +3,7 @@
  * CWP Media tool
  */
 
-use CWP\Media\MediaFileSystem;
+use CWP\Filesystem\MediaFileSystem;
 use Nette\Utils\FileSystem;
 
 class Directory extends MediaFileSystem

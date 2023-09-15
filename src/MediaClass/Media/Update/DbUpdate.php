@@ -9,10 +9,10 @@ namespace CWP\Media\Update;
  * CWP Media tool
  */
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Utils\Utils;
-use CWP\Media\MediaDebug;
-use CWP\Media\MediaSetup;
+use CWP\Core\MediaDebug;
+use CWP\Core\MediaSetup;
 use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
 
@@ -54,7 +54,7 @@ class DbUpdate extends MediaUpdate
 
         foreach ($updates as $classmethod => $data_array) {
             $this->$classmethod($data_array);
-         
+
         }
 
         $filename = basename($file);
@@ -124,10 +124,10 @@ class DbUpdate extends MediaUpdate
 
     public function renameColumns($rename_column)
     {
-        
+
         if (is_array($rename_column)) {
             foreach ($rename_column as $table_name => $column) {
-               
+
                 $this->set($table_name);
                 foreach ($column as $old => $new) {
 

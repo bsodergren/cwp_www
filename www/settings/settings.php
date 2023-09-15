@@ -1,6 +1,6 @@
 <?php
-use CWP\HTML\Template;
-use CWP\Media\MediaSettings;
+use CWP\Template\Template;
+use CWP\Core\MediaSettings;
 use CWP\Utils\Utils;
 /**
  * CWP Media tool

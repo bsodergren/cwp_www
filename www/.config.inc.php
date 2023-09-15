@@ -4,7 +4,7 @@
  */
 
 use Camoo\Config\Config;
-use CWP\Media\Bootstrap;
+use CWP\Core\Bootstrap;
 use Tracy\Debugger;
 
 define('__PROJECT_ROOT__', dirname(__FILE__, 3));

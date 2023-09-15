@@ -9,7 +9,7 @@ namespace CWP\Spreadsheet\LarrySheets;
  * CWP Media tool
  */
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class LarrySheetsXLSX extends Media

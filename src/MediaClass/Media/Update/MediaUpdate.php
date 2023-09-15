@@ -11,8 +11,8 @@ namespace CWP\Media\Update;
 
 use CWP\Db\MediaMySQL;
 use CWP\Db\MediaSqlite;
-use CWP\Media\Bootstrap;
-use CWP\Media\Media;
+use CWP\Core\Bootstrap;
+use CWP\Core\Media;
 
 class MediaUpdate
 {

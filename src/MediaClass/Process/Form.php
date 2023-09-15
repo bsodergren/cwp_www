@@ -9,7 +9,7 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Spreadsheet\Media\MediaXLSX;
 
 class Form extends MediaProcess

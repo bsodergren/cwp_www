@@ -3,10 +3,10 @@
  * CWP Media tool
  */
 
-use CWP\HTML\Template;
+use CWP\Template\Template;
 use CWP\Media\Mail\EmailImport;
-use CWP\Media\Media;
-use CWP\Media\MediaFileSystem;
+use CWP\Core\Media;
+use CWP\Filesystem\MediaFileSystem;
 
 /**
  * CWP Media tool.

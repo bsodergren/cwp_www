@@ -6,7 +6,7 @@
 namespace CWP\Media\Import;
 
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\Media;
+use CWP\Core\Media;
 use CWP\Utils\Utils;
 use Smalot\PdfParser\Parser;
 

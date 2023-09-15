@@ -7,7 +7,7 @@ namespace CWP\Media\Mail;
 
 use CWP\Media\Mail\Attachment\MediaAttachment;
 use CWP\Media\Mail\Jobnumber\Jobnumber;
-use CWP\Media\MediaFileSystem;
+use CWP\Filesystem\MediaFileSystem;
 
 class EmailImport extends EmailDisplay
 {

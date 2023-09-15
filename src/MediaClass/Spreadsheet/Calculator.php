@@ -5,7 +5,7 @@
 
 namespace CWP\Spreadsheet;
 
-use CWP\Media\Media;
+use CWP\Core\Media;
 
 class Calculator
 {
