@@ -43,7 +43,9 @@ class MediaAppUpdater
     public function isUpdate()
     {
 
+
         dd($this->latest,$this->current );
+
 
     }
 }
