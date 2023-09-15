@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
 
 namespace CWP\HTML;
@@ -19,22 +19,25 @@ class Template
     public $default_params = [];
     public $template;
     private $test = 0;
+    public $error = true;
 
     public function __construct()
     {
     }
 
-    public static function GetHTML($template = '', $array = [])
+    public static function GetHTML($template = '', $array = [], $error = true)
     {
         $template_obj = new self();
+        $template_obj->error = $error;
         $template_obj->template($template, $array);
 
         return $template_obj->html;
     }
 
-    public static function echo($template = '', $array = [])
+    public static function echo($template = '', $array = [], $error = true)
     {
         $template_obj = new self();
+        $template_obj->error = $error;
         $template_obj->template($template, $array);
         echo $template_obj->html;
     }
@@ -83,8 +86,12 @@ class Template
             $template_file = __TEMPLATE_DIR__.'/application/'.$template.'.html';
             if (!file_exists($template_file)) {
                 // use default template directory
-                $template_text = '<h1>NO TEMPLATE FOUND<br>';
-                $template_text .= 'FOR <pre>'.$template.'</pre></h1> <br>';
+                if (true == $this->error) {
+                    $template_text = '<h1>NO TEMPLATE FOUND<br>';
+                    $template_text .= 'FOR <pre>'.$template.'</pre></h1> <br>';
+                } else {
+                    $template_text = '';
+                }
             } else {
                 $template_text = file_get_contents($template_file);
             }
@@ -148,17 +155,9 @@ class Template
     {
         global $mediaUpdates;
 
-        $installed = __UPDATE_CURRENT_VER__;
-        // $latest = null;
-        //  if (__UPDATE_CURRENT_VER__ != Media::$AutoUpdate->getLatestVersion()) {
-        Media::$AutoUpdate->checkUpdate();
-        $latest = Media::$AutoUpdate->getLatestVersion();
-        if ('0.0.0' == $latest) {
-            $latest = null;
-        }
+        $installed = '0.0.0';
 
-        // $latest =
-        //  }
+        $latest = '0.0.0';
 
         return [$installed, $latest];
     }

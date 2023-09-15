@@ -1,26 +1,15 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
 
-use Monolog\Logger;
-use CWP\Media\Media;
-use CWP\HTML\Template;
 use CWP\HTML\HTMLDisplay;
+use CWP\HTML\Template;
+use CWP\Media\Media;
 use CWP\Utils\MediaDevice;
-use CWP\AutoUpdate\AutoUpdate;
-
 
 (new MediaDevice())->run();
-define("__DEVICE__",MediaDevice::$DEVICE);
-
-$__test_nav_links = __PUBLIC_ROOT__.'/test_navlinks.php';
-
-if (file_exists($__test_nav_links)) {
-    require_once $__test_nav_links;
-} else {
-    define('__DEV_LINKS__', []);
-}
+define('__DEVICE__', MediaDevice::$DEVICE);
 
 $template = new Template();
 
@@ -34,17 +23,7 @@ if (function_exists('apache_setenv')) {
     apache_setenv('dont-vary', '1');
 }
 
-define('__UPDATE_CURRENT_VER__', trim(file_get_contents(__UPDATE_CURRENT_FILE__)));
-Media::$AutoUpdate = new AutoUpdate(__UPDATE_TMP_DIR__, __PUBLIC_ROOT__, 600);
-Media::$AutoUpdate->setCurrentVersion(__UPDATE_CURRENT_VER__);
-Media::$AutoUpdate->setUpdateUrl(__UPDATE_URL__);
-
-$logger = new Logger('default');
-$logger->pushHandler(new Monolog\Handler\StreamHandler(__UPDATE_LOG_FILE__));
-Media::$AutoUpdate->setLogger($logger);
-
 // Cache (optional but recommended)
 $cache = new \CWP\Cache\File(__UPDATE_CACHE_DIR__);
-Media::$AutoUpdate->setCache($cache, 3600);
 
 // new HTMLDisplay();

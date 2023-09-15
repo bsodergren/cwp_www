@@ -1,12 +1,11 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
 
 namespace CWP\Media;
 
 use CWP\Utils\Utils;
-
 
 /**
  * @property mixed $job_id
@@ -18,10 +17,11 @@ use CWP\Utils\Utils;
  */
 class Media
 {
-
     public static $AutoUpdate;
     public static $explorer;
     public static $connection;
+
+    public static $template;
     public $exp;
 
     public $conn;
@@ -112,7 +112,6 @@ class Media
                     //     $$key = $value;
                     //     $partArray[$key] = $value;
                     //     break;
-                    // no break
                     break;
                 case 'pub':
                     $trimData = MediaPublication::getTrimData($value, $bind);
@@ -516,7 +515,6 @@ class Media
         $base_dir = dirname($pdf_filename, 2);
         $pdf_filename = basename($pdf_filename);
 
-
         $query = 'INSERT INTO `media_job` ?';
 
         self::$connection->query($query, [
@@ -542,8 +540,7 @@ class Media
         foreach ($job_table as $u) {
             $job_id = $u->job_id;
         }
+
         return $job_id;
     }
-
-
 }

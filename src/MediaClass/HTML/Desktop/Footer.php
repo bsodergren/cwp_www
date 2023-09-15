@@ -1,20 +1,20 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool.
  */
 
 namespace CWP\HTML\Desktop;
 
+use CWP\HTML\HTMLDocument;
 use CWP\HTML\Template;
 
-class Footer extends Template
+class Footer extends HTMLDocument
 {
     // public $html;
 
     public static function display($template = '', $params = [])
     {
-        $templateObj = new Template();
         $params['END_JAVASCRIPT'] = Template::GetHTML('base/footer/javascript');
-        echo $templateObj->template('base/footer/footer', $params);
+        echo Template::GetHTML('base/footer/footer', $params);
     }
 }
