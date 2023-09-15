@@ -64,7 +64,6 @@ class MediaAppUpdater
     }
     public function getUpdate()
     {
-
         $ExecProcess = new Process(['git','pull']);
         $callback = Callback::check([$this, 'callback']);
         $ExecProcess->start();
