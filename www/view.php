@@ -5,10 +5,10 @@
 
 require_once '.config.inc.php';
 
-use CWP\HTML\Header;
 use CWP\HTML\Template;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaError;
+use CWP\Utils\MediaDevice;
 use CWP\Spreadsheet\XLSXViewer;
 use Symfony\Component\Finder\Finder;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -243,7 +243,7 @@ if ($quicksheet_index != $sheet_id) {
         $params['MESSAGE'] = $message;
     }
 
-    Header::Display('', ['CUSTOM_CSS' => $custom_css]);
+    MediaDevice::getHeader('', ['CUSTOM_CSS' => $custom_css]);
 
     $template->template('view/main', $params);
     $template->render();

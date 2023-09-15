@@ -18,6 +18,7 @@ class Header extends HTMLDocument
         define('__ONLOAD__', $onload);
 
         [$params['BOOTSTRAP'] ,$params['DEFAULT_CSS']] = self::header_CSS();
+
         $params['__NAVBAR__'] = self::_getNavbar();
         $params['UPDATES_HTML'] = self::_headerVersionUpdates();
         $params['__MSG__'] = self::displayMsg();

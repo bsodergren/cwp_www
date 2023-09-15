@@ -11,7 +11,7 @@ use Sinergi\BrowserDetector\Os;
 
 class MediaDevice
 {
- 
+
 
     public static $DEVICE = "Unknown";
 
@@ -66,4 +66,35 @@ class MediaDevice
 
         return [$browser->getName(),$device->getName(),$os->getName()];
     }
+
+    private static function getDevicePath()
+    {
+        $ClassName = ucfirst(strtolower(__DEVICE__));
+        return 'CWP\\HTML\\'.$ClassName;
+
+    }
+
+    public static function getHeader($template='', $params=[])
+    {
+        $className = self::getDevicePath(). '\\Header';
+        if (class_exists($className)) {
+            $className::Display($template, $params );
+        }
+    }
+    public static function getNavbar($template='', $params=[])
+    {
+        $className = self::getDevicePath(). '\\Navbar';
+        if (class_exists($className)) {
+            $className::Display($template, $params );
+        }
+    }
+    public static function getFooter($template='', $params=[])
+    {
+        $className = self::getDevicePath(). '\\Footer';
+        if (class_exists($className)) {
+            $className::Display($template, $params );
+        }
+    }
+
+
 }

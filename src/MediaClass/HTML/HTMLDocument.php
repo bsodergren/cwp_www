@@ -3,6 +3,7 @@
 namespace CWP\HTML;
 
 use CWP\Media\Media;
+use CWP\Utils\MediaDevice;
 use CWP\Media\MediaSettings;
 
 class HTMLDocument
@@ -67,12 +68,7 @@ class HTMLDocument
     public function getNavbar()
     {
         if (!MediaSettings::isTrue('NO_NAV')) {
-            $ClassName = ucfirst(strtolower(__DEVICE__));
-            $className = 'CWP\\HTML\\'.$ClassName.'\\Navbar';
-
-            if (class_exists($className)) {
-                return $className::Display();
-            }
+            MediaDevice::getNavbar();
         }
     }
 
