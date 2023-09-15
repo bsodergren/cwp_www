@@ -4,6 +4,7 @@
  */
 
 use CWP\Media\Media;
+use CWP\Media\Update\MediaAppUpdater;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\Filesystem;
@@ -20,33 +21,41 @@ define('TITLE', 'Form Editor');
 
 include_once __LAYOUT_HEADER__;
 
-$adapter = new LocalFilesystemAdapter(
-    // Determine root directory
-    __PROJECT_ROOT__
-);
 
- $appKey = 'm2xqkk0ojabhluo';
- $appSecret = 'fcy77exrlrh03g1';
+$update = new MediaAppUpdater();
 
-$client = new Client(__DROPBOX_AUTH_TOKEN__);
-$adapter = new DropboxAdapter($client);
-$filesystem = new Filesystem($adapter);
-$path = '.';
-try {
-    $listing = $filesystem->listContents($path, 0);
-    /** @var \League\Flysystem\StorageAttributes $item */
-    foreach ($listing as $item) {
+echo $update->currentVersion();
+echo $update->getLastest();
 
-        $path = $item->path();
-        if ($item instanceof FileAttributes) {
-            echo $path.'<br>';
-            // handle the file
-        } elseif ($item instanceof DirectoryAttributes) {
-            // handle the directory
-            echo $path.'<br>';
-        }
-    }
-} catch (FilesystemException $exception) {
-    dd($exception);
-    // handle the error
-}
+
+
+// $adapter = new LocalFilesystemAdapter(
+//     // Determine root directory
+//     __PROJECT_ROOT__
+// );
+
+//  $appKey = 'm2xqkk0ojabhluo';
+//  $appSecret = 'fcy77exrlrh03g1';
+
+// $client = new Client(__DROPBOX_AUTH_TOKEN__);
+// $adapter = new DropboxAdapter($client);
+// $filesystem = new Filesystem($adapter);
+// $path = '.';
+// try {
+//     $listing = $filesystem->listContents($path, 0);
+//     /** @var \League\Flysystem\StorageAttributes $item */
+//     foreach ($listing as $item) {
+
+//         $path = $item->path();
+//         if ($item instanceof FileAttributes) {
+//             echo $path.'<br>';
+//             // handle the file
+//         } elseif ($item instanceof DirectoryAttributes) {
+//             // handle the directory
+//             echo $path.'<br>';
+//         }
+//     }
+// } catch (FilesystemException $exception) {
+//     dd($exception);
+//     // handle the error
+// }
