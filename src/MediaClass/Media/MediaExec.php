@@ -51,11 +51,16 @@ class MediaExec
         }
     }
 
-    public function run()
+    public function exec($callback = null,$env=[])
+    {
+        $this->getCommand();
+        $this->ExecProcess->run($callback,$env);
+
+    }
+    public function run($callback = null)
     {
         $this->getCommand();
 
-        $callback = Callback::check([$this, 'callback']);
         $this->ExecProcess->start();
         $this->ExecProcess->wait($callback);
     }
@@ -73,13 +78,14 @@ class MediaExec
     {
         $qdf_cmd = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
         $pdf_file = FileSystem::normalizePath($pdf_file);
+        $callback = Callback::check([$this, 'callback']);
 
         $this->command($qdf_cmd);
         $this->option($pdf_file);
         $this->option('--pages', '.');
         $this->option('1-z', '--');
         $this->option('--replace-input');
-        $this->run();
+        $this->run( $callback);
     }
 
     public function callback($type, $buffer): void

@@ -2,6 +2,7 @@
 
 namespace CWP\Media\Update;
 
+use CWP\Media\MediaExec;
 use CWP\HTML\HTMLDisplay;
 use Nette\Utils\Callback;
 use Nette\Utils\FileSystem;
@@ -14,12 +15,15 @@ class MediaAppUpdater
 
     public $latest;
     public $current;
+    public $process;
 
     public function __construct()
     {
         define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
         $this->getLastest();
         $this->currentVersion();
+        $this->process = new MediaExec();
+
     }
 
     public function get_content($URL)
@@ -61,17 +65,19 @@ class MediaAppUpdater
     }
     public function getUpdate()
     {
-        $ExecProcess = new Process(['git','pull']);
         $callback = Callback::check([$this, 'callback']);
-        $ExecProcess->start();
-        $ExecProcess->wait($callback);
+        $this->process->command('git');
+        $this->process->option('pull');
+        $this->process->run($callback);
     }
 
     public function composerUpdate()
     {
-        $ExecProcess = new Process(['composer','-d',__PUBLIC_ROOT__,'update']);
         $callback = Callback::check([$this, 'callback']);
 
-        $ExecProcess->run($callback,['HOME'=>__HOME__]);
+        $this->process->command('composer');
+        $this->process->option('-d',__PUBLIC_ROOT__,'update');
+
+        $this->process->exec($callback,['HOME'=>__HOME__]);
     }
 }
