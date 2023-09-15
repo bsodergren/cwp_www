@@ -23,7 +23,6 @@ class MediaAppUpdater
         \define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
         $this->getLastest();
         $this->currentVersion();
-        $this->process = new MediaExec();
     }
 
     public function get_content($URL)
@@ -69,28 +68,30 @@ class MediaAppUpdater
 
     public function getUpdate()
     {
+        $process = new MediaExec();
         $callback = Callback::check([$this, 'callback']);
-        $this->process->command('git');
-        $this->process->option('pull');
+        $process->command('git');
+        $process->option('pull');
         if (__DEBUG__ == true) {
-            echo $this->process->getCommand();
+            echo $process->getCommand();
         } else {
-            $this->process->run($callback);
+            $process->run($callback);
         }
     }
 
     public function composerUpdate()
     {
         $callback = Callback::check([$this, 'callback']);
+        $process = new MediaExec();
 
-        $this->process->command('composer');
-        $this->process->option('-d');
-        $this->process->option(__PUBLIC_ROOT__);
-        $this->process->option('update');
+        $process->command('composer');
+        $process->option('-d');
+        $process->option(__PUBLIC_ROOT__);
+        $process->option('update');
         if (__DEBUG__ == true) {
-            echo $this->process->getCommand();
+            echo $process->getCommand();
         } else {
-            $this->process->exec($callback, ['HOME' => __HOME__]);
+            $process->exec($callback, ['HOME' => __HOME__]);
         }
     }
 }
