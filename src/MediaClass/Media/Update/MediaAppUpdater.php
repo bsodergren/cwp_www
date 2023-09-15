@@ -60,7 +60,7 @@ class MediaAppUpdater
     public function callback($type, $buffer): void
     {
 
-             HTMLDisplay::put($buffer.'<br>', 'green');
+             HTMLDisplay::put(nl2br($buffer), 'green');
 
     }
     public function getUpdate()
