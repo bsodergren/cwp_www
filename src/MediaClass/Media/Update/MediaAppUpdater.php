@@ -15,7 +15,8 @@ class MediaAppUpdater
     public function __construct()
     {
         define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
-
+        $this->getLastest();
+        $this->currentVersion();
     }
 
     public function get_content($URL)
@@ -42,7 +43,7 @@ class MediaAppUpdater
     public function isUpdate()
     {
 
-
+        dd($this->latest,$this->current );
 
     }
 }
