@@ -78,21 +78,21 @@ class MediaDevice
     {
         $className = self::getDevicePath(). '\\Header';
         if (class_exists($className)) {
-            $className::Display($template, $params );
+            return  $className::Display($template, $params );
         }
     }
     public static function getNavbar($template='', $params=[])
     {
         $className = self::getDevicePath(). '\\Navbar';
         if (class_exists($className)) {
-            $className::Display($template, $params );
+           return  $className::Display($template, $params );
         }
     }
     public static function getFooter($template='', $params=[])
     {
         $className = self::getDevicePath(). '\\Footer';
         if (class_exists($className)) {
-            $className::Display($template, $params );
+            return  $className::Display($template, $params );
         }
     }
 

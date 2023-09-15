@@ -68,7 +68,7 @@ class HTMLDocument
     public function getNavbar()
     {
         if (!MediaSettings::isTrue('NO_NAV')) {
-            MediaDevice::getNavbar();
+           return MediaDevice::getNavbar();
         }
     }
 
