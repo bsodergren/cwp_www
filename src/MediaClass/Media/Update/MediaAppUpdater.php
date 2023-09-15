@@ -45,9 +45,18 @@ class MediaAppUpdater
 
         if($this->latest > $this->current){
             echo "Update";
+            $this->getUpdate();
         } else {
             echo "No update";
         }
+
+    }
+
+    public function getUpdate()
+    {
+
+        dd(__PUBLIC_ROOT__);
+
 
     }
 }
