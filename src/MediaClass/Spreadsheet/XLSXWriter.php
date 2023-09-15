@@ -1,11 +1,12 @@
 <?php
+
 namespace CWP\Spreadsheet;
+
 use CWP\Filesystem\DropBox;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class XLSXWriter extends Xlsx
 {
-
     public function write($filename)
     {
 

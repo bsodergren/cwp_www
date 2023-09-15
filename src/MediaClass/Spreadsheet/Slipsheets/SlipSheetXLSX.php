@@ -33,8 +33,7 @@ class SlipSheetXLSX extends Media
         $sql = 'SELECT * FROM form_data_count WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by form_id ASC';
 
         $result                   = Media::$connection->fetchAll($sql);
-        foreach ($result as $id => $row)
-        {
+        foreach ($result as $id => $row) {
             /*
             +"id": 1320
             +"form_id": 3107
@@ -55,15 +54,15 @@ class SlipSheetXLSX extends Media
             +"bind": "SHS"
             +"max_skid": "17500"
             */
-        //     $data = [
-        //         'pub'=>$row->pub,
-        //         'former'=>$row->former,
-        //     'full_boxes'=>$row->full_boxes,
-        //     'packaging'=>$row->packaging,
-        //     'lifts_last_layer'=>$row->lifts_last_layer,
-        //     'layers_last_box'=>$row->layers_last_box,
+            //     $data = [
+            //         'pub'=>$row->pub,
+            //         'former'=>$row->former,
+            //     'full_boxes'=>$row->full_boxes,
+            //     'packaging'=>$row->packaging,
+            //     'lifts_last_layer'=>$row->lifts_last_layer,
+            //     'layers_last_box'=>$row->layers_last_box,
 
-        // ];
+            // ];
 
             $slipSheetArray[] = $row;
 
@@ -98,7 +97,7 @@ class SlipSheetXLSX extends Media
 
             foreach ($page as $k => $v) {
                 $this->SlipData = $v;
-             //   dd($this->SlipData);
+                //   dd($this->SlipData);
                 for ($lineIdx = 1; $lineIdx <= $SlipSheetSize; ++$lineIdx) {
                     switch ($lineIdx) {
                         case 1:
@@ -121,10 +120,10 @@ class SlipSheetXLSX extends Media
                         case 7:
                             break;
                         case 8:
-                           // $this->setFormLocation($col_A, $row);
+                            // $this->setFormLocation($col_A, $row);
 
                             //$this->setFormerInfo($col_B, $row);
-                        //   $this->setPcsInfo($col_B, $row);
+                            //   $this->setPcsInfo($col_B, $row);
                     }
                     ++$row;
                 }

@@ -41,7 +41,8 @@ class Navbar extends Template
         if (null != $latest) {
             $dropdown_link_html .= $templateObj->template(
                 'base/navbar/'.$nav_list_dir.'/navbar_item',
-                ['DROPDOWN_TEXT' => 'New! '.$latest]);
+                ['DROPDOWN_TEXT' => 'New! '.$latest]
+            );
             if (__DEVICE__ == 'desktop') {
                 $latest_version_html = $templateObj->template('base/footer/version_latest', ['VERSION' => $latest]);
             }

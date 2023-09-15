@@ -42,7 +42,8 @@ class EmailDisplay
                         [
                             'JS_SELECT_KEY' => $attachment['filename'].'|'.$key,
                             'JS_SELECT_OPTIONS' => $option_html,
-                    ]);
+                    ]
+                    );
                 }
             }
         }
@@ -52,7 +53,8 @@ class EmailDisplay
                 '/import/js_select',
                 [
                     'JS_SELECT_STATEMENTS' => $js_select_options,
-        ]);
+        ]
+            );
         }
 
         return '';
@@ -65,6 +67,7 @@ class EmailDisplay
             [
                 'SELECT_OPTIONS' => $this->drawFileOptions(),
                 'JS_SELECT' => $this->drawJsScript(),
-        ]);
+        ]
+        );
     }
 }

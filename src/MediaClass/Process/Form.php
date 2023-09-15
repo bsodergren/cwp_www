@@ -5,10 +5,6 @@
 
 namespace CWP\Process;
 
-/*
- * CWP Media tool
- */
-
 use CWP\Core\Media;
 use CWP\Spreadsheet\Media\MediaXLSX;
 

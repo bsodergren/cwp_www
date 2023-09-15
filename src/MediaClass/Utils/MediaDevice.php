@@ -11,7 +11,6 @@ use CWP\Browser\Device;
 use CWP\Browser\Browser;
 use Nette\Utils\FileSystem;
 
-
 class MediaDevice
 {
     public static $DEVICE = "APPLICATION";
@@ -70,7 +69,7 @@ class MediaDevice
 
     private static function getDevicePath()
     {
-        $ClassName = ucfirst(strtolower( self::$DEVICE));
+        $ClassName = ucfirst(strtolower(self::$DEVICE));
         return 'CWP\\Template\\'.$ClassName;
 
     }
@@ -106,7 +105,7 @@ class MediaDevice
 
         foreach($files as $file) {
             $filePath = self::getThemepath() . '/'.$file;
-            $url = __URL_LAYOUT__.'/'.strtolower( self::$DEVICE).'/'.$file;
+            $url = __URL_LAYOUT__.'/'.strtolower(self::$DEVICE).'/'.$file;
             if(!file_exists($filePath)) {
 
                 $filePath = self::getDefaultTheme() . '/'.$file;
@@ -149,7 +148,7 @@ class MediaDevice
     public static function getThemePath()
     {
 
-        return __THEME_DIR__.'/'.strtolower( self::$DEVICE);
+        return __THEME_DIR__.'/'.strtolower(self::$DEVICE);
     }
 
     public static function getDefaultTheme()

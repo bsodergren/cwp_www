@@ -133,6 +133,6 @@ class MediaExport
     {
         $this->exportJsonData();
         $zip            = new Zip();
-        $zip->exportZip($this->getPDF(), $this->json_file );
+        $zip->exportZip($this->getPDF(), $this->json_file);
     }
 }

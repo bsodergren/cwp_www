@@ -1,7 +1,9 @@
 <?php
+
 namespace CWP\HTML;
 
 use CWP\Template\Template;
+
 /**
  * CWP Media tool
  */
@@ -30,7 +32,7 @@ class HTMLForms
         return Template::GetHTML('elements/select/select', ['SELECT_NAME' => $name, 'SELECT_LABEL' => $text, 'SELECT_STYLE' => $style, 'SELECT_OPTIONS' => $option_html]);
     }
 
-    public static function draw_checkbox($name, $value, $text = 'Face Trim',$template='elements/checkbox')
+    public static function draw_checkbox($name, $value, $text = 'Face Trim', $template = 'elements/checkbox')
     {
         global $pub_keywords;
 

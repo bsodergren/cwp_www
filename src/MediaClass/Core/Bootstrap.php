@@ -24,7 +24,7 @@ class Bootstrap
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->definePath('__FILES_DIR__', $this->getFileStorage());
         $this->define('__URL_PATH__', $this->getURL());
-        $this->define('__HOME__',dirname($_SERVER['DOCUMENT_ROOT'], 2));
+        $this->define('__HOME__', dirname($_SERVER['DOCUMENT_ROOT'], 2));
     }
 
     public function directory($path)

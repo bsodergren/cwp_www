@@ -25,7 +25,7 @@ class View extends MediaProcess
     public function header()
     {
         define('TITLE', 'Updating excel sheet');
-MediaDevice::getHeader();
+        MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         $this->page_end = Template::GetHTML('stream/end_page', []);
     }

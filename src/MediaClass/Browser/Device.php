@@ -4,11 +4,11 @@ namespace CWP\Browser;
 
 class Device
 {
-    const UNKNOWN = 'unknown';
+    public const UNKNOWN = 'unknown';
 
-    const IPAD = 'iPad';
-    const IPHONE = 'iPhone';
-    const WINDOWS_PHONE = 'Windows Phone';
+    public const IPAD = 'iPad';
+    public const IPHONE = 'iPhone';
+    public const WINDOWS_PHONE = 'Windows Phone';
 
     /**
      * @var string

@@ -27,7 +27,7 @@ class MediaSqlite extends MediaDb implements MediaDbAbstract
             case 'drop':
             case 'alter':
             case 'create':
-                case 'delete':
+            case 'delete':
 
                 $this->query($args[0]);
                 break;

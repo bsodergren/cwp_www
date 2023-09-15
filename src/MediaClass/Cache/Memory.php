@@ -63,8 +63,8 @@ class Memory extends AbstractCache
     {
         $clone = clone $this;
 
-        $clone->cache =& $this->cache;
-        $clone->cacheTtl =& $this->cacheTtl;
+        $clone->cache = & $this->cache;
+        $clone->cacheTtl = & $this->cacheTtl;
 
         return $clone;
     }

@@ -1,32 +1,31 @@
 <?php
+
 namespace CWP\Media;
 
 use CWP\Core\Media;
 
-
 class MediaPublication
 {
-
-public static $trim_details = [];
-
+    public static $trim_details = [];
 
 
 
-public function getPubList($ids)
-{
-    // if(is_array($ids)) {
-    $ids = implode(',', $ids);
-    // }
 
-    $sql = 'SELECT * FROM pub_trim WHERE id IN ('.$ids.');';
-    $pubs = Media::$connection->query($sql);
-    foreach ($pubs as $row) {
-        echo $row->id;
-        echo $row->pub_name;
+    public function getPubList($ids)
+    {
+        // if(is_array($ids)) {
+        $ids = implode(',', $ids);
+        // }
+
+        $sql = 'SELECT * FROM pub_trim WHERE id IN ('.$ids.');';
+        $pubs = Media::$connection->query($sql);
+        foreach ($pubs as $row) {
+            echo $row->id;
+            echo $row->pub_name;
+        }
+
+        dd($pubs);
     }
-
-    dd($pubs);
-}
     public static function getTrimData($publication, $bind)
     {
 
@@ -65,7 +64,7 @@ public function getPubList($ids)
         return  self::$trim_details;
     }
 
-     public static function CleanPublication($publication)
+    public static function CleanPublication($publication)
     {
         $pcs         = ['+', "'", '&'];
         $publication = str_replace($pcs, '', $publication);

@@ -80,7 +80,7 @@ class DbUpdate extends MediaUpdate
         }
     }
 
-    public function __call($method, $args )
+    public function __call($method, $args)
     {
         dd(["call",$method, $args]);
 

@@ -34,8 +34,10 @@ class PDFImport extends MediaImport
 
 
         $keyidx = array_key_first($pdf);
-        Media::$explorer->table('media_job')->where('job_id',
-            $this->job_id)->update([
+        Media::$explorer->table('media_job')->where(
+            'job_id',
+            $this->job_id
+        )->update([
                 'close' => $pdf[$keyidx]['details']['product'],
             ]);
 

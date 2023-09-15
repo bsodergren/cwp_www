@@ -35,7 +35,7 @@ class NopPacker implements PackerInterface
 
     /**
      * Pack the value
-     * 
+     *
      * @param mixed $value
      * @return mixed
      */
@@ -43,10 +43,10 @@ class NopPacker implements PackerInterface
     {
         return $value;
     }
-    
+
     /**
      * Unpack the value
-     * 
+     *
      * @param mixed $packed
      * @return mixed
      */

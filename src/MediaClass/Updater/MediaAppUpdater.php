@@ -11,7 +11,6 @@ use Symfony\Component\Process\Process;
 
 class MediaAppUpdater
 {
-
     public const GIT_VERSION = "https://raw.githubusercontent.com/bsodergren/cwp_www/main/current.txt";
 
     public $latest;
@@ -41,7 +40,7 @@ class MediaAppUpdater
     }
     public function currentVersion()
     {
-        if(__DEBUG__ == true){
+        if(__DEBUG__ == true) {
             $this->current = '1.2.3';
         } else {
             $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
@@ -56,7 +55,7 @@ class MediaAppUpdater
     public function isUpdate()
     {
 
-        if($this->latest > $this->current){
+        if($this->latest > $this->current) {
             return $this->latest;
         }
         return null;
@@ -65,7 +64,7 @@ class MediaAppUpdater
     public function callback($type, $buffer): void
     {
 
-             HTMLDisplay::put(nl2br($buffer), 'green');
+        HTMLDisplay::put(nl2br($buffer), 'green');
 
     }
     public function getUpdate()
@@ -73,9 +72,9 @@ class MediaAppUpdater
         $callback = Callback::check([$this, 'callback']);
         $this->process->command('git');
         $this->process->option('pull');
-        if(__DEBUG__ == true){
+        if(__DEBUG__ == true) {
             echo  $this->process->getCommand();
-        }else{
+        } else {
             $this->process->run($callback);
         }
     }
@@ -88,10 +87,10 @@ class MediaAppUpdater
         $this->process->option('-d');
         $this->process->option(__PUBLIC_ROOT__);
         $this->process->option('update');
-        if(__DEBUG__ == true){
+        if(__DEBUG__ == true) {
             echo  $this->process->getCommand();
-        }else{
-        $this->process->exec($callback,['HOME'=>__HOME__]);
+        } else {
+            $this->process->exec($callback, ['HOME' => __HOME__]);
         }
     }
 }

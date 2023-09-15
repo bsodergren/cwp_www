@@ -28,7 +28,7 @@ class Import extends MediaProcess
     public function header()
     {
         define('TITLE', 'Importing PDF File');
-MediaDevice::getHeader();
+        MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         $this->page_end = Template::GetHTML('stream/end_page', []);
     }
@@ -138,9 +138,9 @@ MediaDevice::getHeader();
             } else {
                 HTMLDisplay::put('File already was uploaded');
             } // end if
-                if (isset($imap)) {
-                    imap_setflag_full($imap, $imap_id, '\\Seen');
-                }
+            if (isset($imap)) {
+                imap_setflag_full($imap, $imap_id, '\\Seen');
+            }
             $MediaImport = new PDFImport();
             $MediaImport->Import($pdf_file, $job_number);
             if ($MediaImport->status == 0) {

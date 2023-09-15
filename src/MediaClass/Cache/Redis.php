@@ -94,7 +94,7 @@ class Redis extends AbstractCache
     public function get($key, $default = null)
     {
         $response = $this->client->get($this->keyToId($key));
-        
+
         return !empty($response) ? $this->unpack($response) : $default;
     }
 
@@ -140,7 +140,7 @@ class Redis extends AbstractCache
         if (isset($ttlSeconds) && $ttlSeconds <= 0) {
             return $this->client->del($id);
         }
-        
+
         return !isset($ttlSeconds)
             ? $this->client->set($id, $packed)
             : $this->client->setex($id, $ttlSeconds, $packed);

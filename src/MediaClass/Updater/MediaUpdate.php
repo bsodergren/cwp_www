@@ -29,12 +29,10 @@ class MediaUpdate
     {
         //$this->conn = Media::$connection;
 
-        if ('mysql' == Bootstrap::$CONFIG['db']['type'])
-        {
+        if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
             $this->dbClassObj = new MediaMySQL($this);
         }
-        if ('sqlite' == Bootstrap::$CONFIG['db']['type'])
-        {
+        if ('sqlite' == Bootstrap::$CONFIG['db']['type']) {
             $this->dbClassObj = new MediaSqlite($this);
         }
     }

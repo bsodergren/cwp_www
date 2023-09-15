@@ -112,7 +112,7 @@ class Predis extends AbstractCache
             return false;
         }
 
-        $ok = array_reduce($responses, function($ok, $response) {
+        $ok = array_reduce($responses, function ($ok, $response) {
             return $ok && $response instanceof Status && $response->getPayload() === 'OK';
         }, true);
 

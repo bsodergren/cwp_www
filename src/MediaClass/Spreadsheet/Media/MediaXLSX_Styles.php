@@ -121,12 +121,12 @@ class MediaXLSX_Styles extends Styles
 
 
     }
-    public function addSheetData($value, $text, $row,$col='A')
+    public function addSheetData($value, $text, $row, $col = 'A')
     {
-        if($col == 'A'){
+        if($col == 'A') {
             $col2 = 'B';
         }
-        if($col == 'C'){
+        if($col == 'C') {
             $col2 = 'D';
         }
 
@@ -137,7 +137,7 @@ class MediaXLSX_Styles extends Styles
         $valCell  = Styles::row($col2, $row);
         $this->setAlign($valCell, 'H');
         $this->setCellText($valCell, $value);
-       // $this->setBorder($valCell);
+        // $this->setBorder($valCell);
     }
 
     public function setRowHeights()
@@ -243,13 +243,13 @@ class MediaXLSX_Styles extends Styles
             $this->addFormText($form);
 
             foreach ($sheet_labels as $key => $val) {
-            if (str_contains($key, '_')) {
-                [$row,$col] = explode('_', $key);
-            } else {
-                $row = $key;
-                $col = 'A';
-            }
-                $this->addSheetData($val[0], $val[1], $row,$col);
+                if (str_contains($key, '_')) {
+                    [$row,$col] = explode('_', $key);
+                } else {
+                    $row = $key;
+                    $col = 'A';
+                }
+                $this->addSheetData($val[0], $val[1], $row, $col);
             }
         }
     }

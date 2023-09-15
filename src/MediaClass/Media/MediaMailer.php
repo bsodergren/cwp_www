@@ -57,7 +57,7 @@ class MediaMailer
             $this->mail->Password   = __IMAP_PASSWD__;                               // SMTP password
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            // Enable implicit TLS encryption
             $this->mail->Port       = 465;                                    // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-$sendname = '';
+            $sendname = '';
             // Recipients
             $this->mail->setFrom('bjorn.sodergren@gmail.com', 'Mailer');
 

@@ -60,7 +60,7 @@ class HTMLDocument
                 'base/navbar/'.$this->nav_list_dir.'/navbar_item',
                 ['DROPDOWN_TEXT' => 'New! '.$latest]
             );
-          //  $latest_version_html = $this->template->template('base/footer/version_latest', ['VERSION' => $latest]);
+            //  $latest_version_html = $this->template->template('base/footer/version_latest', ['VERSION' => $latest]);
         }
 
         return [$dropdown_link_html, $latest_version_html];
@@ -112,7 +112,7 @@ class HTMLDocument
             $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest]);
         }
 
-       // return $version_html;
+        // return $version_html;
     }
 
     public static function displayMsg()

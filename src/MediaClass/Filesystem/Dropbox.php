@@ -31,7 +31,7 @@ class DropBox
 
     public function cleanPath($path)
     {
-        return str_replace("\\","/",$path);
+        return str_replace("\\", "/", $path);
     }
 
     public function createFolder($path)

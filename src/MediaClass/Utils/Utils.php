@@ -76,7 +76,9 @@ class Utils
                 'Saddle Head Small',
                 'Perfect Head Large',
                 'Perfect Head Medium',
-                'Perfect Head Small'], $bind);
+                'Perfect Head Small'],
+            $bind
+        );
 
         return $bind_name;
     }

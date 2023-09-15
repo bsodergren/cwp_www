@@ -14,7 +14,6 @@ use CWP\Core\MediaSettings;
 
 class HTMLDisplay
 {
-
     public static $url = false;
 
     public static $timeout = 0;

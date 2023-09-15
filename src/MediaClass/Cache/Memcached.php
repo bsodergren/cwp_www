@@ -191,7 +191,7 @@ class Memcached extends AbstractCache
      */
     public function clear()
     {
-       return $this->server->flush();
+        return $this->server->flush();
     }
 
 

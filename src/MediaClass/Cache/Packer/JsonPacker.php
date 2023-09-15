@@ -36,7 +36,7 @@ class JsonPacker implements PackerInterface
 
     /**
      * Pack the value
-     * 
+     *
      * @param mixed $value
      * @return string
      */
@@ -44,10 +44,10 @@ class JsonPacker implements PackerInterface
     {
         return json_encode($value);
     }
-    
+
     /**
      * Unpack the value
-     * 
+     *
      * @param string $packed
      * @return mixed
      * @throws InvalidArgumentException

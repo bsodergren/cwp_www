@@ -4,7 +4,7 @@ namespace CWP\Browser;
 
 class BrowserDetector implements DetectorInterface
 {
-    const FUNC_PREFIX = 'checkBrowser';
+    public const FUNC_PREFIX = 'checkBrowser';
 
     protected static $userAgentString;
 

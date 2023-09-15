@@ -62,7 +62,7 @@ class PhpFile extends AbstractFile
         $macro = var_export($value, true);
 
         if (strpos($macro, 'stdClass::__set_state') !== false) {
-            $macro = preg_replace_callback("/('([^'\\\\]++|''\\.)')|stdClass::__set_state/", $macro, function($match) {
+            $macro = preg_replace_callback("/('([^'\\\\]++|''\\.)')|stdClass::__set_state/", $macro, function ($match) {
                 return empty($match[1]) ? '(object)' : $match[1];
             });
         }

@@ -48,7 +48,7 @@ class Index extends MediaProcess
     {
         define('TITLE', 'Writing Excel files');
 
-MediaDevice::getHeader();
+        MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
         $this->media->excelArray();
@@ -79,7 +79,7 @@ MediaDevice::getHeader();
                 $this->media->delete_form();
 
                 define('TITLE', 'Reimporting Media Drop');
-MediaDevice::getHeader();
+                MediaDevice::getHeader();
 
                 Template::echo('stream/start_page', []);
 

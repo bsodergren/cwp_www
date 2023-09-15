@@ -1,10 +1,11 @@
 <?php
+
 namespace CWP\Core;
+
 use CWP\Core\Media;
 
 class MediaDebug extends Media
 {
-
     public static $DEBUG = false;
 
     private function trace()
@@ -21,6 +22,7 @@ class MediaDebug extends Media
                 case 'dump':
                     $lineno = $row['line'];
                     //break;
+                    // no break
                 case 'dd':
                     $lineno = $row['line'];
                     break;
@@ -32,7 +34,7 @@ class MediaDebug extends Media
                 case '__construct':
                 case '__directory':
                 case '__filename':
-                    case '__dump':
+                case '__dump':
                     break;
 
                 default:
@@ -41,16 +43,16 @@ class MediaDebug extends Media
                         $class = $row['class'].$row['type'];
                     }
                     $s[]      = $class.$row['function']."()";
-                   // $file   = $row['file'];
+                    // $file   = $row['file'];
                     break;
             }
-           // if($i == 5){
-           //     break;
-           // }
+            // if($i == 5){
+            //     break;
+            // }
             $i++;
         }
-      //  $s = array_reverse($s);
-        $s_str = implode("->",$s);
+        //  $s = array_reverse($s);
+        $s_str = implode("->", $s);
         $file  = pathinfo($file, \PATHINFO_BASENAME);
 
         return $file.':'.$lineno.':'.$s_str;
@@ -60,16 +62,15 @@ class MediaDebug extends Media
     {
         $trace = $this->trace();
 
-        switch(func_num_args())
-        {
+        switch(func_num_args()) {
             case 1:
-                if(is_array($content)){
-                    foreach($content as $str){
-                        if(is_array($str)){
-                            foreach($str as $str2){
+                if(is_array($content)) {
+                    foreach($content as $str) {
+                        if(is_array($str)) {
+                            foreach($str as $str2) {
                                 $output[] = $str2;
                             }
-                        }else {
+                        } else {
                             $output[] = $str;
 
                         }
@@ -78,14 +79,14 @@ class MediaDebug extends Media
                     $output[] = $content;
                 }
                 break;
-                default:
-                foreach(func_get_args() as $str){
+            default:
+                foreach(func_get_args() as $str) {
                     // if(is_array($str)){
                     //     foreach($str as $str2){
                     //         $output[] = $str2;
                     //     }
                     // }else {
-                        $output[] = $str;
+                    $output[] = $str;
                     // }
                 }
         }
@@ -96,17 +97,21 @@ class MediaDebug extends Media
     }
     public static function dump(...$content)
     {
-        if(self::$DEBUG == false) return null;
+        if(self::$DEBUG == false) {
+            return null;
+        }
 
-        dump((new self)->__dump($content));
+        dump((new self())->__dump($content));
 
     }
     public static function dd(...$content)
     {
 
-        if(self::$DEBUG == false) return null;
+        if(self::$DEBUG == false) {
+            return null;
+        }
 
-        dd((new self)->__dump($content));
+        dd((new self())->__dump($content));
     }
 
 

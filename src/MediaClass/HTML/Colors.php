@@ -1,5 +1,7 @@
 <?php
+
 namespace CWP\HTML;
+
 /**
  * CWP Media tool
  */

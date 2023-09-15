@@ -51,10 +51,10 @@ class MediaExec
         }
     }
 
-    public function exec($callback = null,$env=[])
+    public function exec($callback = null, $env = [])
     {
         $this->getCommand();
-        $this->ExecProcess->run($callback,$env);
+        $this->ExecProcess->run($callback, $env);
 
     }
     public function run($callback = null)
@@ -85,7 +85,7 @@ class MediaExec
         $this->option('--pages', '.');
         $this->option('1-z', '--');
         $this->option('--replace-input');
-        $this->run( $callback);
+        $this->run($callback);
     }
 
     public function callback($type, $buffer): void

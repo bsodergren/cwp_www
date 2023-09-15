@@ -51,7 +51,7 @@ class SerializePacker implements PackerInterface
 
     /**
      * Pack the value
-     * 
+     *
      * @param mixed $value
      * @return string
      */
@@ -59,10 +59,10 @@ class SerializePacker implements PackerInterface
     {
         return serialize($value);
     }
-    
+
     /**
      * Unpack the value
-     * 
+     *
      * @param string $packed
      * @return string
      * @throws \UnexpectedValueException if he value can't be unpacked

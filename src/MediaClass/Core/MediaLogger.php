@@ -1,5 +1,7 @@
 <?php
+
 namespace CWP\Core;
+
 /**
  * CWP Media tool
  */

@@ -4,7 +4,7 @@
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\MediaError;
+use CWP\Core\MediaError;
 
 require '.config.inc.php';
 

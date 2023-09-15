@@ -1,5 +1,7 @@
 <?php
+
 namespace CWP\Spreadsheet\MasterList;
+
 /**
  * CWP Media tool
  */

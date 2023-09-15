@@ -30,15 +30,15 @@ interface PackerInterface
 
     /**
      * Pack the value
-     * 
+     *
      * @param mixed $value
      * @return string|mixed
      */
     public function pack($value);
-    
+
     /**
      * Unpack the value
-     * 
+     *
      * @param string|mixed $packed
      * @return string
      * @throws \UnexpectedValueException if the value can't be unpacked

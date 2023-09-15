@@ -20,18 +20,18 @@ class MediaDb
         $this->conn = $class;
     }
 
-public function __call($method,$args)
-{
-   // $method = str_replace('_', '', $method);
-    if(method_exists($this,$method)){
-        dd($method);
+    public function __call($method, $args)
+    {
+        // $method = str_replace('_', '', $method);
+        if(method_exists($this, $method)) {
+            dd($method);
 
-        $this->$method(...$args);
+            $this->$method(...$args);
+
+        }
+        // dd("Nope");
 
     }
-   // dd("Nope");
-
-}
 
 
 }

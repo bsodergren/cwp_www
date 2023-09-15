@@ -11,7 +11,7 @@ namespace CWP\Process;
 
 use CWP\Media\Import\PDFImport;
 use CWP\Core\Media;
-use CWP\Media\MediaError;
+use CWP\Core\MediaError;
 
 class Form_Edit extends MediaProcess
 {

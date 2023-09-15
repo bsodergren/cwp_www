@@ -1,23 +1,23 @@
 <?php
+
 namespace CWP\Updater\Db;
 
 interface MediaDbAbstract
 {
+    public function query($query);
+    public function fetch($query);
+    public function fetchOne($query);
 
-    function query($query);
-    function fetch($query);
-    function fetchOne($query);
+    public function check_tableExists($table);
 
-     function check_tableExists($table);
+    public function check_columnExists($table, $column);
 
-     function check_columnExists($table, $column);
+    public function rename_column($table, $old, $new);
 
-     function rename_column($table, $old, $new);
+    public function create_column($table, $column, $type);
 
-     function create_column($table, $column, $type);
+    public function change_column($table_name, $name, $type);
 
-     function change_column($table_name, $name, $type);
-
-     function reset_table($table);
+    public function reset_table($table);
 
 }

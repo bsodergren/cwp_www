@@ -4,10 +4,10 @@
  */
 
 namespace CWP\Core;
+
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-
 
 /**
  * CWP Media tool.
@@ -31,7 +31,7 @@ class MediaError
         }
 
         if ('' != $msg) {
-MediaDevice::getHeader();
+            MediaDevice::getHeader();
             Template::echo('error/'.$severity, ['MSG' => $msg]);
         }
 
