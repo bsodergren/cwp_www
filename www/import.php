@@ -3,9 +3,10 @@
  * CWP Media tool
  */
 
-use CWP\Template\Template;
-use CWP\Media\Mail\EmailImport;
 use CWP\Core\Media;
+use CWP\Template\Template;
+use CWP\Utils\MediaDevice;
+use CWP\Media\Mail\EmailImport;
 use CWP\Filesystem\MediaFileSystem;
 
 /**
@@ -15,7 +16,7 @@ require_once '.config.inc.php';
 define('TITLE', 'Import new Media drop');
 // $template = new Template();
 
-require_once __LAYOUT_HEADER__;
+MediaDevice::getHeader();
 
 /* connect to gmail */
 
@@ -61,4 +62,4 @@ $params['UPLOAD_IMPORT_HTML'] = template::GetHTML('/import/form_card', $import_c
 
 $template->render('import/main', $params);
 
-require_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

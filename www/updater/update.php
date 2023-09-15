@@ -6,7 +6,8 @@ use CWP\Core\Media;
 use CWP\HTML\HTMLDisplay;
 
 define('TITLE', 'Media Updater');
-include_once __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 
 
 echo Media::$VersionUpdate;
@@ -19,4 +20,4 @@ if(Media::$VersionUpdate !== null){
 }
 
 // echo HTMLDisplay::JavaRefresh('/index.php', 3);
-include_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

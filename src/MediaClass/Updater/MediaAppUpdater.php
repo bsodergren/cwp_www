@@ -1,7 +1,8 @@
 <?php
 
-namespace CWP\Media\Update;
+namespace CWP\Updater;
 
+use CWP\Core\MediaSettings;
 use CWP\Media\MediaExec;
 use CWP\HTML\HTMLDisplay;
 use Nette\Utils\Callback;
@@ -40,7 +41,11 @@ class MediaAppUpdater
     }
     public function currentVersion()
     {
-        $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
+        if(__DEBUG__ == true){
+            $this->current = '1.2.3';
+        } else {
+            $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
+        }
 
     }
     public function getLastest()
@@ -68,7 +73,11 @@ class MediaAppUpdater
         $callback = Callback::check([$this, 'callback']);
         $this->process->command('git');
         $this->process->option('pull');
-        $this->process->run($callback);
+        if(__DEBUG__ == true){
+            echo  $this->process->getCommand();
+        }else{
+            $this->process->run($callback);
+        }
     }
 
     public function composerUpdate()
@@ -79,7 +88,10 @@ class MediaAppUpdater
         $this->process->option('-d');
         $this->process->option(__PUBLIC_ROOT__);
         $this->process->option('update');
-
+        if(__DEBUG__ == true){
+            echo  $this->process->getCommand();
+        }else{
         $this->process->exec($callback,['HOME'=>__HOME__]);
+        }
     }
 }

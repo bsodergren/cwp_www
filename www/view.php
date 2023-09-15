@@ -5,9 +5,9 @@
 
 require_once '.config.inc.php';
 
-use CWP\Template\Template;
+use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\MediaError;
+use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 use CWP\Spreadsheet\XLSXViewer;
 use Symfony\Component\Finder\Finder;
@@ -15,12 +15,12 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if ('email' == $_REQUEST['action']) {
     define('TITLE', 'Email excel zip file');
-    require_once __LAYOUT_HEADER__;
+MediaDevice::getHeader();
     $template->render('view/mail_form', [
         '__FORM_URL__' => __URL_PATH__.'/process.php',
         'FORM_NUMBER' => $_REQUEST['form_number'],
         'JOB_ID' => $_REQUEST['job_id']]);
-    require_once __LAYOUT_FOOTER__;
+    MediaDevice::getFooter();
     exit;
 }
 
@@ -248,7 +248,7 @@ if ($quicksheet_index != $sheet_id) {
     $template->template('view/main', $params);
     $template->render();
 
-    include_once __LAYOUT_FOOTER__;
+    MediaDevice::getFooter();
 } else {
     MediaError::msg('warning', 'Excel files are not found, try deleting and recreating');
 

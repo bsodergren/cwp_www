@@ -57,7 +57,7 @@ class MediaMailer
             $this->mail->Password   = __IMAP_PASSWD__;                               // SMTP password
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            // Enable implicit TLS encryption
             $this->mail->Port       = 465;                                    // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
+$sendname = '';
             // Recipients
             $this->mail->setFrom('bjorn.sodergren@gmail.com', 'Mailer');
 
@@ -72,7 +72,7 @@ class MediaMailer
             echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, 'Email to '.$sendname.' sent');
             ob_flush();
         } catch (Exception $e) {
-            echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, "Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}");
         }
     }
 }

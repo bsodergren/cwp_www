@@ -5,14 +5,16 @@
 
 namespace CWP\Utils;
 
+use Name;
+use CWP\Browser\Os;
+use CWP\Browser\Device;
+use CWP\Browser\Browser;
 use Nette\Utils\FileSystem;
-use Sinergi\BrowserDetector\Os;
-use Sinergi\BrowserDetector\Device;
-use Sinergi\BrowserDetector\Browser;
+
 
 class MediaDevice
 {
-    public static $DEVICE = "Unknown";
+    public static $DEVICE = "APPLICATION";
     public static $default_theme = "application";
     public function __construct()
     {
@@ -68,7 +70,7 @@ class MediaDevice
 
     private static function getDevicePath()
     {
-        $ClassName = ucfirst(strtolower(__DEVICE__));
+        $ClassName = ucfirst(strtolower( self::$DEVICE));
         return 'CWP\\Template\\'.$ClassName;
 
     }
@@ -104,7 +106,7 @@ class MediaDevice
 
         foreach($files as $file) {
             $filePath = self::getThemepath() . '/'.$file;
-            $url = __URL_LAYOUT__.'/'.strtolower(__DEVICE__).'/'.$file;
+            $url = __URL_LAYOUT__.'/'.strtolower( self::$DEVICE).'/'.$file;
             if(!file_exists($filePath)) {
 
                 $filePath = self::getDefaultTheme() . '/'.$file;
@@ -146,7 +148,8 @@ class MediaDevice
 
     public static function getThemePath()
     {
-        return __THEME_DIR__.'/'.strtolower(__DEVICE__);
+
+        return __THEME_DIR__.'/'.strtolower( self::$DEVICE);
     }
 
     public static function getDefaultTheme()

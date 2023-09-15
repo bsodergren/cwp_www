@@ -3,9 +3,11 @@
  * CWP Media tool
  */
 
-namespace CWP\Db;
+namespace CWP\Updater\Db;
 
 use CWP\Core\Media;
+use CWP\Updater\Db\MediaDb;
+use CWP\Updater\Db\MediaDbAbstract;
 
 /**
  * CWP Media tool.

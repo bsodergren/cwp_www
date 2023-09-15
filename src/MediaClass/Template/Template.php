@@ -5,9 +5,9 @@
 
 namespace CWP\Template;
 
-use CWP\Core\Media;
-use CWP\Core\MediaSettings;
 use CWP\Utils\MediaDevice;
+use CWP\Core\MediaSettings;
+
 
 /**
  * CWP Media tool.

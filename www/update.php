@@ -10,7 +10,8 @@ require_once '.config.inc.php';
 define('TITLE', 'Update Form');
 
 HTMLDisplay::$timeout = 3;
-include_once __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 $form_number          = $_REQUEST['form_number'];
 
 $media->excelArray($form_number);

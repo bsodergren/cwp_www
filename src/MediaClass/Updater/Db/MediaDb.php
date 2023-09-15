@@ -3,7 +3,7 @@
  * CWP Media tool
  */
 
-namespace CWP\Db;
+namespace CWP\Updater\Db;
 
 use CWP\Core\Media;
 

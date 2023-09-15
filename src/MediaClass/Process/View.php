@@ -10,10 +10,12 @@ namespace CWP\Process;
  */
 
 use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
 use CWP\Media\MediaMailer;
-use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Template\Template;
+use CWP\Utils\MediaDevice;
+use CWP\Process\MediaProcess;
 use CWP\Spreadsheet\XLSXViewer;
+use CWP\Spreadsheet\Media\MediaXLSX;
 use Symfony\Component\Finder\Finder;
 
 class View extends MediaProcess
@@ -23,7 +25,7 @@ class View extends MediaProcess
     public function header()
     {
         define('TITLE', 'Updating excel sheet');
-        include_once __LAYOUT_HEADER__;
+MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         $this->page_end = Template::GetHTML('stream/end_page', []);
     }
@@ -31,7 +33,7 @@ class View extends MediaProcess
     public function footer()
     {
         echo $this->page_end;
-        include_once __LAYOUT_FOOTER__;
+        MediaDevice::getFooter();
     }
 
     public function run($req)

@@ -5,13 +5,14 @@
 
 use CWP\Core\Media;
 use CWP\Core\MediaSetup;
-use CWP\Media\Update\DbUpdate;
-use CWP\Media\Update\MediaAppUpdater;
-use Nette\Caching\Storages\DevNullStorage;
-use Nette\Database\Connection;
-use Nette\Database\Conventions\DiscoveredConventions;
+use CWP\Updater\DbUpdate;
+use CWP\Utils\MediaDevice;
 use Nette\Database\Explorer;
 use Nette\Database\Structure;
+use Nette\Database\Connection;
+use CWP\Updater\MediaAppUpdater;
+use Nette\Caching\Storages\DevNullStorage;
+use Nette\Database\Conventions\DiscoveredConventions;
 
 new MediaSetup();
 
@@ -30,3 +31,4 @@ Media::$CurrentVersion = $appUpdate->current;
 Media::$MediaAppUpdater = $appUpdate;
 
 ( new DbUpdate() )->checkDbUpdates();
+

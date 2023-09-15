@@ -5,7 +5,13 @@
 
 use CWP\Core\Bootstrap;
 
-define('APP_NAME', Bootstrap::$CONFIG['application']['name']);
+$debug_string = '';
+
+if(__DEBUG__ == 1){
+    define('__DEBUG_STR__',"<span class='fs-6 text-success'>Debug Enabled ". __DEVICE__."</span>");
+}
+
+define('APP_NAME', Bootstrap::$CONFIG['application']['name'] );
 define('APP_ORGANIZATION', 'cwp');
 define('APP_OWNER', 'bjorn');
 
@@ -24,10 +30,9 @@ $nav_bar_links = [
         'Paper' => '/paper.php',
         'Language' => '/settings/language.php',
         'Local Settings' => '/settings/local.php',
+        'Update' => '/updater/update.php',
     ],
 ];
-
-$nav_bar_links['Settings']['Update'] = '/updater/update.php';
 
 define('__NAVBAR_LINKS__', $nav_bar_links);
 

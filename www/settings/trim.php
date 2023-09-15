@@ -8,7 +8,8 @@ require_once '../.config.inc.php';
 
 define('TITLE', 'Media Settings');
 //$template = new Template();
-require __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 
 //$header_html = Template::GetHTML("trim/table_head", []);
 
@@ -202,4 +203,4 @@ $new_html = Template::GetHTML('trim/form/form', [
 
 $template->render('trim/main', ['PUB_LIST' => $pub_list, 'NEW_PUB'=>$new_html]);
 
-include_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

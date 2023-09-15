@@ -18,6 +18,8 @@ class Bootstrap
 
         $this->Config = $Config;
         self::$CONFIG = $Config->all();
+        $this->define('__DEBUG__', $this->isDebugSet());
+
         $this->define('__DRIVE_LETTER__', $this->getDriveLetter());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->definePath('__FILES_DIR__', $this->getFileStorage());
@@ -94,7 +96,10 @@ class Bootstrap
 
         return '';
     }
-
+    private function isDebugSet()
+    {
+        return $this->Config['application']['debug'];
+    }
     private function getURL()
     {
         return $this->Config['server']['url_root'];

@@ -9,14 +9,16 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
+use CWP\Utils\Zip;
+use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
-use CWP\Media\Import\PDFImport;
-use CWP\Media\MediaError;
 use CWP\Media\MediaExport;
+use CWP\Template\Template;
+use CWP\Utils\MediaDevice;
+use CWP\Process\MediaProcess;
+use CWP\Media\Import\PDFImport;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Spreadsheet\Media\MediaXLSX;
-use CWP\Utils\Zip;
 
 class Index extends MediaProcess
 {
@@ -46,7 +48,7 @@ class Index extends MediaProcess
     {
         define('TITLE', 'Writing Excel files');
 
-        include __LAYOUT_HEADER__;
+MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
         $this->media->excelArray();
@@ -77,7 +79,7 @@ class Index extends MediaProcess
                 $this->media->delete_form();
 
                 define('TITLE', 'Reimporting Media Drop');
-                include_once __LAYOUT_HEADER__;
+MediaDevice::getHeader();
 
                 Template::echo('stream/start_page', []);
 

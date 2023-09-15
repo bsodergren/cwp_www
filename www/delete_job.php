@@ -19,7 +19,8 @@ if (array_key_exists('actSubmit', $_REQUEST)) {
     exit;
 }
 
-include_once __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 $form_url = __URL_PATH__.'/delete_job.php';
 
 $form = new Formr\Formr();
@@ -33,4 +34,4 @@ $form->input_submit('actSubmit', '', 'Confirm', '', 'class="'.$buttonClass.'  bg
 
 $form->close();
 
-include_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

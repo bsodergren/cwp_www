@@ -9,12 +9,13 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
+use CWP\Media\MediaExec;
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
-use CWP\Media\Import\PDFImport;
-use CWP\Media\MediaExec;
-use CWP\Filesystem\MediaFileSystem;
+use CWP\Utils\MediaDevice;
 use Nette\Utils\FileSystem;
+use CWP\Media\Import\PDFImport;
+use CWP\Filesystem\MediaFileSystem;
 
 class Import extends MediaProcess
 {
@@ -27,7 +28,7 @@ class Import extends MediaProcess
     public function header()
     {
         define('TITLE', 'Importing PDF File');
-        include __LAYOUT_HEADER__;
+MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         $this->page_end = Template::GetHTML('stream/end_page', []);
     }
@@ -35,7 +36,7 @@ class Import extends MediaProcess
     public function footer()
     {
         echo $this->page_end;
-        include_once __LAYOUT_FOOTER__;
+        MediaDevice::getFooter();
     }
 
     public function run($req)

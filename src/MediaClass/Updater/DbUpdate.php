@@ -3,7 +3,7 @@
  * CWP Media tool
  */
 
-namespace CWP\Media\Update;
+namespace CWP\Updater;
 
 /*
  * CWP Media tool

@@ -18,7 +18,8 @@ $display = new HTMLDisplay();
 // $media = new Media();
 // $template = new Template();
 
-include_once __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 
 $row_html = '';
 $letter_html = '';
@@ -193,4 +194,4 @@ $template->clear();
 $template->template('form/main', $form_html);
 $template->render();
 
-include_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

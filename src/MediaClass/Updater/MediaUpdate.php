@@ -3,16 +3,16 @@
  * CWP Media tool
  */
 
-namespace CWP\Media\Update;
+namespace CWP\Updater;
 
 /*
  * CWP Media tool
  */
 
-use CWP\Db\MediaMySQL;
-use CWP\Db\MediaSqlite;
-use CWP\Core\Bootstrap;
 use CWP\Core\Media;
+use CWP\Core\Bootstrap;
+use CWP\Updater\Db\MediaMySQL;
+use CWP\Updater\Db\MediaSqlite;
 
 class MediaUpdate
 {

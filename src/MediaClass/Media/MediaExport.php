@@ -12,6 +12,9 @@ class MediaExport
 {
     public $mediaArray  = [];
     public $formNumbers = [];
+    public $json_file = '';
+    public $media;
+
 
     public function __construct($media)
     {

@@ -8,7 +8,8 @@ use CWP\Template\Template;
 
 require_once '.config.inc.php';
 define('TITLE', 'Paper Editor');
-include __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 
 $form_url                       = __URL_HOME__.'/process.php';
 define('__FORM_URL__', $form_url);
@@ -93,4 +94,4 @@ echo Template::GetHTML('paper/main', ['FORM_URL' => $form_url,
 
 // dd($results);
 
-include __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

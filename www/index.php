@@ -3,8 +3,9 @@
  * CWP Media tool
  */
 
-use CWP\HTML\HTMLDisplay;
 use CWP\Core\Media;
+use CWP\HTML\HTMLDisplay;
+use CWP\Utils\MediaDevice;
 use CWP\Filesystem\MediaFileSystem;
 
 /**
@@ -14,7 +15,7 @@ require_once '.config.inc.php';
 
 define('TITLE', APP_NAME);
 
-include_once __LAYOUT_HEADER__;
+MediaDevice::getHeader();
 
 $table = $explorer->table('media_job');
 $results = $table->fetchAssoc('job_id');
@@ -126,4 +127,4 @@ if ($cnt > 0) {
     echo HTMLDisplay::JavaRefresh('/import.php', 0);
 }
 
-include_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

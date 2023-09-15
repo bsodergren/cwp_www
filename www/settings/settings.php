@@ -9,7 +9,8 @@ use CWP\Utils\Utils;
 require_once '../.config.inc.php';
 define('TITLE', 'Media Settings');
 // $template = new Template();
-require __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 
 $settings_array = [];
 $settings_html  = '';
@@ -231,4 +232,4 @@ $template->template('settings/main', [
 ]);
 
 $template->render();
-include_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

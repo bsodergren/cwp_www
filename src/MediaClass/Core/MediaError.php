@@ -6,6 +6,7 @@
 namespace CWP\Core;
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
+use CWP\Utils\MediaDevice;
 
 
 /**
@@ -30,7 +31,7 @@ class MediaError
         }
 
         if ('' != $msg) {
-            include_once __LAYOUT_HEADER__;
+MediaDevice::getHeader();
             Template::echo('error/'.$severity, ['MSG' => $msg]);
         }
 

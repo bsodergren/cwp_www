@@ -6,10 +6,7 @@
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 use CWP\Core\Media;
-use CWP\Utils\MediaDevice;
 
-(new MediaDevice())->run();
-define('__DEVICE__', MediaDevice::$DEVICE);
 
 $template = new Template();
 

@@ -6,7 +6,8 @@
 require_once '.config.inc.php';
 
 define('TITLE', 'Email excel zip file');
-require_once __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 
 if (isset($_REQUEST['job_id'])) {
     $zip_file = $media->zip_file;
@@ -17,4 +18,4 @@ if (isset($_REQUEST['job_id'])) {
     echo 'No Job ID';
 }
 
-require_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();

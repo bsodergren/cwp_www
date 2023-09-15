@@ -5,13 +5,12 @@
 
 namespace CWP\Core;
 
+use CWP\Utils\Utils;
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
-use CWP\Core\Bootstrap;
-use CWP\Utils\Utils;
-use Nette\Database\Connection;
 use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
+use Nette\Database\Connection;
 
 class MediaSetup
 {
@@ -60,7 +59,7 @@ class MediaSetup
 
     public static function header($msg)
     {
-        new HTMLDisplay();
+        //new HTMLDisplay();
         echo Template::GetHTML('setup/header', []);
         echo HTMLDisplay::pushhtml('setup/msg', ['TEXT' => $msg]);
     }

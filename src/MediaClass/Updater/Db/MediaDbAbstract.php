@@ -1,5 +1,5 @@
 <?php
-namespace CWP\Db;
+namespace CWP\Updater\Db;
 
 interface MediaDbAbstract
 {

@@ -9,7 +9,8 @@ require_once '.config.inc.php';
 define('TITLE', 'Media Job editor');
 define('NO_NAV', true);
 
-include_once __LAYOUT_HEADER__;
+use CWP\Utils\MediaDevice;
+MediaDevice::getHeader();
 
 // $media = new Media();
 // $template = new Template();
@@ -87,4 +88,4 @@ $html_array  = [
 
 echo $template->return('form_edit/main', $html_array);
 
-include_once __LAYOUT_FOOTER__;
+MediaDevice::getFooter();
