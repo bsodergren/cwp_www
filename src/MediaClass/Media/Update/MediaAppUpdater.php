@@ -69,7 +69,7 @@ class MediaAppUpdater
 
     public function composerUpdate()
     {
-        $ExecProcess = new Process(['composer','update']);
+        $ExecProcess = new Process(['composer','-d',__PUBLIC_ROOT__,'update']);
         $callback = Callback::check([$this, 'callback']);
         $ExecProcess->start();
         $ExecProcess->wait($callback);
