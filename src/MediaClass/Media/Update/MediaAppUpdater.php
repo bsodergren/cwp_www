@@ -9,10 +9,14 @@ class MediaAppUpdater
 
     public const GIT_VERSION = "https://raw.githubusercontent.com/bsodergren/cwp_www/main/current.txt";
 
+    public $latest;
+    public $current;
+
     public function __construct()
     {
         define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
-
+        $this->getLastest();
+        $this->currentVersion();
     }
 
     public function get_content($URL)
@@ -29,12 +33,17 @@ class MediaAppUpdater
     }
     public function currentVersion()
     {
-        $installed = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
-        return $installed;
+        $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
     }
-    public function getLastest(){
+    public function getLastest()
+    {
+        $this->latest = $this->get_content(self::GIT_VERSION);
+    }
 
-        echo $this->get_content(self::GIT_VERSION);
+    public function isUpdate()
+    {
+
+        dd($this->latest,$this->current );
 
     }
 }
