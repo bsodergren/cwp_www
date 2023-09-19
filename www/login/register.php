@@ -24,8 +24,14 @@ if (__USE_REGISTER__ == false) {
 define('TITLE', 'Register');
 
 if (!isset($_POST['email'])) {
+
+
+    $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'register']);
+    $params['FORM_FIELD'] = Template::getHTML('authentication/forms/register');
+    $params['__FORM_URL__'] = __URL_PATH__.'/login/register.php';
+    
     MediaDevice::getHeader();
-    $template->render('authentication/register', ['__FORM_URL__' => __URL_PATH__.'/login/register.php']);
+    $template->render('authentication/form', $params);
     MediaDevice::getFooter();
     exit;
 }
