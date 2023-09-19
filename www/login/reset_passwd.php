@@ -36,7 +36,6 @@ if (array_key_exists('token', $_GET)) {
 
         $tokens['SELECTOR'] = $_GET['selector'];
         $tokens['TOKEN'] = $_GET['token'];
-        $params['__FORM_URL__'] = __URL_HOME__.'/login/reset_passwd.php';
 
         $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'reset']);
         $params['FORM_FIELD'] = Template::getHTML('authentication/forms/reset_form', $tokens);
