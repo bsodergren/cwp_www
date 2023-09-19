@@ -48,6 +48,7 @@ if (__USE_REGISTER__ == false) {
 }
 
 $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'login']);
+$params['FORGOT_PWD'] = Template::getHTML('authentication/button/forgot_passwd');
 $params['FORM_FIELD'] = Template::getHTML('authentication/forms/login');
 $params['__FORM_URL__'] = __URL_PATH__.'/login/login.php';
 $params['REGISTER'] = $register;

@@ -7,18 +7,11 @@ use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 
-/*
- * CWP Media tool for load flags
- */
-
 define('__AUTH__', false);
 
 require_once '../.config.inc.php';
 
-
-
-if (array_key_exists('submit', $_POST) &&  $_POST['submit'] == 'reset') {
-
+if (array_key_exists('submit', $_POST) && 'reset' == $_POST['submit']) {
     try {
         $auth->resetPassword($_POST['selector'], $_POST['token'], $_POST['password']);
 
@@ -35,9 +28,7 @@ if (array_key_exists('submit', $_POST) &&  $_POST['submit'] == 'reset') {
         $msg = 'Too many requests';
     }
     echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
-
 }
-
 
 if (array_key_exists('token', $_GET)) {
     try {
@@ -47,21 +38,12 @@ if (array_key_exists('token', $_GET)) {
         $tokens['TOKEN'] = $_GET['token'];
         $params['__FORM_URL__'] = __URL_HOME__.'/login/reset_passwd.php';
 
-
         $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'reset']);
-        $params['FORM_FIELD'] = Template::getHTML('authentication/forms/reset_form',$tokens);
+        $params['FORM_FIELD'] = Template::getHTML('authentication/forms/reset_form', $tokens);
         $params['__FORM_URL__'] = __URL_PATH__.'/login/reset_passwd.php';
-        
+
         MediaDevice::getHeader();
         $template->render('authentication/form', $params);
-        MediaDevice::getFooter();
-
-
-
-
-        MediaDevice::getHeader();
-
-        echo Template::GetHTML('authentication/reset_form', $params);
         MediaDevice::getFooter();
     } catch (\Delight\Auth\InvalidSelectorTokenPairException $e) {
         $msg = 'Invalid token';
@@ -75,4 +57,3 @@ if (array_key_exists('token', $_GET)) {
 
     exit;
 }
-
