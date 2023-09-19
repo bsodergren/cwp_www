@@ -42,15 +42,13 @@ if (array_key_exists('username', $_POST)) {
 
 MediaDevice::getHeader();
 
-$register = Template::getHtml('authentication/button/register', []);
-if (__USE_REGISTER__ == false) {
-    $register = '';
+if (__USE_REGISTER__ == true) {
+    $params['REGISTER'] = Template::getHTML('authentication/button/button', ['BUTTON_LINK' => __URL_PATH__.'/login/register.php', 'BUTTON_TEXT' => 'Register new User']);
 }
 
 $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'login']);
-$params['FORGOT_PWD'] = Template::getHTML('authentication/button/forgot_passwd');
+$params['FORGOT_PWD'] = Template::getHTML('authentication/button/button', ['BUTTON_LINK' => __URL_PATH__.'/login/forgot.php', 'BUTTON_TEXT' => 'Forgot Password']);
 $params['FORM_FIELD'] = Template::getHTML('authentication/forms/login');
 $params['__FORM_URL__'] = __URL_PATH__.'/login/login.php';
-$params['REGISTER'] = $register;
 $template->render('authentication/form', $params);
 MediaDevice::getFooter();
