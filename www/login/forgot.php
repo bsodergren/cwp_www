@@ -8,10 +8,6 @@ use CWP\Media\MediaMailer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 
-/*
- * CWP Media tool for load flags
- */
-
 define('__AUTH__', false);
 
 require_once '../.config.inc.php';
