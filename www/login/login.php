@@ -42,7 +42,7 @@ if (array_key_exists('username', $_POST)) {
 
 MediaDevice::getHeader();
 $register = Template::getHtml('authentication/login_register', []);
-if (__NO_REGISTER__ == true) {
+if (__USE_REGISTER__ == false) {
     $register = '';
 }
 $template->render('authentication/login', ['__FORM_URL__' => __URL_PATH__.'/login/login.php', 'REGISTER' => $register]);

@@ -15,7 +15,7 @@ define('__AUTH__', false);
 
 require_once '../.config.inc.php';
 
-if (__NO_REGISTER__ == true) {
+if (__USE_REGISTER__ == false) {
     echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
     exit;
 }
