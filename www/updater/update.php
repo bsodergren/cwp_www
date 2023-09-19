@@ -13,7 +13,6 @@ use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
 
-echo Media::$VersionUpdate;
 if (null !== Media::$VersionUpdate) {
     Media::$MediaAppUpdater->getUpdate();
     Media::$MediaAppUpdater->composerUpdate();
