@@ -32,12 +32,14 @@ $nav_bar_links = [
     ],
 ];
 
-if ($auth->isLoggedIn()) {
-    $nav_bar_links['Settings']['User Info'] = '/login/userinfo.php';
-    $nav_bar_links['Logout'] = '/login/logout.php';
-} else {
-    $nav_bar_links = [];
-    $nav_bar_links['Login'] = '/login/login.php';
+if (__USE_AUTHENTICATION__ == true) {
+    if ($auth->isLoggedIn()) {
+        $nav_bar_links['Settings']['User Info'] = '/login/userinfo.php';
+        $nav_bar_links['Logout'] = '/login/logout.php';
+    } else {
+        $nav_bar_links = [];
+        $nav_bar_links['Login'] = '/login/login.php';
+    }
 }
 
 define('__NAVBAR_LINKS__', $nav_bar_links);
@@ -47,4 +49,4 @@ const STREAM_CLASS = 'show test-nowrap px-5 rounded-pill';
 define('MSG_CLASS', 'bg-primary bg-opacity-75 w-75 fs-3 '.STREAM_CLASS);
 define('HEADER_CLASS', 'bg-success bg-opacity-50 w-50 mx-5 fs-6 '.STREAM_CLASS);
 
-define('__NO_REGISTER__', true);
+define('__NO_REGISTER__', Bootstrap::$CONFIG['application']['register']);
