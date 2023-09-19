@@ -1,0 +1,19 @@
+<form action="%%__FORM_URL__%%" method="post" class="w-25 m-3 rounded bg-success" style="--bs-bg-opacity: .5;"
+    enctype="multipart/form-data">
+    <input type="hidden" name="token" value="%%TOKEN%%">
+    <input type="hidden" name="selector" value="%%SELECTOR%%">
+    <div class="card">
+        <div class="card-header bg-success  text-black fw-bold">New Password</div>
+
+        <div class="card-body bg-success" style="--bs-bg-opacity: .5;">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">Password</span>
+                <input type="password" class="form-control" placeholder="Password" aria-label="Password"
+                    aria-describedby="basic-addon1" name="password">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" name="submit" value="reset">Submit</button>
+
+    </div>
+</form>

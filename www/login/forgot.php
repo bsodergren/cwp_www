@@ -15,36 +15,27 @@ use CWP\Utils\MediaDevice;
 define('__AUTH__', false);
 
 require_once '../.config.inc.php';
-
-if (__USE_REGISTER__ == false) {
-    echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
-    exit;
-}
-
 define('TITLE', 'Register');
 
 if (!isset($_POST['email'])) {
     MediaDevice::getHeader();
-    $template->render('authentication/register', ['__FORM_URL__' => __URL_PATH__.'/login/register.php']);
+    $template->render('authentication/reset', ['__FORM_URL__' => __URL_PATH__.'/login/forgot.php']);
     MediaDevice::getFooter();
     exit;
 }
 
 $mail = new MediaMailer();
 
-$mail->recpt($_POST['email'], $_POST['name']);     // Add a recipient
+$mail->recpt($_POST['email'], '');     // Add a recipient
 
 try {
-    $userId = $auth->register($_POST['email'], $_POST['password'], $_POST['username'], function ($selector, $token) use ($mail) {
-        $mail->subject('Verification email');
-
-        $params['VERIFY_LINK'] = __URL_HOME__.'/login/verify.php?selector='.urlencode($selector).'&token='.urlencode($token);
-
-        $mail->Body(Template::getHtml('authentication/email/verify', $params));
+    $auth->forgotPassword($_POST['email'], function ($selector, $token) use ($mail) {
+        $mail->subject('Reset your password');
+        $params['VERIFY_LINK'] = __URL_HOME__.'/login/reset_passwd.php?selector='.urlencode($selector).'&token='.urlencode($token);
+        $mail->Body(Template::getHtml('authentication/email/reset', $params));
         $mail->mail();
+        $msg = 'Password Recovery email sent';
     });
-
-    $msg = 'We have signed up a new user with the ID '.$userId;
 } catch (\Delight\Auth\InvalidEmailException $e) {
     $msg = 'Invalid email address';
 } catch (\Delight\Auth\InvalidPasswordException $e) {
