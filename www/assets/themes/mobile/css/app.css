@@ -3,10 +3,19 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+/*
+.table-success {
+    background: #fff;
+
+} */
 
 .col-lg-12 {
-    background: #fff;
-}
-.col-lg-12:nth-child(2n) {
+    padding-bottom: 5px;
     background: #d1e7dd;
 }
+.col-lg-12:nth-child(2n) {
+    padding-bottom: 5px;
+    background: rgba(0, 0, 0, 0.125);
+}
+
+
