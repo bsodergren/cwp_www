@@ -3,3 +3,10 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+
+.col-lg-12 {
+    background: #fff;
+}
+.col-lg-12:nth-child(2n) {
+    background: #d1e7dd;
+}
