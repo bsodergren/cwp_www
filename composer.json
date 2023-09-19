@@ -36,6 +36,7 @@
         "monolog/monolog": "^2.9",
         "league/flysystem": "^3.15",
         "spatie/flysystem-dropbox": "^3.0",
-        "tracy/tracy": "^2.10"
+        "tracy/tracy": "^2.10",
+        "delight-im/auth": "^8.3"
     }
 }

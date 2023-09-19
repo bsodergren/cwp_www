@@ -65,7 +65,6 @@ class Import extends MediaProcess
         if (isset($_POST['mail_file'])
         && '' == $_FILES['the_file']['name']) {
             list($fullFile, $imap_id) = explode('|', $_POST['mail_file']);
-
             $location = new MediaFileSystem();
             $fullFile = $location->getDirectory('upload', true).\DIRECTORY_SEPARATOR.$fullFile;
 
@@ -138,6 +137,7 @@ class Import extends MediaProcess
             } else {
                 HTMLDisplay::put('File already was uploaded');
             } // end if
+
             if (isset($imap)) {
                 imap_setflag_full($imap, $imap_id, '\\Seen');
             }

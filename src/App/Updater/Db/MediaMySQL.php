@@ -54,7 +54,9 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
         try {
             $result = Media::$connection->query($query);
 
-            return $result->getRowCount();
+            foreach ($result as $row) {
+                return $row->cnt;
+            }
         } catch (\PDOException   $e) {
             echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";
         }
@@ -80,7 +82,7 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
 
     public function check_tableExists($table)
     {
-        $query = "SELECT count(*) FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
+        $query = "SELECT count(*) as cnt FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
 
         return $this->queryExists($query);
     }

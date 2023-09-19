@@ -48,10 +48,13 @@ $boot->definePath('__INC_CORE_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'core'
 $boot->getDatabase();
 
 define('__TEMP_DIR__', sys_get_temp_dir());
+
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'path_constants.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
 
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'boot.php';
+require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'auth.php';
+require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
+
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';

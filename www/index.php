@@ -8,6 +8,8 @@ use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
 
+define('__AUTH__', true);
+
 require_once '.config.inc.php';
 
 define('TITLE', APP_NAME);
