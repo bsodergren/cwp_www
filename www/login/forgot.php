@@ -15,7 +15,11 @@ define('TITLE', 'Register');
 
 if (!isset($_POST['email'])) {
     MediaDevice::getHeader();
-    $template->render('authentication/reset', ['__FORM_URL__' => __URL_PATH__.'/login/forgot.php']);
+
+    $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'reset']);
+    $params['FORM_FIELD'] = Template::getHTML('authentication/forms/reset_passwd');
+    $params['__FORM_URL__'] = __URL_PATH__.'/login/forgot.php';
+    $template->render('authentication/form', $params);
     MediaDevice::getFooter();
     exit;
 }
