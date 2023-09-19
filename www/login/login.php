@@ -26,6 +26,8 @@ if (array_key_exists('username', $_POST)) {
     try {
         $auth->loginWithUsername($_POST['username'], $_POST['password'], $rememberDuration);
         $msg = 'Logged in';
+        echo HTMLDisplay::JavaRefresh('/index.php', 0, $msg);
+        exit;
     } catch (\Delight\Auth\InvalidEmailException  $e) {
         $msg = 'Wrong email address';
     } catch (\Delight\Auth\InvalidPasswordException $e) {
@@ -36,7 +38,7 @@ if (array_key_exists('username', $_POST)) {
         $msg = 'Too many requests';
     }
 
-    echo HTMLDisplay::JavaRefresh('/index.php', 0, $msg);
+    echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
     exit;
 }
 
