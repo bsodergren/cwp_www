@@ -1,0 +1,18 @@
+<div class="input-group mt-1">
+    <label class="input-group-text" for="pdfFilename">Job Name</label>
+    <select name="mail_file" class="form-select" id="pdfFilename">
+        <option value="">-- select one -- </option>
+        %%SELECT_OPTIONS%%
+    </select>
+</div>
+<div class="input-group mt-1">
+    <label class="input-group-text" for="jobNumbers">Job Number</label>
+    <input type="text" name="mail_job_number" class="form-select" list="jobNumbers">
+<datalist id="jobNumbers">
+        <option value="">-- select one -- </option>
+    </datalist>
+
+    %%JS_SELECT%%
+
+
+</div>
