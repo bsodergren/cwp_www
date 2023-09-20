@@ -56,7 +56,6 @@ if (empty($results)) {
 $sort = ['SORT_FORMER' => 1, 'SORT_LETTER' => 1];
 
 $result = $media->getFormDrops($current_form_number, $sort);
-
 foreach ($result as $idx => $form_array) {
     $form_number = $form_array['form_number'];
     // $job_id = $form_array['job_id'];

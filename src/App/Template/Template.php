@@ -88,7 +88,7 @@ class Template
         } else {
             $template_text = '';
         }
-
+        $template_text = '<!-- END OF ' . $template_text . '-->' .PHP_EOL. ' <!--' . $template . '-->'.PHP_EOL;
         return $template_text.\PHP_EOL;
     }
 
