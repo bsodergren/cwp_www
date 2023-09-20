@@ -7,11 +7,11 @@ require_once '.config.inc.php';
 
 use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
-use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+use CWP\Filesystem\MediaFinder;
+use CWP\Spreadsheet\XLSXViewer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Symfony\Component\Finder\Finder;
 
 if ('email' == $_REQUEST['action']) {
     define('TITLE', 'Email excel zip file');
@@ -23,14 +23,13 @@ if ('email' == $_REQUEST['action']) {
     MediaDevice::getFooter();
     exit;
 }
+$finder = new MediaFinder($media);
 
 define('TITLE', 'View Form');
-
-if (true == is_dir($media->xlsx_directory)) {
+if (true == $finder->dirExists($media->xlsx_directory)) {
     $form_number = '';
     $file_id = '';
     $sheet_id = 0;
-
     if (array_key_exists('form_number', $_REQUEST)) {
         $form_number = $_REQUEST['form_number'];
     }
@@ -42,27 +41,27 @@ if (true == is_dir($media->xlsx_directory)) {
     if (array_key_exists('sheet_id', $_REQUEST)) {
         $sheet_id = $_REQUEST['sheet_id'];
     }
-    if (!is_dir($media->xlsx_directory)) {
+    if (!$finder->dirExists($media->xlsx_directory)) {
         XLSXViewer::checkifexist($media);
     }
 
-    $finder = new Finder();
-    $finder->files()->in($media->xlsx_directory)->name('*.xlsx')->notName('~*')->sortByName(true);
+
+    $result = $finder->search($media->xlsx_directory,'*.xlsx');
     $found = false;
 
-    if (!$finder->hasResults()) {
-        XLSXViewer::checkifexist($media);
-    }
+    // if (!$finder->hasResults()) {
+    //     XLSXViewer::checkifexist($media);
+    // }
 
     $idx = 0;
     $params['FORM_LIST_HTML'] = '';
     $params['EXCEL_DIRECTORY'] = $media->xlsx_directory;
     $excel_link = '';
 
-    foreach ($finder as $file) {
-        $files[] = $file->getRealPath();
+    foreach ($result as $file) {
+        $files[] = $file;
         $class = 'enabled';
-        preg_match('/.*_([FM0-9]+).xlsx/', $file->getRealPath(), $output_array);
+        preg_match('/.*_([FM0-9]+).xlsx/', $file, $output_array);
         [$text_form,$text_number] = explode('FM', $output_array[1]);
 
         if ('' != $form_number) {
@@ -78,11 +77,11 @@ if (true == is_dir($media->xlsx_directory)) {
             $class = 'disabled';
             $current_form_number = $text_number;
 
-            $url_link = HTMLDisplay::draw_excelLink($file->getRealPath());
+            $url_link = HTMLDisplay::draw_excelLink($file);
             if (false != $url_link) {
                 $params['EXCEL_LINK'] = Template::GetHTML('/view/sheet_link', [
                     'PAGE_FORM_URL' => $url_link,
-                    'PAGE_FORM_NUMBER' => $file->getfilename(),
+                    'PAGE_FORM_NUMBER' => basename($file),
                     'SHEET_DISABLED' => 'enabled',
                     'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',
                     'SHEET_CLASS' => 'btn-info',
@@ -112,7 +111,10 @@ if (true == is_dir($media->xlsx_directory)) {
 
     if ('' != $file_id) {
         $reader = IOFactory::createReader('Xlsx');
-        $spreadsheet = $reader->load($files[$file_id]);
+
+        $excel_file = $finder->getFile($files[$file_id]);
+
+        $spreadsheet = $reader->load($excel_file);
         $sheet_names = $spreadsheet->getSheetNames();
 
         $params['SHEET_LIST_HTML'] = '';

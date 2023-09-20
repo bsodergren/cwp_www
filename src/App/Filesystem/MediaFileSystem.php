@@ -53,7 +53,7 @@ class MediaFileSystem
             if ('' != $form_number) {
                 $filename = $filename.'_FM'.$form_number.'.zip';
             } else {
-                $filename = $filename.'.zip';
+                $filename .= '.zip';
             }
         }
         if ('pdf' == strtolower($type)) {
@@ -81,7 +81,14 @@ class MediaFileSystem
         $directory = $output_filename;
 
         if ('xlsx' == strtolower($type)) {
-            $directory .= __XLSX_DIRECTORY__;
+
+            if (__USE_DROPBOX__ == true) {
+                $create_dir = false;
+            } else {
+                $directory .= __XLSX_DIRECTORY__;
+            }
+
+
         }
 
         if ('slips' == strtolower($type)) {
@@ -100,20 +107,28 @@ class MediaFileSystem
         }
 
         if (\defined('__MEDIA_FILES_DIR__')) {
-            if (__MEDIA_FILES_DIR__ != '') {
+            if (__MEDIA_FILES_DIR__ != '' && __USE_DROPBOX__ == false) {
                 if (!is_dir(__MEDIA_FILES_DIR__)) {
                     FileSystem::createDir(__MEDIA_FILES_DIR__, 511);
                 }
                 $directory = __MEDIA_FILES_DIR__.$directory;
-            } else {
-                $directory = __FILES_DIR__.$directory;
             }
+            //else {
+            //    $directory = __FILES_DIR__.$directory;
+           // }
+        }
+
+        if (__USE_DROPBOX__ == true && 'xlsx' == strtolower($type)) {
+            $directory = __DROPBOX_FILES_DIR__.$directory;
         } else {
             $directory = __FILES_DIR__.$directory;
         }
 
-        $this->directory = FileSystem::normalizePath($directory);
+          //  $directory = FileSystem::un($directory);
 
+        $this->directory = FileSystem::normalizePath($directory);
+        if ('xlsx' == strtolower($type)) {
+        }
         if (true == $create_dir) {
             FileSystem::createDir($this->directory, 511);
         }

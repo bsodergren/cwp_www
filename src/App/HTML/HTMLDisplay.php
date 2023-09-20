@@ -12,6 +12,11 @@ use CWP\Template\Template;
  * CWP Media tool
  */
 
+const STREAM_CLASS = 'show test-nowrap px-5 rounded-pill';
+
+\define('MSG_CLASS', 'bg-primary bg-opacity-75 w-75 fs-3 '.STREAM_CLASS);
+\define('HEADER_CLASS', 'bg-success bg-opacity-50 w-50 mx-5 fs-6 '.STREAM_CLASS);
+
 class HTMLDisplay
 {
     public static $url = false;
@@ -29,7 +34,7 @@ class HTMLDisplay
 
         $flushdummy = '';
         for ($i = 0; $i < 1200; ++$i) {
-            $flushdummy = $flushdummy.'      ';
+            $flushdummy .= '      ';
         }
         self::$flushdummy = $flushdummy;
     }
