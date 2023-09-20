@@ -111,6 +111,7 @@ class MediaDevice
                 }
             }
             if (null !== $url) {
+                $url = $url .'?'.random_int(100000, 999999);
                 switch ($type) {
                     case 'image':
                         $html .= $url;
