@@ -49,9 +49,11 @@ foreach ($paper_type as $paper) {
 
     foreach ($paper->related('paper_count', 'paper_id') as $paper_details) {
         $row_params = [];
+        $header_param['ROWS'] = '';
         $row_html = '';
         $i = 0;
         foreach ($paper_details as $key => $val) {
+            $text_params = [];
             if ('id' == $key) {
                 $row_id = $val;
                 continue;
@@ -60,12 +62,31 @@ foreach ($paper_type as $paper) {
                 continue;
             }
             ++$i;
+
+            if (6 == $paper->pages || 8 == $paper->pages) {
+                if (str_contains($key, 'back')) {
+                    continue;
+                }
+            }
+
+            $bg_class = ' bg-warning-subtle ';
+            if ('' == $val) {
+                $bg_class = ' bg-danger-subtle ';
+            }
+
             $text_params = [
-                'FRONT_LABEL' => $key,
-                'FRONT_NAME' => $row_id.'['.$key.']',
-                'FRONT_VALUE' => $val,
+                'FORM_VALUE_CLASS' => $bg_class,
+                'FORM_LABEL' => 'label_'.$key,
+                'FORM_TEXT' => ucwords(str_replace('_', ' ', $key)),
+                'FORM_NAME' => $row_id.'['.$key.']',
+                'FORM_VALUE' => $val,
             ];
-            $row_params['ROWS'] .= Template::GetHTML('paper/text_row', $text_params);
+
+            if (str_contains($key, 'carton')) {
+                $carton_params[strtoupper($key)] = Template::GetHTML('paper/text_row', $text_params);
+            }
+
+            $header_param['ROWS'] .= Template::GetHTML('paper/text_row', $text_params);
             /*
                         $row_params[strtoupper($key)]=HTMLForms::draw_text($row_id."[".$key."]",
                         [
@@ -76,13 +97,8 @@ foreach ($paper_type as $paper) {
                             'class' => 'form-control',
                         ]);
                         */
-            if (0 == $i % 3) {
-                $row_html .= template::GetHTML('paper/row', $row_params);
-                $row_params = [];
-            }
         }
 
-        $header_param['ROWS'] = $row_html;
         $row_header_html .= Template::GetHTML('paper/paper_header', $header_param);
     }
 }
