@@ -135,7 +135,7 @@ class MediaDropbox
                 $tmp_upload_folder = Filesystem::normalizePath($tmp_upload_folder);
 
                 if (true == $create) {
-                    Filesystem::createDir($tmp_upload_folder, 775);
+                    Filesystem::createDir($tmp_upload_folder, 0775);
                 }
 
                 return $tmp_upload_folder;
