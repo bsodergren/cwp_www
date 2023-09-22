@@ -6,11 +6,11 @@
 require_once '.config.inc.php';
 
 use CWP\Core\MediaError;
+use CWP\Filesystem\MediaFinder;
 use CWP\HTML\HTMLDisplay;
+use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Filesystem\MediaFinder;
-use CWP\Spreadsheet\XLSXViewer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if ('email' == $_REQUEST['action']) {
@@ -26,6 +26,7 @@ if ('email' == $_REQUEST['action']) {
 $finder = new MediaFinder($media);
 
 define('TITLE', 'View Form');
+// dd($media->xlsx_directory);
 if (true == $finder->dirExists($media->xlsx_directory)) {
     $form_number = '';
     $file_id = '';
@@ -45,8 +46,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         XLSXViewer::checkifexist($media);
     }
 
-
-    $result = $finder->search($media->xlsx_directory,'*.xlsx');
+    $result = $finder->search($media->xlsx_directory, '*.xlsx');
     $found = false;
 
     // if (!$finder->hasResults()) {

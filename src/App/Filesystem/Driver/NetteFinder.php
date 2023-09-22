@@ -1,7 +1,11 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 namespace CWP\Filesystem\Driver;
-use Nette\Utils\Finder;
+
+use Symfony\Component\Finder\Finder;
 
 class NetteFinder extends Finder
 {
@@ -10,10 +14,19 @@ class NetteFinder extends Finder
         return is_dir($dir);
     }
 
-    public function search($path,$search)
+    public function search($path, $search)
     {
         $finder = new Finder();
-       return $finder->files()->in($path)->name($search)->notName('~*')->sortByName(true);
+        $finder->files()->in($path)->name($search)->notName('~*')->sortByName(true);
+        foreach ($finder as $file) {
+            $files[] = $file->getRealPath();
+        }
 
+        return $files;
+    }
+
+    public function getFile($filename)
+    {
+        return $filename;
     }
 }

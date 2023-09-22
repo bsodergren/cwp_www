@@ -10,6 +10,8 @@ use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 class MediaDropboxFinder extends MediaDropbox
 {
+    private object $db;
+
     public function __construct()
     {
         $dropbox = new MediaDropbox();

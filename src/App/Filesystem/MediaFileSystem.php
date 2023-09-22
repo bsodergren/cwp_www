@@ -81,14 +81,11 @@ class MediaFileSystem
         $directory = $output_filename;
 
         if ('xlsx' == strtolower($type)) {
-
             if (__USE_DROPBOX__ == true) {
                 $create_dir = false;
             } else {
                 $directory .= __XLSX_DIRECTORY__;
             }
-
-
         }
 
         if ('slips' == strtolower($type)) {
@@ -113,18 +110,18 @@ class MediaFileSystem
                 }
                 $directory = __MEDIA_FILES_DIR__.$directory;
             }
-            //else {
+            // else {
             //    $directory = __FILES_DIR__.$directory;
-           // }
+            // }
         }
 
         if (__USE_DROPBOX__ == true && 'xlsx' == strtolower($type)) {
             $directory = __DROPBOX_FILES_DIR__.$directory;
         } else {
-            $directory = __FILES_DIR__.$directory;
+            // $directory = __FILES_DIR__.$directory;
         }
 
-          //  $directory = FileSystem::un($directory);
+        //  $directory = FileSystem::un($directory);
 
         $this->directory = FileSystem::normalizePath($directory);
         if ('xlsx' == strtolower($type)) {

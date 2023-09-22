@@ -17,7 +17,7 @@ use CWP\Core\Media;
 class MediaMySQL extends MediaDb implements MediaDbAbstract
 {
     private $fieldTranslate = [
-        ['TEXT' => 'VARCHAR(255)'],
+        // ['TEXT' => 'VARCHAR(255)'],
     ];
 
     public function query($query)
@@ -55,7 +55,7 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
             $result = Media::$connection->query($query);
 
             foreach ($result as $row) {
-                return $row->cnt;
+                return $row->count();
             }
         } catch (\PDOException   $e) {
             echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";

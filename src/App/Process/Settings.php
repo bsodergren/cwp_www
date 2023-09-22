@@ -21,7 +21,6 @@ class Settings extends MediaProcess
 
         if ($form->submitted()) {
             $this->url = '/index.php';
-
             // get our form values and assign them to a variable
             foreach ($req as $key => $value) {
                 if ('submit' == $key) {
@@ -37,7 +36,11 @@ class Settings extends MediaProcess
                     $new_settiings[$field] = $value;
                     continue;
                 }
-
+                if (str_contains($key, '-group')) {
+                    $pcs = explode('-', $key);
+                    $key = $pcs[0];
+                    $field = 'setting_'.$pcs[1];
+                }
                 if (str_contains($key, '-description')) {
                     $pcs = explode('-', $key);
                     $key = $pcs[0];
