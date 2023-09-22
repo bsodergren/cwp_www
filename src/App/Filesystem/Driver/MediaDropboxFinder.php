@@ -25,7 +25,7 @@ class MediaDropboxFinder extends MediaDropbox
         return $r;
     }
 
-    public function search($path, $search)
+    public function search($search, $path = '/')
     {
         try {
             $searchResults = $this->db->dropbox->search($path, $search, ['start' => 0, 'max_results' => 50]);
@@ -38,7 +38,7 @@ class MediaDropboxFinder extends MediaDropbox
         foreach ($items->all() as $item) {
             $file[] = $item->getMetadata()->path_display;
         }
-        sort($file);
+        natsort($file);
 
         return $file;
     }

@@ -14,7 +14,7 @@ class NetteFinder extends Finder
         return is_dir($dir);
     }
 
-    public function search($path, $search)
+    public function search($search, $path = '/')
     {
         $finder = new Finder();
         $finder->files()->in($path)->name($search)->notName('~*')->sortByName(true);

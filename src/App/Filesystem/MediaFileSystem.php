@@ -17,6 +17,8 @@ class MediaFileSystem
 {
     public $directory;
 
+    public $dropbox;
+
     public $job_number;
 
     public $pdf_file;
@@ -25,6 +27,7 @@ class MediaFileSystem
     {
         $this->job_number = $job_number;
         $this->pdf_file = $pdf_file;
+        $this->dropbox = new MediaDropbox();
     }
 
     public function getFilename($type = '', $form_number = '', $create_dir = '')
@@ -84,23 +87,12 @@ class MediaFileSystem
             if (__USE_DROPBOX__ == true) {
                 $create_dir = false;
             } else {
-                $directory .= __XLSX_DIRECTORY__;
+                // $directory .= __XLSX_DIRECTORY__;
             }
         }
 
-        if ('slips' == strtolower($type)) {
-            $directory .= __XLSX_SLIPS_DIRECTORY__;
-        }
-
-        if ('pdf' == strtolower($type)) {
-            $directory = __PDF_UPLOAD_DIR__;
-        }
         if ('zip' == strtolower($type)) {
-            $directory .= __ZIP_FILE_DIR__;
-        }
-
-        if ('upload' == strtolower($type)) {
-            $directory = __EMAIL_PDF_UPLOAD_DIR__;
+            // $directory .= __ZIP_FILE_DIR__;
         }
 
         if (\defined('__MEDIA_FILES_DIR__')) {
@@ -116,7 +108,7 @@ class MediaFileSystem
         }
 
         if (__USE_DROPBOX__ == true && 'xlsx' == strtolower($type)) {
-            $directory = __DROPBOX_FILES_DIR__.$directory;
+            // $directory = __DROPBOX_FILES_DIR__.$directory;
         } else {
             // $directory = __FILES_DIR__.$directory;
         }
@@ -124,8 +116,7 @@ class MediaFileSystem
         //  $directory = FileSystem::un($directory);
 
         $this->directory = FileSystem::normalizePath($directory);
-        if ('xlsx' == strtolower($type)) {
-        }
+
         if (true == $create_dir) {
             FileSystem::createDir($this->directory, 511);
         }
@@ -136,6 +127,13 @@ class MediaFileSystem
     public function getDirectory($type = '', $create_dir = '')
     {
         return $this->__directory($type, $create_dir);
+    }
+
+    public function getDropboxDirectory($type = 'upload', $create_dir = false)
+    {
+        $this->directory = $this->dropbox->getDirectory($type, $create_dir);
+
+        return $this->directory;
     }
 
     public static function rename($old, $new)

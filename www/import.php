@@ -21,7 +21,7 @@ MediaDevice::getHeader();
 /* connect to gmail */
 
 $locations = new MediaFileSystem();
-$upload_directory = $locations->getDirectory('upload', true);
+$upload_directory = $locations->getDropboxDirectory('upload', true);
 $params = [];
 $upload_params = [];
 $pdf_select_options = [];
@@ -37,19 +37,39 @@ if (1 == __IMAP_ENABLE__) {
             $import->hasAttachment();
         }
         $import->moveAttachments();
-        $import->getJobNumbers();
-        $mail_import_card['FIRST_FORM'] = $import->drawSelectBox();
-        $params['EMAIL_IMPORT_HTML'] = template::GetHTML('/import/form_card', $mail_import_card);
-    }
+        // $import->getJobNumbers();
+        // $mail_import_card['CARD_HEADER'] = 'Import from Gmail';
 
-    //    dd($import->attachments);
+        // $mail_import_card['FIRST_FORM'] = $import->drawSelectBox();
+        // $params['EMAIL_IMPORT_HTML'] = Template::GetHTML('/import/form_card', $mail_import_card);
+    }
+    // dd($import->attachments);
 }
+
+$results = $locations->dropbox->getContents($locations->getDropboxDirectory('pdf', false));
+
+foreach ($results as $key => $pdf_file) {
+    $dropbox_options_html .= template::GetHTML('/import/dropbox/form_option', [
+        'OPTION_VALUE' => $pdf_file['path'],
+        'OPTION_NAME' => $pdf_file['name'],
+    ]);
+}
+
+$import_card['SECOND_FORM'] = template::GetHTML('/import/dropbox/jobnumber', ['JN_NAME' => 'dropbox[job_number]']);
+$import_card['FIRST_FORM'] = template::GetHTML('/import/dropbox/form_select', [
+   'SELECT_OPTIONS' => $dropbox_options_html,
+   'SELECT_NAME' => 'dropbox[pdf_file]',
+]);
+
+$import_card['CARD_HEADER'] = 'Import from Dropbox';
+$params['DROPBOX_FILES_HTML'] = template::GetHTML('/import/form_card', $import_card);
+
 //	echo $output;
 
 /* close the connection */
-$import_card['CARD_HEADER'] = 'Import from Computer';
-$import_card['FIRST_FORM'] = template::GetHTML('/import/form_text', ['JN_NAME' => 'job_number']);
-$import_card['SECOND_FORM'] = template::GetHTML('/import/form_upload', []);
+$import_card['CARD_HEADER'] = 'Upload from Computer';
+$import_card['SECOND_FORM'] = template::GetHTML('/import/upload/form_text', ['JN_NAME' => 'upload[job_number]']);
+$import_card['FIRST_FORM'] = template::GetHTML('/import/upload/form_upload', []);
 $import_card['BUTTON_SUBMIT'] = template::GetHTML('/import/form_submit', []);
 $params['UPLOAD_IMPORT_HTML'] = template::GetHTML('/import/form_card', $import_card);
 

@@ -5,6 +5,7 @@
 
 namespace CWP\Media\Mail;
 
+use CWP\Filesystem\MediaDropbox;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Media\Mail\Attachment\MediaAttachment;
 use CWP\Media\Mail\Jobnumber\Jobnumber;
@@ -30,7 +31,9 @@ class EmailImport extends EmailDisplay
         }
 
         $location = new MediaFileSystem();
-        $this->upload_directory = $location->getDirectory('upload', true);
+        $this->upload_directory = $location->getDropboxDirectory('upload', true);
+        $this->pdf_directory = $location->getDropboxDirectory('pdf', true);
+        $this->dropbox = new MediaDropbox();
     }
 
     public function __destruct()
@@ -62,6 +65,7 @@ class EmailImport extends EmailDisplay
             $this->getAttachmentFile(1);
 
             @imap_clearflag_full($this->imap, $this->mailId, '\\Seen');
+            imap_setflag_full($this->imap, $this->mailId, '\\Seen');
         }
     }
 

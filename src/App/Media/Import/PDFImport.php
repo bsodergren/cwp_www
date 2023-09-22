@@ -6,6 +6,7 @@
 namespace CWP\Media\Import;
 
 use CWP\Core\Media;
+use CWP\Filesystem\MediaDropbox;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\Utils;
 use Smalot\PdfParser\Parser;
@@ -77,11 +78,12 @@ class PDFImport extends MediaImport
             $this->job_id = $media_job_id;
         }
 
-        if (file_exists($pdf_file)) {
-            $parser = new Parser();
-            $pdf = $parser->parseFile($pdf_file);
-            $pages = $pdf->getPages();
+        $file = MediaDropbox::DownloadFile($pdf_file);
 
+        if (file_exists($file)) {
+            $parser = new Parser();
+            $pdf = $parser->parseFile($file);
+            $pages = $pdf->getPages();
             if ('' != $form_number) {
                 --$form_number;
                 $page_text = [];

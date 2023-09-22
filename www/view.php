@@ -26,7 +26,6 @@ if ('email' == $_REQUEST['action']) {
 $finder = new MediaFinder($media);
 
 define('TITLE', 'View Form');
-// dd($media->xlsx_directory);
 if (true == $finder->dirExists($media->xlsx_directory)) {
     $form_number = '';
     $file_id = '';
