@@ -109,13 +109,13 @@ class HTMLDocument
     {
         $latest = Media::$VersionUpdate;
         $installed = Media::$CurrentVersion;
-        dd($latest, $installed);
+        // dd($latest, $installed);
         $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed]);
         if (null != $latest) {
             $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest]);
         }
 
-        // return $version_html;
+        return $version_html;
     }
 
     public static function displayMsg()
