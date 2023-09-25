@@ -55,4 +55,16 @@ foreach ($setting['local'] as $key => $array) {
 
 // $const = get_defined_constants(true);
 Media::$Dropbox = __USE_DROPBOX__;
+
+if (Media::$Dropbox) {
+    define('__FILES_DIR__', '');
+
+} else {
+
+    if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {
+        if (true == Bootstrap::$CONFIG['server']['media_files']) {
+            define('__FILES_DIR__', __HTTP_ROOT__.Bootstrap::$CONFIG['server']['media_files']);
+        }
+    }
+}
 unset($setting);
