@@ -141,11 +141,15 @@ class MediaFileSystem
 
         if ('zip' == strtolower($type)) {
             $directory .= \DIRECTORY_SEPARATOR.__ZIP_DIRECTORY__;
-            $create_dir = true;
+            if (Media::$Dropbox) {
+                $create_dir = false;
+            }
         }
         if ('upload' == strtolower($type)) {
             $directory = \DIRECTORY_SEPARATOR.'Uploads';
-            $create_dir = true;
+            if (Media::$Dropbox) {
+                $create_dir = false;
+            }
         }
         if (!Media::$Dropbox) {
             if (\defined('__MEDIA_FILES_DIR__')) {
