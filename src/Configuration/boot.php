@@ -13,8 +13,6 @@ use Nette\Database\Conventions\DiscoveredConventions;
 use Nette\Database\Explorer;
 use Nette\Database\Structure;
 
-new MediaSetup();
-
 $connection = new Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
 $storage = new DevNullStorage();
 $structure = new Structure($connection, $storage);
@@ -23,6 +21,8 @@ $explorer = new Explorer($connection, $structure, $conventions, $storage);
 
 Media::$connection = $connection;
 Media::$explorer = $explorer;
+
+new MediaSetup();
 
 $appUpdate = new MediaAppUpdater();
 Media::$VersionUpdate = $appUpdate->isUpdate();

@@ -24,8 +24,17 @@ class MediaSetup
 
     public static function firstRun()
     {
-        if (file_exists(__SQLITE_DATABASE__)) {
+        if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
+            $res = Media::$connection->query('SHOW TABLES');
+            if (0 == $res->getRowCount()) {
+                return true;
+            }
+
             return false;
+        } else {
+            if (file_exists(__SQLITE_DATABASE__)) {
+                return false;
+            }
         }
 
         return true;
@@ -35,24 +44,22 @@ class MediaSetup
     {
         self::header('Creating new Database');
 
-        FileSystem::createDir(__DATABASE_ROOT__, 777);
-
-        if ('mysql' == Bootstrap::$CONFIG['db']['type']) {
-            touch(__SQLITE_DATABASE__);
+        if ('mysql' != Bootstrap::$CONFIG['db']['type']) {
+            FileSystem::createDir(__DATABASE_ROOT__, 777);
         }
 
-        $connection = new Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
+        //  $connection = new Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
         $_default_sql_dir = FileSystem::normalizePath(__DEFAULT_TABLES_DIR__);
         $file_tableArray = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql');
         foreach ($file_tableArray as $k => $sql_file) {
             $table_name = str_replace('cwp_table_', '', basename($sql_file, '.sql'));
             self::message('Loading schema for '.$table_name);
-            $connection->query('drop table if exists '.$table_name);
-            Helpers::loadFromFile($connection, $sql_file);
+            Media::$connection->query('drop table if exists '.$table_name);
+            Helpers::loadFromFile(Media::$connection, $sql_file);
         }
         self::message('Loading default Data');
 
-        Helpers::loadFromFile($connection, $_default_sql_dir.'/cwp_data.sql');
+        Helpers::loadFromFile(Media::$connection, $_default_sql_dir.'/cwp_data.sql');
 
         return true;
     }

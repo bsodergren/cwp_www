@@ -50,7 +50,6 @@ class DbUpdate extends MediaUpdate
             'updateData' => $update_data,
             'deleteData' => $delete_data,
         ];
-
         foreach ($updates as $classmethod => $data_array) {
             $this->$classmethod($data_array);
         }
@@ -188,7 +187,7 @@ class DbUpdate extends MediaUpdate
                 foreach ($updates as $where => $data) {
                     foreach ($data as $key => $update_array) {
                         $query = 'UPDATE '.$table.' ';
-                        $query = $query.'SET ';
+                        $query .= 'SET ';
                         foreach ($update_array as $field => $value) {
                             $field_array[] = '`'.$field."` = '".$value."'";
                         }

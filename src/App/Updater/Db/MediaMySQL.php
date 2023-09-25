@@ -75,7 +75,8 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
 
     public function check_columnExists($table, $column)
     {
-        $query = 'SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "'.$table.'" AND COLUMN_NAME = "'.$column.'";';
+        // $query = 'SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "'.$table.'" AND COLUMN_NAME = "'.$column.'";';
+        $query = 'SHOW COLUMNS FROM `'.$table.'`  LIKE "'.$column.'";';
 
         return $this->queryExists($query);
     }
