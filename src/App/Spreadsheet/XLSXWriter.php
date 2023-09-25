@@ -5,8 +5,9 @@
 
 namespace CWP\Spreadsheet;
 
-use CWP\Filesystem\MediaDropbox;
+use CWP\Core\Media;
 use Nette\Utils\FileSystem;
+use CWP\Filesystem\Driver\MediaDropbox;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class XLSXWriter extends Xlsx
@@ -15,11 +16,8 @@ class XLSXWriter extends Xlsx
 
     public function write($filename)
     {
-        if (__USE_DROPBOX__ == true) {
+        if (Media::$Dropbox) {
             $d = new MediaDropbox();
-            // $path = \dirname(str_replace(\dirname($filename, 3).'\\', '', $filename)).\DIRECTORY_SEPARATOR;
-            // $path = str_replace(basename(__FILES_DIR__), '', $path);
-            // $res = $d->createFolder($path);
             $filename = basename($filename);
             $tmp_file = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$filename;
             $dropbox_name = $this->xls_path.\DIRECTORY_SEPARATOR.$filename;
