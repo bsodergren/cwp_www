@@ -27,6 +27,7 @@ class Media
     public static $CurrentVersion;
 
     public static $MediaAppUpdater;
+    public static $Dropbox = false;
 
     private $mediaLoc;
 
@@ -209,14 +210,16 @@ class Media
         $this->xlsx_directory = $this->mediaLoc->getDirectory('xlsx');
         $this->zip_directory = $this->mediaLoc->getDirectory('zip');
         $this->zip_file = $this->mediaLoc->getFilename('zip');
+
+//dd([$this->base_dir,$this->pdf_fullname,$this->pdf_tmp_file,$this->xlsx_directory,$this->zip_directory,$this->base_dir]);
     }
 
-    public function getFilename($type = '', $form_number = '', $create_dir = '')
+public function getFilename($type = '', $form_number = '', $create_dir = '')
     {
         return $this->mediaLoc->getFilename($type, $form_number, $create_dir);
     }
 
-    public function getDirectory($type = '', $create_dir = '')
+public function getDirectory($type = '', $create_dir = '')
     {
         return $this->mediaLoc->getDirectory($type, $create_dir);
     }
@@ -424,6 +427,7 @@ class Media
     {
         $msg = null;
         if (true == $this->xlsx) {
+
             $msg = MediaFileSystem::delete($this->xlsx_directory);
             $this->deleteFromDatabase('form_data_count');
             // if (null === $msg) {
@@ -431,7 +435,6 @@ class Media
             $this->xlsx = false;
             // }
         }
-
         return $msg;
     }
 

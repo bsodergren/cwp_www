@@ -51,9 +51,8 @@ class MediaXLSX extends Media
             $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
             if (__USE_DROPBOX__ == true) {
                 $d = new MediaDropbox();
-                $path = \dirname(str_replace(\dirname($new_xlsx_file, 3).'\\', '', $new_xlsx_file)).\DIRECTORY_SEPARATOR;
-               // $path = str_replace(basename(__FILES_DIR__), '', $path);
-                dd($path);
+                $pos = strrpos($new_xlsx_file, '\\');
+                $path = substr($new_xlsx_file, 0, $pos);
                 $this->dropbox_path = $d->createFolder($path);
             }
 
@@ -122,9 +121,7 @@ class MediaXLSX extends Media
             $writer = new XLSXWriter($this->spreadsheet);
             $writer->xls_path = $this->dropbox_path;
             $writer->write($new_xlsx_file);
-
             HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing '.basename($new_xlsx_file)]);
-
             $this->spreadsheet->disconnectWorksheets();
             unset($this->spreadsheet);
         }

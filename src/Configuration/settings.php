@@ -58,5 +58,5 @@ foreach ($setting['local'] as $key => $array) {
 }
 
 // $const = get_defined_constants(true);
-
+Media::$Dropbox = __USE_DROPBOX__;
 unset($setting);

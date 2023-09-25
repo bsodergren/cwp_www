@@ -33,6 +33,8 @@ class EmailImport extends EmailDisplay
         $location = new MediaFileSystem();
         $this->upload_directory = $location->getDropboxDirectory('upload', true);
         $this->pdf_directory = $location->getDropboxDirectory('pdf', true);
+
+
         $this->dropbox = new MediaDropbox();
     }
 
@@ -71,11 +73,13 @@ class EmailImport extends EmailDisplay
 
     public function clean($name)
     {
-        $name = basename($name, '.pdf');
-        $name = str_replace('.', '', $name);
-        $name = str_replace(',', '_', $name);
-        $name = str_replace(' ', '_', $name);
 
-        return $name.'.pdf';
+        // Trimmer_Position_0623-C_RunSheets_Itsaca.pdf
+        preg_match('/([0-9]{3,4})[ -_.]([ABC])[ -_.]([A-Za-z]+)[ -_.]([A-Za-z]+)(.pdf)/', $name, $output_array);
+
+
+    $name = $output_array[1] . '-'.$output_array[2]. '_'. $output_array[3]. '_'. $output_array[4].  $output_array[5];
+
+        return $name;
     }
 }

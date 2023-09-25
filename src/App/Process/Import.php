@@ -53,46 +53,52 @@ class Import extends MediaProcess
         }
 
         if ('' != $_FILES['the_file']['name']) {
-            $fileName = $_FILES['the_file']['name'];
-            $fileSize = $_FILES['the_file']['size'];
-            $fileTmpName = $_FILES['the_file']['tmp_name'];
-
             $job_number = $_POST['upload']['job_number'];
-
-            $locations = new MediaFileSystem();
-            $pdf_directory = $locations->getDropboxDirectory('pdf', false);
-            $pdf_file = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
-
-            MediaQPDF::cleanPDF($fileTmpName);
-            MediaDropbox::UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
-            //        if (file_exists($pdf_file)) {
-            //            FileSystem::delete($pdf_file);
-            //        }
-        }
-
-        if ('' == $pdf_file) {
-            HTMLDisplay::put("<span class='p-3 text-danger'> no File selected </span> ");
-            $this->error = true;
-        } else {
-            $f = explode('.', $pdf_file);
-            $f = end($f);
-            $fileExtension = strtolower($f);
-        }
-
-        if (!\in_array($fileExtension, $this->fileExtensionsAllowed)) {
-            HTMLDisplay::put('This file extension is not allowed. Please upload a PDF file');
-            $this->error = true;
-        }
-
-        if ($fileSize > 4000000000) {
-            HTMLDisplay::put('File exceeds maximum size (40MB)');
-            $this->error = true;
         }
 
         if ('' == $job_number) {
             HTMLDisplay::put("<span class='p-3 text-danger'>No Job Number </span> ");
             $this->error = true;
         }
+
+        if (false == $this->error) {
+            if ('' != $_FILES['the_file']['name']) {
+                $fileName = $_FILES['the_file']['name'];
+                $fileSize = $_FILES['the_file']['size'];
+                $fileTmpName = $_FILES['the_file']['tmp_name'];
+
+
+                $locations = new MediaFileSystem();
+                $pdf_directory = $locations->getDropboxDirectory('pdf', false);
+                $pdf_file = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
+
+                MediaQPDF::cleanPDF($fileTmpName);
+                MediaDropbox::UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
+                //        if (file_exists($pdf_file)) {
+                //            FileSystem::delete($pdf_file);
+                //        }
+            }
+
+            if ('' == $pdf_file) {
+                HTMLDisplay::put("<span class='p-3 text-danger'> no File selected </span> ");
+                $this->error = true;
+            } else {
+                $f = explode('.', $pdf_file);
+                $f = end($f);
+                $fileExtension = strtolower($f);
+            }
+
+            if (!\in_array($fileExtension, $this->fileExtensionsAllowed)) {
+                HTMLDisplay::put('This file extension is not allowed. Please upload a PDF file');
+                $this->error = true;
+            }
+
+            if ($fileSize > 4000000000) {
+                HTMLDisplay::put('File exceeds maximum size (40MB)');
+                $this->error = true;
+            }
+        }
+
         $this->url = 'import.php';
 
         if (false == $this->error) {

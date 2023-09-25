@@ -79,7 +79,6 @@ class MediaExec
         $qdf_cmd = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
         $pdf_file = FileSystem::normalizePath($pdf_file);
         $callback = Callback::check([$this, 'callback']);
-
         $this->command($qdf_cmd);
         $this->option($pdf_file);
         $this->option('--pages', '.');

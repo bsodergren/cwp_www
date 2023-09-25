@@ -13,7 +13,7 @@ class MediaFinder
 {
     public $finder;
 
-    public function __construct($media)
+    public function __construct($media='')
     {
         $this->media = $media;
 

@@ -18,10 +18,7 @@ class Bootstrap
         $this->Config = $Config;
         self::$CONFIG = $Config->all();
         $this->define('__DEBUG__', $this->isDebugSet());
-
-        $this->define('__DRIVE_LETTER__', $this->getDriveLetter());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
-        $this->definePath('__FILES_DIR__', $this->getFileStorage());
         $this->define('__URL_PATH__', $this->getURL());
         $this->define('__HOME__', \dirname($_SERVER['DOCUMENT_ROOT'], 2));
     }
@@ -75,25 +72,6 @@ class Bootstrap
         }
 
         return __PROJECT_ROOT__.\DIRECTORY_SEPARATOR.'bin';
-    }
-
-    private function getFileStorage()
-    {
-        return __HTTP_ROOT__.\DIRECTORY_SEPARATOR.'files';
-    }
-
-    private function getDriveLetter()
-    {
-        global $_SERVER;
-
-        if (!\array_key_exists('OS', $_SERVER)) {
-            return '';
-        }
-        if (str_contains(strtolower($_SERVER['OS']), 'windows')) {
-            return substr(__DIR__, 0, 2);
-        }
-
-        return '';
     }
 
     private function isDebugSet()

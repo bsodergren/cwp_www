@@ -7,6 +7,7 @@ namespace CWP\Media\Mail\Attachment;
 
 use CWP\Core\MediaQPDF;
 use CWP\Filesystem\MediaDropbox;
+use CWP\Filesystem\MediaFileSystem;
 
 trait MediaAttachment
 {
@@ -21,12 +22,14 @@ trait MediaAttachment
                 || true == stripos($attachment_name, 'Run_Sheets')) {
                     $this->attachments[$key]['name'] = $attachment_name;
                     $this->attachments[$key]['filename'] = $attachment_filename;
-                    if (false == $this->dropbox->exists($attachment_name)) {
+                        if (false == MediaFileSystem::exists($attachment_name)) {
+
                         $dropboxFilename = $this->pdf_directory.\DIRECTORY_SEPARATOR.$attachment_name;
                         $filename = $this->upload_directory.\DIRECTORY_SEPARATOR.$attachment_name;
                         file_put_contents($filename, $attachment['attachment']);
+
                         MediaQPDF::cleanPDF($filename);
-                        MediaDropbox::UploadFile($filename, $dropboxFilename, ['autorename' => false]);
+                        MediaFileSystem::UploadFile($filename, $dropboxFilename, ['autorename' => false]);
                     }
                     unset($this->attachments[$key]['attachment']);
                 } else {

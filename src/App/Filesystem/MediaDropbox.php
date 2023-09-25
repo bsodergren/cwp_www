@@ -109,7 +109,15 @@ class MediaDropbox
 
     public function deleteFile($file)
     {
-        $deletedFolder = $this->dropbox->delete($file);
+        $file = Filesystem::unixSlashes($file);
+
+      //  $file = ltrim($file, '\\');
+        try {
+        return $this->dropbox->delete($file);
+        } catch(DropboxClientException $e) {
+         //  dd( $file,$e);
+           return false;
+        }
     }
 
     public function save($localfile, $remotefile, $options = [])

@@ -15,9 +15,13 @@ use CWP\Utils\MediaDevice;
 require_once '.config.inc.php';
 define('TITLE', 'Import new Media drop');
 // $template = new Template();
-
+$files = [];
 MediaDevice::getHeader();
-
+$table = $explorer->table('media_job');
+$results = $table->fetchAssoc('job_id');
+foreach ($results as $id => $row) {
+    $files[] = $row['pdf_file'];
+}
 /* connect to gmail */
 
 $locations = new MediaFileSystem();
@@ -38,31 +42,30 @@ if (1 == __IMAP_ENABLE__) {
         }
         $import->moveAttachments();
         // $import->getJobNumbers();
-        // $mail_import_card['CARD_HEADER'] = 'Import from Gmail';
-
-        // $mail_import_card['FIRST_FORM'] = $import->drawSelectBox();
-        // $params['EMAIL_IMPORT_HTML'] = Template::GetHTML('/import/form_card', $mail_import_card);
+        $mail_import_card['CARD_HEADER'] = 'New jobs from Gmail';
+        $mail_import_card['FIRST_FORM'] = $import->drawSelectBox();
+        $params['EMAIL_IMPORT_HTML'] = Template::GetHTML('/import/form_card', $mail_import_card);
     }
     // dd($import->attachments);
 }
-
-$results = $locations->dropbox->getContents($locations->getDropboxDirectory('pdf', false));
-
-foreach ($results as $key => $pdf_file) {
-    $dropbox_options_html .= template::GetHTML('/import/dropbox/form_option', [
-        'OPTION_VALUE' => $pdf_file['path'],
-        'OPTION_NAME' => $pdf_file['name'],
+    $results = $locations->getContents($locations->getDropboxDirectory('pdf', false));
+    foreach ($results as $key => $pdf_file) {
+        if (!in_array($pdf_file['name'], $files)) {
+            $dropbox_options_html .= template::GetHTML('/import/dropbox/form_option', [
+                'OPTION_VALUE' => $pdf_file['path'],
+                'OPTION_NAME' => $pdf_file['name'],
+            ]);
+        }
+    }
+    $import_card['SECOND_FORM'] = template::GetHTML('/import/dropbox/jobnumber', ['JN_NAME' => 'dropbox[job_number]']);
+    $import_card['FIRST_FORM'] = template::GetHTML('/import/dropbox/form_select', [
+       'SELECT_OPTIONS' => $dropbox_options_html,
+       'SELECT_NAME' => 'dropbox[pdf_file]',
     ]);
-}
 
-$import_card['SECOND_FORM'] = template::GetHTML('/import/dropbox/jobnumber', ['JN_NAME' => 'dropbox[job_number]']);
-$import_card['FIRST_FORM'] = template::GetHTML('/import/dropbox/form_select', [
-   'SELECT_OPTIONS' => $dropbox_options_html,
-   'SELECT_NAME' => 'dropbox[pdf_file]',
-]);
+    $import_card['CARD_HEADER'] = 'Import from Dropbox';
+    $params['DROPBOX_FILES_HTML'] = template::GetHTML('/import/form_card', $import_card);
 
-$import_card['CARD_HEADER'] = 'Import from Dropbox';
-$params['DROPBOX_FILES_HTML'] = template::GetHTML('/import/form_card', $import_card);
 
 //	echo $output;
 
