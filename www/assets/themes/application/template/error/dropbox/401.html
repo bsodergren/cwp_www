@@ -1,0 +1,24 @@
+<form action="%%__URL_PATH__%%/process.php" method="post" class="w-50 m-3 rounded bg-success"
+    style="--bs-bg-opacity: .5;" enctype="multipart/form-data">
+    <div class="card">
+        <div class="card-body bg-success" style="--bs-bg-opacity: .5;">
+            <div class="input-group row">
+                <input type="hidden" name="FORM_PROCESS" value="updateSetting">
+                <label for="__DROPBOX_AUTH_TOKEN__" class="form-control-label  text-start">
+                    Need to genereate a new access token at <a target="_blank"
+                        href="https://www.dropbox.com/developers/apps">https://www.dropbox.com/developers/apps</a>
+                    <br>
+                    copy it here when done.
+                </label>
+                <textarea data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                    data-bs-title="__DROPBOX_AUTH_TOKEN__ Dropbox Token" type="text"
+                    class="form-control border border-info" name="__DROPBOX_AUTH_TOKEN__" id="__DROPBOX_AUTH_TOKEN__"
+                    placeholder="%%TOKEN%%" cols="32" rows="4" spellcheck="false" data-ms-editor="true">%%TOKEN%%</textarea>
+            </div>
+            <div id="_submit" class="form-group">
+                <label class="sr-only" for="submit"></label>
+                <button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

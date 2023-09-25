@@ -19,20 +19,9 @@ use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
 
-$settings_array = [];
-$settings_html = '';
-$checkbox_html = '';
-$array_html = '';
-$textbox_html = '';
-
 $cat = 'server';
-$text_col_width = 'col-6';
 if (isset($_GET['cat'])) {
     $cat = $_GET['cat'];
-}
-
-if ('lang' == $cat) {
-    $text_col_width = 'col-8';
 }
 
 
@@ -75,6 +64,8 @@ foreach ($table as $id => $row) {
     $settings[$group][$row->definedName]['require'] = $row->require;
     $settings[$group][$row->definedName]['group'] = $group;
 }
+
+
 foreach ($settings as $setting_group => $setting) {
     $settings_html = '';
     $checkbox_html = '';
@@ -130,7 +121,7 @@ foreach ($settings as $setting_group => $setting) {
             'SELECT_NAME' => $definedName.'-group']);
 
 
-        $tooltip = 'data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"	data-bs-title="'.$tooltip_desc.'" ';
+
 
         if (null == $name) {
             $name = $definedName;
@@ -149,6 +140,7 @@ foreach ($settings as $setting_group => $setting) {
             $row_desc_params = ['DESCRIPTION' => $description, 'DEFINED_NAME' => $definedName];
         }
 
+
         if ('bool' == $type) {
             $name_label = Template::GetHTML('settings/checkbox/'.$text_template, $row_name_params);
 
@@ -163,7 +155,6 @@ foreach ($settings as $setting_group => $setting) {
             $params = [
                 'SETTING_GROUP' => $setting_group_select_list_html,
                 'DEFINED_NAME' => $definedName,
-                'TOOLTIP' => $tooltip,
                 'CHECKED' => $checked,
                 'NAME' => $name,
                 'NAME_LABEL' => $name_label,
@@ -190,7 +181,6 @@ foreach ($settings as $setting_group => $setting) {
                 'SETTING_GROUP' => $setting_group_select_list_html,
                 'DEFINED_NAME' => $definedName,
                 'PLACEHOLDER' => $place_holder,
-                'TOOLTIP' => $tooltip,
                 'VALUE' => $value,
                 'NAME' => $name,
                 'NAME_LABEL' => $name_label,
@@ -213,7 +203,6 @@ foreach ($settings as $setting_group => $setting) {
             $params = [
                 'SETTING_GROUP' => $setting_group_select_list_html,
                 'DEFINED_NAME' => $definedName.'-array',
-                'TOOLTIP' => $tooltip,
                 'VALUE' => $value_text,
                 'NAME' => $name,
                 'NAME_LABEL' => $name_label,
@@ -286,7 +275,6 @@ foreach ($settings as $setting_group => $setting) {
             $params = [
                 'SETTING_GROUP' => $setting_group_select_list_html,
                 'DEFINED_NAME' => $definedName.'-list',
-                'TOOLTIP' => $tooltip,
                 'SELECT_OPTIONS' => $options_group,
                 'NAME' => $name,
                 'NAME_LABEL' => $name_label,

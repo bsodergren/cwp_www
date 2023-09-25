@@ -12,6 +12,7 @@ $refer_script = basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.p
 if (__SCRIPT_NAME__ == $refer_script) {
     MediaError::msg('info', $refer_script.'< >'.__SCRIPT_NAME__, 0);
 }
+
 if (null === $refer_script || '' == $refer_script) {
     MediaError::msg('info', 'referer not set', 0);
     echo HTMLDisplay::JavaRefresh('/index.php', 0);
@@ -35,7 +36,14 @@ if (isset($_POST['divClass'])) {
     exit;
 }
 
-$procesClass = 'CWP\\Process\\'.ucfirst(__FORM_POST__);
+$procesClass = ucfirst(__FORM_POST__);
+if (array_key_exists('FORM_PROCESS', $_POST)) {
+    if ('updateSetting' == $_POST['FORM_PROCESS']) {
+        $procesClass = ucfirst('Settings');
+    }
+}
+
+$procesClass = 'CWP\\Process\\'.$procesClass;
 $mediaProcess = new $procesClass($media);
 $mediaProcess->run($_REQUEST);
 

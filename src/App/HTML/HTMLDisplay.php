@@ -47,12 +47,20 @@ class HTMLDisplay
 
         if ('' != $msg) {
             $sep = '?';
-            $msg = urlencode($msg);
-            if (str_contains($url, '?')) {
-                $sep = '&';
-            }
+            if (\is_array($msg)) {
+                foreach ($msg as $key => $value) {
+                    $url_array[] = $key.'='.urlencode($value);
+                }
+                $url_params = implode('&', $url_array);
+                $url = $url.$sep.$url_params;
+            } else {
+                $msg = urlencode($msg);
+                if (str_contains($url, '?')) {
+                    $sep = '&';
+                }
 
-            $url = $url.$sep.'msg='.$msg;
+                $url = $url.$sep.'msg='.$msg;
+            }
         }
 
         // if ($timeout > 0) {

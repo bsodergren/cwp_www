@@ -1,0 +1,222 @@
+<!-- end of header.php -->
+<form action="/process.php" name="MyForm" id="MyForm" method="post" accept-charset="utf-8">
+    <input type="hidden" name="FORM_PROCESS" value="Updating user settings">
+    <input type="hidden" name="cat" value="local">
+    <!-- <div id="_submit" class="form-group">
+<label class="sr-only" for="submit"></label>
+<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+</div> -->
+
+    <div class="container bg-success rounded-1">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="fs-2 text-center" >Dropbox</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 align-content-center">
+                <div class="container bg-info rounded-1 w-75">
+        <div class="row">
+            <div class="col-sm-2">off/on</div>
+            <div class="col-sm-4">name</div>
+            <div class="col-sm-4">description</div>
+            <div class="col-sm-2">Group</div>
+        </div>
+        <div class="row">
+
+
+            <div class="col-sm-2 form-check form-switch">
+                <input type="hidden" name="__USE_DROPBOX__" value="0">
+                <input class="form-check-input h-100 w-100" name="__USE_DROPBOX__" value="1" type="checkbox"
+                    role="switch" id="flexSwitchCheckDefault" checked />
+            </div>
+            <div class="col-sm-4 text-start">
+                <label class="form-check-label  text-start" for="flexSwitchCheckDefault">Use Dropbox</label>
+
+            </div>
+            <div class="col-sm-4 text-start">
+                <label class="form-check-label  text-start" for="flexSwitchCheckDefault">Saves files to dropbox</label>
+
+            </div>
+            <div class="col-sm-2">
+                <input name="__USE_DROPBOX__-group" class="form-select" list="__USE_DROPBOX__-group" value="Dropbox">
+                <datalist id="__USE_DROPBOX__-group">
+                    <option value="Dropbox">Dropbox </option>
+                    <option value="Publication">Publication</option>
+
+                    <option value="Misc">Misc</option>
+
+                    <option value="iMap">iMap</option>
+
+
+                </datalist>
+
+
+            </div>
+        </div>
+
+        <div class="row">
+
+
+
+            <div class="col-sm-2">
+
+                <label for="__DROPBOX_APP_SECRET__" class="form-control-label  text-start">Dropbox Token</label>
+
+
+            </div>
+            <div class="col-sm-4">
+
+                <textarea type="text" class="form-control border border-info" name="__DROPBOX_APP_SECRET__"
+                    id="__DROPBOX_APP_SECRET__" placeholder="f8t0vr1vw5dghnw" cols="32"
+                    rows="1">f8t0vr1vw5dghnw</textarea>
+            </div>
+            <div class="col-sm-4">
+
+                <label class="form-control-label  text-start" for="__DROPBOX_APP_SECRET__">Dropbox App Secret
+                    Token</label>
+
+            </div>
+            <div class="col-sm-2">
+
+                <input name="__DROPBOX_APP_SECRET__-group" class="form-select" list="__DROPBOX_APP_SECRET__-group"
+                    value="Dropbox">
+                <datalist id="__DROPBOX_APP_SECRET__-group">
+                    <option value="Dropbox">Dropbox </option>
+                    <option value="Publication">Publication</option>
+
+                    <option value="Misc">Misc</option>
+
+                    <option value="iMap">iMap</option>
+
+
+                </datalist>
+
+
+            </div>
+        </div>
+        <div class="row">
+
+
+            <div class="col-sm-2">
+
+                <label for="__DROPBOX_APP_KEY__" class="form-control-label  text-start">Dropbox Key</label>
+
+
+            </div>
+            <div class="col-sm-4">
+
+                <textarea type="text" class="form-control border border-info" name="__DROPBOX_APP_KEY__"
+                    id="__DROPBOX_APP_KEY__" placeholder="t0neze73y6iblav" cols="32" rows="1">t0neze73y6iblav</textarea>
+            </div>
+            <div class="col-sm-4">
+
+                <label class="form-control-label  text-start" for="__DROPBOX_APP_KEY__">Dropbox App Secret Key</label>
+
+            </div>
+            <div class="col-sm-2">
+
+                <input name="__DROPBOX_APP_KEY__-group" class="form-select" list="__DROPBOX_APP_KEY__-group"
+                    value="Dropbox">
+                <datalist id="__DROPBOX_APP_KEY__-group">
+                    <option value="Dropbox">Dropbox </option>
+                    <option value="Publication">Publication</option>
+
+                    <option value="Misc">Misc</option>
+
+                    <option value="iMap">iMap</option>
+
+
+                </datalist>
+
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-2">
+
+                <label for="__DROPBOX_FILES_DIR__" class="form-control-label  text-start">Dropbox Files
+                    Directory</label>
+
+
+            </div>
+            <div class="col-sm-4">
+
+                <textarea type="text" class="form-control border border-info" name="__DROPBOX_FILES_DIR__"
+                    id="__DROPBOX_FILES_DIR__" placeholder="/Media Folder" cols="32" rows="1">/Media Folder</textarea>
+            </div>
+            <div class="col-sm-4">
+
+                <label class="form-control-label  text-start" for="__DROPBOX_FILES_DIR__">location of all dropbox
+                    files</label>
+
+            </div>
+            <div class="col-sm-2">
+
+                <input name="__DROPBOX_FILES_DIR__-group" class="form-select" list="__DROPBOX_FILES_DIR__-group"
+                    value="Dropbox">
+                <datalist id="__DROPBOX_FILES_DIR__-group">
+                    <option value="Dropbox">Dropbox </option>
+                    <option value="Publication">Publication</option>
+
+                    <option value="Misc">Misc</option>
+
+                    <option value="iMap">iMap</option>
+
+
+                </datalist>
+
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-2">
+
+                <label for="__DROPBOX_AUTH_TOKEN__" class="form-control-label  text-start">Dropbox Token</label>
+
+
+            </div>
+            <div class="col-sm-4">
+
+                <textarea type="text" class="form-control border border-info" name="__DROPBOX_AUTH_TOKEN__"
+                    id="__DROPBOX_AUTH_TOKEN__"
+                    placeholder="sl.BmsoyNjYH7S_7iGi8evoaGv7YxrFoepuus0gMVLs2E9eoc0aMIpTyE-_nKNDtmIOVAanV_SbMUDig-r0MqOO-t8i8o6BEQNfkdr8dVw0zaHsU5fuJ3A34ISA2AuJTJ203HGKorfMsH9v9KwoT_H-pzs"
+                    cols="32"
+                    rows="1">sl.BmsoyNjYH7S_7iGi8evoaGv7YxrFoepuus0gMVLs2E9eoc0aMIpTyE-_nKNDtmIOVAanV_SbMUDig-r0MqOO-t8i8o6BEQNfkdr8dVw0zaHsU5fuJ3A34ISA2AuJTJ203HGKorfMsH9v9KwoT_H-pzs</textarea>
+            </div>
+            <div class="col-sm-4">
+
+                <label class="form-control-label  text-start" for="__DROPBOX_AUTH_TOKEN__">Dropbox Token</label>
+
+            </div>
+            <div class="col-sm-2">
+
+                <input name="__DROPBOX_AUTH_TOKEN__-group" class="form-select" list="__DROPBOX_AUTH_TOKEN__-group"
+                    value="Dropbox">
+                <datalist id="__DROPBOX_AUTH_TOKEN__-group">
+                    <option value="Dropbox">Dropbox </option>
+                    <option value="Publication">Publication</option>
+                    <option value="Misc">Misc</option>
+                    <option value="iMap">iMap</option>
+                </datalist>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="_submit" class="form-group">
+                    <label class="sr-only" for="submit"></label>
+                    <button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+                </div>            </div>
+        </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+
+</form>

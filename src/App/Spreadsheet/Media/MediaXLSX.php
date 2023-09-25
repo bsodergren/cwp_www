@@ -6,6 +6,7 @@
 namespace CWP\Spreadsheet\Media;
 
 use CWP\Core\Media;
+use CWP\Filesystem\MediaDropbox;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Calculator;
@@ -47,6 +48,15 @@ class MediaXLSX extends Media
         $calc = new Calculator($this->media);
 
         foreach ($this->xlsx_array as $form_number => $dataArray) {
+            $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
+            if (__USE_DROPBOX__ == true) {
+                $d = new MediaDropbox();
+                $path = \dirname(str_replace(\dirname($new_xlsx_file, 3).'\\', '', $new_xlsx_file)).\DIRECTORY_SEPARATOR;
+               // $path = str_replace(basename(__FILES_DIR__), '', $path);
+                dd($path);
+                $this->dropbox_path = $d->createFolder($path);
+            }
+
             $data = $dataArray['forms'];
             // $data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
@@ -81,8 +91,8 @@ class MediaXLSX extends Media
                                             $this->box['skid_count'] = "$sk of ".$max_boxes + 1;
                                             $this->form_details['count'] = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box['lift_size'];
                                             $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
-                                            $full_boxes = $full_boxes - 1;
-                                            $s_idx = $s_idx + 1;
+                                            --$full_boxes;
+                                            ++$s_idx;
                                         }
                                         // $s_idx=$s_idx+1;
                                         ++$sk;
@@ -95,7 +105,7 @@ class MediaXLSX extends Media
                             }
                             $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
                             $this->form_details = '';
-                            $s_idx = $s_idx + 1;
+                            ++$s_idx;
                         }
                     }
                 }
@@ -110,7 +120,7 @@ class MediaXLSX extends Media
             $this->spreadsheet->removeSheetByIndex($sheetIndex);
             $this->spreadsheet->setActiveSheetIndex(0);
             $writer = new XLSXWriter($this->spreadsheet);
-            $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
+            $writer->xls_path = $this->dropbox_path;
             $writer->write($new_xlsx_file);
 
             HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing '.basename($new_xlsx_file)]);
@@ -296,7 +306,7 @@ class MediaXLSX extends Media
         foreach ($data as $key => $array) {
             $pcs_count = Utils::toint($array['count']);
 
-            $total_count = $total_count + $pcs_count;
+            $total_count += $pcs_count;
         }
 
         return $total_count;

@@ -5,7 +5,10 @@
 
 namespace CWP\Filesystem;
 
+use CWP\Core\MediaError;
+use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
+use CWP\Utils\MediaDevice;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
@@ -86,7 +89,11 @@ class MediaDropbox
 
     public function getContents($path)
     {
-        $listFolderContents = $this->dropbox->listFolder($path);
+        try {
+            $listFolderContents = $this->dropbox->listFolder($path);
+        } catch (DropboxClientException $e) {
+            $this->error($e);
+        }
 
         // Fetch Items (Returns an instance of ModelCollection)
         $items = $listFolderContents->getItems();
@@ -183,6 +190,22 @@ class MediaDropbox
 
     public function error($e)
     {
+        $code = $e->getCode();
+        $message = $e->getMessage();
+
+        //        $url = $_SERVER[''];
+        // switch ($code) {
+        //     case '401':
+        // MediaError::msg('info', $code, 0);
+        echo HTMLDisplay::JavaRefresh('/error.php', 0, ['type' => 'Dropbox', 'code' => $code, 'message' => $message]);
+        exit;
+        // Template::echo('error/dropbox/'.$code, ['TOKEN' => __DROPBOX_AUTH_TOKEN__]);
+        //     break;
+        // default:
+        //     Template::echo('error/dropbox/default', ['CODE' => $code, 'MSG' => $message]);
+        //     break;
+        // }
+
         // 0 => "__construct"
         // 1 => "__wakeup"
         // 2 => "getMessage"
@@ -194,21 +217,23 @@ class MediaDropbox
         // 8 => "getTraceAsString"
         // 9 => "__toString"
         // https://www.dropbox.com/developers/apps
-        foreach (get_class_methods($e) as $i => $method) {
-            if (0 == $i) {
-                continue;
-            }
-            if (1 == $i) {
-                continue;
-            }
-            if (9 == $i) {
-                continue;
-            }
-            $msg = $e->$method();
-            dump([$method, $msg]);
-            //            $msgs .= Template::gethtml("error/error", ['MSG'=>$msg]);
-        }
+        // foreach (get_class_methods($e) as $i => $method) {
+        //     if (0 == $i) {
+        //         continue;
+        //     }
+        //     if (1 == $i) {
+        //         continue;
+        //     }
+        //     if (9 == $i) {
+        //         continue;
+        //     }
+        //     $msg = $e->$method();
+        //     dump([$method, $msg]);
+        //     //            $msgs .= Template::gethtml("error/error", ['MSG'=>$msg]);
+        // }
         //      Template::echo("error/messages", ['MSG_GROUP'=>$msgs]);
+
+        MediaDevice::getFooter();
         exit;
     }
 }
