@@ -5,7 +5,6 @@
 
 namespace CWP\Media\Mail;
 
-use CWP\Filesystem\MediaDropbox;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Media\Mail\Attachment\MediaAttachment;
 use CWP\Media\Mail\Jobnumber\Jobnumber;
@@ -31,11 +30,9 @@ class EmailImport extends EmailDisplay
         }
 
         $location = new MediaFileSystem();
-        $this->upload_directory = $location->getDropboxDirectory('upload', true);
-        $this->pdf_directory = $location->getDropboxDirectory('pdf', true);
-
-
-        $this->dropbox = new MediaDropbox();
+        $this->fs = $location;
+        $this->upload_directory = $location->getDirectory('upload', true);
+        $this->pdf_directory = $location->getDirectory('pdf', true);
     }
 
     public function __destruct()
@@ -73,12 +70,10 @@ class EmailImport extends EmailDisplay
 
     public function clean($name)
     {
-
         // Trimmer_Position_0623-C_RunSheets_Itsaca.pdf
         preg_match('/([0-9]{3,4})[ -_.]([ABC])[ -_.]([A-Za-z]+)[ -_.]([A-Za-z]+)(.pdf)/', $name, $output_array);
 
-
-    $name = $output_array[1] . '-'.$output_array[2]. '_'. $output_array[3]. '_'. $output_array[4].  $output_array[5];
+        $name = $output_array[1].'-'.$output_array[2].'_'.$output_array[3].'_'.$output_array[4].$output_array[5];
 
         return $name;
     }

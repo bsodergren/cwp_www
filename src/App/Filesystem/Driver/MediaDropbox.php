@@ -3,7 +3,7 @@
  * CWP Media tool for load flags
  */
 
-namespace CWP\Filesystem;
+namespace CWP\Filesystem\Driver;
 
 use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
@@ -16,7 +16,7 @@ use Nette\Utils\FileSystem;
 
 // use Symfony\Component\Filesystem\Filesystem;
 
-class MediaDropbox
+class MediaDropbox implements MediaFileInterface
 {
     public object $dropbox;
 
@@ -36,16 +36,49 @@ class MediaDropbox
         }
     }
 
+    public function dirExists($dir)
+    {
+        dd($dir);
+
+        $r = $this->exists(basename($dir));
+
+        return $r;
+    }
+
     public function search($search, $path = '/')
     {
-        try {
-            $searchResults = $this->dropbox->search($path, $search, ['start' => 0, 'max_results' => 100]);
-        } catch (DropboxClientException $e) {
-            $this->error($e);
-        }
-        $items = $searchResults->getItems();
+        dd($path);
 
-        return $items;
+        try {
+            $searchResults = $this->dropbox->search($path, $search, ['start' => 0, 'max_results' => 50]);
+        } catch (DropboxClientException $e) {
+            dd($e);
+        }
+            $items = $searchResults->getItems();
+
+        // All Items
+        foreach ($items->all() as $item) {
+            $file[] = $item->getMetadata()->path_display;
+        }
+        natsort($file);
+
+        return $file;
+    }
+
+    public function getFile($filename)
+    {
+        $tmp_filename = basename($filename);
+        $tmp_file = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$tmp_filename;
+        if (!file_exists($tmp_file)) {
+            $file = $this->dropbox->download($filename);
+
+            $contents = $file->getContents();
+
+            // Save file contents to disk
+            file_put_contents($tmp_file, $contents);
+        }
+
+        return $tmp_file;
     }
 
     public function exists($path)
@@ -68,7 +101,6 @@ class MediaDropbox
 
     public function createFolder($path)
     {
-        // $path = '/'.__DROPBOX_FILES_DIR__.'/'.$path;
         $path = Filesystem::normalizePath($path);
 
         $path = Filesystem::unixSlashes($path);
@@ -90,7 +122,11 @@ class MediaDropbox
     public function getContents($path)
     {
         try {
+            $path = Filesystem::unixSlashes($path);
+
+
             $listFolderContents = $this->dropbox->listFolder($path);
+
         } catch (DropboxClientException $e) {
             $this->error($e);
         }
@@ -107,25 +143,31 @@ class MediaDropbox
         return $return;
     }
 
-    public function deleteFile($file)
+    public function delete($file)
     {
         $file = Filesystem::unixSlashes($file);
 
-      //  $file = ltrim($file, '\\');
+        //  $file = ltrim($file, '\\');
         try {
-        return $this->dropbox->delete($file);
-        } catch(DropboxClientException $e) {
-         //  dd( $file,$e);
-           return false;
+            return $this->dropbox->delete($file);
+        } catch (DropboxClientException $e) {
+            //  dd( $file,$e);
+            return false;
         }
     }
+
+
+
+
+
+
 
     public function save($localfile, $remotefile, $options = [])
     {
         $remotefile = Filesystem::unixSlashes($remotefile);
 
         if (false !== $this->exists(basename($remotefile))) {
-            $this->deleteFile($remotefile);
+            $this->delete($remotefile);
         }
 
         try {
@@ -134,58 +176,28 @@ class MediaDropbox
             $this->error($e);
         }
 
+
         return $file;
     }
 
-    public function cleanPath($path)
+    public function UploadFile($filename, $uploadFilename, $options = [])
     {
-        return str_replace('\\', '/', $path);
-    }
+        $filename = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename);
 
-    public function getDirectory($type, $create = false)
-    {
-        switch ($type) {
-            case 'upload':
-                $tmp_upload_folder = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$this->upload_dir;
-                $tmp_upload_folder = Filesystem::normalizePath($tmp_upload_folder);
-
-                if (true == $create) {
-                    Filesystem::createDir($tmp_upload_folder, 0775);
-                }
-
-                return $tmp_upload_folder;
-            case 'tmp':
-                return __TEMP_DIR__;
-            case 'pdf':
-                if (true == $create) {
-                    $this->createFolder($this->upload_dir);
-                }
-
-                return $this->upload_dir;
-        }
-
-        return null;
-    }
-
-    public static function UploadFile($filename, $uploadFilename, $options = [])
-    {
-        $dropbox = new self();
-        $dropbox->save($filename, $uploadFilename, $options);
+        $this->save($filename, $uploadFilename, $options);
 
         return $uploadFilename;
     }
 
-    public static function DownloadFile($filename)
+    public function DownloadFile($filename)
     {
-        $dropbox = new self();
-
         $tmpFilename = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename);
 
         if (file_exists($tmpFilename)) {
             Filesystem::delete($tmpFilename);
         }
 
-        $file = $dropbox->dropbox->download($filename, $tmpFilename);
+        $file = $this->dropbox->download($filename, $tmpFilename);
 
         // Downloaded File Metadata
         $metadata = $file->getMetadata();
@@ -194,6 +206,11 @@ class MediaDropbox
         $name = $metadata->getName();
 
         return $tmpFilename;
+    }
+
+    public function rename($old, $new)
+    {
+        return $msg;
     }
 
     public function error($e)

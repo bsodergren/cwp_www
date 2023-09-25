@@ -10,15 +10,16 @@ namespace CWP\Filesystem;
  */
 
 use CWP\Core\Media;
-use Nette\InvalidStateException;
-use Nette\IOException;
+use CWP\Core\Bootstrap;
 use Nette\Utils\FileSystem;
+use CWP\Filesystem\Driver\MediaLocal;
+use CWP\Filesystem\Driver\MediaDropbox;
 
 class MediaFileSystem
 {
     public $directory;
 
-    public $dropbox;
+    public object $fileDriver;
 
     public $job_number;
 
@@ -28,55 +29,70 @@ class MediaFileSystem
     {
         $this->job_number = $job_number;
         $this->pdf_file = $pdf_file;
-        $this->dropbox = new MediaDropbox();
+        if (Media::$Dropbox) {
+            define('__FILES_DIR__', '');
+            $this->fileDriver = new MediaDropbox();
+        } else {
+
+            if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {
+                if (true == Bootstrap::$CONFIG['server']['media_files']) {
+                    define('__FILES_DIR__', __HTTP_ROOT__.Bootstrap::$CONFIG['server']['media_files']);
+                }
+            }
+            $this->fileDriver = new MediaLocal();
+        }
     }
 
     public function getContents($path)
     {
-        if (Media::$Dropbox) {
-            $dropbox = new MediaDropbox();
-
-            return $dropbox->getContents($path);
-        } else {
-            $f = new MediaFinder();
-            $array = $f->search($path, '*.pdf');
-            foreach ($array as $file) {
-                $return[] = ['name' => basename($file), 'path' => $file];
-            }
-
-            return $return;
-        }
+        return $this->fileDriver->getContents($path);
     }
 
-    public static function exists($file)
+    public function exists($file)
     {
-        $fs = new self($file);
-
-        if (Media::$Dropbox) {
-            $dropbox = new MediaDropbox();
-
-            return $dropbox->exists($file);
-        } else {
-            $directory = $fs->getDirectory('upload', true);
-            $pdf_file = $directory.\DIRECTORY_SEPARATOR.$file;
-
-            return file_exists($pdf_file);
-        }
+        return $this->fileDriver->exists($file);
     }
 
-    public static function uploadFile($filename, $dropboxFilename, $options = [])
+    public function uploadFile($filename, $dropboxFilename, $options = [])
     {
-        if (Media::$Dropbox) {
-            MediaDropbox::UploadFile($filename, $dropboxFilename, $options);
-        }
+        return $this->fileDriver->UploadFile($filename, $dropboxFilename, $options);
     }
 
-    public function getFilename($type = '', $form_number = '', $create_dir = '')
+    public function DownloadFile($filename)
     {
-        return $this->__filename($type, $form_number, $create_dir);
+        return $this->fileDriver->DownloadFile($filename);
     }
 
-    private function __filename($type = '', $form_number = '', $create_dir = false)
+    public function createFolder($path)
+    {
+        return $this->fileDriver->createFolder($path);
+    }
+
+    public function delete($file)
+    {
+        return $this->fileDriver->delete($file);
+    }
+
+    public function rename($old, $new)
+    {
+        return $this->fileDriver->rename($old, $new);
+    }
+    public function save($filename,$path)
+    {
+        return $this->fileDriver->save($filename,$path);
+    }
+
+    public function getFilename($type = '', $form_number = '', $create_dir = false)
+    {
+        return $this->filename($type, $form_number, $create_dir);
+    }
+
+    public function getDirectory($type = '', $create_dir = true)
+    {
+        return $this->directory($type, $create_dir);
+    }
+
+    public function filename($type = '', $form_number = '', $create_dir = false)
     {
         $directory = '';
 
@@ -87,148 +103,76 @@ class MediaFileSystem
         $file = basename($this->pdf_file, '.pdf');
         $filename = $this->job_number.'_'.$file;
 
-        if ('xlsx' == strtolower($type)) {
-            $filename = $filename.'_FM'.$form_number.'.xlsx';
-        }
-        if ('slips' == strtolower($type)) {
-            $filename = $filename.'_CountSlips_FM'.$form_number.'.xlsx';
-        }
-        if ('zip' == strtolower($type)) {
-            if ('' != $form_number) {
-                $filename = $filename.'_FM'.$form_number.'.zip';
-            } else {
-                $filename .= '.zip';
-            }
-        }
-        if ('pdf' == strtolower($type)) {
-            $filename = $this->pdf_file;
+        $type = strtolower($type);
+        switch ($type) {
+            case 'xlsx':
+                $filename = $filename.'_FM'.$form_number.'.xlsx';
+                break;
+            case 'slips':
+                $filename = $filename.'_CountSlips_FM'.$form_number.'.xlsx';
+                break;
+            case 'zip':
+                if ('' != $form_number) {
+                    $filename = $filename.'_FM'.$form_number.'.zip';
+                } else {
+                    $filename .= '.zip';
+                }
+                break;
+            case 'pdf':
+                $filename = $this->pdf_file;
+                break;
         }
 
         if ('' != $type) {
-            $directory = $this->__directory($type, $create_dir);
+            $directory = $this->directory($type, $create_dir);
         }
 
         $filename = $directory.\DIRECTORY_SEPARATOR.$filename;
         $filename = FileSystem::normalizePath($filename);
-        if ('pdf' == strtolower($type)) {
-        }
 
         return $filename;
     }
 
-    private function __directory($type = '', $create_dir = true)
+    public function directory($type = '', $create_dir = true)
     {
         $output_filename = '';
 
-        if (false !== $this->__filename()) {
-            $output_filename = $this->__filename();
+        if (false !== $this->filename()) {
+            $output_filename = $this->filename();
             $output_filename = str_replace($this->job_number.'_', '', $output_filename);
             $output_filename = $this->job_number.$output_filename;
         }
 
-        $directory = $output_filename;
-        if (Media::$Dropbox) {
-            if (__DROPBOX_FILES_DIR__ != '') {
-                $directory = __DROPBOX_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
-            }
-        }
-        if ('xlsx' == strtolower($type)) {
-            $directory .= \DIRECTORY_SEPARATOR.__XLSX_DIRECTORY__;
-            if (Media::$Dropbox) {
-                $create_dir = false;
-            }
-        }
+        $directory = __FILES_DIR__.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
 
-        if ('zip' == strtolower($type)) {
-            $directory .= \DIRECTORY_SEPARATOR.__ZIP_DIRECTORY__;
-            if (Media::$Dropbox) {
-                $create_dir = false;
-            }
-        }
-        if ('upload' == strtolower($type)) {
-            $directory = \DIRECTORY_SEPARATOR.'Uploads';
-            if (Media::$Dropbox) {
-                $create_dir = false;
-            }
-        }
-        if (!Media::$Dropbox) {
-            if (\defined('__MEDIA_FILES_DIR__')) {
-                if (__MEDIA_FILES_DIR__ != '') {
-                    if (!is_dir(__MEDIA_FILES_DIR__)) {
-                        FileSystem::createDir(__MEDIA_FILES_DIR__, 511);
-                    }
-                    $directory = __MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$directory;
+        $type = strtolower($type);
+        switch ($type) {
+            case 'xlsx':
+                $directory .= \DIRECTORY_SEPARATOR.__XLSX_DIRECTORY__;
+
+                break;
+            case 'zip':
+                $directory .= \DIRECTORY_SEPARATOR.__ZIP_DIRECTORY__;
+                break;
+            case 'upload':
+                if (Media::$Dropbox) {
+                    $directory = __TEMP_DIR__;
+                } else {
+                    $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
                 }
-            }
-        }
-        if ('pdf' == strtolower($type)) {
+                break;
+            case 'pdf':
+                $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
+                break;
         }
 
         $directory = FileSystem::unixSlashes($directory);
         $this->directory = FileSystem::normalizePath($directory);
 
         if (true == $create_dir) {
-            FileSystem::createDir($this->directory, 511);
+            FileSystem::createDir($directory, 511);
         }
 
         return $this->directory;
-    }
-
-    public function getDirectory($type = '', $create_dir = '')
-    {
-        return $this->__directory($type, $create_dir);
-    }
-
-    public function getDropboxDirectory($type = 'upload', $create_dir = false)
-    {
-        if (Media::$Dropbox) {
-            $this->directory = $this->dropbox->getDirectory($type, $create_dir);
-        } else {
-            $this->directory = $this->getDirectory($type, $create_dir);
-        }
-
-        return $this->directory;
-    }
-
-    public static function rename($old, $new)
-    {
-        $msg = null;
-        $old = FileSystem::platformSlashes($old);
-
-        $new = FileSystem::platformSlashes($new);
-
-        try {
-            if (false == filesystem::rename($old, $new)) {
-                throw new InvalidStateException();
-            }
-        } catch (InvalidStateException $e) {
-            $msg = $e->getMessage();
-        }
-
-        return $msg;
-    }
-
-    public static function delete($file)
-    {
-        $msg = null;
-        if (__USE_DROPBOX__ == true) {
-            $d = new MediaDropbox();
-
-            $msg = $d->deleteFile($file);
-
-            return $msg;
-        }
-
-        if (file_exists($file) || is_dir($file)) {
-            try {
-                FileSystem::delete($file);
-            } catch (IOException $e) {
-                $msg = $e->getMessage();
-            }
-        } else {
-            $msg = $file.' not found';
-        }
-
-        return $msg;
     }
 }

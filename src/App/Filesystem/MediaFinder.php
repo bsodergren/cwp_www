@@ -5,39 +5,40 @@
 
 namespace CWP\Filesystem;
 
-use CWP\Filesystem\Driver\MediaDropboxFinder;
-use CWP\Filesystem\Driver\NetteFinder;
+use CWP\Core\Media;
+use CWP\Filesystem\Driver\MediaDropbox;
+use CWP\Filesystem\Driver\MediaLocal;
 use Nette\Utils\FileSystem;
 
 class MediaFinder
 {
-    public $finder;
+    public $fileDriver;
 
-    public function __construct($media='')
+    public function __construct($media = '')
     {
         $this->media = $media;
 
-        if (__USE_DROPBOX__ == true) {
-            $this->finder = new MediaDropboxFinder();
+        if (Media::$Dropbox) {
+            $this->fileDriver = new MediaDropbox();
         } else {
-            $this->finder = new NetteFinder();
+            $this->fileDriver = new MediaLocal();
         }
     }
 
     public function dirExists($directory)
     {
-        return $this->finder->is_dir($directory);
+        return $this->fileDriver->dirExists($directory);
     }
 
     public function search($path, $search)
     {
         $path = FileSystem::unixSlashes($path);
 
-        return $this->finder->search($search, $path);
+        return $this->fileDriver->search($search, $path);
     }
 
     public function getFile($file)
     {
-        return $this->finder->getFile($file);
+        return $this->fileDriver->getFile($file);
     }
 }

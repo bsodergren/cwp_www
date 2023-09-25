@@ -6,7 +6,7 @@
 namespace CWP\Media\Import;
 
 use CWP\Core\Media;
-use CWP\Filesystem\MediaDropbox;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\Utils;
 use Smalot\PdfParser\Parser;
@@ -23,7 +23,8 @@ class PDFImport extends MediaImport
 
         $pdf = $this->form;
 
-        if (\count($pdf) < 1) {
+        if (\count($pdf) == 0) {
+
             $this->deleteFromDatabase('media_job');
             $this->status = 2;
 
@@ -54,17 +55,18 @@ class PDFImport extends MediaImport
     public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
     {
         $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
-
         if (null !== $this->job_id) {
             return 0;
         }
         $this->job_id = Media::insertJobNumber($pdf_uploaded_file, $job_number);
+
         $this->insertDrop($pdf_uploaded_file, $update_form);
     }
 
     public function reImport($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
     {
         $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
+
         if (null === $this->job_id) {
             return 0;
         }
@@ -77,8 +79,7 @@ class PDFImport extends MediaImport
         if ('' != $media_job_id) {
             $this->job_id = $media_job_id;
         }
-
-        $file = MediaDropbox::DownloadFile($pdf_file);
+        $file = (new MediaFileSystem())->DownloadFile($pdf_file);
 
         if (file_exists($file)) {
             $parser = new Parser();
@@ -102,6 +103,7 @@ class PDFImport extends MediaImport
                     $this->parse_page($page_text);
                 }
             }
+
         }
     }
 
@@ -117,6 +119,7 @@ class PDFImport extends MediaImport
 
     public function parse_page($page_text)
     {
+
         $page_count = \count($page_text);
 
         $form_number = $this->find_key('run#', $page_text);
@@ -193,7 +196,6 @@ class PDFImport extends MediaImport
                 switch ($value) {
                     case 'run#':
                         $form_peices = explode('Run#', $item);
-
                         return trim($form_peices[1]);
 
                     case 'production':

@@ -48,13 +48,7 @@ class MediaXLSX extends Media
         $calc = new Calculator($this->media);
 
         foreach ($this->xlsx_array as $form_number => $dataArray) {
-            $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
-            if (__USE_DROPBOX__ == true) {
-                $d = new MediaDropbox();
-                $pos = strrpos($new_xlsx_file, '\\');
-                $path = substr($new_xlsx_file, 0, $pos);
-                $this->dropbox_path = $d->createFolder($path);
-            }
+            //$this->xlsx_path = $this->media->getDirectory('xlsx');
 
             $data = $dataArray['forms'];
             // $data           = $dataArray;
@@ -119,7 +113,8 @@ class MediaXLSX extends Media
             $this->spreadsheet->removeSheetByIndex($sheetIndex);
             $this->spreadsheet->setActiveSheetIndex(0);
             $writer = new XLSXWriter($this->spreadsheet);
-            $writer->xls_path = $this->dropbox_path;
+            $writer->xls_path = $this->media->xlsx_directory;
+            $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
             $writer->write($new_xlsx_file);
             HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing '.basename($new_xlsx_file)]);
             $this->spreadsheet->disconnectWorksheets();

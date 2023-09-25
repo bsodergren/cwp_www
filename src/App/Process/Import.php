@@ -10,7 +10,6 @@ namespace CWP\Process;
  */
 
 use CWP\Core\MediaQPDF;
-use CWP\Filesystem\MediaDropbox;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\Import\PDFImport;
@@ -67,13 +66,13 @@ class Import extends MediaProcess
                 $fileSize = $_FILES['the_file']['size'];
                 $fileTmpName = $_FILES['the_file']['tmp_name'];
 
-
                 $locations = new MediaFileSystem();
-                $pdf_directory = $locations->getDropboxDirectory('pdf', false);
+                $pdf_directory = $locations->getDirectory('pdf', false);
                 $pdf_file = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
 
-                MediaQPDF::cleanPDF($fileTmpName);
-                MediaDropbox::UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
+                $locations->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
+                MediaQPDF::cleanPDF($pdf_file);
+
                 //        if (file_exists($pdf_file)) {
                 //            FileSystem::delete($pdf_file);
                 //        }

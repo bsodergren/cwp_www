@@ -44,11 +44,7 @@ foreach ($setting['lang'] as $key => $array) {
         define($key, $array['value']);
     }
 }
-if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {
-    if (true == Bootstrap::$CONFIG['server']['media_files']) {
-        define('__MEDIA_FILES_DIR__', Bootstrap::$CONFIG['server']['media_files']);
-    }
-}
+
 foreach ($setting['local'] as $key => $array) {
     MediaSettings::configEmail($key);
 

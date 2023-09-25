@@ -401,7 +401,7 @@ public function getDirectory($type = '', $create_dir = '')
 
         //   MediaFileSystem::delete($this->pdf_file);
         //   MediaFileSystem::delete($this->pdf_tmp_file);
-        MediaFileSystem::delete($this->base_dir);
+        (new MediaFileSystem)->delete($this->base_dir);
     }
 
     public function delete_form($form_number = '')
@@ -420,7 +420,10 @@ public function getDirectory($type = '', $create_dir = '')
         if ('' != $form_number) {
             $table_obj->where('form_number', $form_number);
         }
-        $table_obj->where('job_id', $this->job_id)->delete();
+        $table_obj->where('job_id', $this->job_id);
+
+       $count = $table_obj->delete();
+
     }
 
     public function delete_xlsx()
@@ -428,7 +431,7 @@ public function getDirectory($type = '', $create_dir = '')
         $msg = null;
         if (true == $this->xlsx) {
 
-            $msg = MediaFileSystem::delete($this->xlsx_directory);
+            $msg = (new MediaFileSystem)->delete($this->xlsx_directory);
             $this->deleteFromDatabase('form_data_count');
             // if (null === $msg) {
             self::set_exists(0, 'xlsx', $this->job_id);
@@ -442,7 +445,7 @@ public function getDirectory($type = '', $create_dir = '')
     {
         $msg = null;
         if (true == $this->zip) {
-            $msg = MediaFileSystem::delete($this->zip_directory);
+            $msg = (new MediaFileSystem)->delete($this->zip_directory);
             // if (null === $msg) {
             self::set_exists(0, 'zip', $this->job_id);
             $this->zip = false;

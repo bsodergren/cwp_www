@@ -127,7 +127,7 @@ class Index extends MediaProcess
             if ($msg = null === $this->media->delete_zip()) {
                 $mediaLoc = new MediaFileSystem($this->media->pdf_file, $job_number);
                 $mediaLoc->getDirectory();
-                if ($msg = null === MediaFileSystem::rename($this->media->base_dir, $mediaLoc->directory)) {
+                if ($msg = null === $mediaLoc->rename($this->media->base_dir, $mediaLoc->directory)) {
                     $this->media->update_job_number($job_number);
                     dd($this->media, $mediaLoc);
 
