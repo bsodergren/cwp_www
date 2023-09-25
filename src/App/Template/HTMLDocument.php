@@ -109,7 +109,7 @@ class HTMLDocument
     {
         $latest = Media::$VersionUpdate;
         $installed = Media::$CurrentVersion;
-
+        dd($latest, $installed);
         $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed]);
         if (null != $latest) {
             $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest]);
