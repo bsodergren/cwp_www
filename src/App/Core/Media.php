@@ -170,11 +170,13 @@ class Media
         foreach ($this->MediaArray as $form_number => $form_details) {
             $combinded = [];
             $replace = [];
+            $count = 0;
             if (\array_key_exists('Back', $form_details['forms'])) {
-                $count = 0;
+                //$count = 0;
                 $back_forms = $form_details['forms']['Back'];
                 foreach ($back_forms as $letter => $parts) {
                     $combinded = [];
+                    $count = 0;
                     foreach ($parts as $idx => $row) {
                         if (0 == $row['no_bindery']) {
                             $count = $row['count'] + $count;
