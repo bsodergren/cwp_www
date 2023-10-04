@@ -24,13 +24,6 @@ if (isset($_GET['cat'])) {
     $cat = $_GET['cat'];
 }
 
-
-$col_w_one = 'col-sm-2';
-$col_w_two= 'col-sm-2';
-$col_w_three= 'col-sm-4';
-$col_w_four= 'col-sm-4';
-
-
 $table = Media::$explorer->table('settings');
 $table->select('setting_group');
 $table->group('setting_group');
@@ -65,7 +58,6 @@ foreach ($table as $id => $row) {
     $settings[$group][$row->definedName]['group'] = $group;
 }
 
-
 foreach ($settings as $setting_group => $setting) {
     $settings_html = '';
     $checkbox_html = '';
@@ -77,9 +69,10 @@ foreach ($settings as $setting_group => $setting) {
     $text_fields = '';
     $array_fields = '';
     $list_fields = '';
+    //$setting_group_html='';
     $group_name_html = '';
-    if($setting_group != ''){
-        $group_name_html = '<div class="alert alert-warning" role="alert">'.$setting_group.'</div>';
+    if ('' != $setting_group) {
+        $group_name_html = $setting_group;
     }
     foreach ($setting as $definedName => $array) {
         $value_text = '';
@@ -88,7 +81,7 @@ foreach ($settings as $setting_group => $setting) {
         $checked = '';
         $notchecked = '';
         $description_label = '';
-
+        $text_settings_html='';
         $id = $array['id'];
         $type = $array['type'];
         $value = $array['value'];
@@ -100,51 +93,44 @@ foreach ($settings as $setting_group => $setting) {
         foreach ($setting_groups as $group_name) {
             if ('A' == $group_name) {
                 $group_name = '';
-             }
-             if ($group_name == $array['group']) {
-                 $selected = $group_name;
-                 continue;
-             }
+            }
+            if ($group_name == $array['group']) {
+                $selected = $group_name;
+                continue;
+            }
 
             $setting_group_option_list_html .= template::getHtml('settings/select/option', [
                 'OPTION_VALUE' => $group_name,
                 'OPTION_TEXT' => $group_name,
                 ]);
-
-
         }
 
         $setting_group_select_list_html = template::getHtml('settings/select/select',
             ['SELECT_OPTIONS' => $setting_group_option_list_html,
             'SELECTED' => $selected,
-
             'SELECT_NAME' => $definedName.'-group']);
 
+        // if (null == $name) {
+        //     $name = $definedName;
+        //     $text_template = 'name_textbox';
+        //     $row_name_params = ['DESCRIPTION' => $definedName, 'DEFINED_NAME' => $definedName];
+        // } else {
+        //     $text_template = 'name_label';
+        //     $row_name_params = ['NAME' => $name, 'DEFINED_NAME' => $definedName];
+        // }
 
-
-
-        if (null == $name) {
-            $name = $definedName;
-            $text_template = 'name_textbox';
-            $row_name_params = ['DESCRIPTION' => $definedName, 'DEFINED_NAME' => $definedName];
-        } else {
-            $text_template = 'name_label';
-            $row_name_params = ['NAME' => $name, 'DEFINED_NAME' => $definedName];
-        }
-
-        if (null == $description) {
-            $desc_template = 'description_textbox';
-            $row_desc_params = ['DESCRIPTION' => $description, 'DEFINED_NAME' => $definedName];
-        } else {
-            $desc_template = 'description_label';
-            $row_desc_params = ['DESCRIPTION' => $description, 'DEFINED_NAME' => $definedName];
-        }
-
+        // if (null == $description) {
+        //     $desc_template = 'description_textbox';
+        //     $row_desc_params = ['DESCRIPTION' => $description, 'DEFINED_NAME' => $definedName];
+        // } else {
+        //     $desc_template = 'description_label';
+        //     $row_desc_params = ['DESCRIPTION' => $description, 'DEFINED_NAME' => $definedName];
+        // }
 
         if ('bool' == $type) {
-            $name_label = Template::GetHTML('settings/checkbox/'.$text_template, $row_name_params);
+            // $name_label = Template::GetHTML('settings/checkbox/'.$text_template, $row_name_params);
 
-            $description_label = Template::GetHTML('settings/checkbox/'.$desc_template, $row_desc_params);
+            // $description_label = Template::GetHTML('settings/checkbox/'.$desc_template, $row_desc_params);
 
             if (1 == $value) {
                 $checked = 'checked';
@@ -162,7 +148,7 @@ foreach ($settings as $setting_group => $setting) {
                 'COL_ONE' => $col_w_one,
                 'COL_TWO' => $col_w_two,
                 'COL_THREE' => $col_w_three,
-                'COL_FOUR' => $col_w_four
+                'COL_FOUR' => $col_w_four,
             ];
             $checkbox_fields .= Template::GetHTML('settings/checkbox/checkbox', $params);
         }
@@ -173,12 +159,11 @@ foreach ($settings as $setting_group => $setting) {
                 $place_holder = 'no value set';
             }
 
-            $name_label = Template::GetHTML('settings/text/'.$text_template, $row_name_params);
+            // $name_label = Template::GetHTML('settings/text/'.$text_template, $row_name_params);
 
-            $description_label = Template::GetHTML('settings/text/'.$desc_template, $row_desc_params);
+            // $description_label = Template::GetHTML('settings/text/'.$desc_template, $row_desc_params);
 
             $params = [
-                'SETTING_GROUP' => $setting_group_select_list_html,
                 'DEFINED_NAME' => $definedName,
                 'PLACEHOLDER' => $place_holder,
                 'VALUE' => $value,
@@ -188,15 +173,20 @@ foreach ($settings as $setting_group => $setting) {
                 'COL_ONE' => $col_w_one,
                 'COL_TWO' => $col_w_two,
                 'COL_THREE' => $col_w_three,
-                'COL_FOUR' => $col_w_four
+                'COL_FOUR' => $col_w_four,
                         ];
-            $text_fields .= Template::GetHTML('settings/text/text', $params);
+            $text_fields = Template::GetHTML('settings/text/text', $params);
+            $text_settings_html .= Template::GetHTML('settings/setting', ['FORM_HTML' => $text_fields,
+            'SETTING_NAME' => $definedName,
+            'SETTING_LABEL' => $description,
+        'GROUP_SELECT' => $setting_group_select_list_html,
+    ]);
         }
 
         if ('array' == $type) {
-            $name_label = Template::GetHTML('settings/array/'.$text_template, $row_name_params);
+            // $name_label = Template::GetHTML('settings/array/'.$text_template, $row_name_params);
 
-            $description_label = Template::GetHTML('settings/array/'.$desc_template, $row_desc_params);
+            // $description_label = Template::GetHTML('settings/array/'.$desc_template, $row_desc_params);
 
             $value_text = MediaSettings::jsonString_to_TextForm($value);
 
@@ -218,9 +208,9 @@ foreach ($settings as $setting_group => $setting) {
             $pub_list = [];
             $options_group = '';
 
-            $name_label = Template::GetHTML('settings/list/'.$text_template, $row_name_params);
+            // $name_label = Template::GetHTML('settings/list/'.$text_template, $row_name_params);
 
-            $description_label = Template::GetHTML('settings/list/'.$desc_template, $row_desc_params);
+            // $description_label = Template::GetHTML('settings/list/'.$desc_template, $row_desc_params);
 
             $table = $explorer->table('pub_trim');
             $res = $table->order('bind ASC, pub_name ASC');
@@ -285,47 +275,47 @@ foreach ($settings as $setting_group => $setting) {
         }
     }
 
-    if ('' != $checkbox_fields) {
-        $checkbox_html = Template::GetHTML('settings/checkbox/main', ['CHECKBOX_FIELDS' => $checkbox_fields,
-        'COL_ONE' => $col_w_one,
-        'COL_TWO' => $col_w_two,
-        'COL_THREE' => $col_w_three,
-        'COL_FOUR' => $col_w_four]);
-    }
-    if ('' != $text_fields) {
-        $textbox_html = Template::GetHTML('settings/text/main', ['TEXTBOX_FIELDS' => $text_fields,
-        'SETTINGS_COL_WIDTH' => $text_col_width,
-        'COL_ONE' => $col_w_one,
-        'COL_TWO' => $col_w_two,
-        'COL_THREE' => $col_w_three,
-        'COL_FOUR' => $col_w_four
-    ]);
-    }
-    if ('' != $array_fields) {
-        $array_html = Template::GetHTML('settings/array/main', ['ARRAY_FIELDS' => $array_fields,
+    // if ('' != $checkbox_fields) {
+    //     $checkbox_html = Template::GetHTML('settings/checkbox/main', ['CHECKBOX_FIELDS' => $checkbox_fields,
+    //     'COL_ONE' => $col_w_one,
+    //     'COL_TWO' => $col_w_two,
+    //     'COL_THREE' => $col_w_three,
+    //     'COL_FOUR' => $col_w_four]);
+    // }
+    // if ('' != $text_settings_html) {
+    //     $textbox_html = Template::GetHTML('settings/text/main', ['TEXTBOX_FIELDS' => $text_fields,
+    //     'SETTINGS_COL_WIDTH' => $text_col_width,
+    //     'COL_ONE' => $col_w_one,
+    //     'COL_TWO' => $col_w_two,
+    //     'COL_THREE' => $col_w_three,
+    //     'COL_FOUR' => $col_w_four
+    // ]);
+    // }
+    // if ('' != $array_fields) {
+    //     $array_html = Template::GetHTML('settings/array/main', ['ARRAY_FIELDS' => $array_fields,
 
-        'COL_ONE' => $col_w_one,
-        'COL_TWO' => $col_w_two,
-        'COL_THREE' => $col_w_three,
-        'COL_FOUR' => $col_w_four]);
-    }
-    if ('' != $list_fields) {
-        $list_html = Template::GetHTML('settings/list/main', ['LIST_FIELDS' => $list_fields,
+    //     'COL_ONE' => $col_w_one,
+    //     'COL_TWO' => $col_w_two,
+    //     'COL_THREE' => $col_w_three,
+    //     'COL_FOUR' => $col_w_four]);
+    // }
+    // if ('' != $list_fields) {
+    //     $list_html = Template::GetHTML('settings/list/main', ['LIST_FIELDS' => $list_fields,
 
-        'COL_ONE' => $col_w_one,
-        'COL_TWO' => $col_w_two,
-        'COL_THREE' => $col_w_three,
-        'COL_FOUR' => $col_w_four]);
-    }
+    //     'COL_ONE' => $col_w_one,
+    //     'COL_TWO' => $col_w_two,
+    //     'COL_THREE' => $col_w_three,
+    //     'COL_FOUR' => $col_w_four]);
+    // }
 
     // $template->template('settings/new_setting', ['CATEGORY' => $cat]);
 
     $setting_group_html .= Template::GetHTML('settings/group', [
         'GROUP_NAME' => $group_name_html,
-        'CHECKBOX_HTML' => $checkbox_html,
-        'TEXTBOX_HTML' => $textbox_html,
-        'ARRAY_HTML' => $array_html,
-        'LIST_HTML' => $list_html,
+        // 'CHECKBOX_HTML' => $checkbox_html,
+        'TEXTBOX_HTML' => $text_settings_html,
+        // 'ARRAY_HTML' => $array_html,
+        // 'LIST_HTML' => $list_html,
     ]);
 }
 
