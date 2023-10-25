@@ -12,8 +12,8 @@ class MediaDebug extends Media
     private function trace()
     {
         $trace = debug_backtrace();
-        $s = [];
-        $file = $trace[1]['file'];
+        $s     = [];
+        $file  = $trace[1]['file'];
 
         foreach ($trace as $i => $row) {
             $class = '';
@@ -42,25 +42,25 @@ class MediaDebug extends Media
                     if ('' != $row['class']) {
                         $class = $row['class'].$row['type'];
                     }
-                    $s[] = $class.$row['function'].'()';
+                    $s[]    = $class.$row['function'].'()';
                     // $file   = $row['file'];
                     break;
             }
             // if($i == 5){
             //     break;
             // }
-            ++$i;
+            $i++;
         }
         //  $s = array_reverse($s);
         $s_str = implode('->', $s);
-        $file = pathinfo($file, \PATHINFO_BASENAME);
+        $file  = pathinfo($file, \PATHINFO_BASENAME);
 
         return $file.':'.$lineno.':'.$s_str;
     }
 
     private function __dump(...$content)
     {
-        $trace = $this->trace();
+        $trace           = $this->trace();
 
         switch (\func_num_args()) {
             case 1:

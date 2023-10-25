@@ -19,45 +19,45 @@ class GroupSorter
         $result = [];
         arsort($numbers); // Sort the numbers in descending order based on values
 
-        while (!empty($numbers)) {
-            $group = [];
+        while (! empty($numbers)) {
+            $group          = [];
 
             // Take the largest remaining number and add it to the group
-            $group[] = key($numbers);
+            $group[]        = key($numbers);
             unset($numbers[key($numbers)]);
 
             $remainingCount = \count($numbers);
 
             // Find the best group size (2, 3, or 4) that minimizes the difference in group sums
 
-            $bestGroupDiff = \PHP_INT_MAX;
+            $bestGroupDiff  = \PHP_INT_MAX;
 
-            for ($groupSize = 2; $groupSize <= min($remainingCount, 4); ++$groupSize) {
+            for ($groupSize = 2; $groupSize <= min($remainingCount, 4); $groupSize++) {
                 // Calculate the sum of the current group
-                $groupSum = array_sum($group);
+                $groupSum     = array_sum($group);
 
                 // Find the remaining number(s) that minimize the difference in group sums
                 $combinations = $this->generateCombinations(array_keys($numbers), $groupSize - 1);
 
                 foreach ($combinations as $combination) {
                     $combinationSum = array_sum($combination);
-                    $diff = abs($groupSum - $combinationSum);
+                    $diff           = abs($groupSum - $combinationSum);
 
                     if ($diff < $bestGroupDiff) {
-                        $bestGroupDiff = $diff;
+                        $bestGroupDiff       = $diff;
                         $this->bestGroupSize = $groupSize;
                     }
                 }
             }
 
             // Add the remaining numbers that minimize the difference in group sums to the group
-            $combination = array_shift($this->generateCombinations(array_keys($numbers), $this->bestGroupSize - 1));
+            $combination    = array_shift($this->generateCombinations(array_keys($numbers), $this->bestGroupSize - 1));
             foreach ($combination as $num) {
                 $group[] = $num;
                 unset($numbers[$num]);
             }
 
-            $result[] = $group;
+            $result[]       = $group;
         }
 
         return $result;
@@ -65,23 +65,23 @@ class GroupSorter
 
     private function generateCombinations($numbers, $length)
     {
-        $result = [];
+        $result            = [];
 
         $totalCombinations = 2 ** \count($numbers);
 
-        for ($i = 1; $i < $totalCombinations; ++$i) {
+        for ($i = 1; $i < $totalCombinations; $i++) {
             $binary = str_pad(decbin($i), \count($numbers), '0', \STR_PAD_LEFT);
 
             if (substr_count($binary, '1') == $length) {
                 $combination = [];
 
-                for ($j = 0; $j < \count($numbers); ++$j) {
+                for ($j = 0; $j < \count($numbers); $j++) {
                     if ('1' == $binary[$j]) {
                         $combination[] = $numbers[$j];
                     }
                 }
 
-                $result[] = $combination;
+                $result[]    = $combination;
             }
         }
 

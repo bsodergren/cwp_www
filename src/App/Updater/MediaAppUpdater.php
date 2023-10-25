@@ -15,7 +15,9 @@ class MediaAppUpdater
     public const GIT_VERSION = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/current.txt';
 
     public $latest;
+
     public $current;
+
     public $process;
 
     public function __construct()
@@ -27,7 +29,7 @@ class MediaAppUpdater
 
     public function get_content($URL)
     {
-        $ch = curl_init();
+        $ch   = curl_init();
         curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, \CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, \CURLOPT_SSL_VERIFYHOST, 2);
@@ -68,7 +70,7 @@ class MediaAppUpdater
 
     public function getUpdate()
     {
-        $process = new MediaExec();
+        $process  = new MediaExec();
         $callback = Callback::check([$this, 'callback']);
         $process->command('git');
         $process->option('pull');
@@ -82,7 +84,7 @@ class MediaAppUpdater
     public function composerUpdate()
     {
         $callback = Callback::check([$this, 'callback']);
-        $process = new MediaExec();
+        $process  = new MediaExec();
 
         $process->command('composer');
         $process->option('-d');

@@ -39,7 +39,7 @@ trait Jobnumber
     public function getSubject($mailId)
     {
         $msg_header = imap_headerinfo($this->imap, $mailId);
-        $match = preg_match_all('/(23[0-9]{4})/U', $msg_header->subject, $output_array);
+        $match      = preg_match_all('/(23[0-9]{4})/U', $msg_header->subject, $output_array);
         if (true == $match) {
             $this->addJobNumber($mailId, $output_array);
         }
@@ -48,7 +48,7 @@ trait Jobnumber
     public function getBody($mailId)
     {
         $message = imap_qprint(imap_body($this->imap, $mailId, \FT_PEEK));
-        $match = preg_match_all('/(23[0-9]{4})/U', $message, $output_array);
+        $match   = preg_match_all('/(23[0-9]{4})/U', $message, $output_array);
         if (true == $match) {
             $this->addJobNumber($mailId, $output_array);
         }

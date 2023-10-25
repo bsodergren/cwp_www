@@ -15,8 +15,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class LarrySheetsXLSX extends Media
 {
     protected object $spreadsheet;
+
     protected object $media;
+
     private object $SlipData;
+
     private object $styles;
 
     public $slipSheetArray;
@@ -28,41 +31,41 @@ class LarrySheetsXLSX extends Media
 
     public function createslipsheet($sheetObj, $form_number, $sheetIndex)
     {
-        $sql = 'SELECT * FROM form_data_count WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by form_id ASC';
+        $sql                      = 'SELECT * FROM form_data_count WHERE job_id = '.$this->media->job_id.' AND form_number = '.$form_number.' order by form_id ASC';
 
-        $result = Media::$connection->fetchAll($sql);
+        $result                   = Media::$connection->fetchAll($sql);
         foreach ($result as $id => $row) {
             $slipSheetArray[$row->former][] = $row;
         }
 
         dd($slipSheetArray);
-        $sheets = array_chunk($slipSheetArray, 6);
+        $sheets                   = array_chunk($slipSheetArray, 6);
 
-        $worksheet_title = 'Larry Sheet';
+        $worksheet_title          = 'Larry Sheet';
 
-        $myWorkSheet = new Worksheet($sheetObj, $worksheet_title);
+        $myWorkSheet              = new Worksheet($sheetObj, $worksheet_title);
         $sheetObj->addSheet($myWorkSheet, $sheetIndex);
-        $SlipSheet = $sheetObj->getSheet($sheetIndex);
+        $SlipSheet                = $sheetObj->getSheet($sheetIndex);
 
-        $this->styles = new LarrySheetsXLSX_Styles($SlipSheet);
+        $this->styles             = new LarrySheetsXLSX_Styles($SlipSheet);
         $this->styles->totalPages = \count($sheets);
 
         $this->styles->sheetCommon();
         $this->styles->setColWidths($this->styles->Columns);
-        $SlipSheetSize = \count($this->styles->rowHeight);
-        $rowOffset = $SlipSheetSize * 3;
-        $row = 1;
-        $lineIdx = 1;
+        $SlipSheetSize            = \count($this->styles->rowHeight);
+        $rowOffset                = $SlipSheetSize * 3;
+        $row                      = 1;
+        $lineIdx                  = 1;
         foreach ($sheets as $pageNo => $page) {
             $col_A = 'A';
             $col_B = 'C';
 
-            $row = $rowOffset * $pageNo;
-            ++$row;
+            $row   = $rowOffset * $pageNo;
+            $row++;
 
             foreach ($page as $k => $v) {
                 $this->SlipData = $v;
-                for ($lineIdx = 1; $lineIdx <= $SlipSheetSize; ++$lineIdx) {
+                for ($lineIdx = 1; $lineIdx <= $SlipSheetSize; $lineIdx++) {
                     switch ($lineIdx) {
                         case 1:
                             break;
@@ -89,12 +92,12 @@ class LarrySheetsXLSX extends Media
                             // $this->setFormerInfo($col_B, $row);
                             $this->setPcsInfo($col_B, $row);
                     }
-                    ++$row;
+                    $row++;
                 }
 
                 if (2 == $k) {
-                    $row = $rowOffset * $pageNo;
-                    ++$row;
+                    $row   = $rowOffset * $pageNo;
+                    $row++;
                     $col_A = 'E';
                     $col_B = 'G';
                 }
@@ -117,15 +120,15 @@ class LarrySheetsXLSX extends Media
     {
         if ('half' == $this->SlipData->packaging) {
             $text = 'Half Skid';
-            $box = 'Box';
+            $box  = 'Box';
         }
         if ('full' == $this->SlipData->packaging) {
             $text = 'Full Skid';
-            $box = 'Box';
+            $box  = 'Box';
         }
         if (str_contains($this->SlipData->packaging, 'cartons')) {
             $text = $this->SlipData->packaging;
-            $box = 'Cartons';
+            $box  = 'Cartons';
         }
 
         $this->styles->addSheetData(ucwords($text), $column.$row);
@@ -156,7 +159,7 @@ class LarrySheetsXLSX extends Media
     private function boxDataBoxes($col_A, $col_B, $row, $box)
     {
         if (str_contains($box, 'Cartons')) {
-            ++$row;
+            $row++;
         }
 
         if ($this->SlipData->full_boxes > 0) {
@@ -167,7 +170,7 @@ class LarrySheetsXLSX extends Media
 
     private function boxDataLayers($col_A, $col_B, $row, $box)
     {
-        if (!str_contains($box, 'Cartons')) {
+        if (! str_contains($box, 'Cartons')) {
             if (0 != $this->SlipData->layers_last_box) {
                 $this->styles->addSheetData('Layers', $col_A.$row);
                 $this->styles->addSheetData($this->SlipData->layers_last_box, $col_B.$row);

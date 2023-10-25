@@ -10,14 +10,17 @@ use Nette\Utils\FileSystem;
 
 class MediaExport
 {
-    public $mediaArray = [];
+    public $mediaArray  = [];
+
     public $formNumbers = [];
-    public $json_file = '';
+
+    public $json_file   = '';
+
     public $media;
 
     public function __construct($media)
     {
-        $this->media = $media;
+        $this->media      = $media;
         $this->mediaArray = $media->MediaArray;
     }
 
@@ -103,26 +106,26 @@ class MediaExport
     {
         $this->json_file = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($this->getPDF(), '.pdf').'.json';
 
-        $forms = $this->getFormList();
-        $formData = [
-            'pdf_file' => $this->getPDF(),
-            'product' => $this->mediaArray[$this->getFirstKey()]['product'],
+        $forms           = $this->getFormList();
+        $formData        = [
+            'pdf_file'   => $this->getPDF(),
+            'product'    => $this->mediaArray[$this->getFirstKey()]['product'],
             'job_number' => $this->getJobNumber(),
-            'forms' => [],
+            'forms'      => [],
         ];
 
         foreach ($forms as $formNumber) {
             $formData['forms'][$formNumber] = [
-                'product' => $this->getProduct($formNumber),
-                'count' => $this->getCount($formNumber),
-                'config' => $this->getFormConfig($formNumber),
-                'bind' => $this->getFormBind($formNumber),
+                'product'     => $this->getProduct($formNumber),
+                'count'       => $this->getCount($formNumber),
+                'config'      => $this->getFormConfig($formNumber),
+                'bind'        => $this->getFormBind($formNumber),
                 'form_number' => $formNumber,
-                'form' => $this->getFormData($formNumber),
+                'form'        => $this->getFormData($formNumber),
             ];
         }
 
-        $jsonString = json_encode($formData);
+        $jsonString      = json_encode($formData);
         FileSystem::write($this->json_file, $jsonString);
     }
 

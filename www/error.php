@@ -6,14 +6,6 @@
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 
-/**
- * CWP Media tool for load flags.
- */
-
-/**
- * CWP Media tool for load flags.
- */
-
 require_once '.config.inc.php';
 
 MediaDevice::getHeader();

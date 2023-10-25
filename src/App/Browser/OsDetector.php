@@ -40,8 +40,7 @@ class OsDetector implements DetectorInterface
             || self::checkAndroid($os, $userAgent)
             || self::checkLinux($os, $userAgent)
             || self::checkNokia($os, $userAgent)
-            || self::checkBlackBerry($os, $userAgent)
-        ;
+            || self::checkBlackBerry($os, $userAgent);
     }
 
     /**

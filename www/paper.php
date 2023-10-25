@@ -12,7 +12,7 @@ use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
 
-$form_url = __URL_HOME__.'/process.php';
+$form_url   = __URL_HOME__.'/process.php';
 define('__FORM_URL__', $form_url);
 
 /*
@@ -48,10 +48,10 @@ foreach ($paper_type as $paper) {
     $header_param['PAPER_INFO'] = $paper->paper_wieght.' '.$paper->paper_size.' '.$paper->pages;
 
     foreach ($paper->related('paper_count', 'paper_id') as $paper_details) {
-        $row_params = [];
+        $row_params           = [];
         $header_param['ROWS'] = '';
-        $row_html = '';
-        $i = 0;
+        $row_html             = '';
+        $i                    = 0;
         foreach ($paper_details as $key => $val) {
             $text_params = [];
             if ('id' == $key) {
@@ -61,7 +61,7 @@ foreach ($paper_type as $paper) {
             if ('paper_id' == $key) {
                 continue;
             }
-            ++$i;
+            $i++;
 
             if (6 == $paper->pages || 8 == $paper->pages) {
                 if (str_contains($key, 'back')) {
@@ -69,17 +69,17 @@ foreach ($paper_type as $paper) {
                 }
             }
 
-            $bg_class = ' bg-warning-subtle ';
+            $bg_class    = ' bg-warning-subtle ';
             if ('' == $val) {
                 $bg_class = ' bg-danger-subtle ';
             }
 
             $text_params = [
                 'FORM_VALUE_CLASS' => $bg_class,
-                'FORM_LABEL' => 'label_'.$key,
-                'FORM_TEXT' => ucwords(str_replace('_', ' ', $key)),
-                'FORM_NAME' => $row_id.'['.$key.']',
-                'FORM_VALUE' => $val,
+                'FORM_LABEL'       => 'label_'.$key,
+                'FORM_TEXT'        => ucwords(str_replace('_', ' ', $key)),
+                'FORM_NAME'        => $row_id.'['.$key.']',
+                'FORM_VALUE'       => $val,
             ];
 
             if (str_contains($key, 'carton')) {
@@ -104,8 +104,8 @@ foreach ($paper_type as $paper) {
 }
 
 echo Template::GetHTML('paper/main', ['FORM_URL' => $form_url,
-'PAPER_BODY_HTML' => $row_header_html,
-'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Update publications']),
+    'PAPER_BODY_HTML'                            => $row_header_html,
+    'FORM_BUTTON'                                => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Update publications']),
 ]);
 // $results        = $paper_type->fetchAll();
 

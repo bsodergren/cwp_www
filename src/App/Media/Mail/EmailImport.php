@@ -15,24 +15,28 @@ class EmailImport extends EmailDisplay
     use MediaAttachment;
 
     public $imap;
-    public $mailId = 0;
+
+    public $mailId       = 0;
+
     public $upload_directory;
+
     public static $index = 0;
 
     public $structure;
-    public $attachments = [];
+
+    public $attachments  = [];
 
     public function __construct()
     {
-        $this->imap = imap_open(__IMAP_HOST__.__IMAP_FOLDER__, __IMAP_USER__, __IMAP_PASSWD__); // || exit('Cannot connect to Gmail: '.imap_last_error());
-        if (!imap_is_open($this->imap)) {
+        $this->imap             = imap_open(__IMAP_HOST__.__IMAP_FOLDER__, __IMAP_USER__, __IMAP_PASSWD__); // || exit('Cannot connect to Gmail: '.imap_last_error());
+        if (! imap_is_open($this->imap)) {
             dd('imap didnt open');
         }
 
-        $location = new MediaFileSystem();
-        $this->fs = $location;
+        $location               = new MediaFileSystem();
+        $this->fs               = $location;
         $this->upload_directory = $location->getDirectory('upload', true);
-        $this->pdf_directory = $location->getDirectory('pdf', true);
+        $this->pdf_directory    = $location->getDirectory('pdf', true);
     }
 
     public function __destruct()

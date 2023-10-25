@@ -13,16 +13,16 @@ trait MediaAttachment
     {
         foreach ($this->attachments as $key => $attachment) {
             if (true === $attachment['is_attachment']) {
-                $attachment_name = $this->clean($attachment['name']);
+                $attachment_name     = $this->clean($attachment['name']);
                 $attachment_filename = $this->clean($attachment['filename']);
 
                 if (true == stripos($attachment_name, 'RunSheets')
                 || true == stripos($attachment_name, 'Run_Sheets')) {
-                    $this->attachments[$key]['name'] = $attachment_name;
+                    $this->attachments[$key]['name']     = $attachment_name;
                     $this->attachments[$key]['filename'] = $attachment_filename;
                     if (false == $this->fs->exists($attachment_name)) {
                         $dropboxFilename = $this->pdf_directory.\DIRECTORY_SEPARATOR.$attachment_name;
-                        $filename = $this->upload_directory.\DIRECTORY_SEPARATOR.$attachment_name;
+                        $filename        = $this->upload_directory.\DIRECTORY_SEPARATOR.$attachment_name;
                         file_put_contents($filename, $attachment['attachment']);
                         MediaQPDF::cleanPDF($filename);
                         $this->fs->UploadFile($filename, $dropboxFilename, ['autorename' => false]);
@@ -43,7 +43,7 @@ trait MediaAttachment
             foreach ($this->structure->parts[$i]->dparameters as $object) {
                 if ('filename' == strtolower($object->attribute)) {
                     $this->attachments[$this->mailId]['is_attachment'] = true;
-                    $this->attachments[$this->mailId]['filename'] = $object->value;
+                    $this->attachments[$this->mailId]['filename']      = $object->value;
                 }
             }
         }
@@ -55,7 +55,7 @@ trait MediaAttachment
             foreach ($this->structure->parts[$i]->parameters as $object) {
                 if ('name' == strtolower($object->attribute)) {
                     $this->attachments[$this->mailId]['is_attachment'] = true;
-                    $this->attachments[$this->mailId]['name'] = $object->value;
+                    $this->attachments[$this->mailId]['name']          = $object->value;
                 }
             }
         }
@@ -64,14 +64,11 @@ trait MediaAttachment
     public function getAttachmentFile($i)
     {
         if ($this->attachments[$this->mailId]['is_attachment']) {
-            $this->attachments[$this->mailId]['attachment'] =
-            @imap_fetchbody($this->imap, $this->mailId, $i + 1);
+            $this->attachments[$this->mailId]['attachment'] = @imap_fetchbody($this->imap, $this->mailId, $i + 1);
             if (3 == $this->structure->parts[$i]->encoding) { // 3 = BASE64
-                $this->attachments[$this->mailId]['attachment'] =
-                @base64_decode($this->attachments[$this->mailId]['attachment']);
+                $this->attachments[$this->mailId]['attachment'] = @base64_decode($this->attachments[$this->mailId]['attachment']);
             } elseif (4 == $this->structure->parts[$i]->encoding) { // 4 = QUOTED-PRINTABLE
-                $this->attachments[$this->mailId]['attachment'] =
-                 @quoted_printable_decode($this->attachments[$this->mailId]['attachment']);
+                $this->attachments[$this->mailId]['attachment'] = @quoted_printable_decode($this->attachments[$this->mailId]['attachment']);
             }
         }
     }

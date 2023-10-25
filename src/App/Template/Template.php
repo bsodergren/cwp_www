@@ -14,12 +14,18 @@ use CWP\Utils\MediaDevice;
 class Template
 {
     public static $static_html;
-    public $html = '';
-    public $header_html = '';
+
+    public $html           = '';
+
+    public $header_html    = '';
+
     public $default_params = [];
+
     public $template;
-    private $test = 0;
-    public $error = true;
+
+    private $test          = 0;
+
+    public $error          = true;
 
     public function __construct()
     {
@@ -27,7 +33,7 @@ class Template
 
     public static function GetHTML($template = '', $array = [], $error = true)
     {
-        $template_obj = new self();
+        $template_obj        = new self();
         $template_obj->error = $error;
         $template_obj->template($template, $array);
 
@@ -36,7 +42,7 @@ class Template
 
     public static function echo($template = '', $array = [], $error = true)
     {
-        $template_obj = new self();
+        $template_obj        = new self();
         $template_obj->error = $error;
         $template_obj->template($template, $array);
         echo $template_obj->html;
@@ -96,7 +102,7 @@ class Template
     private function defaults($text)
     {
         preg_match_all('/%%([A-Z_]+)%%/m', $text, $output_array);
-        $params = [];
+        $params               = [];
 
         foreach ($output_array[1] as $n => $def) {
             if (MediaSettings::isSet($def)) {
@@ -112,7 +118,7 @@ class Template
         $params = array_merge($params, $this->default_params);
         if (\is_array($params)) {
             foreach ($params as $key => $value) {
-                $key = '%%'.strtoupper($key).'%%';
+                $key  = '%%'.strtoupper($key).'%%';
                 $text = str_replace($key, $value, $text);
             }
 
@@ -125,7 +131,7 @@ class Template
     public function template($template, $params = [])
     {
         $template_text = $this->loadTemplate($template);
-        $html = $this->parse($template_text, $params);
+        $html          = $this->parse($template_text, $params);
 
         $this->add($html);
 
@@ -147,7 +153,7 @@ class Template
 
         $installed = '0.0.0';
 
-        $latest = '0.0.0';
+        $latest    = '0.0.0';
 
         return [$installed, $latest];
     }

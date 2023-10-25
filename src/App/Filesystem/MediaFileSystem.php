@@ -9,11 +9,11 @@ namespace CWP\Filesystem;
  * CWP Media tool
  */
 
-use CWP\Core\Media;
 use CWP\Core\Bootstrap;
-use Nette\Utils\FileSystem;
-use CWP\Filesystem\Driver\MediaLocal;
+use CWP\Core\Media;
 use CWP\Filesystem\Driver\MediaDropbox;
+use CWP\Filesystem\Driver\MediaLocal;
+use Nette\Utils\FileSystem;
 
 class MediaFileSystem
 {
@@ -28,12 +28,10 @@ class MediaFileSystem
     public function __construct($pdf_file = null, $job_number = null)
     {
         $this->job_number = $job_number;
-        $this->pdf_file = $pdf_file;
+        $this->pdf_file   = $pdf_file;
         if (Media::$Dropbox) {
             $this->fileDriver = new MediaDropbox();
         } else {
-
-
             $this->fileDriver = new MediaLocal();
         }
     }
@@ -72,9 +70,10 @@ class MediaFileSystem
     {
         return $this->fileDriver->rename($old, $new);
     }
-    public function save($filename,$path)
+
+    public function save($filename, $path)
     {
-        return $this->fileDriver->save($filename,$path);
+        return $this->fileDriver->save($filename, $path);
     }
 
     public function getFilename($type = '', $form_number = '', $create_dir = false)
@@ -91,14 +90,14 @@ class MediaFileSystem
     {
         $directory = '';
 
-        if (!isset($this->pdf_file)) {
+        if (! isset($this->pdf_file)) {
             return false;
         }
 
-        $file = basename($this->pdf_file, '.pdf');
-        $filename = $this->job_number.'_'.$file;
+        $file      = basename($this->pdf_file, '.pdf');
+        $filename  = $this->job_number.'_'.$file;
 
-        $type = strtolower($type);
+        $type      = strtolower($type);
         switch ($type) {
             case 'xlsx':
                 $filename = $filename.'_FM'.$form_number.'.xlsx';
@@ -122,8 +121,8 @@ class MediaFileSystem
             $directory = $this->directory($type, $create_dir);
         }
 
-        $filename = $directory.\DIRECTORY_SEPARATOR.$filename;
-        $filename = FileSystem::normalizePath($filename);
+        $filename  = $directory.\DIRECTORY_SEPARATOR.$filename;
+        $filename  = FileSystem::normalizePath($filename);
 
         return $filename;
     }
@@ -138,9 +137,9 @@ class MediaFileSystem
             $output_filename = $this->job_number.$output_filename;
         }
 
-        $directory = __FILES_DIR__.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
+        $directory       = __FILES_DIR__.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
 
-        $type = strtolower($type);
+        $type            = strtolower($type);
         switch ($type) {
             case 'xlsx':
                 $directory .= \DIRECTORY_SEPARATOR.__XLSX_DIRECTORY__;
@@ -161,7 +160,7 @@ class MediaFileSystem
                 break;
         }
 
-        $directory = FileSystem::unixSlashes($directory);
+        $directory       = FileSystem::unixSlashes($directory);
         $this->directory = FileSystem::normalizePath($directory);
 
         if (true == $create_dir) {

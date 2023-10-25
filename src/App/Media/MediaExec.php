@@ -17,13 +17,14 @@ use Symfony\Component\Process\Process;
 class MediaExec
 {
     public $executable;
+
     public $optArray = [];
 
     private object $ExecProcess;
 
     // public $optArray = [];
 
-    public $cmdArgs = [];
+    public $cmdArgs  = [];
 
     public function __construct()
     {
@@ -76,7 +77,7 @@ class MediaExec
 
     public function cleanPdf($pdf_file)
     {
-        $qdf_cmd = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
+        $qdf_cmd  = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
         $pdf_file = FileSystem::normalizePath($pdf_file);
         $callback = Callback::check([$this, 'callback']);
         $this->command($qdf_cmd);

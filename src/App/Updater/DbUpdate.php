@@ -23,16 +23,16 @@ class DbUpdate extends MediaUpdate
 
     public function versionUpdate($file)
     {
-        $new_table = [];
+        $new_table     = [];
         $rename_column = [];
-        $new_column = [];
-        $new_data = [];
-        $update_data = [];
-        $reset_table = [];
-        $delete_data = [];
+        $new_column    = [];
+        $new_data      = [];
+        $update_data   = [];
+        $reset_table   = [];
+        $delete_data   = [];
         $change_column = [];
-        $test = false;
-        $inactive = false;
+        $test          = false;
+        $inactive      = false;
 
         include_once $file;
 
@@ -40,21 +40,21 @@ class DbUpdate extends MediaUpdate
             exit;
         }
 
-        $updates = [
-            'resetTable' => $reset_table,
-            'newTable' => $new_table,
+        $updates       = [
+            'resetTable'    => $reset_table,
+            'newTable'      => $new_table,
             'renameColumns' => $rename_column,
-            'changeColumn' => $change_column,
-            'newColumn' => $new_column,
-            'newData' => $new_data,
-            'updateData' => $update_data,
-            'deleteData' => $delete_data,
+            'changeColumn'  => $change_column,
+            'newColumn'     => $new_column,
+            'newData'       => $new_data,
+            'updateData'    => $update_data,
+            'deleteData'    => $delete_data,
         ];
         foreach ($updates as $classmethod => $data_array) {
             $this->$classmethod($data_array);
         }
 
-        $filename = basename($file);
+        $filename      = basename($file);
 
         if (false === $test) {
             if ($this->check_tableExists('updates')) {
@@ -71,7 +71,7 @@ class DbUpdate extends MediaUpdate
     {
         if (\is_array($new_data)) {
             foreach ($new_data as $table => $new_data_vals) {
-                $u = Media::$connection->query('INSERT INTO '.$table.' ?', $new_data_vals);
+                $u             = Media::$connection->query('INSERT INTO '.$table.' ?', $new_data_vals);
                 $this->refresh = true;
             }
         }
@@ -92,7 +92,7 @@ class DbUpdate extends MediaUpdate
         if (\is_array($new_table)) {
             foreach ($new_table as $table_name) {
                 $this->set($table_name);
-                if (!$this->check_tableExists($table_name)) {
+                if (! $this->check_tableExists($table_name)) {
                     $this->create_table($table_name);
                     $this->refresh = true;
                 }
@@ -125,7 +125,7 @@ class DbUpdate extends MediaUpdate
                 $this->set($table_name);
                 foreach ($column as $old => $new) {
                     if ($this->dbClassObj->check_columnExists($table_name, $old)) {
-                        if (!$this->dbClassObj->check_columnExists($table_name, $new)) {
+                        if (! $this->dbClassObj->check_columnExists($table_name, $new)) {
                             $this->dbClassObj->rename_column($table_name, $old, $new);
                             $this->refresh = true;
                         }
@@ -158,7 +158,7 @@ class DbUpdate extends MediaUpdate
             foreach ($new_column as $table_name => $column) {
                 $this->set($table_name);
                 foreach ($column as $field => $type) {
-                    if (!$this->dbClassObj->check_columnExists($table_name, $field)) {
+                    if (! $this->dbClassObj->check_columnExists($table_name, $field)) {
                         $this->dbClassObj->create_column($table_name, $field, $type);
                         $this->refresh = true;
                     }
@@ -186,7 +186,7 @@ class DbUpdate extends MediaUpdate
             foreach ($update_data as $table => $updates) {
                 foreach ($updates as $where => $data) {
                     foreach ($data as $key => $update_array) {
-                        $query = 'UPDATE '.$table.' ';
+                        $query         = 'UPDATE '.$table.' ';
                         $query .= 'SET ';
                         foreach ($update_array as $field => $value) {
                             $field_array[] = '`'.$field."` = '".$value."'";
@@ -195,7 +195,7 @@ class DbUpdate extends MediaUpdate
                         $query .= implode(',', $field_array);
                         unset($field_array);
                         $query .= ' WHERE `'.$where."` = '".$key."'";
-                        $result = Media::$connection->query($query);
+                        $result        = Media::$connection->query($query);
                         $this->refresh = true;
                     }
                 }
@@ -208,10 +208,10 @@ class DbUpdate extends MediaUpdate
         if (\is_array($delete_data)) {
             foreach ($delete_data as $table => $updates) {
                 foreach ($updates as $data => $val) {
-                    $queryArr = [];
+                    $queryArr      = [];
 
                     if (\is_array($val)) {
-                        if (!\is_int($data)) {
+                        if (! \is_int($data)) {
                             $where = $data;
                         } else {
                             $where = $val[0];
@@ -219,10 +219,10 @@ class DbUpdate extends MediaUpdate
                         $data = $val;
                     }
 
-                    $pre_query = 'DELETE FROM '.$table.' WHERE ';
+                    $pre_query     = 'DELETE FROM '.$table.' WHERE ';
                     foreach ($data as $field => $value) {
-                        if (!\is_int($field)) {
-                            if (!isset($where)) {
+                        if (! \is_int($field)) {
+                            if (! isset($where)) {
                                 $where = $field;
                             }
                             if ($field != $where) {
@@ -237,8 +237,8 @@ class DbUpdate extends MediaUpdate
                     if (\count($queryArr) > 0) {
                         $query = $pre_query.implode(' AND ', $queryArr);
                     }
-                    $queryArr = [];
-                    $queries = explode(';', $query);
+                    $queryArr      = [];
+                    $queries       = explode(';', $query);
                     foreach ($queries as $q) {
                         if (str_contains($q, 'DELETE')) {
                             $result = Media::$connection->query($q);
@@ -254,7 +254,7 @@ class DbUpdate extends MediaUpdate
     {
         $updated_array = [];
 
-        $rows = Media::$connection->fetchAll('SELECT * FROM updates');
+        $rows          = Media::$connection->fetchAll('SELECT * FROM updates');
         foreach ($rows as $k => $arr) {
             $updated_array[] = $arr['update_filename'];
         }
@@ -262,7 +262,7 @@ class DbUpdate extends MediaUpdate
         $updates_array = Utils::get_filelist(__SQL_UPDATES_DIR__, 'php', true);
         sort($updates_array);
 
-        $updates = array_diff($updates_array, $updated_array);
+        $updates       = array_diff($updates_array, $updated_array);
 
         if (\count($updates) >= 1) {
             MediaSetup::header('Found '.\count($updates).' updates');

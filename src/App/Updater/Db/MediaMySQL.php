@@ -90,9 +90,9 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
 
     public function rename_column($table, $old, $new)
     {
-        $query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table."' AND COLUMN_NAME = '".$old."';";
+        $query  = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table."' AND COLUMN_NAME = '".$old."';";
         $result = $this->fetchOne($query);
-        $query = 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
+        $query  = 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
         $result = $this->query($query);
 
         return $result;
@@ -100,22 +100,22 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
 
     public function change_column($table_name, $name, $type)
     {
-        $type = $this->sanitizeFields($type);
-        $query = 'ALTER TABLE `'.$table_name.'` CHANGE `'.$name.'` `'.$name.'` '.$type.';';
+        $type   = $this->sanitizeFields($type);
+        $query  = 'ALTER TABLE `'.$table_name.'` CHANGE `'.$name.'` `'.$name.'` '.$type.';';
         $result = $this->query($query);
     }
 
     public function create_column($table, $column, $type)
     {
-        $type = $this->sanitizeFields($type);
-        $query = 'ALTER TABLE '.$table.' ADD `'.$column.'` '.$type.';';
+        $type   = $this->sanitizeFields($type);
+        $query  = 'ALTER TABLE '.$table.' ADD `'.$column.'` '.$type.';';
 
         $result = $this->query($query);
     }
 
     public function reset_Table($table_name)
     {
-        $query = 'TRUNCATE `'.$table_name.'`; ';
+        $query  = 'TRUNCATE `'.$table_name.'`; ';
         $result = $this->query($query);
     }
 }

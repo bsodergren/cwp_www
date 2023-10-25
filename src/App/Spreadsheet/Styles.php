@@ -17,13 +17,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class Styles
 {
     public static $offset;
+
     public $obj;
 
     public static function row($letter, $row)
     {
         $offset = self::$offset - 1;
         $offset = $offset * 27;
-        $row = $offset + (int) $row;
+        $row    = $offset + (int) $row;
 
         return $letter.(string) $row;
     }
@@ -75,9 +76,9 @@ class Styles
 
     public function setBorder($array)
     {
-        $cell = $array;
+        $cell   = $array;
         $border = 'outline';
-        $style = 'BORDER_THIN';
+        $style  = 'BORDER_THIN';
 
         if (\is_array($array)) {
             foreach ($array as $k => $v) {
@@ -105,7 +106,7 @@ class Styles
                     $width = $this->colWidth;
                 }
             } else {
-                $col = $data;
+                $col   = $data;
                 $width = $this->colWidth;
             }
             $this->obj->getColumnDimension($col)->setWidth($width, $unit);
@@ -117,7 +118,7 @@ class Styles
         $cellArray[] = $array;
 
         if (method_exists(static::class, 'RightBlock')) {
-            $cell = $this->RightBlock($array['cell']);
+            $cell        = $this->RightBlock($array['cell']);
             $cellArray[] = ['cell' => $cell, 'size' => $array['size']];
         }
         foreach ($cellArray as $n => $cellData) {
@@ -153,13 +154,13 @@ class Styles
             $cellArray[] = $this->RightBlock($cell);
         }
 
-        $replace = ['H' => 'HORIZONTAL', 'V' => 'VERTICAL'];
-        $style_c = strtr($style, $replace);
+        $replace     = ['H' => 'HORIZONTAL', 'V' => 'VERTICAL'];
+        $style_c     = strtr($style, $replace);
 
-        $replace = ['C' => 'CENTER', 'L' => 'LEFT', 'R' => 'RIGHT', 'T' => 'TOP', 'B' => 'BOTTOM'];
-        $align_c = strtr($align, $replace);
+        $replace     = ['C' => 'CENTER', 'L' => 'LEFT', 'R' => 'RIGHT', 'T' => 'TOP', 'B' => 'BOTTOM'];
+        $align_c     = strtr($align, $replace);
 
-        $constant = \constant("\PhpOffice\PhpSpreadsheet\Style\Alignment::".strtoupper($style_c).'_'.strtoupper($align_c));
+        $constant    = \constant("\PhpOffice\PhpSpreadsheet\Style\Alignment::".strtoupper($style_c).'_'.strtoupper($align_c));
 
         foreach ($cellArray as $n => $cell) {
             if ('H' == $style) {
@@ -190,7 +191,7 @@ class Styles
                 $border => [
                     'borderStyle' => \constant('\PhpOffice\PhpSpreadsheet\Style\Border::'.$style),
                     // 'borderStyle' => $style,
-                    'color' => ['argb' => '00000000'],
+                    'color'       => ['argb' => '00000000'],
                 ],
             ],
         ];

@@ -20,8 +20,7 @@ class DeviceDetector implements DetectorInterface
             self::checkIpad($device, $userAgent)
             || self::checkIphone($device, $userAgent)
             || self::checkWindowsPhone($device, $userAgent)
-            || self::checkSamsungPhone($device, $userAgent)
-        ;
+            || self::checkSamsungPhone($device, $userAgent);
     }
 
     /**

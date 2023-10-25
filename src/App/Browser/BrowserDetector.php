@@ -7,7 +7,7 @@ namespace CWP\Browser;
 
 class BrowserDetector implements DetectorInterface
 {
-    public const FUNC_PREFIX = 'checkBrowser';
+    public const FUNC_PREFIX       = 'checkBrowser';
 
     protected static $userAgentString;
 
@@ -81,7 +81,7 @@ class BrowserDetector implements DetectorInterface
      */
     public static function detect(Browser $browser, UserAgent $userAgent = null)
     {
-        self::$browser = $browser;
+        self::$browser         = $browser;
         if (null === $userAgent) {
             $userAgent = self::$browser->getUserAgent();
         }
@@ -548,7 +548,7 @@ class BrowserDetector implements DetectorInterface
     public static function checkBrowserGaleon()
     {
         if (false !== stripos(self::$userAgentString, 'galeon')) {
-            $aresult = explode(' ', stristr(self::$userAgentString, 'galeon'));
+            $aresult  = explode(' ', stristr(self::$userAgentString, 'galeon'));
             $aversion = explode('/', $aresult[0]);
             if (isset($aversion[1])) {
                 self::$browser->setVersion($aversion[1]);
@@ -569,7 +569,7 @@ class BrowserDetector implements DetectorInterface
     public static function checkBrowserKonqueror()
     {
         if (false !== stripos(self::$userAgentString, 'Konqueror')) {
-            $aresult = explode(' ', stristr(self::$userAgentString, 'Konqueror'));
+            $aresult  = explode(' ', stristr(self::$userAgentString, 'Konqueror'));
             $aversion = explode('/', $aresult[0]);
             if (isset($aversion[1])) {
                 self::$browser->setVersion($aversion[1]);
@@ -610,7 +610,7 @@ class BrowserDetector implements DetectorInterface
     public static function checkBrowserOmniWeb()
     {
         if (false !== stripos(self::$userAgentString, 'omniweb')) {
-            $aresult = explode('/', stristr(self::$userAgentString, 'omniweb'));
+            $aresult  = explode('/', stristr(self::$userAgentString, 'omniweb'));
             $aversion = explode(' ', isset($aresult[1]) ? $aresult[1] : '');
             self::$browser->setVersion($aversion[0]);
             self::$browser->setName(Browser::OMNIWEB);
@@ -878,7 +878,7 @@ class BrowserDetector implements DetectorInterface
     public static function checkBrowserLynx()
     {
         if (false !== stripos(self::$userAgentString, 'lynx')) {
-            $aresult = explode('/', stristr(self::$userAgentString, 'Lynx'));
+            $aresult  = explode('/', stristr(self::$userAgentString, 'Lynx'));
             $aversion = explode(' ', isset($aresult[1]) ? $aresult[1] : '');
             self::$browser->setVersion($aversion[0]);
             self::$browser->setName(Browser::LYNX);

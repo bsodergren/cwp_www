@@ -50,7 +50,7 @@ class MediaSetup
 
         //  $connection = new Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
         $_default_sql_dir = FileSystem::normalizePath(__DEFAULT_TABLES_DIR__);
-        $file_tableArray = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql');
+        $file_tableArray  = Utils::get_filelist($_default_sql_dir, 'cwp_table.*)\.(sql');
         foreach ($file_tableArray as $k => $sql_file) {
             $table_name = str_replace('cwp_table_', '', basename($sql_file, '.sql'));
             self::message('Loading schema for '.$table_name);

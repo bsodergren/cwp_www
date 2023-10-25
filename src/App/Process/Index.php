@@ -52,7 +52,7 @@ class Index extends MediaProcess
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
         $this->media->excelArray();
 
-        $excel = new MediaXLSX($this->media);
+        $excel     = new MediaXLSX($this->media);
 
         $excel->writeWorkbooks();
         Template::echo('stream/end_page', []);
@@ -62,9 +62,9 @@ class Index extends MediaProcess
 
     public function create_zip()
     {
-        $xlsx_dir = $this->media->xlsx_directory;
-        $zip_file = $this->media->zip_file;
-        $zip = new Zip();
+        $xlsx_dir  = $this->media->xlsx_directory;
+        $zip_file  = $this->media->zip_file;
+        $zip       = new Zip();
         $this->msg = $zip->zip($xlsx_dir, $this->job_id, $zip_file);
         // $msg ='ZIP File Created';
     }
@@ -81,7 +81,7 @@ class Index extends MediaProcess
 
                 Template::echo('stream/start_page', []);
 
-                $import = new PDFImport();
+                $import    = new PDFImport();
                 $import->reImport($this->media->pdf_fullname, $this->media->job_number);
 
                 $this->msg = 'PDF Reimported';
@@ -106,9 +106,9 @@ class Index extends MediaProcess
 
     public function delete_xlsx()
     {
-        $msg = $this->media->delete_xlsx();
+        $msg       = $this->media->delete_xlsx();
         //                $this->media->deleteSlipSheets();
-        $msg = $this->media->delete_zip();
+        $msg       = $this->media->delete_zip();
         $this->msg = 'Zip and excel files removed';
     }
 

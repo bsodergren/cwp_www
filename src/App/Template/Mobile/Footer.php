@@ -26,19 +26,19 @@ class Footer extends HTMLDocument
         if (MediaSettings::isSet('__FOOTER_NAV_HTML__')) {
             $params['FOOT_NAV_PANEL'] = Template::GetHTML(
                 'base/footer/settings_nav',
-                ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__,
-                'VERSIONS_HTML' => self::_footerVersionUpdates(),
+                ['FOOTER_NAV_HTML'  => __FOOTER_NAV_HTML__,
+                    'VERSIONS_HTML' => self::_footerVersionUpdates(),
                 ]
             );
         }
 
-        $params['JS_FOOTER_SRC'] = MediaDevice::getAssetURL('js', ['js/main.js',
-        'vendor/bootstrap/js/bootstrap.bundle.min.js',
-        'vendor/purecounter/purecounter_vanilla.js',
-        'vendor/glightbox/js/glightbox.min.js',
-        'vendor/swiper/swiper-bundle.min.js',
-        'vendor/aos/aos.js',
-        'vendor/php-email-form/validate.js',
+        $params['JS_FOOTER_SRC']  = MediaDevice::getAssetURL('js', ['js/main.js',
+            'vendor/bootstrap/js/bootstrap.bundle.min.js',
+            'vendor/purecounter/purecounter_vanilla.js',
+            'vendor/glightbox/js/glightbox.min.js',
+            'vendor/swiper/swiper-bundle.min.js',
+            'vendor/aos/aos.js',
+            'vendor/php-email-form/validate.js',
         ]);
 
         $params['END_JAVASCRIPT'] = Template::GetHTML('base/footer/javascript');

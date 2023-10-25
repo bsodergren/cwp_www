@@ -14,10 +14,10 @@ class MediaPublication
     public function getPubList($ids)
     {
         // if(is_array($ids)) {
-        $ids = implode(',', $ids);
+        $ids  = implode(',', $ids);
         // }
 
-        $sql = 'SELECT * FROM pub_trim WHERE id IN ('.$ids.');';
+        $sql  = 'SELECT * FROM pub_trim WHERE id IN ('.$ids.');';
         $pubs = Media::$connection->query($sql);
         foreach ($pubs as $row) {
             echo $row->id;
@@ -29,14 +29,14 @@ class MediaPublication
 
     public static function getTrimData($publication, $bind)
     {
-        $head = null;
-        $foot = null;
-        $get = false;
+        $head   = null;
+        $foot   = null;
+        $get    = false;
         $insert = false;
-        $pub = self::CleanPublication($publication);
-        $b = strtolower($bind);
+        $pub    = self::CleanPublication($publication);
+        $b      = strtolower($bind);
 
-        if (!\array_key_exists('pub', self::$trim_details)) {
+        if (! \array_key_exists('pub', self::$trim_details)) {
             $get = true;
         } elseif (self::$trim_details['pub'] != $pub) {
             $get = true;
@@ -47,13 +47,13 @@ class MediaPublication
             if (null == $res) {
                 $insert = true;
 
-                $res = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
+                $res    = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
             }
 
             if (\is_object($res)) {
-                $head = $res->head_trim;
-                $foot = $res->foot_trim;
-                $size = $res->delivered_size;
+                $head               = $res->head_trim;
+                $foot               = $res->foot_trim;
+                $size               = $res->delivered_size;
                 self::$trim_details = ['pub' => $publication, 'bind' => $bind, 'head_trim' => $head, 'foot_trim' => $foot, 'size' => $size];
             }
 
@@ -67,7 +67,7 @@ class MediaPublication
 
     public static function CleanPublication($publication)
     {
-        $pcs = ['+', "'", '&'];
+        $pcs         = ['+', "'", '&'];
         $publication = str_replace($pcs, '', $publication);
         $publication = str_replace('É', 'E', $publication);
         $publication = str_replace('  ', ' ', $publication);

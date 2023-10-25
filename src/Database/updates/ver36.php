@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool
+ * CWP Media tool for load flags
  */
 
 $delete_data = [
@@ -9,7 +9,7 @@ $delete_data = [
     ],
 ];
 
-$new_column = [
+$new_column  = [
     'settings' => [
         'require' => 'TEXT',
     ],
@@ -18,7 +18,7 @@ $new_column = [
 $update_data = [
     'settings' => [
         'definedName' => [
-            '__SHOW_MAIL__' => ['require' => '__IMAP_ENABLE__'],
+            '__SHOW_MAIL__'   => ['require' => '__IMAP_ENABLE__'],
             '__IMAP_ENABLE__' => ['require' => '__IMAP_HOST__'],
         ],
     ],

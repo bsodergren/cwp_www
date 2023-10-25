@@ -21,6 +21,7 @@ class MediaUpdate
     public $refresh = false;
 
     public $conn;
+
     public $conf;
 
     public object $dbClassObj;

@@ -12,6 +12,7 @@ use CWP\Utils\MediaDevice;
 class HTMLDocument
 {
     public $nav_list_dir = 'list';
+
     public $template;
 
     public function __construct()
@@ -21,7 +22,7 @@ class HTMLDocument
 
     public static function __callStatic($method, $args)
     {
-        $new = new self();
+        $new    = new self();
         $method = str_replace('_', '', $method);
 
         return $new->$method();
@@ -50,9 +51,9 @@ class HTMLDocument
 
     public function NavbarLatestVersion()
     {
-        $latest = Media::$VersionUpdate;
-        $installed = Media::$CurrentVersion;
-        $dropdown_link_html = $this->template->template(
+        $latest              = Media::$VersionUpdate;
+        $installed           = Media::$CurrentVersion;
+        $dropdown_link_html  = $this->template->template(
             'base/navbar/'.$this->nav_list_dir.'/navbar_item',
             ['DROPDOWN_TEXT' => 'Version '.$installed]
         );
@@ -71,19 +72,19 @@ class HTMLDocument
 
     public function getNavbar()
     {
-        if (!MediaSettings::isTrue('NO_NAV')) {
+        if (! MediaSettings::isTrue('NO_NAV')) {
             return MediaDevice::getNavbar();
         }
     }
 
     public function headerJS()
     {
-        $path = '/'.__SCRIPT_NAME__;
+        $path   = '/'.__SCRIPT_NAME__;
         if (MediaSettings::isTrue('__FORM_POST__')) {
             $path = '/'.__FORM_POST__;
         }
 
-        $js = trim(Template::GetHTML($path.'/javascript', [], false));
+        $js     = trim(Template::GetHTML($path.'/javascript', [], false));
 
         $onload = trim(Template::GetHTML($path.'/onload', [], false));
 
@@ -92,7 +93,7 @@ class HTMLDocument
 
     public function headerCSS()
     {
-        $bootstrap = Template::GetHTML('base/header/bootstrap_5', [], false);
+        $bootstrap  = Template::GetHTML('base/header/bootstrap_5', [], false);
         $custom_css = Template::GetHTML('base/header/css', [], false);
 
         return [$bootstrap, $custom_css];
@@ -107,8 +108,8 @@ class HTMLDocument
 
     public function footerVersionUpdates()
     {
-        $latest = Media::$VersionUpdate;
-        $installed = Media::$CurrentVersion;
+        $latest       = Media::$VersionUpdate;
+        $installed    = Media::$CurrentVersion;
         // dd($latest, $installed);
         $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed]);
         if (null != $latest) {

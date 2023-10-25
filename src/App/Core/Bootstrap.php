@@ -11,6 +11,7 @@ use Nette\Utils\FileSystem;
 class Bootstrap
 {
     public static $CONFIG;
+
     public object $Config;
 
     public function __construct(Config $Config)
@@ -26,7 +27,7 @@ class Bootstrap
     public function directory($path)
     {
         $path = FileSystem::normalizePath($path);
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             FileSystem::createDir($path, 511);
         }
 
@@ -35,7 +36,7 @@ class Bootstrap
 
     public function define($const, $value)
     {
-        if (!\defined($const)) {
+        if (! \defined($const)) {
             \define($const, $value);
         }
     }
@@ -51,11 +52,11 @@ class Bootstrap
         if ('mysql' == $this->Config['db']['type']) {
             $this->definePath('__SQLITE_DATABASE__', __DATABASE_ROOT__.\DIRECTORY_SEPARATOR.'using_mysql.db');
             $database_files = __SQL_CONFIG_DIR__.\DIRECTORY_SEPARATOR.'mysql';
-            $database_dsn = 'mysql:host='.$this->Config['db']['host'].';dbname='.$this->Config['db']['dbname'];
+            $database_dsn   = 'mysql:host='.$this->Config['db']['host'].';dbname='.$this->Config['db']['dbname'];
         } else {
             $this->definePath('__SQLITE_DATABASE__', __DATABASE_ROOT__.\DIRECTORY_SEPARATOR.'cwp_sqlite.db');
             $database_files = __SQL_CONFIG_DIR__.\DIRECTORY_SEPARATOR.'sqllite';
-            $database_dsn = 'sqlite:'.__SQLITE_DATABASE__;
+            $database_dsn   = 'sqlite:'.__SQLITE_DATABASE__;
         }
 
         $this->define('__DATABASE_DSN__', $database_dsn);
@@ -67,7 +68,7 @@ class Bootstrap
 
     private function getUsrBin()
     {
-        if (!\array_key_exists('OS', $_SERVER)) {
+        if (! \array_key_exists('OS', $_SERVER)) {
             return '/usr/bin';
         }
 

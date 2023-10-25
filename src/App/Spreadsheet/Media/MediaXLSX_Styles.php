@@ -18,6 +18,7 @@ use CWP\Spreadsheet\Styles;
 class MediaXLSX_Styles extends Styles
 {
     public $obj;
+
     public $rowHeight = [
         14.5, 14.5, 14.5, 14.5, 14.5, // Blank lines, row 1-5
         62, // 6 Job Number,
@@ -49,7 +50,7 @@ class MediaXLSX_Styles extends Styles
 
     public function sheetCommon()
     {
-        $merg_rows = [6, 7, 8, 9, 10];
+        $merg_rows   = [6, 7, 8, 9, 10];
 
         foreach ($merg_rows as $row) {
             $cell = Styles::row('B', $row).':'.Styles::row('C', $row);
@@ -62,16 +63,16 @@ class MediaXLSX_Styles extends Styles
             $this->setIndent($cell);
         }
 
-        $sql = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
+        $sql         = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
 
-        $result = Media::$connection->fetchAll($sql);
+        $result      = Media::$connection->fetchAll($sql);
         foreach ($result as $k => $val) {
-            $col = Styles::row($val['ecol'], $val['erow']);
-            $text = $val['text'];
-            $bold = $val['bold'];
+            $col       = Styles::row($val['ecol'], $val['erow']);
+            $text      = $val['text'];
+            $bold      = $val['bold'];
             $font_size = $val['font_size'];
-            $h_align = $val['h_align'];
-            $v_align = $val['v_align'];
+            $h_align   = $val['h_align'];
+            $v_align   = $val['v_align'];
 
             if (isset($text)) {
                 $this->setCellText($col, $text);
@@ -129,7 +130,7 @@ class MediaXLSX_Styles extends Styles
         $this->setCellText($textCell, $text);
         $this->setBorder($textCell);
 
-        $valCell = Styles::row($col2, $row);
+        $valCell  = Styles::row($col2, $row);
         $this->setAlign($valCell, 'H');
         $this->setCellText($valCell, $value);
         // $this->setBorder($valCell);
@@ -138,7 +139,7 @@ class MediaXLSX_Styles extends Styles
     public function setRowHeights()
     {
         $hn = \count($this->rowHeight);
-        for ($i = 0; $i < $hn; ++$i) {
+        for ($i = 0; $i < $hn; $i++) {
             $this->setHeight(['cell' => Styles::row(null, $i + 1), 'height' => $this->rowHeight[$i]]);
         }
     }
@@ -180,12 +181,12 @@ class MediaXLSX_Styles extends Styles
 
         if (0 != $form['del_size']) {
             $deliveryInst[$trim_cell] = ['text' => 'Delivered Size', 'value' => $form['del_size']];
-            $trim_cell = 25;
+            $trim_cell                = 25;
         }
 
         if (0 != $form['foot_trim']) {
             $deliveryInst[$trim_cell] = ['text' => 'Foot Trim', 'value' => $form['foot_trim']];
-            $trim_cell = 24;
+            $trim_cell                = 24;
         }
         if (0 != $form['head_trim']) {
             $deliveryInst[$trim_cell] = ['text' => 'Head Trim', 'value' => $form['head_trim']];
@@ -214,7 +215,7 @@ class MediaXLSX_Styles extends Styles
         }
 
         if (true == $form['bindery_trim']) {
-            $row = 24;
+            $row  = 24;
 
             $cell = Styles::row('A', $row).':'.Styles::row('D', $row);
             $this->setMerge($cell);
@@ -231,7 +232,7 @@ class MediaXLSX_Styles extends Styles
     {
         $this->setColWidth();
 
-        for ($i = 1; $i <= $copies; ++$i) {
+        for ($i = 1; $i <= $copies; $i++) {
             Styles::$offset = $i;
             $this->setRowHeights();
             $this->sheetCommon();

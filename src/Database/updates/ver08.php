@@ -1,14 +1,17 @@
 <?php
+/**
+ * CWP Media tool for load flags
+ */
 
 $new_data = [
-    "settings" => [
+    'settings' => [
         [
-            "definedName" => '__HALF_FORM_CNT__',
-            'setting_value' => '1',
-            'setting_type' => 'bool',
-            'setting_name' => 'Split Forms',
+            'definedName'         => '__HALF_FORM_CNT__',
+            'setting_value'       => '1',
+            'setting_type'        => 'bool',
+            'setting_name'        => 'Split Forms',
             'setting_description' => "Automatically split 'ABCD' forms in half",
-            'setting_cat'=>'local',
+            'setting_cat'         => 'local',
         ],
-    ]
+    ],
 ];

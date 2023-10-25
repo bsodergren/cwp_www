@@ -68,9 +68,9 @@ class MediaDropbox implements MediaFileInterface
     public function getFile($filename)
     {
         $tmp_filename = basename($filename);
-        $tmp_file = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$tmp_filename;
-        if (!file_exists($tmp_file)) {
-            $file = $this->dropbox->download($filename);
+        $tmp_file     = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$tmp_filename;
+        if (! file_exists($tmp_file)) {
+            $file     = $this->dropbox->download($filename);
 
             $contents = $file->getContents();
 
@@ -91,7 +91,7 @@ class MediaDropbox implements MediaFileInterface
         $items = $searchResults->getItems();
 
         // Fetch Items
-        $item = $items->first();
+        $item  = $items->first();
         if (null === $item) {
             return false;
         }
@@ -122,11 +122,9 @@ class MediaDropbox implements MediaFileInterface
     public function getContents($path)
     {
         try {
-            $path = Filesystem::unixSlashes($path);
-
+            $path               = Filesystem::unixSlashes($path);
 
             $listFolderContents = $this->dropbox->listFolder($path);
-
         } catch (DropboxClientException $e) {
             $this->error($e);
         }
@@ -156,12 +154,6 @@ class MediaDropbox implements MediaFileInterface
         }
     }
 
-
-
-
-
-
-
     public function save($localfile, $remotefile, $options = [])
     {
         $remotefile = Filesystem::unixSlashes($remotefile);
@@ -175,7 +167,6 @@ class MediaDropbox implements MediaFileInterface
         } catch (DropboxClientException $e) {
             $this->error($e);
         }
-
 
         return $file;
     }
@@ -197,13 +188,13 @@ class MediaDropbox implements MediaFileInterface
             Filesystem::delete($tmpFilename);
         }
 
-        $file = $this->dropbox->download($filename, $tmpFilename);
+        $file        = $this->dropbox->download($filename, $tmpFilename);
 
         // Downloaded File Metadata
-        $metadata = $file->getMetadata();
+        $metadata    = $file->getMetadata();
 
         // Name
-        $name = $metadata->getName();
+        $name        = $metadata->getName();
 
         return $tmpFilename;
     }
@@ -215,7 +206,7 @@ class MediaDropbox implements MediaFileInterface
 
     public function error($e)
     {
-        $code = $e->getCode();
+        $code    = $e->getCode();
         $message = $e->getMessage();
 
         //        $url = $_SERVER[''];

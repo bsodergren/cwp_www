@@ -16,7 +16,7 @@ class Trim extends MediaProcess
     {
         global $_POST;
 
-        $form = new Formr('bootstrap4');
+        $form      = new Formr('bootstrap4');
 
         if ($form->submitted()) {
             if (\array_key_exists('trim_update', $_POST)) {
@@ -59,13 +59,13 @@ class Trim extends MediaProcess
         }
         foreach ($updateData as $id => $data) {
             $insert_data = [
-                'head_trim' => $this->cleanTrimPost($data['head']),
-                'foot_trim' => $this->cleanTrimPost($data['foot']),
-                'face_trim' => $this->cleanTrimPost($data['face']),
+                'head_trim'      => $this->cleanTrimPost($data['head']),
+                'foot_trim'      => $this->cleanTrimPost($data['foot']),
+                'face_trim'      => $this->cleanTrimPost($data['face']),
                 'delivered_size' => $this->cleanTrimPost($data['size'], true),
             ];
 
-            $count = Media::$explorer->table('pub_trim')->where('id', $id)->update($insert_data);
+            $count       = Media::$explorer->table('pub_trim')->where('id', $id)->update($insert_data);
         }
         $this->msg = 'Publications Updated';
     }
@@ -76,23 +76,23 @@ class Trim extends MediaProcess
 
         $publication = $_POST['publication'];
         if ('' != $publication) {
-            $bind = $_POST['bind'];
+            $bind           = $_POST['bind'];
 
-            $head_trim = $this->cleanTrimPost($_POST['head_trim']);
-            $foot_trim = $this->cleanTrimPost($_POST['foot_trim']);
-            $face_trim = $this->cleanTrimPost($_POST['face_trim']);
+            $head_trim      = $this->cleanTrimPost($_POST['head_trim']);
+            $foot_trim      = $this->cleanTrimPost($_POST['foot_trim']);
+            $face_trim      = $this->cleanTrimPost($_POST['face_trim']);
             $delivered_size = $this->cleanTrimPost($_POST['delivered_size'], true);
 
-            $data = [
-                'pub_name' => MediaPublication::CleanPublication($publication),
-                'bind' => $bind,
-                'head_trim' => $head_trim,
-                'foot_trim' => $foot_trim,
-                'face_trim' => $face_trim,
+            $data           = [
+                'pub_name'       => MediaPublication::CleanPublication($publication),
+                'bind'           => $bind,
+                'head_trim'      => $head_trim,
+                'foot_trim'      => $foot_trim,
+                'face_trim'      => $face_trim,
                 'delivered_size' => $delivered_size,
             ];
-            $res = Media::$explorer->table('pub_trim')->insert($data);
-            $this->msg = 'Publication Added';
+            $res            = Media::$explorer->table('pub_trim')->insert($data);
+            $this->msg      = 'Publication Added';
         } else {
             $this->msg = 'No publication named';
         }
@@ -103,7 +103,7 @@ class Trim extends MediaProcess
         if ('' == $var) {
             $var = null;
         } else {
-            if (!str_contains($var, '/')) {
+            if (! str_contains($var, '/')) {
                 if (true == $size) {
                     $var = Utils::DelSizeToFrac($var);
                 } else {

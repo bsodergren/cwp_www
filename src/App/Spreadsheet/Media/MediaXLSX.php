@@ -21,26 +21,31 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class MediaXLSX extends Media
 {
     protected object $spreadsheet;
+
     public object $media;
+
     public $xlsx_array;
+
     public $box;
+
     public $form_details;
 
     public $sheet_labels = [];
+
     public $trim_details = [];
 
     public function __construct(object $media, $quiet = false)
     {
-        $this->media = $media;
+        $this->media      = $media;
         $this->xlsx_array = $media->MediaArray;
 
-        $keyidx = array_key_first($this->xlsx_array);
-        $array = $this->xlsx_array[$keyidx]['details'];
+        $keyidx           = array_key_first($this->xlsx_array);
+        $array            = $this->xlsx_array[$keyidx]['details'];
         // $array          =  $this->xlsx_array[$keyidx];
 
         $this->job_number = $array['job_number'];
-        $this->pdf_file = $array['pdf_file'];
-        $this->job_id = $array['job_id'];
+        $this->pdf_file   = $array['pdf_file'];
+        $this->job_id     = $array['job_id'];
     }
 
     public function writeWorkbooks()
@@ -50,12 +55,12 @@ class MediaXLSX extends Media
         foreach ($this->xlsx_array as $form_number => $dataArray) {
             //$this->xlsx_path = $this->media->getDirectory('xlsx');
 
-            $data = $dataArray['forms'];
+            $data              = $dataArray['forms'];
             // $data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
-            $slipSheet = new SlipSheetXLSX($this->media);
+            $slipSheet         = new SlipSheetXLSX($this->media);
             //   $larrySheet = new LarrySheetsXLSX($this->media);
-            $s_idx = 0;
+            $s_idx             = 0;
 
             $this->media->get_form_configuration($dataArray['details']);
 
@@ -64,41 +69,41 @@ class MediaXLSX extends Media
                     foreach ($result_array as $form_letter => $form_details_array) {
                         foreach ($form_details_array as $key => $this->form_details) {
                             $this->form_details['job_number'] = $this->job_number;
-                            $this->box = $calc->calculateBox($this->form_details);
+                            $this->box                        = $calc->calculateBox($this->form_details);
                             $this->addFormBoxData();
                             if ('full' == $this->box['packaging'] || 'half' == $this->box['packaging']) {
-                                $tmp_box = $this->box;
+                                $tmp_box    = $this->box;
                                 $full_boxes = $this->box['full_boxes'];
-                                $max_boxes = $this->box['full_boxes'];
+                                $max_boxes  = $this->box['full_boxes'];
 
                                 if ($this->box['full_boxes'] >= 1) {
                                     if (0 != $this->box['layers_last_box'] && 0 != $this->box['lifts_last_layer']) {
-                                        $this->box['layers_last_box'] = 0;
+                                        $this->box['layers_last_box']  = 0;
                                         $this->box['lifts_last_layer'] = 0;
-                                        $this->box['full_boxes'] = '';
-                                        $sk = 0;
+                                        $this->box['full_boxes']       = '';
+                                        $sk                            = 0;
 
                                         while ($full_boxes > 0) {
-                                            ++$sk;
+                                            $sk++;
                                             $this->box['layers_last_box'] = $this->box['layers_per_skid'];
-                                            $this->box['skid_count'] = "$sk of ".$max_boxes + 1;
-                                            $this->form_details['count'] = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box['lift_size'];
+                                            $this->box['skid_count']      = "$sk of ".$max_boxes + 1;
+                                            $this->form_details['count']  = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box['lift_size'];
                                             $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
-                                            --$full_boxes;
-                                            ++$s_idx;
+                                            $full_boxes--;
+                                            $s_idx++;
                                         }
                                         // $s_idx=$s_idx+1;
-                                        ++$sk;
-                                        $this->box['skid_count'] = "$sk of ".$max_boxes + 1;
-                                        $this->box['layers_last_box'] = $tmp_box['layers_last_box'];
+                                        $sk++;
+                                        $this->box['skid_count']       = "$sk of ".$max_boxes + 1;
+                                        $this->box['layers_last_box']  = $tmp_box['layers_last_box'];
                                         $this->box['lifts_last_layer'] = $tmp_box['lifts_last_layer'];
-                                        $this->form_details['count'] = (($this->box['layers_last_box'] * $this->box['lifts_per_layer']) + $this->box['lifts_last_layer']) * $this->box['lift_size'];
+                                        $this->form_details['count']   = (($this->box['layers_last_box'] * $this->box['lifts_per_layer']) + $this->box['lifts_last_layer']) * $this->box['lift_size'];
                                     }
                                 }
                             }
                             $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
-                            $this->form_details = '';
-                            ++$s_idx;
+                            $this->form_details               = '';
+                            $s_idx++;
                         }
                     }
                 }
@@ -107,14 +112,14 @@ class MediaXLSX extends Media
             $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
             // $larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
 
-            $sheetIndex = $this->spreadsheet->getIndex(
+            $sheetIndex        = $this->spreadsheet->getIndex(
                 $this->spreadsheet->getSheetByName('Worksheet')
             );
             $this->spreadsheet->removeSheetByIndex($sheetIndex);
             $this->spreadsheet->setActiveSheetIndex(0);
-            $writer = new XLSXWriter($this->spreadsheet);
-            $writer->xls_path = $this->media->xlsx_directory;
-            $new_xlsx_file = $this->media->getfilename('xlsx', $form_number, true);
+            $writer            = new XLSXWriter($this->spreadsheet);
+            $writer->xls_path  = $this->media->xlsx_directory;
+            $new_xlsx_file     = $this->media->getfilename('xlsx', $form_number, true);
             $writer->write($new_xlsx_file);
             HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing '.basename($new_xlsx_file)]);
             $this->spreadsheet->disconnectWorksheets();
@@ -126,7 +131,7 @@ class MediaXLSX extends Media
 
     public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
     {
-        $bindery_trim = false;
+        $bindery_trim         = false;
         /*
                 "packaging" => "small cartons"
                 "full_boxes" => 2.0
@@ -137,56 +142,56 @@ class MediaXLSX extends Media
                 "max_skid" => 17500
                 */
 
-        $pub_value = $this->form_details['pub'];
-        $this->trim_details = MediaPublication::getTrimData($pub_value, $this->form_details['bind']);
+        $pub_value            = $this->form_details['pub'];
+        $this->trim_details   = MediaPublication::getTrimData($pub_value, $this->form_details['bind']);
 
-        $head_trim = $this->trim_details['head_trim'];
-        $foot_trim = $this->trim_details['foot_trim'];
-        $del_size = $this->trim_details['size'];
+        $head_trim            = $this->trim_details['head_trim'];
+        $foot_trim            = $this->trim_details['foot_trim'];
+        $del_size             = $this->trim_details['size'];
 
-        $ship_value = $this->form_details['ship'];
-        $delivery = strtolower($this->form_details['former']);
+        $ship_value           = $this->form_details['ship'];
+        $delivery             = strtolower($this->form_details['former']);
 
         if ('back' == $delivery || 1 == $this->form_details['face_trim']) {
             if (1 != $this->form_details['no_bindery']) {
                 // $this->form_details['market'] = "";
-                $ship_value = __LANG_BINDERY;
+                $ship_value   = __LANG_BINDERY;
                 if (1 == $this->form_details['face_trim']) {
                     $ship_value = __LANG_BINDERY_FACETRIM;
                 }
-                $head_trim = 0;
-                $foot_trim = 0;
+                $head_trim    = 0;
+                $foot_trim    = 0;
                 $bindery_trim = true;
             }
         }
 
-        $worksheet_title = $form_number.$form_letter.'_'.$delivery;
+        $worksheet_title      = $form_number.$form_letter.'_'.$delivery;
 
-        $myWorkSheet = new Worksheet($sheetObj, $worksheet_title);
+        $myWorkSheet          = new Worksheet($sheetObj, $worksheet_title);
         $sheetObj->addSheet($myWorkSheet, $sheet_index);
-        $sheet = $sheetObj->getSheet($sheet_index);
+        $sheet                = $sheetObj->getSheet($sheet_index);
 
         $sheet->getHeaderFooter()->setOddHeader('&36&B '.__LANG_MEDIA_LOAD_FLAG);
         $sheet->getHeaderFooter()->setOddFooter('&L&B'.__LANG_MEDIA_LOAD_FLAG.'&RPage &P of &N');
 
-        $form['job_number'] = $this->form_details['job_number'];
-        $form['market'] = $this->form_details['market'];
-        $form['pub_value'] = $pub_value;
-        $form['ship_value'] = $ship_value;
-        $form['form_number'] = $form_number;
-        $form['form_letter'] = $form_letter;
+        $form['job_number']   = $this->form_details['job_number'];
+        $form['market']       = $this->form_details['market'];
+        $form['pub_value']    = $pub_value;
+        $form['ship_value']   = $ship_value;
+        $form['form_number']  = $form_number;
+        $form['form_letter']  = $form_letter;
         $form['bindery_trim'] = $bindery_trim;
-        $form['head_trim'] = $head_trim;
-        $form['foot_trim'] = $foot_trim;
-        $form['del_size'] = $del_size;
+        $form['head_trim']    = $head_trim;
+        $form['foot_trim']    = $foot_trim;
+        $form['del_size']     = $del_size;
 
-        $form['page_conf'] = $this->media->form_configuration['configuration'].' '.$this->media->form_configuration['paper_wieght'].'#';
+        $form['page_conf']    = $this->media->form_configuration['configuration'].' '.$this->media->form_configuration['paper_wieght'].'#';
 
-        $styles = new MediaXLSX_Styles($sheet);
+        $styles               = new MediaXLSX_Styles($sheet);
 
-        $packageMethod = str_replace(' ', '_', $this->box['packaging']);
-        $this->sheet_labels = [];
-        $form = $this->$packageMethod($form);
+        $packageMethod        = str_replace(' ', '_', $this->box['packaging']);
+        $this->sheet_labels   = [];
+        $form                 = $this->$packageMethod($form);
         $this->getLabels();
 
         $styles->createPage($form, $this->sheet_labels, __PAGES_PER_XLSX__);
@@ -199,21 +204,21 @@ class MediaXLSX extends Media
         }
 
         if (str_contains($packaging, 'carton')) {
-            $labels['14'] = __LANG_LIFTS_PER_CARTON;
-            $labels['15'] = __LANG_PCS_PER_CARTON;
+            $labels['14']      = __LANG_LIFTS_PER_CARTON;
+            $labels['15']      = __LANG_PCS_PER_CARTON;
             $label_value['15'] = $layers_last_box;
         } else {
-            $labels['14'] = 'Lifts per Layer';
-            $labels['15'] = __LANG_LAYERS_PER_SKID;
-            $label_value['15'] = $layers_per_skid;
-            $labels['16'] = 'Max Skid';
+            $labels['14']             = 'Lifts per Layer';
+            $labels['15']             = __LANG_LAYERS_PER_SKID;
+            $label_value['15']        = $layers_per_skid;
+            $labels['16']             = 'Max Skid';
             $this->sheet_labels['16'] = [$max_skid, __LANG_MAX_SKID];
         }
 
-        $count = str_replace(',', '', $this->form_details['count']);
-        $this->sheet_labels['13'] = [$this->box['lift_size'], __LANG_LIFT_SIZE];
-        $this->sheet_labels['14'] = [$lifts_per_layer, $labels['14']];
-        $this->sheet_labels['15'] = [$label_value['15'], $labels['15']];
+        $count                      = str_replace(',', '', $this->form_details['count']);
+        $this->sheet_labels['13']   = [$this->box['lift_size'], __LANG_LIFT_SIZE];
+        $this->sheet_labels['14']   = [$lifts_per_layer, $labels['14']];
+        $this->sheet_labels['15']   = [$label_value['15'], $labels['15']];
 
         $this->sheet_labels['17_C'] = [$count, __LANG_TOTAL_COUNT];
     }
@@ -224,14 +229,14 @@ class MediaXLSX extends Media
             $$var = $value;
         }
 
-        $form['packaging'] = $packaging;
+        $form['packaging']          = $packaging;
 
         $this->sheet_labels['13_C'] = [$full_boxes, __LANG_FULL_CARTON];
-        $total_boxes = $full_boxes;
+        $total_boxes                = $full_boxes;
 
         if ($lifts_last_layer > 0) {
             $this->sheet_labels['14_C'] = [$lifts_last_layer, __LANG_CNT_LAST_CARTON];
-            $total_boxes = $full_boxes + 1;
+            $total_boxes                = $full_boxes + 1;
         } else {
             $this->sheet_labels['14_C'] = ['0', __LANG_CNT_LAST_CARTON];
         }
@@ -293,7 +298,7 @@ class MediaXLSX extends Media
     public static function getFormTotals($data)
     {
         $total_count = 0;
-        $pcs_count = 0;
+        $pcs_count   = 0;
 
         foreach ($data as $key => $array) {
             $pcs_count = Utils::toint($array['count']);
@@ -306,7 +311,7 @@ class MediaXLSX extends Media
 
     public function addFormBoxData()
     {
-        $fields = [
+        $fields        = [
             'form_number',
             'form_letter',
             'count',
@@ -325,13 +330,13 @@ class MediaXLSX extends Media
             }
         }
 
-        $count = Media::$explorer->table('form_data_count')
+        $count         = Media::$explorer->table('form_data_count')
             ->where('form_id', $this->form_details['form_id'])
             ->update($form_box_data);
 
         if (0 == $count) {
             $form_box_data['form_id'] = $this->form_details['form_id'];
-            $count = Media::$explorer->table('form_data_count')->insert($form_box_data);
+            $count                    = Media::$explorer->table('form_data_count')->insert($form_box_data);
         }
     }
 }

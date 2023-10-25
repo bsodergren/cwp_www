@@ -13,12 +13,12 @@ define('__AUTH__', false);
 require_once '../.config.inc.php';
 define('TITLE', 'Register');
 
-if (!isset($_POST['email'])) {
+if (! isset($_POST['email'])) {
     MediaDevice::getHeader();
 
     $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'reset']);
-    $params['FORM_FIELD'] = Template::getHTML('authentication/forms/reset_passwd');
-    $params['__FORM_URL__'] = __URL_PATH__.'/login/forgot.php';
+    $params['FORM_FIELD']    = Template::getHTML('authentication/forms/reset_passwd');
+    $params['__FORM_URL__']  = __URL_PATH__.'/login/forgot.php';
     $template->render('authentication/form', $params);
     MediaDevice::getFooter();
     exit;
@@ -34,7 +34,7 @@ try {
         $params['VERIFY_LINK'] = __URL_HOME__.'/login/reset_passwd.php?selector='.urlencode($selector).'&token='.urlencode($token);
         $mail->Body(Template::getHtml('authentication/email/reset', $params));
         $mail->mail();
-        $msg = 'Password Recovery email sent';
+        $msg                   = 'Password Recovery email sent';
     });
 } catch (\Delight\Auth\InvalidEmailException $e) {
     $msg = 'Invalid email address';

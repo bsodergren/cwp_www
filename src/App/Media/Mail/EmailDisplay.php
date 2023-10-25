@@ -16,7 +16,7 @@ class EmailDisplay
         foreach ($this->attachments as $key => $attachment) {
             $html .= template::GetHTML('/import/email/form_option', [
                 'OPTION_VALUE' => $attachment['filename'].'|'.$key,
-                'OPTION_NAME' => $attachment['name'],
+                'OPTION_NAME'  => $attachment['name'],
             ]);
         }
 
@@ -40,9 +40,9 @@ class EmailDisplay
                     $js_select_options .= template::GetHTML(
                         '/import/email/js_select_statement',
                         [
-                            'JS_SELECT_KEY' => $attachment['filename'].'|'.$key,
+                            'JS_SELECT_KEY'     => $attachment['filename'].'|'.$key,
                             'JS_SELECT_OPTIONS' => $option_html,
-                    ]
+                        ]
                     );
                 }
             }
@@ -53,7 +53,7 @@ class EmailDisplay
                 '/import/email/js_select',
                 [
                     'JS_SELECT_STATEMENTS' => $js_select_options,
-        ]
+                ]
             );
         }
 
@@ -66,8 +66,8 @@ class EmailDisplay
             '/import/email/form_select',
             [
                 'SELECT_OPTIONS' => $this->drawFileOptions(),
-                'JS_SELECT' => $this->drawJsScript(),
-        ]
+                'JS_SELECT'      => $this->drawJsScript(),
+            ]
         );
     }
 }

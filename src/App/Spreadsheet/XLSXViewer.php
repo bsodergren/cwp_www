@@ -20,7 +20,7 @@ class XLSXViewer
         }
 
         $media->excelArray($form_number);
-        $excel = new MediaXLSX($media, true);
+        $excel       = new MediaXLSX($media, true);
 
         echo HTMLDisplay::JavaRefresh('/view.php?'.$_SERVER['QUERY_STRING'], 0);
     }

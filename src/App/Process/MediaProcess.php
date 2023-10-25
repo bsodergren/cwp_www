@@ -10,16 +10,19 @@ use CWP\HTML\HTMLDisplay;
 class MediaProcess
 {
     public object $media;
+
     public $job_id;
 
-    public $url = '/index.php';
-    public $msg = '';
+    public $url     = '/index.php';
+
+    public $msg     = '';
+
     public $timeout = '0';
 
     public function __construct($media)
     {
         if (\is_object($media)) {
-            $this->media = $media;
+            $this->media  = $media;
             $this->job_id = $media->job_id;
         }
     }

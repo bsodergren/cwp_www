@@ -16,12 +16,13 @@ use CWP\Media\Import\PDFImport;
 class Form_Edit extends MediaProcess
 {
     public $form_number;
+
     public $form_edit;
 
     public function run($req)
     {
-        $this->form_number = $req['form_number'];
-        $this->form_edit['url'] = __URL_PATH__.'/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number;
+        $this->form_number          = $req['form_number'];
+        $this->form_edit['url']     = __URL_PATH__.'/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number;
         $this->form_edit['timeout'] = 0;
 
         if (\array_key_exists('Reset', $req)) {
@@ -83,7 +84,7 @@ class Form_Edit extends MediaProcess
 
                     case 'split':
                         if (1 == $value) {
-                            $form_data = $this->media->getFormRow($id);
+                            $form_data          = $this->media->getFormRow($id);
                             $form_data['count'] = ($form_data['count'] / 2);
                             $this->media->updateFormRow($id, $form_data);
                             unset($form_data['id']);
@@ -93,28 +94,28 @@ class Form_Edit extends MediaProcess
                         break;
 
                     case 'formletter':
-                        $data = ['form_letter' => strtoupper($value)];
+                        $data  = ['form_letter' => strtoupper($value)];
                         break;
 
                     case 'facetrim':
-                        $data = ['face_trim' => $value];
+                        $data  = ['face_trim' => $value];
                         break;
 
                     case 'former':
-                        $data = ['former' => $value];
+                        $data  = ['former' => $value];
                         break;
 
                     case 'pcscount':
                         $value = str_replace('*', 'x', $value);
                         if (str_contains($value, 'x')) {
                             list($x, $n) = explode('x', $value);
-                            $value = $x * $n;
+                            $value       = $x * $n;
                         }
                         if (str_contains($value, '/')) {
                             list($x, $n) = explode('/', $value);
-                            $value = $x / $n;
+                            $value       = $x / $n;
                         }
-                        $data = ['count' => $value];
+                        $data  = ['count' => $value];
 
                         break;
                 }

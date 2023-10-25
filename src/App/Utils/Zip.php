@@ -26,7 +26,7 @@ class AdvancedFilesystemIterator extends \ArrayIterator
 
     public function sort($method)
     {
-        if (!method_exists('SplFileInfo', $method)) {
+        if (! method_exists('SplFileInfo', $method)) {
             throw new \InvalidArgumentException(sprintf('Method "%s" does not exist in SplFileInfo', $method));
         }
 
@@ -57,20 +57,20 @@ class Zip
     public function zip($xlsx_directory, $job_id, $zip_file)
     {
         $rootPath = realpath($xlsx_directory);
-        $zipPath = str_replace(basename($zip_file), '', $zip_file);
+        $zipPath  = str_replace(basename($zip_file), '', $zip_file);
 
         FileSystem::createDir($zipPath);
 
-        $zip = new \ZipArchive();
+        $zip      = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
-        $files = (new AdvancedFilesystemIterator($rootPath))->sortByMTime();
+        $files    = (new AdvancedFilesystemIterator($rootPath))->sortByMTime();
 
         foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
-            if (!$file->isDir()) {
+            if (! $file->isDir()) {
                 // Get real and relative path for current file
-                $filePath = $file->getRealPath();
+                $filePath     = $file->getRealPath();
                 $relativePath = substr($filePath, \strlen($rootPath) + 1);
                 // Add current file to archive
                 $zip->addFile($filePath, $relativePath);
@@ -78,7 +78,7 @@ class Zip
         }
 
         // Zip archive will be created only after closing object
-        $d = $zip->close();
+        $d        = $zip->close();
         if (true === $d) {
             Media::$explorer->table('media_job')->where('job_id', $job_id)->update(['zip_exists' => '1']);
 
@@ -90,16 +90,16 @@ class Zip
 
     public function exportZip($pdf_file, $jsonFile)
     {
-        $zipPath = \dirname($pdf_file, 2).'/Export';
+        $zipPath  = \dirname($pdf_file, 2).'/Export';
         FileSystem::createDir($zipPath);
 
         $zip_file = $zipPath.'/export.zip';
-        $zip = new \ZipArchive();
+        $zip      = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
         $zip->addFile($pdf_file, basename($pdf_file));
         $zip->addFile($jsonFile, basename($jsonFile));
 
-        $d = $zip->close();
+        $d        = $zip->close();
     }
 }

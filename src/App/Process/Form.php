@@ -15,7 +15,7 @@ class Form extends MediaProcess
     public function run($req)
     {
         $this->form_number = $req['form_number'];
-        $method = str_replace(' ', '', $req['submit']);
+        $method            = str_replace(' ', '', $req['submit']);
         $this->updateForm($req);
         if (method_exists($this, $method)) {
             $this->$method();
@@ -32,12 +32,12 @@ class Form extends MediaProcess
             $break = false;
             if (str_starts_with($key, 'former')) {
                 list($front, $id) = explode('_', $key);
-                $count = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]);
+                $count            = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]);
             }
 
             if (str_starts_with($key, 'facetrim')) {
                 list($front, $id) = explode('_', $key);
-                $count = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]);
+                $count            = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]);
             }
 
             if (str_starts_with($key, 'nobindery')) {
@@ -45,7 +45,7 @@ class Form extends MediaProcess
 
                 // dd($front,$id,$letters,$value, $job_id);
 
-                $count = Media::$explorer->table('form_data')->where('job_id', $job_id)
+                $count                      = Media::$explorer->table('form_data')->where('job_id', $job_id)
                 ->where('form_number', $id)
                 ->where('form_letter', $letters)
                 ->update(['no_bindery' => $value]);
@@ -55,7 +55,7 @@ class Form extends MediaProcess
 
     public function Edit()
     {
-        $this->url = '/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number.'';
+        $this->url     = '/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number.'';
         $this->timeout = 0;
     }
 
@@ -67,8 +67,8 @@ class Form extends MediaProcess
         $this->msg = 'Form finished';
 
         $this->media->excelArray();
-        $excel = new MediaXLSX($this->media, true);
-        $break = true;
+        $excel     = new MediaXLSX($this->media, true);
+        $break     = true;
     }
 
     public function Previous()
@@ -93,7 +93,7 @@ class Form extends MediaProcess
         $form_data = Media::$explorer->table('form_data');
         $form_data->where('form_number = ?', $next_form_number);
         $form_data->where('job_id = ?', $this->job_id);
-        $results = $form_data->fetch();
+        $results   = $form_data->fetch();
 
         if (empty($results)) {
             if ('Previous' == $_REQUEST['submit']) {

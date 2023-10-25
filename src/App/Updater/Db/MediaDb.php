@@ -13,6 +13,7 @@ use CWP\Core\Media;
 class MediaDb
 {
     public $conn;
+
     public $tableTmpName = 'sqlb_temp_table_1';
 
     public function __construct($class)

@@ -19,7 +19,8 @@ use Nette\Utils\FileSystem;
 
 class Import extends MediaProcess
 {
-    public $error = false;
+    public $error                 = false;
+
     // Store errors here
     public $fileExtensionsAllowed = ['pdf'];
 
@@ -47,7 +48,7 @@ class Import extends MediaProcess
 
         // These will be the only file extensions allowed
         if ('' != $_POST['dropbox']['pdf_file']) {
-            $pdf_file = $_POST['dropbox']['pdf_file'];
+            $pdf_file   = $_POST['dropbox']['pdf_file'];
             $job_number = $_POST['dropbox']['job_number'];
         }
 
@@ -62,13 +63,13 @@ class Import extends MediaProcess
 
         if (false == $this->error) {
             if ('' != $_FILES['the_file']['name']) {
-                $fileName = $_FILES['the_file']['name'];
-                $fileSize = $_FILES['the_file']['size'];
-                $fileTmpName = $_FILES['the_file']['tmp_name'];
+                $fileName      = $_FILES['the_file']['name'];
+                $fileSize      = $_FILES['the_file']['size'];
+                $fileTmpName   = $_FILES['the_file']['tmp_name'];
 
-                $locations = new MediaFileSystem();
+                $locations     = new MediaFileSystem();
                 $pdf_directory = $locations->getDirectory('pdf', false);
-                $pdf_file = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
+                $pdf_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
 
                 $locations->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
                 MediaQPDF::cleanPDF($pdf_file);
@@ -82,12 +83,12 @@ class Import extends MediaProcess
                 HTMLDisplay::put("<span class='p-3 text-danger'> no File selected </span> ");
                 $this->error = true;
             } else {
-                $f = explode('.', $pdf_file);
-                $f = end($f);
+                $f             = explode('.', $pdf_file);
+                $f             = end($f);
                 $fileExtension = strtolower($f);
             }
 
-            if (!\in_array($fileExtension, $this->fileExtensionsAllowed)) {
+            if (! \in_array($fileExtension, $this->fileExtensionsAllowed)) {
                 HTMLDisplay::put('This file extension is not allowed. Please upload a PDF file');
                 $this->error = true;
             }
@@ -101,12 +102,12 @@ class Import extends MediaProcess
         $this->url = 'import.php';
 
         if (false == $this->error) {
-            $this->url = 'index.php';
+            $this->url     = 'index.php';
             $this->timeout = 2;
 
             // $media_closing = '/'.basename($fileName, '.pdf');
 
-            $MediaImport = new PDFImport();
+            $MediaImport   = new PDFImport();
             $MediaImport->Import($pdf_file, $job_number);
             if (0 == $MediaImport->status) {
                 HTMLDisplay::put("<span class='p-3 text-danger'>something went wrong</span>");

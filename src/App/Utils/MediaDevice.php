@@ -11,7 +11,8 @@ use CWP\Browser\Os;
 
 class MediaDevice
 {
-    public static $DEVICE = 'APPLICATION';
+    public static $DEVICE        = 'APPLICATION';
+
     public static $default_theme = 'application';
 
     public function __construct()
@@ -21,8 +22,8 @@ class MediaDevice
 
     public function run()
     {
-        $device = new Device();
-        $os = new Os();
+        $device  = new Device();
+        $os      = new Os();
         $browser = new Browser();
 
         /*
@@ -102,16 +103,16 @@ class MediaDevice
 
         foreach ($files as $file) {
             $filePath = self::getThemepath().'/'.$file;
-            $url = __URL_LAYOUT__.'/'.strtolower(self::$DEVICE).'/'.$file;
-            if (!file_exists($filePath)) {
+            $url      = __URL_LAYOUT__.'/'.strtolower(self::$DEVICE).'/'.$file;
+            if (! file_exists($filePath)) {
                 $filePath = self::getDefaultTheme().'/'.$file;
-                $url = __URL_LAYOUT__.'/'.strtolower(self::$default_theme).'/'.$file;
-                if (!file_exists($filePath)) {
+                $url      = __URL_LAYOUT__.'/'.strtolower(self::$default_theme).'/'.$file;
+                if (! file_exists($filePath)) {
                     $url = null;
                 }
             }
             if (null !== $url) {
-                $url = $url .'?'.random_int(100000, 999999);
+                $url = $url.'?'.random_int(100000, 999999);
                 switch ($type) {
                     case 'image':
                         $html .= $url;
@@ -141,12 +142,12 @@ class MediaDevice
 
     public static function getTemplateFile($template)
     {
-        $template = str_replace('.html', '', $template);
+        $template      = str_replace('.html', '', $template);
 
         $template_file = self::getThemePath().'/template/'.$template.'.html';
-        if (!file_exists($template_file)) {
+        if (! file_exists($template_file)) {
             $template_file = self::getDefaultTheme().'/template/'.$template.'.html';
-            if (!file_exists($template_file)) {
+            if (! file_exists($template_file)) {
                 $template_file = null;
             }
         }

@@ -101,7 +101,7 @@ class MediaSqlite extends MediaDb implements MediaDbAbstract
     public function change_column($table_name, $name, $type)
     {
         $tableSQL = $this->getOrigSQL($table_name);
-        $fields = $this->getColumns($tableSQL);
+        $fields   = $this->getColumns($tableSQL);
 
         $this->createTempTable($tableSQL, $name, $type);
         $this->copyTable($table_name, $fields);
@@ -111,20 +111,20 @@ class MediaSqlite extends MediaDb implements MediaDbAbstract
 
     private function cleanTableSQL($tableSQL)
     {
-        $sep = "\n\t";
+        $sep          = "\n\t";
 
-        $tableSQL = trim(str_replace("\n", '\x', $tableSQL));
-        $tableSQL = preg_replace("/\s{2,}/", ' ', $tableSQL);
-        $tableSQL = trim(str_replace("\t", ' ', $tableSQL));
-        $tableSQL = trim(str_replace("\x", "\n", $tableSQL));
-        $sql_array = explode("\n", $tableSQL);
+        $tableSQL     = trim(str_replace("\n", '\x', $tableSQL));
+        $tableSQL     = preg_replace("/\s{2,}/", ' ', $tableSQL);
+        $tableSQL     = trim(str_replace("\t", ' ', $tableSQL));
+        $tableSQL     = trim(str_replace("\x", "\n", $tableSQL));
+        $sql_array    = explode("\n", $tableSQL);
 
-        $start_query = $sql_array[0];
-        $sql_array = array_reverse($sql_array);
+        $start_query  = $sql_array[0];
+        $sql_array    = array_reverse($sql_array);
         array_pop($sql_array);
-        $sql_array = array_reverse($sql_array);
-        $fieldsList = '';
-        $endQuery = [];
+        $sql_array    = array_reverse($sql_array);
+        $fieldsList   = '';
+        $endQuery     = [];
 
         foreach ($sql_array as $row) {
             if (str_contains($row, ')')) {
@@ -134,19 +134,19 @@ class MediaSqlite extends MediaDb implements MediaDbAbstract
             $fieldsList .= trim($row);
         }
 
-        $fieldsList = str_replace(',', ",\n", $fieldsList);
+        $fieldsList   = str_replace(',', ",\n", $fieldsList);
 
         $fieldsListAr = explode("\n", $fieldsList);
         array_walk($fieldsListAr, function (&$value, $key) {
             $value = trim($value);
-            if (!str_contains($value, '"')) {
+            if (! str_contains($value, '"')) {
                 $value = preg_replace("/([a-zA-Z_]+)\s+(.*)/", '"$1" $2', $value);
             }
         });
 
-        $end_str = implode($sep, $endQuery);
-        $fieldsList = implode($sep, $fieldsListAr);
-        $tableSQL = $start_query.$sep.$fieldsList.$sep.$end_str;
+        $end_str      = implode($sep, $endQuery);
+        $fieldsList   = implode($sep, $fieldsListAr);
+        $tableSQL     = $start_query.$sep.$fieldsList.$sep.$end_str;
 
         return $tableSQL;
     }
@@ -171,19 +171,19 @@ class MediaSqlite extends MediaDb implements MediaDbAbstract
 
     private function copyTable($OrigTable, $fields = [])
     {
-        $sep = ' ';
+        $sep        = ' ';
         array_walk($fields, function (&$value, $key) {
             $value = trim($value);
             $value = '"'.$value.'"';
         });
         $field_list = implode(',', $fields);
 
-        $sql[] = 'INSERT INTO "main"."'.$this->tableTmpName.'"';
-        $sql[] = '('.$field_list.')';
-        $sql[] = 'SELECT';
-        $sql[] = $field_list;
-        $sql[] = 'FROM "main"."'.$OrigTable.'"';
-        $query = implode($sep, $sql);
+        $sql[]      = 'INSERT INTO "main"."'.$this->tableTmpName.'"';
+        $sql[]      = '('.$field_list.')';
+        $sql[]      = 'SELECT';
+        $sql[]      = $field_list;
+        $sql[]      = 'FROM "main"."'.$OrigTable.'"';
+        $query      = implode($sep, $sql);
         $this->insert($query);
     }
 

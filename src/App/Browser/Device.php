@@ -7,10 +7,12 @@ namespace CWP\Browser;
 
 class Device
 {
-    public const UNKNOWN = 'unknown';
+    public const UNKNOWN       = 'unknown';
 
-    public const IPAD = 'iPad';
-    public const IPHONE = 'iPhone';
+    public const IPAD          = 'iPad';
+
+    public const IPHONE        = 'iPhone';
+
     public const WINDOWS_PHONE = 'Windows Phone';
 
     /**
@@ -62,7 +64,7 @@ class Device
      */
     public function getName()
     {
-        if (!isset($this->name)) {
+        if (! isset($this->name)) {
             DeviceDetector::detect($this, $this->getUserAgent());
         }
 

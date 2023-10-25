@@ -1,27 +1,28 @@
 <?php
-
+/**
+ * CWP Media tool for load flags
+ */
 
 $rename_column = [
-    "settings" => [
-        "setting_name" => "definedName"
-    ]
+    'settings' => [
+        'setting_name' => 'definedName',
+    ],
 ];
-$new_column = [
-    "settings" => [
-        "setting_name" => "text",
-        "setting_description" => "text"
-    ]
+$new_column    = [
+    'settings' => [
+        'setting_name'        => 'text',
+        'setting_description' => 'text',
+    ],
 ];
 
-
-$update_data = [
-    "settings" => [
-        "definedName" => [
-            "__USER_XLSX_DIR__" => [
-                'setting_name'=>'Media Files',
+$update_data   = [
+    'settings' => [
+        'definedName' => [
+            '__USER_XLSX_DIR__'  => [
+                'setting_name'        => 'Media Files',
                 'setting_description' => 'User Media Directory'],
-            "__USE_LOCAL_XLSX__" => [
-                'setting_name'=>'Use Custom Media Dir',
+            '__USE_LOCAL_XLSX__' => [
+                'setting_name'        => 'Use Custom Media Dir',
                 'setting_description' => 'User Media Directory'],
 
         ],

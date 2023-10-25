@@ -19,11 +19,11 @@ const STREAM_CLASS = 'show test-nowrap px-5 rounded-pill';
 
 class HTMLDisplay
 {
-    public static $url = false;
+    public static $url     = false;
 
     public static $timeout = 0;
 
-    public static $msg = '';
+    public static $msg     = '';
 
     public static $flushdummy;
 
@@ -32,8 +32,8 @@ class HTMLDisplay
         ob_implicit_flush(true);
         @ob_end_flush();
 
-        $flushdummy = '';
-        for ($i = 0; $i < 1200; ++$i) {
+        $flushdummy       = '';
+        for ($i = 0; $i < 1200; $i++) {
             $flushdummy .= '      ';
         }
         self::$flushdummy = $flushdummy;
@@ -52,7 +52,7 @@ class HTMLDisplay
                     $url_array[] = $key.'='.urlencode($value);
                 }
                 $url_params = implode('&', $url_array);
-                $url = $url.$sep.$url_params;
+                $url        = $url.$sep.$url_params;
             } else {
                 $msg = urlencode($msg);
                 if (str_contains($url, '?')) {
@@ -74,9 +74,9 @@ class HTMLDisplay
 
     public static function pushhtml($template, $params = [])
     {
-        $params['MSG_CLASS'] = MSG_CLASS;
+        $params['MSG_CLASS']    = MSG_CLASS;
         $params['HEADER_CLASS'] = HEADER_CLASS;
-        $contents = Template::GetHTML($template, $params);
+        $contents               = Template::GetHTML($template, $params);
         self::push($contents);
     }
 
@@ -128,7 +128,7 @@ class HTMLDisplay
     public static function draw_excelLink($excel_file)
     {
         $relativePath = substr($excel_file, \strlen(__HTTP_ROOT__) + 1);
-        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+        $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
         if (false == self::is_404($url)) {
             return false;
@@ -144,13 +144,13 @@ class HTMLDisplay
     {
         $relativePath = substr($pdf_file, \strlen(__HTTP_ROOT__) + 1);
 
-        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+        $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
         if (false == self::is_404($url)) {
             return false;
         }
 
-        $url = 'onclick="event.stopPropagation(); OpenNewWindow(\''.$url.'\')"';
+        $url          = 'onclick="event.stopPropagation(); OpenNewWindow(\''.$url.'\')"';
 
         return $url;
     }
@@ -168,23 +168,23 @@ class HTMLDisplay
 
     public function display_table_rows($array, $letter)
     {
-        $html = '';
-        $start = '';
-        $end = '';
-        $row_template = new Template();
+        $html             = '';
+        $start            = '';
+        $end              = '';
+        $row_template     = new Template();
 
         foreach ($array as $part) {
             if ('' == $start) {
                 $start = $part['id'];
             }
 
-            $end = $part['id'];
+            $end         = $part['id'];
 
             $check_front = '';
-            $check_back = '';
+            $check_back  = '';
 
-            $classFront = 'Front'.$letter;
-            $classBack = 'Back'.$letter;
+            $classFront  = 'Front'.$letter;
+            $classBack   = 'Back'.$letter;
 
             if ('Back' == $part['former']) {
                 $check_back = 'checked';
@@ -195,42 +195,42 @@ class HTMLDisplay
             $radio_check = '';
 
             if ('4pg' == $part['config']) {
-                $value = [
+                $value       = [
                     'Front' => ['value' => 'Front', 'checked' => $check_front, 'text' => 'Front', 'class' => $classFront],
-                    'Back' => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
+                    'Back'  => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
                 ];
                 $radio_check = $this->draw_radio('former_'.$part['id'], $value);
             }
 
-            $facetrim = MediaSettings::isFacetrim($part);
+            $facetrim    = MediaSettings::isFacetrim($part);
 
-            $array = [
-                'MARKET' => $part['market'],
+            $array       = [
+                'MARKET'      => $part['market'],
                 'PUBLICATION' => $part['pub'],
-                'COUNT' => $part['count'],
-                'SHIP' => $part['ship'],
-                'RADIO_BTNS' => $radio_check,
-                'FACE_TRIM' => $this->draw_checkbox('facetrim_'.$part['id'], $facetrim, 'Face Trim'),
-              //  'NO_TRIM'     => $this->draw_checkbox('nobindery_'.$part['id'], $nobindery, 'No Trimmers'),
+                'COUNT'       => $part['count'],
+                'SHIP'        => $part['ship'],
+                'RADIO_BTNS'  => $radio_check,
+                'FACE_TRIM'   => $this->draw_checkbox('facetrim_'.$part['id'], $facetrim, 'Face Trim'),
+                //  'NO_TRIM'     => $this->draw_checkbox('nobindery_'.$part['id'], $nobindery, 'No Trimmers'),
             ];
 
             $row_template->template('form/row', $array);
         }
 
         $AllCheckBoxFront = 'all'.$classFront;
-        $AllCheckBoxBack = 'all'.$classBack;
+        $AllCheckBoxBack  = 'all'.$classBack;
         if ($end > $start + 1 && '' != $radio_check) {
             $radio_check_array = [
-                'LETTER' => $letter,
+                'LETTER'           => $letter,
                 'ALLCHECKBOXFRONT' => $AllCheckBoxFront,
-                'ALLCHECKBOXBACK' => $AllCheckBoxBack,
-                'CLASSFRONT' => $classFront,
-                'CLASSBACK' => $classBack,
+                'ALLCHECKBOXBACK'  => $AllCheckBoxBack,
+                'CLASSFRONT'       => $classFront,
+                'CLASSBACK'        => $classBack,
             ];
             $row_template->template('form/all_parts', $radio_check_array);
         }
 
-        $html = $row_template->return();
+        $html             = $row_template->return();
 
         return $html;
     }

@@ -15,12 +15,14 @@ use Symfony\Component\Finder\Finder;
 class MediaLocal implements MediaFileInterface
 {
     public $directory;
+
     public $pdf_file;
+
     public $job_number;
 
     public function getContents($path)
     {
-        $f = new MediaFinder();
+        $f     = new MediaFinder();
         $array = $f->search($path, '*.pdf');
         foreach ($array as $file) {
             $return[] = ['name' => basename($file), 'path' => $file];
@@ -32,7 +34,7 @@ class MediaLocal implements MediaFileInterface
     public function exists($file)
     {
         $directory = (new MediaFileSystem())->directory('upload', true);
-        $pdf_file = $directory.\DIRECTORY_SEPARATOR.$file;
+        $pdf_file  = $directory.\DIRECTORY_SEPARATOR.$file;
 
         return file_exists($pdf_file);
     }

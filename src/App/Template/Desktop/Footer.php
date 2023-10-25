@@ -18,8 +18,8 @@ class Footer extends HTMLDocument
         if (MediaSettings::isSet('__FOOTER_NAV_HTML__')) {
             $params['FOOT_NAV_PANEL'] = Template::GetHTML(
                 'base/footer/settings_nav',
-                ['FOOTER_NAV_HTML' => __FOOTER_NAV_HTML__,
-                'VERSIONS_HTML' => self::_footerVersionUpdates(),
+                ['FOOTER_NAV_HTML'  => __FOOTER_NAV_HTML__,
+                    'VERSIONS_HTML' => self::_footerVersionUpdates(),
                 ]
             );
         }
