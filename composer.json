@@ -35,6 +35,8 @@
         "monolog/monolog": "^2.9",
         "tracy/tracy": "^2.10",
         "delight-im/auth": "^8.3",
-        "kunalvarma05/dropbox-php-sdk": "^0.4.2"
+        "kunalvarma05/dropbox-php-sdk": "^0.4.2",
+        "masbug/flysystem-google-drive-ext": "^2.2",
+        "league/flysystem-bundle": "^3.2"
     }
 }
