@@ -12,6 +12,7 @@ namespace CWP\Filesystem;
 use CWP\Core\Bootstrap;
 use CWP\Core\Media;
 use CWP\Filesystem\Driver\MediaDropbox;
+use CWP\Filesystem\Driver\MediaGoogleDrive;
 use CWP\Filesystem\Driver\MediaLocal;
 use Nette\Utils\FileSystem;
 
@@ -29,16 +30,17 @@ class MediaFileSystem
     {
         $this->job_number = $job_number;
         $this->pdf_file   = $pdf_file;
-        if (Media::$Dropbox) {
-            $this->fileDriver = new MediaDropbox();
-        } else {
-            $this->fileDriver = new MediaLocal();
-        }
+        $this->fileDriver = Media::getFileDriver();
     }
 
     public function getContents($path)
     {
         return $this->fileDriver->getContents($path);
+    }
+
+    public function dirExists($file)
+    {
+        return $this->fileDriver->dirExists($file);
     }
 
     public function exists($file)
@@ -149,11 +151,13 @@ class MediaFileSystem
                 $directory .= \DIRECTORY_SEPARATOR.__ZIP_DIRECTORY__;
                 break;
             case 'upload':
-                if (Media::$Dropbox) {
-                    $directory = __TEMP_DIR__;
-                } else {
+                // if (Media::$Dropbox) {
+                //     $directory = __TEMP_DIR__;
+                // } elseif (Media::$Google) {
+                //         $directory = __TEMP_DIR__;
+                // } else {
                     $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
-                }
+                // }
                 break;
             case 'pdf':
                 $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
@@ -164,7 +168,7 @@ class MediaFileSystem
         $this->directory = FileSystem::normalizePath($directory);
 
         if (true == $create_dir) {
-            FileSystem::createDir($directory, 511);
+            $this->fileDriver->createFolder($directory);
         }
 
         return $this->directory;

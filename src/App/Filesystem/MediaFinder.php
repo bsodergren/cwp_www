@@ -7,6 +7,7 @@ namespace CWP\Filesystem;
 
 use CWP\Core\Media;
 use CWP\Filesystem\Driver\MediaDropbox;
+use CWP\Filesystem\Driver\MediaGoogleDrive;
 use CWP\Filesystem\Driver\MediaLocal;
 use Nette\Utils\FileSystem;
 
@@ -17,12 +18,8 @@ class MediaFinder
     public function __construct($media = '')
     {
         $this->media = $media;
+        $this->fileDriver = Media::getFileDriver();
 
-        if (Media::$Dropbox) {
-            $this->fileDriver = new MediaDropbox();
-        } else {
-            $this->fileDriver = new MediaLocal();
-        }
     }
 
     public function dirExists($directory)

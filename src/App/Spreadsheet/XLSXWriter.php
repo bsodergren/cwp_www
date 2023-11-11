@@ -7,6 +7,7 @@ namespace CWP\Spreadsheet;
 
 use CWP\Core\Media;
 use CWP\Filesystem\Driver\MediaDropbox;
+use CWP\Filesystem\Driver\MediaGoogleDrive;
 use Nette\Utils\FileSystem;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -16,16 +17,23 @@ class XLSXWriter extends Xlsx
 
     public function write($filename)
     {
+
         if (Media::$Dropbox) {
-            $d            = new MediaDropbox();
-            $filename     = basename($filename);
-            $tmp_file     = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$filename;
-            $dropbox_name = $this->xls_path.\DIRECTORY_SEPARATOR.$filename;
-            parent::save($tmp_file);
-            $file         = $d->save($tmp_file, $dropbox_name, ['autorename' => false]);
-            FileSystem::delete($tmp_file);
+            $this->saveFile(new MediaDropBox,$filename);
+        } elseif (Media::$Google) {
+            $this->saveFile(new MediaGoogleDrive,$filename);
         } else {
             parent::save($filename);
         }
+    }
+
+    private function saveFile($object,$filename)
+    {
+        $filename     = basename($filename);
+        $tmp_file     = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$filename;
+        $remote_name = $this->xls_path.\DIRECTORY_SEPARATOR.$filename;
+        parent::save($tmp_file);
+        $file         = $object->save($tmp_file, $remote_name);
+        FileSystem::delete($tmp_file);
     }
 }

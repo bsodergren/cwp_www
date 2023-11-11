@@ -5,9 +5,12 @@
 
 namespace CWP\Core;
 
-use CWP\Filesystem\MediaFileSystem;
-use CWP\Media\MediaPublication;
 use CWP\Utils\Utils;
+use CWP\Media\MediaPublication;
+use CWP\Filesystem\MediaFileSystem;
+use CWP\Filesystem\Driver\MediaLocal;
+use CWP\Filesystem\Driver\MediaDropbox;
+use CWP\Filesystem\Driver\MediaGoogleDrive;
 
 /**
  * @property mixed $job_id
@@ -30,6 +33,8 @@ class Media
     public static $MediaAppUpdater;
 
     public static $Dropbox = false;
+
+    public static $Google = false;
 
     private $mediaLoc;
 
@@ -561,4 +566,16 @@ class Media
 
         return $job_id;
     }
+
+    public static function getFileDriver()
+    {
+        if (Media::$Dropbox) {
+            return new MediaDropbox();
+        } elseif (Media::$Google) {
+            return  new MediaGoogleDrive();
+        } else {
+            return new MediaLocal();
+        }
+    }
+
 }

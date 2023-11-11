@@ -26,7 +26,6 @@ $upload_directory             = $locations->getDirectory('upload', true);
 $params                       = [];
 $upload_params                = [];
 $pdf_select_options           = [];
-
 if (1 == __IMAP_ENABLE__) {
     /* try to connect */
     $import = new EmailImport();
