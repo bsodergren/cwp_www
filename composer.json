@@ -30,6 +30,8 @@
         "symfony/process": "^6.3",
         "symfony/finder": "^6.3",
         "nette/finder": "^3.0",
+        "composer/semver": "^3.3",
+        "monolog/monolog": "^2.9",
         "tracy/tracy": "^2.10",
         "delight-im/auth": "^8.3",
         "kunalvarma05/dropbox-php-sdk": "^0.4.2",
