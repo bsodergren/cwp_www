@@ -20,5 +20,5 @@ if (null !== Media::$VersionUpdate) {
     echo 'All up  to date';
 }
 
-echo HTMLDisplay::JavaRefresh('/index.php', 10);
+//echo HTMLDisplay::JavaRefresh('/index.php', 10);
 MediaDevice::getFooter();
