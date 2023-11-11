@@ -51,6 +51,8 @@ class MediaDevice
                 return 'DESKTOP';
             } elseif ('iOS' == $os->getName()) {
                 return 'MOBILE';
+            } elseif ('unknown' == $device->getName()) {
+                return 'DESKTOP';
             }
         } elseif ('Chrome' == $browser->getName()) {
             if ('Windows' == $os->getName()) {
