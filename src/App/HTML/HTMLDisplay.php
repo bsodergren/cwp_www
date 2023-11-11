@@ -87,6 +87,19 @@ class HTMLDisplay
         @ob_flush();
     }
 
+    public static function spinner()
+    {
+        $contents = '
+<div class="text-center">
+<div class="spinner-border"
+style="width: 10rem; height: 10rem; border-width: 2rem;"
+ role="status">
+<span class="visually-hidden">Loading...</span>
+</div>
+</div>';
+        self::push($contents."<br> \n");
+    }
+
     public static function put($contents, $color = null)
     {
         if (null !== $color) {

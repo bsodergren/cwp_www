@@ -33,6 +33,7 @@ class MediaFileSystem
         $this->fileDriver = Media::getFileDriver();
     }
 
+
     public function getContents($path)
     {
         return $this->fileDriver->getContents($path);
@@ -140,7 +141,7 @@ class MediaFileSystem
         }
 
         $directory       = __FILES_DIR__.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
-
+//dd($directory);
         $type            = strtolower($type);
         switch ($type) {
             case 'xlsx':

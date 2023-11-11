@@ -44,13 +44,13 @@ if (1 == __IMAP_ENABLE__) {
     }
     // dd($import->attachments);
 }
-
+//dd($locations->getDirectory('pdf', false));
 $results                      = $locations->getContents($locations->getDirectory('pdf', false));
 foreach ($results as $key => $pdf_file) {
-    if (! in_array($pdf_file['name'], $files)) {
+    if (! in_array($pdf_file, $files)) {
         $dropbox_options_html .= template::GetHTML('/import/dropbox/form_option', [
-            'OPTION_VALUE' => $pdf_file['path'],
-            'OPTION_NAME'  => $pdf_file['name'],
+            'OPTION_VALUE' => $pdf_file,
+            'OPTION_NAME'  => basename($pdf_file, '.pdf'),
         ]);
     }
 }

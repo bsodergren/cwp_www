@@ -70,8 +70,8 @@ class Import extends MediaProcess
                 $locations     = new MediaFileSystem();
                 $pdf_directory = $locations->getDirectory('pdf', false);
                 $pdf_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
-
                 $locations->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
+
                 MediaQPDF::cleanPDF($pdf_file);
 
                 //        if (file_exists($pdf_file)) {
@@ -103,7 +103,7 @@ class Import extends MediaProcess
 
         if (false == $this->error) {
             $this->url     = 'index.php';
-            $this->timeout = 2;
+            $this->timeout = 50;
 
             // $media_closing = '/'.basename($fileName, '.pdf');
 

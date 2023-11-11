@@ -55,10 +55,11 @@ foreach ($setting['local'] as $key => $array) {
 
 // $const = get_defined_constants(true);
 Media::$Dropbox = false;
-Media::$Google  = true;
+Media::$Google  = false;
 
-if (Media::$Dropbox || Media::$Google  ) {
+if (Media::$Google) {
     define('__FILES_DIR__', '');
+    define('__CLOUD_DIR__', 'H:\\My Drive\\CWPMediaFolder\\');
 } else {
     if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {
         if (true == Bootstrap::$CONFIG['server']['media_files']) {

@@ -25,7 +25,7 @@ class MediaLocal implements MediaFileInterface
         $f     = new MediaFinder();
         $array = $f->search($path, '*.pdf');
         foreach ($array as $file) {
-            $return[] = ['name' => basename($file), 'path' => $file];
+            $return[] =  $file;
         }
 
         return $return;
@@ -33,10 +33,11 @@ class MediaLocal implements MediaFileInterface
 
     public function exists($file)
     {
-        $directory = (new MediaFileSystem())->directory('upload', true);
-        $pdf_file  = $directory.\DIRECTORY_SEPARATOR.$file;
+        //dd($file);
 
-        return file_exists($pdf_file);
+        // $directory = (new MediaFileSystem())->directory('upload', true);
+        // $file  = $directory.\DIRECTORY_SEPARATOR.$file;
+        return file_exists($file);
     }
 
     public function delete($file)
@@ -76,6 +77,7 @@ class MediaLocal implements MediaFileInterface
 
     public function createFolder($path)
     {
+        FileSystem::createDir($path);
     }
 
     public function uploadFile($filename, $dropboxFilename, $options = [])

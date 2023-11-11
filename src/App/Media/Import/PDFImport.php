@@ -53,6 +53,11 @@ class PDFImport extends MediaImport
 
     public function Import($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
     {
+
+        $pdf_uploaded_file = (new MediaFileSystem())->DownloadFile($pdf_uploaded_file);
+
+
+
         $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
         if (null !== $this->job_id) {
             return 0;
@@ -73,12 +78,11 @@ class PDFImport extends MediaImport
         $this->insertDrop($pdf_uploaded_file, $update_form);
     }
 
-    public function processPdf($pdf_file = '', $media_job_id = '', $form_number = '')
+    public function processPdf($file = '', $media_job_id = '', $form_number = '')
     {
         if ('' != $media_job_id) {
             $this->job_id = $media_job_id;
         }
-        $file = (new MediaFileSystem())->DownloadFile($pdf_file);
 
         if (file_exists($file)) {
             $parser = new Parser();

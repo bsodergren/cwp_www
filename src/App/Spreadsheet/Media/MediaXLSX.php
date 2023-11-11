@@ -7,6 +7,7 @@ namespace CWP\Spreadsheet\Media;
 
 use CWP\Core\Media;
 use CWP\Filesystem\MediaDropbox;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Calculator;
@@ -29,6 +30,7 @@ class MediaXLSX extends Media
     public $box;
 
     public $form_details;
+    public $xlsx_path;
 
     public $sheet_labels = [];
 
@@ -52,8 +54,9 @@ class MediaXLSX extends Media
     {
         $calc = new Calculator($this->media);
 
+        $this->xlsx_path = $this->media->getDirectory('xlsx');
+        (new MediaFileSystem)->createFolder($this->xlsx_path);
         foreach ($this->xlsx_array as $form_number => $dataArray) {
-            //$this->xlsx_path = $this->media->getDirectory('xlsx');
 
             $data              = $dataArray['forms'];
             // $data           = $dataArray;

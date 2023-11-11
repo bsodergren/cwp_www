@@ -69,7 +69,7 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public object $localfs;
 
-    private $upload_dir = '/Uploads';
+    private $upload_dir = '\Uploads';
 
     public function __construct()
     {
@@ -90,7 +90,6 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function dirExists($dir)
     {
-
         $r = $this->google->directoryExists($dir);
 
         return $r;
@@ -98,9 +97,7 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function search($search, $path = '/')
     {
-        return $this->getContents($path,true);
-
-
+        return $this->getContents($path, true);
     }
 
     public function getFile($filename)
@@ -136,14 +133,15 @@ class MediaGoogleDrive implements MediaFileInterface
         return $path;
     }
 
-    public function getContents($path,$recursive = false)
+    public function getContents($path, $recursive = false)
     {
+        $path     = Filesystem::unixSlashes($path);
         $contents = $this->google->listContents($path, $recursive /* is_recursive */);
         // Fetch Items (Returns an instance of ModelCollection)
 
         foreach ($contents as $item) {
-            if($item->isFile() == true){
-                $files[]= $item->path();
+            if ($item->isFile() == true) {
+                $files[] = $item->path();
             }
         }
 
@@ -154,8 +152,7 @@ class MediaGoogleDrive implements MediaFileInterface
     {
         $file = Filesystem::unixSlashes($file);
 
-            return $this->google->delete($file);
-
+        return $this->google->delete($file);
     }
 
     public function save($localfile, $remotefile, $options = [])
@@ -167,14 +164,13 @@ class MediaGoogleDrive implements MediaFileInterface
         }
 
         $this->google->writeStream($remotefile, $this->localfs->readStream($localfile));
-
     }
 
     public function UploadFile($filename, $uploadFilename, $options = [])
     {
-        dd("Upload File");
-        $filename = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename);
-
+        //dd("Upload File");
+        //dd($filename, $uploadFilename);
+        //  $filename = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename);
         $this->save($filename, $uploadFilename, $options);
 
         return $uploadFilename;
@@ -182,20 +178,16 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function DownloadFile($filename)
     {
-        dd("Download File");
+        // dd("Download File");
         $tmpFilename = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename);
 
         if (file_exists($tmpFilename)) {
             Filesystem::delete($tmpFilename);
         }
+  //      dd(get_class_methods($this->google));
 
-        $file        = $this->google->download($filename, $tmpFilename);
-
-        // Downloaded File Metadata
-        $metadata    = $file->getMetadata();
-
-        // Name
-        $name        = $metadata->getName();
+        $this->localfs->writeStream($tmpFilename, $this->google->readStream($filename));
+//        $file        = $this->google->download($filename, $tmpFilename);
 
         return $tmpFilename;
     }
@@ -209,7 +201,6 @@ class MediaGoogleDrive implements MediaFileInterface
     {
         $code    = $e->getCode();
         $message = $e->getMessage();
-
 
         echo HTMLDisplay::JavaRefresh('/error.php', 0, ['type' => 'Dropbox', 'code' => $code, 'message' => $message]);
         exit;

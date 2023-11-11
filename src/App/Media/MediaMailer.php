@@ -72,7 +72,7 @@ class MediaMailer
             echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, 'Email to '.$sendname.' sent');
             ob_flush();
         } catch (Exception $e) {
-            echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}");
+            echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, 500, "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}");
         }
     }
 }
