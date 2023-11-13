@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
 use CWP\Core\MediaError;
@@ -28,24 +28,25 @@ if (isset($_POST['divClass'])) {
         $hidden = 0;
     }
 
-    $count        = $explorer->table('media_job')
+    $count = $explorer->table('media_job')
         ->where('job_id', $id) // must be called before update()
         ->update([
             'hidden' => $hidden,
-        ]);
+        ])
+    ;
     exit;
 }
 
-$procesClass  = ucfirst(__FORM_POST__);
+$procesClass = ucfirst(__FORM_POST__);
 if (array_key_exists('FORM_PROCESS', $_POST)) {
     if ('updateSetting' == $_POST['FORM_PROCESS']) {
         $procesClass = ucfirst('Settings');
     }
 }
 
-$procesClass  = 'CWP\\Process\\'.$procesClass;
+$procesClass = 'CWP\\Process\\'.$procesClass;
 $mediaProcess = new $procesClass($media);
-//dd($procesClass, $_REQUEST);
+// dd($procesClass, $_REQUEST);
 $mediaProcess->run($_REQUEST);
 
 $mediaProcess->reload();

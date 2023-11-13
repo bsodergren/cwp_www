@@ -1,19 +1,18 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
-use CWP\Filesystem\MediaFileSystem;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 
 require_once '.config.inc.php';
 
-//dd($localFile, $RemoteFile);
+// dd($localFile, $RemoteFile);
 
 MediaDevice::getHeader();
-$timeout    = 15;
-$timeout    = $timeout * 1000;
+$timeout = 15;
+$timeout *= 1000;
 $update_inv = $timeout / 100;
 Template::echo('progress_bar', ['SPEED' => $update_inv]);
 MediaDevice::getFooter();

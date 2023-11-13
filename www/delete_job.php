@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
 use CWP\HTML\HTMLDisplay;
@@ -22,10 +22,10 @@ if (array_key_exists('actSubmit', $_REQUEST)) {
 use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
-$form_url    = __URL_PATH__.'/delete_job.php';
+$form_url = __URL_PATH__.'/delete_job.php';
 
-$form        = new Formr\Formr();
-$hidden      = ['job_id' => $job_id];
+$form = new Formr\Formr();
+$hidden = ['job_id' => $job_id];
 $form->open('', '', $form_url, 'post', '', $hidden);
 echo HTMLDisplay::output('Are you sure you want to delete this job <br>');
 $buttonClass = 'btn fw-bold btn-lg ';

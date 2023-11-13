@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
 use CWP\HTML\HTMLDisplay;
@@ -23,10 +23,10 @@ if (__USE_REGISTER__ == false) {
 
 define('TITLE', 'Register');
 
-if (! isset($_POST['email'])) {
+if (!isset($_POST['email'])) {
     $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'register']);
-    $params['FORM_FIELD']    = Template::getHTML('authentication/forms/register');
-    $params['__FORM_URL__']  = __URL_PATH__.'/login/register.php';
+    $params['FORM_FIELD'] = Template::getHTML('authentication/forms/register');
+    $params['__FORM_URL__'] = __URL_PATH__.'/login/register.php';
 
     MediaDevice::getHeader();
     $template->render('authentication/form', $params);
@@ -48,7 +48,7 @@ try {
         $mail->mail();
     });
 
-    $msg    = 'We have signed up a new user with the ID '.$userId;
+    $msg = 'We have signed up a new user with the ID '.$userId;
 } catch (\Delight\Auth\InvalidEmailException $e) {
     $msg = 'Invalid email address';
 } catch (\Delight\Auth\InvalidPasswordException $e) {

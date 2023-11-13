@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
 use CWP\Template\Template;

@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
 use CWP\HTML\HTMLDisplay;
@@ -49,8 +49,8 @@ if (__USE_REGISTER__ == true) {
 }
 
 $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'login']);
-$params['FORGOT_PWD']    = Template::getHTML('authentication/button/button', ['BUTTON_LINK' => __URL_PATH__.'/login/forgot.php', 'BUTTON_TEXT' => 'Forgot Password']);
-$params['FORM_FIELD']    = Template::getHTML('authentication/forms/login');
-$params['__FORM_URL__']  = __URL_PATH__.'/login/login.php';
+$params['FORGOT_PWD'] = Template::getHTML('authentication/button/button', ['BUTTON_LINK' => __URL_PATH__.'/login/forgot.php', 'BUTTON_TEXT' => 'Forgot Password']);
+$params['FORM_FIELD'] = Template::getHTML('authentication/forms/login');
+$params['__FORM_URL__'] = __URL_PATH__.'/login/login.php';
 $template->render('authentication/form', $params);
 MediaDevice::getFooter();

@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
 require '../.config.inc.php';
@@ -25,5 +25,5 @@ if (null !== Media::$VersionUpdate) {
     HTMLDisplay::put('All up  to date', 'Red');
 }
 
-//echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
+// echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
 MediaDevice::getFooter();
