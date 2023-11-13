@@ -45,6 +45,7 @@ if (array_key_exists('FORM_PROCESS', $_POST)) {
 
 $procesClass  = 'CWP\\Process\\'.$procesClass;
 $mediaProcess = new $procesClass($media);
+//dd($procesClass, $_REQUEST);
 $mediaProcess->run($_REQUEST);
 
 $mediaProcess->reload();

@@ -26,26 +26,29 @@ class Form extends MediaProcess
 
     public function updateForm($req)
     {
-        $job_id = $req['job_id'];
+        $job_id     = $req['job_id'];
+        $skip_forms = '';
+        $former     = [];
 
         foreach ($req as $key => $value) {
             $break = false;
+
             if (str_starts_with($key, 'former')) {
-                list($front, $id) = explode('_', $key);
-                $count            = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]);
+                list($_, $id) = explode('_', $key);
+                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]);
             }
 
             if (str_starts_with($key, 'facetrim')) {
-                list($front, $id) = explode('_', $key);
-                $count            = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]);
+                list($_, $id) = explode('_', $key);
+                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]);
             }
 
             if (str_starts_with($key, 'nobindery')) {
-                list($front, $id, $letters) = explode('_', $key);
+                list($_, $id, $letters) = explode('_', $key);
 
                 // dd($front,$id,$letters,$value, $job_id);
 
-                $count                      = Media::$explorer->table('form_data')->where('job_id', $job_id)
+                $count                  = Media::$explorer->table('form_data')->where('job_id', $job_id)
                 ->where('form_number', $id)
                 ->where('form_letter', $letters)
                 ->update(['no_bindery' => $value]);

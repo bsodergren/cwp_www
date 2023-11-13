@@ -181,10 +181,10 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
     public function display_table_rows($array, $letter)
     {
-        $html             = '';
-        $start            = '';
-        $end              = '';
-        $row_template     = new Template();
+        $html         = '';
+        $start        = '';
+        $end          = '';
+        $row_template = new Template();
 
         foreach ($array as $part) {
             if ('' == $start) {
@@ -230,20 +230,9 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
             $row_template->template('form/row', $array);
         }
 
-        $AllCheckBoxFront = 'all'.$classFront;
-        $AllCheckBoxBack  = 'all'.$classBack;
-        if ($end > $start + 1 && '' != $radio_check) {
-            $radio_check_array = [
-                'LETTER'           => $letter,
-                'ALLCHECKBOXFRONT' => $AllCheckBoxFront,
-                'ALLCHECKBOXBACK'  => $AllCheckBoxBack,
-                'CLASSFRONT'       => $classFront,
-                'CLASSBACK'        => $classBack,
-            ];
-            $row_template->template('form/all_parts', $radio_check_array);
-        }
+        // }
 
-        $html             = $row_template->return();
+        $html         = $row_template->return();
 
         return $html;
     }

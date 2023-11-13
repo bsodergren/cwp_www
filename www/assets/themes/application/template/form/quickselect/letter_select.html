@@ -1,0 +1,13 @@
+<div class="ps-2 %%COLUMS%%">
+    %%LETTER%%
+    <input type="radio" name="%%NAME%%" class="%%FRONTBUTTONCLASS%%" autocomplete="off" id="%%FRONTID%%"
+        %%FRONTCHECKED%% />
+
+    <label name="%%NAME%%" class="%%FRONTLABELCLASS%%" for="%%FRONTID%%" id="%%FRONTID%%"
+        onclick="checkAll%%LETTER%%($(this));">Front</label>
+
+    <input type="radio" name="%%NAME%%" class="%%BACKBUTTONCLASS%%" autocomplete="off" id="%%BACKID%%"
+        %%BACKCHECKED%% />
+    <label name="%%NAME%%" class="%%BACKLABELCLASS%%" for="%%BACKID%%" id="%%BACKID%%"
+        onclick="checkAll%%LETTER%%($(this));">Back</label>
+</div>

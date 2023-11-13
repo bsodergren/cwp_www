@@ -50,6 +50,7 @@ class HTMLForms
             'NAME'    => $name,
             'TEXT'    => $text,
             'CHECKED' => $checked,
+            'VALUE'   => $value,
         ];
 
         return self::formInput($template, $params);

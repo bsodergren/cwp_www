@@ -1,0 +1,14 @@
+
+function checkAll%%LETTER%%(e) {
+    console.log(e);
+    $('.%%CLASSBACK%%').attr('checked', false);
+    $('.%%CLASSFRONT%%').attr('checked', false);
+    if (e.hasClass('%%ALLCHECKBOXFRONT%%')) {
+        $('.%%CLASSFRONT%%').attr('checked', 'checked');
+
+    }
+    if (e.hasClass('%%ALLCHECKBOXBACK%%')) {
+        $('.%%CLASSBACK%%').attr('checked', 'checked');
+    }
+}
+

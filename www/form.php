@@ -75,7 +75,7 @@ foreach ($result as $idx => $form_array) {
 }
 
 foreach ($new_forms as $form_number => $parts) {
-    $next_button           = 'Next';
+    $next_button                 = 'Next';
 
     if ($current_form_number != $first_form) {
         $dropdown_links .= template::GetHTML('/form/page_form_submit', [
@@ -90,7 +90,7 @@ foreach ($new_forms as $form_number => $parts) {
         // ]);
     }
 
-    $form_part             = '';
+    $form_part                   = '';
     foreach ($form_list as $n => $list_form_number) {
         $url_form_number  = $list_form_number->form_number;
         $page_html_params = [];
@@ -136,7 +136,7 @@ foreach ($new_forms as $form_number => $parts) {
         $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
     }
 
-    $form_btn_class        = ' btn-info';
+    $form_btn_class              = ' btn-info';
     if ($next_form_number > $max_forms) {
         $next_view        = 'save';
         $next_button      = 'Save Form';
@@ -159,14 +159,62 @@ foreach ($new_forms as $form_number => $parts) {
         'BUTTON_VALUE' => $next_button,
     ]);
 
-    $form_html['FORM_URL'] = __URL_PATH__.'/process.php';
-    $form_html['NAME']     = $form_array['job_number'].' - Form Number '.$form_number.' of '.$max_forms.' - '.$config[$form_number]['config'].' - '.$config[$form_number]['bind'];
+    $form_html['FORM_URL']       = __URL_PATH__.'/process.php';
+    $form_html['NAME']           = $form_array['job_number'].' - Form Number '.$form_number.' of '.$max_forms.' - '.$config[$form_number]['config'].' - '.$config[$form_number]['bind'];
+    $form_html['CHECKBOX_PARTS'] = '';
+
+    $columns                     = 12 / count($parts);
+    $ColClass                    = 'col-'.$columns;
 
     foreach ($parts as $form_letter => $form_data) {
-        $row_html  = $display->display_table_rows($form_data, $form_letter);
-        $nobindery = MediaSettings::skipTrimmers($form_data);
-        $checkbox  = $display->draw_checkbox('nobindery_'.$form_number.'_'.$form_letter,
-            $nobindery, 'No Trimmers', 'form/checkbox');
+        $frontChecked      = '';
+        $backChecked       = '';
+
+        if ($form_data[0]['former'] == 'Front') {
+            $frontChecked = 'checked';
+        }
+        if ($form_data[0]['former'] == 'Back') {
+            $backChecked = 'checked';
+        }
+
+        $BtnClass          = 'btn-check';
+        $LabelClass        = 'btn btn-outline-success';
+
+        $classFront        = 'Front'.$form_letter;
+        $classBack         = 'Back'.$form_letter;
+
+        $radio_check_array = [
+            'NAME'             => 'All'.$form_letter,
+            'FRONTID'          => 'Front-'.$form_letter.'-outlined',
+            'BACKID'           => 'Back-'.$form_letter.'-outlined',
+            'COLUMS'           => $ColClass,
+            'LETTER'           => $form_letter,
+
+            'FRONTCHECKED'     => $frontChecked,
+            'BACKCHECKED'      => $backChecked,
+
+            'FRONTLABELCLASS'  => $LabelClass.' all'.$classFront,
+
+            'FRONTBUTTONCLASS' => $BtnClass.' all'.$classFront,
+
+            'BACKLABELCLASS'   => $LabelClass.' all'.$classBack,
+            'BACKBUTTONCLASS'  => $BtnClass.' all'.$classBack,
+
+            'ALLCHECKBOXFRONT' => 'all'.$classFront,
+            'ALLCHECKBOXBACK'  => 'all'.$classBack,
+
+            'CLASSFRONT'       => $classFront,
+            'CLASSBACK'        => $classBack,
+
+        ];
+
+        // dump([$radio_check_array]);
+        $form_html['CHECKBOX_PARTS'] .= Template::GetHTML('form/quickselect/letter_select', $radio_check_array);
+        $form_html['CHECKBOX_JAVA'] .= Template::GetHTML('form/quickselect/javascript', $radio_check_array);
+        //$form_html['CHECKBOX_PARTS'] .= $display->draw_checkbox('quickselect['.$form_letter.'_'.$list.']', 'Front', $form_letter, 'form/checkbox');
+        $row_html          = $display->display_table_rows($form_data, $form_letter);
+        $nobindery         = MediaSettings::skipTrimmers($form_data);
+        $checkbox          = $display->draw_checkbox('nobindery_'.$form_number, $nobindery, 'No Trimmers', 'form/checkbox');
         $template->template('form/header', ['NUMBER' => $form_number, 'LETTER' => $form_letter, 'TRIMMERS' => $checkbox,
             'ROWS'                                   => $row_html]);
 
@@ -181,7 +229,7 @@ $form_html['PREV_FORM_NUMBER'] = $prev_form_number;
 
 $form_html['JOB_ID']           = $media->job_id;
 // $form_html['NEXT_VIEW']        = $next_view;
-$form_html['FORM_BODY_HTML']   = $letter_html;
+$form_html['FORM_BODY_HTML']   = "\n<!-- --------------------- -->\n".$letter_html."\n<!-- --------------------- -->\n";
 $form_html['FORM_BUTTONS']     = $dropdown_links;
 $form_html['FORM_LIST_HTML']   = $page_form_html;
 

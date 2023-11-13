@@ -22,9 +22,24 @@
         </div>
         <div class="table table-success row">
             <div class="col">
-                %%FORM_BODY_HTML%%
+                <div class="container-letter">
+                    <div class="table-group-divider row">
+                        <div class="bg-secondary text-center fs-4 col-12">
+                            Form Quick Select
+                        </div>
+                    </div>
+                    <div class="row fs-4 text-center">
+                        %%CHECKBOX_PARTS%%
+                        <script type="text/javascript">
+                                %%CHECKBOX_JAVA%%
+                        </script>
+                    </div>
+                </div>
+            <!-- </div> -->
+            %%FORM_BODY_HTML%%
             </div>
         </div>
+    </div>
     </div>
 
     <input type="hidden" name="form_number" value="%%NEXT_FORM_NUMBER%%">
