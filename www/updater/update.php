@@ -22,6 +22,6 @@ if (null === Media::$VersionUpdate) {
     Media::$MediaAppUpdater->getUpdate();
     Media::$MediaAppUpdater->composerUpdate();
 }
-echo HTMLDisplay::ProgressBar($timeout);
-echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
+// echo HTMLDisplay::ProgressBar($timeout);
+// echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
 MediaDevice::getFooter();
