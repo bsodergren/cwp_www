@@ -12,6 +12,7 @@ define('TITLE', 'Media Updater');
 use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
+Media::$VersionUpdate = '1';
 echo HTMLDisplay::ProgressBar('start');
 
 if (null === Media::$VersionUpdate) {
@@ -19,8 +20,8 @@ if (null === Media::$VersionUpdate) {
     $timeout = 2;
 } else {
     $timeout = 10;
-    Media::$MediaAppUpdater->getUpdate();
-    Media::$MediaAppUpdater->composerUpdate();
+    // Media::$MediaAppUpdater->getUpdate();
+    // Media::$MediaAppUpdater->composerUpdate();
 }
 echo HTMLDisplay::ProgressBar($timeout);
 echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
