@@ -26,6 +26,7 @@ class HTMLDisplay
     public static $msg = '';
 
     public static $flushdummy;
+    public static $BarStarted = false;
 
     public function __construct()
     {
@@ -41,10 +42,21 @@ class HTMLDisplay
 
     public static function ProgressBar($timeout = 5)
     {
+        if ('start' == strtolower($timeout)) {
+            self::$BarStarted = true;
+            self::pushhtml('progress_bar', []);
+
+            return;
+        }
+
         if ($timeout > 0) {
             $timeout *= 1000;
             $update_inv = $timeout / 100;
-            self::pushhtml('progress_bar', ['SPEED' => $update_inv]);
+            if (false == self::$BarStarted) {
+                self::pushhtml('progress_bar', []);
+                self::$BarStarted = false;
+            }
+            self::pushhtml('progressbar,_js', ['SPEED' => $update_inv]);
         }
     }
 
