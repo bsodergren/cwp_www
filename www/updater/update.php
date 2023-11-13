@@ -15,7 +15,6 @@ $timeout = 25;
 MediaDevice::getHeader();
 
 echo HTMLDisplay::ProgressBar($timeout);
-dd(Media::$VersionUpdate);
 
 if (null !== Media::$VersionUpdate) {
     Media::$MediaAppUpdater->getUpdate();
