@@ -1,9 +1,8 @@
 <?php
 /**
- * Command like Metatag writer for video files.
+ * CWP Media Load Flag Creator
  */
 
-use CWP\Core\Media;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Media\Mail\EmailImport;
 use CWP\Template\Template;

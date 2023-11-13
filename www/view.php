@@ -1,6 +1,6 @@
 <?php
 /**
- * Command like Metatag writer for video files.
+ * CWP Media Load Flag Creator
  */
 
 require_once '.config.inc.php';

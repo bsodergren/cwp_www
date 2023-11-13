@@ -1,17 +1,17 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * Command like Metatag writer for video files.
  */
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $fileHeaderComment = <<<'EOF'
-Command like Metatag writer for video files.
+CWP Media Load Flag Creator
 EOF;
 
 return (new PhpCsFixer\Config())->setRules([
-    'array_syntax'      => ['syntax' => 'short'],
+    'array_syntax' => ['syntax' => 'short'],
     // // 'binary_operator_spaces' => [
     // //     'default' => 'single_space',
     // //     'operators' => ['=>' => null],
@@ -43,7 +43,7 @@ return (new PhpCsFixer\Config())->setRules([
     // 'declare_equal_normalize'                     => true,
     // 'elseif'                                      => true,
     // 'encoding'                                    => true,
-    'header_comment'    => ['header' => $fileHeaderComment, 'comment_type' => 'PHPDoc', 'location' => 'after_open', 'separate' => 'bottom'],
+    'header_comment' => ['header' => $fileHeaderComment, 'comment_type' => 'PHPDoc', 'location' => 'after_open', 'separate' => 'bottom'],
 
     // 'full_opening_tag'                            => true,
     // 'fully_qualified_strict_types'                => true, // added by Shift
@@ -150,15 +150,15 @@ return (new PhpCsFixer\Config())->setRules([
     //     'elements' => ['method', 'property'],
     // ],
     // 'whitespace_after_comma_in_array'             => true,
-    '@PhpCsFixer'       => true,
-    '@PSR12:risky'      => true,
+    '@PhpCsFixer' => true,
+    '@PSR12:risky' => true,
     // // '@PER-CS1.0' => true,
     // // '@PER-CS1.0:risky' => true,
 
     // // '@PHP71Migration' => true,
     // // '@PHPUnit75Migration:risky' => true,
-    '@Symfony'          => true,
-    '@Symfony:risky'    => true,
+    '@Symfony' => true,
+    '@Symfony:risky' => true,
 
     // 'protected_to_private' => false,
     // 'native_constant_invocation' => ['strict' => false],
@@ -184,7 +184,8 @@ return (new PhpCsFixer\Config())->setRules([
     // ],
 ])
     ->setRiskyAllowed(true)
-    ->setCacheFile('.php-cs-fixer.cache');
+    ->setCacheFile('.php-cs-fixer.cache')
+;
 
 // $rules = [
 //     'array_indentation' => true,
