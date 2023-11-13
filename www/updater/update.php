@@ -15,6 +15,8 @@ MediaDevice::getHeader();
 echo HTMLDisplay::ProgressBar('start');
 
 if (null === Media::$VersionUpdate) {
+    HTMLDisplay::put('Checking for Composer Updates', 'Red');
+    Media::$MediaAppUpdater->composerUpdate();
     HTMLDisplay::put('All up  to date', 'Red');
     $timeout = 5;
 } else {

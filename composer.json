@@ -37,6 +37,11 @@
         "kunalvarma05/dropbox-php-sdk": "^0.4.2",
         "masbug/flysystem-google-drive-ext": "^2.2",
         "league/flysystem-bundle": "^3.2",
-        "symfony/stopwatch": "^6.3"
+        "symfony/stopwatch": "^6.3",
+        "camoo/config": "^1.0",
+        "vlucas/phpdotenv": "^5.5",
+
+        "nesbot/carbon": "^2.71"
+
     }
 }
