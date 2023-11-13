@@ -63,11 +63,11 @@ class HTMLDisplay
             }
         }
 
-        // if ($timeout > 0) {
-        //     $timeout = $timeout * 1000;
-        //     $update_inv = $timeout / 100;
-        //     Template::echo('progress_bar', ['SPEED' => $update_inv]);
-        // }
+        if ($timeout > 0) {
+            $timeout    = $timeout * 1000;
+            $update_inv = $timeout / 100;
+            Template::echo('progress_bar', ['SPEED' => $update_inv]);
+        }
 
         echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
     }

@@ -67,7 +67,7 @@ class MediaAppUpdater
 
     public function callback($type, $buffer): void
     {
-        HTMLDisplay::put(trim($buffer), 'black');
+        HTMLDisplay::put(trim($buffer).PHP_EOL.'<br>', 'black');
     }
 
     public function getUpdate()
