@@ -15,6 +15,7 @@ $timeout = 25;
 MediaDevice::getHeader();
 
 echo HTMLDisplay::ProgressBar($timeout);
+dd(Media::$VersionUpdate);
 
 if (null !== Media::$VersionUpdate) {
     Media::$MediaAppUpdater->getUpdate();
@@ -24,5 +25,5 @@ if (null !== Media::$VersionUpdate) {
     HTMLDisplay::put('All up  to date', 'Red');
 }
 
-echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
+//echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
 MediaDevice::getFooter();
