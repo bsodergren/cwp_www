@@ -56,13 +56,15 @@ class HTMLDisplay
                 self::pushhtml('progress_bar', []);
                 self::$BarStarted = false;
             }
-            dd($update_inv);
+
             self::pushhtml('progressbar_js', ['SPEED' => $update_inv]);
         }
+
     }
 
     public static function javaRefresh($url, $timeout = 0, $msg = '')
     {
+        dd($timeout);
         $url = str_replace(__URL_PATH__, '', $url);
         $url = __URL_PATH__.'/'.$url;
         $url = str_replace('//', '/', $url);
