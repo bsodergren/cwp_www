@@ -1,13 +1,16 @@
 {
+
     "autoload": {
         "psr-4": {
             "CWP\\": "src/App/"
         }
     },
+
     "require-dev": {
         "symfony/var-dumper": "^6.2",
         "friendsofphp/php-cs-fixer": "^3.26"
     },
+
     "require": {
         "nette/utils": "*",
         "formr/formr": "^1.4",
@@ -36,12 +39,7 @@
         "delight-im/auth": "^8.3",
         "kunalvarma05/dropbox-php-sdk": "^0.4.2",
         "masbug/flysystem-google-drive-ext": "^2.2",
-        "league/flysystem-bundle": "^3.2",
-        "symfony/stopwatch": "^6.3",
-        "camoo/config": "^1.0",
-        "vlucas/phpdotenv": "^5.5",
-
-        "nesbot/carbon": "^2.71"
+        "league/flysystem-bundle": "^3.2"
 
     }
 }
