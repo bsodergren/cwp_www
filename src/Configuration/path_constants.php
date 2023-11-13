@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 use CWP\Utils\MediaDevice;

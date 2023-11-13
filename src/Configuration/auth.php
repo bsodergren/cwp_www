@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 use CWP\Core\Bootstrap;
@@ -13,14 +13,14 @@ use CWP\HTML\HTMLDisplay;
 define('__USE_AUTHENTICATION__', Bootstrap::$CONFIG['application']['authenticate']);
 
 if (__USE_AUTHENTICATION__ == true) {
-    $db   = new PDO(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
+    $db = new PDO(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
     $auth = new \Delight\Auth\Auth($db);
-    if (! defined('__AUTH__')) {
+    if (!defined('__AUTH__')) {
         define('__AUTH__', true);
     }
 
     if (__AUTH__ == true) {
-        if (! $auth->isLoggedIn()) {
+        if (!$auth->isLoggedIn()) {
             echo HTMLDisplay::JavaRefresh('/login/login.php', 0);
             exit;
         }

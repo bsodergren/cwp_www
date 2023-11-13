@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\HTML;
@@ -38,7 +38,7 @@ class HTMLForms
     {
         global $pub_keywords;
 
-        $checked       = '';
+        $checked = '';
 
         $current_value = $value;
 
@@ -46,11 +46,11 @@ class HTMLForms
             $checked = 'checked';
         }
 
-        $params        = [
-            'NAME'    => $name,
-            'TEXT'    => $text,
+        $params = [
+            'NAME' => $name,
+            'TEXT' => $text,
             'CHECKED' => $checked,
-            'VALUE'   => $value,
+            'VALUE' => $value,
         ];
 
         return self::formInput($template, $params);
@@ -62,10 +62,10 @@ class HTMLForms
 
         foreach ($value as $option) {
             $params = [
-                'NAME'    => $name,
-                'VALUE'   => $option['value'],
-                'TEXT'    => $option['text'],
-                'CLASS'   => $option['class'],
+                'NAME' => $name,
+                'VALUE' => $option['value'],
+                'TEXT' => $option['text'],
+                'CLASS' => $option['class'],
                 'CHECKED' => $option['checked'],
             ];
 
@@ -87,7 +87,7 @@ class HTMLForms
         $params['TEXT_NAME'] = $name;
 
         foreach (array_keys($options) as $key) {
-            $array_key          = 'TEXT_'.strtoupper($key);
+            $array_key = 'TEXT_'.strtoupper($key);
             if ('label' == $key) {
                 $params[$array_key] = 'aria-label="'.$options['label'].'"';
                 continue;
