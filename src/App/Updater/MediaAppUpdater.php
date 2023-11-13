@@ -92,6 +92,8 @@ class MediaAppUpdater
         $process->option('-d');
         $process->option(__PUBLIC_ROOT__);
         $process->option('update');
+        $process->option('--no-cache');
+        $process->option('--no-ansi');
         if (__DEBUG__ == true) {
             echo $process->getCommand();
         } else {
