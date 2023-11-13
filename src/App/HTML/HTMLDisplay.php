@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\HTML;
@@ -19,11 +19,11 @@ const STREAM_CLASS = 'show test-nowrap px-5 rounded-pill';
 
 class HTMLDisplay
 {
-    public static $url     = false;
+    public static $url = false;
 
     public static $timeout = 0;
 
-    public static $msg     = '';
+    public static $msg = '';
 
     public static $flushdummy;
 
@@ -32,8 +32,8 @@ class HTMLDisplay
         ob_implicit_flush(true);
         @ob_end_flush();
 
-        $flushdummy       = '';
-        for ($i = 0; $i < 1200; $i++) {
+        $flushdummy = '';
+        for ($i = 0; $i < 1200; ++$i) {
             $flushdummy .= '      ';
         }
         self::$flushdummy = $flushdummy;
@@ -42,7 +42,7 @@ class HTMLDisplay
     public static function ProgressBar($timeout = 5)
     {
         if ($timeout > 0) {
-            $timeout    = $timeout * 1000;
+            $timeout *= 1000;
             $update_inv = $timeout / 100;
             self::pushhtml('progress_bar', ['SPEED' => $update_inv]);
         }
@@ -61,7 +61,7 @@ class HTMLDisplay
                     $url_array[] = $key.'='.urlencode($value);
                 }
                 $url_params = implode('&', $url_array);
-                $url        = $url.$sep.$url_params;
+                $url = $url.$sep.$url_params;
             } else {
                 $msg = urlencode($msg);
                 if (str_contains($url, '?')) {
@@ -76,9 +76,9 @@ class HTMLDisplay
 
     public static function pushhtml($template, $params = [])
     {
-        $params['MSG_CLASS']    = MSG_CLASS;
+        $params['MSG_CLASS'] = MSG_CLASS;
         $params['HEADER_CLASS'] = HEADER_CLASS;
-        $contents               = Template::GetHTML($template, $params);
+        $contents = Template::GetHTML($template, $params);
         self::push($contents);
     }
 
@@ -102,13 +102,17 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
         self::push($contents."<br> \n");
     }
 
-    public static function put($contents, $color = null)
+    public static function put($contents, $color = null, $break = true)
     {
+        $nlbr = '';
         if (null !== $color) {
             $colorObj = new Colors();
             $contents = $colorObj->getColoredSpan($contents, $color);
         }
-        self::push($contents."<br> \n");
+        if (true == $break) {
+            $nlbr = '<br>';
+        }
+        self::push($contents.$nlbr."\n");
     }
 
     public static function echo($value, $exit = 0)
@@ -143,7 +147,7 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
     public static function draw_excelLink($excel_file)
     {
         $relativePath = substr($excel_file, \strlen(__HTTP_ROOT__) + 1);
-        $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
         if (false == self::is_404($url)) {
             return false;
@@ -159,15 +163,13 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
     {
         $relativePath = substr($pdf_file, \strlen(__HTTP_ROOT__) + 1);
 
-        $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
         if (false == self::is_404($url)) {
             return false;
         }
 
-        $url          = 'onclick="event.stopPropagation(); OpenNewWindow(\''.$url.'\')"';
-
-        return $url;
+        return 'onclick="event.stopPropagation(); OpenNewWindow(\''.$url.'\')"';
     }
 
     public static function is_404($url)
@@ -183,9 +185,9 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
     public function display_table_rows($array, $letter)
     {
-        $html         = '';
-        $start        = '';
-        $end          = '';
+        $html = '';
+        $start = '';
+        $end = '';
         $row_template = new Template();
 
         foreach ($array as $part) {
@@ -193,13 +195,13 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
                 $start = $part['id'];
             }
 
-            $end         = $part['id'];
+            $end = $part['id'];
 
             $check_front = '';
-            $check_back  = '';
+            $check_back = '';
 
-            $classFront  = 'Front'.$letter;
-            $classBack   = 'Back'.$letter;
+            $classFront = 'Front'.$letter;
+            $classBack = 'Back'.$letter;
 
             if ('Back' == $part['former']) {
                 $check_back = 'checked';
@@ -210,22 +212,22 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
             $radio_check = '';
 
             if ('4pg' == $part['config']) {
-                $value       = [
+                $value = [
                     'Front' => ['value' => 'Front', 'checked' => $check_front, 'text' => 'Front', 'class' => $classFront],
-                    'Back'  => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
+                    'Back' => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
                 ];
                 $radio_check = $this->draw_radio('former_'.$part['id'], $value);
             }
 
-            $facetrim    = MediaSettings::isFacetrim($part);
+            $facetrim = MediaSettings::isFacetrim($part);
 
-            $array       = [
-                'MARKET'      => $part['market'],
+            $array = [
+                'MARKET' => $part['market'],
                 'PUBLICATION' => $part['pub'],
-                'COUNT'       => $part['count'],
-                'SHIP'        => $part['ship'],
-                'RADIO_BTNS'  => $radio_check,
-                'FACE_TRIM'   => $this->draw_checkbox('facetrim_'.$part['id'], $facetrim, 'Face Trim'),
+                'COUNT' => $part['count'],
+                'SHIP' => $part['ship'],
+                'RADIO_BTNS' => $radio_check,
+                'FACE_TRIM' => $this->draw_checkbox('facetrim_'.$part['id'], $facetrim, 'Face Trim'),
                 //  'NO_TRIM'     => $this->draw_checkbox('nobindery_'.$part['id'], $nobindery, 'No Trimmers'),
             ];
 
@@ -234,8 +236,6 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
         // }
 
-        $html         = $row_template->return();
-
-        return $html;
+        return $row_template->return();
     }
 }

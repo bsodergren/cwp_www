@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\Updater;
@@ -22,7 +22,7 @@ class MediaAppUpdater
 
     public function __construct()
     {
-        if (! defined('__UPDATE_CURRENT_FILE__')) {
+        if (!\defined('__UPDATE_CURRENT_FILE__')) {
             \define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
         }
         $this->getLastest();
@@ -67,12 +67,12 @@ class MediaAppUpdater
 
     public function callback($type, $buffer): void
     {
-        HTMLDisplay::put(trim($buffer).PHP_EOL.'<br>', 'black');
+        HTMLDisplay::put(nl2br($buffer), 'black', false);
     }
 
     public function getUpdate()
     {
-        $process  = new MediaExec();
+        $process = new MediaExec();
         $callback = Callback::check([$this, 'callback']);
         $process->command('git');
         $process->option('pull');
@@ -86,7 +86,7 @@ class MediaAppUpdater
     public function composerUpdate()
     {
         $callback = Callback::check([$this, 'callback']);
-        $process  = new MediaExec();
+        $process = new MediaExec();
 
         $process->command('composer');
         $process->option('-d');
