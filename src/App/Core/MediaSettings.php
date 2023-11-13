@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\Core;
@@ -12,9 +12,9 @@ class MediaSettings
 {
     public static function skipTrimmers($data)
     {
-        $data        = $data[0];
+        $data = $data[0];
         $publication = $data['pub'];
-        $nobindery   = $data['nobindery'];
+        $nobindery = $data['nobindery'];
 
         if (1 == $nobindery) {
             return 1;
@@ -32,7 +32,7 @@ class MediaSettings
     public static function isFacetrim($data)
     {
         $publication = $data['pub'];
-        $facetrim    = $data['facetrim'];
+        $facetrim = $data['facetrim'];
 
         if (1 == $facetrim) {
             return 1;
@@ -70,7 +70,7 @@ class MediaSettings
 
     public static function jsonString_to_TextForm($string)
     {
-        $value_text  = '';
+        $value_text = '';
         $value_array = json_decode($string, 1);
 
         if (\is_array($value_array)) {
@@ -78,15 +78,15 @@ class MediaSettings
                 if (\is_array($link)) {
                     $value_text .= $text." => [,\n";
                     foreach ($link as $text2 => $link2) {
-                        $value_text .= "\t $text2 => $link2,\n";
+                        $value_text .= "\t {$text2} => {$link2},\n";
                     }
                     $value_text .= "],\n";
                     continue;
                 }
                 if (str_contains($string, '{')) {
-                    $value_text .= "$text => $link,\n";
+                    $value_text .= "{$text} => {$link},\n";
                 } else {
-                    $value_text .= "$link\n";
+                    $value_text .= "{$link}\n";
                 }
             }
         }
@@ -97,26 +97,26 @@ class MediaSettings
     public static function save_post_asJson($setting_str)
     {
         if (str_contains($setting_str, '=>')) {
-            $arr       = explode(',', $setting_str);
-            $arr2      = null;
-            $step      = false;
+            $arr = explode(',', $setting_str);
+            $arr2 = null;
+            $step = false;
             $nav_array = [];
 
             foreach ($arr as $k => $string) {
                 if (str_contains($string, ']')) {
-                    $step         = false;
+                    $step = false;
                     $dropdown_key = '';
                     continue;
                 }
 
                 if (str_contains($string, '=>')) {
                     list($v_key, $value) = explode('=>', $string);
-                    $value               = trim($value);
-                    $v_key               = trim($v_key);
+                    $value = trim($value);
+                    $v_key = trim($v_key);
 
                     if (str_contains($value, '[')) {
-                        $step                     = true;
-                        $dropdown_key             = $v_key;
+                        $step = true;
+                        $dropdown_key = $v_key;
                         $nav_array[$dropdown_key] = [];
                         continue;
                     }
@@ -126,16 +126,16 @@ class MediaSettings
                         continue;
                     }
 
-                    $arr2[$v_key]        = $value;
+                    $arr2[$v_key] = $value;
                 }
             }
             if (null === $arr2) {
                 $arr2 = $arr;
             }
 
-            $array     = array_merge($arr2, $nav_array);
+            $array = array_merge($arr2, $nav_array);
 
-            // $arr2['dropdown'] = $nav_array;
+        // $arr2['dropdown'] = $nav_array;
         } else {
             $array = explode("\n", $setting_str);
             $array = array_map('trim', $array);
@@ -146,15 +146,15 @@ class MediaSettings
 
     private static function setImapDefine($key, $config_key)
     {
-        if (! \array_key_exists('email', Bootstrap::$CONFIG)) {
+        if (!\array_key_exists('email', Bootstrap::$CONFIG)) {
             return false;
         }
 
-        if (! \array_key_exists($config_key, Bootstrap::$CONFIG['email'])) {
+        if (!\array_key_exists($config_key, Bootstrap::$CONFIG['email'])) {
             return false;
         }
 
-        if (! \defined($key)) {
+        if (!\defined($key)) {
             if ('' != Bootstrap::$CONFIG['email'][$config_key]) {
                 \define($key, Bootstrap::$CONFIG['email'][$config_key]);
             }

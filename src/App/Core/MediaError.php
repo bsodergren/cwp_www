@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\Core;
@@ -16,7 +16,7 @@ class MediaError
 {
     public static function msg($severity, $msg = '', $refresh = 5)
     {
-        $url     = '/index.php';
+        $url = '/index.php';
         $timeout = $refresh;
 
         if (\is_array($refresh)) {

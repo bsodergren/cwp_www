@@ -1,7 +1,9 @@
 <?php
+/**
+ * CWP Media Load Flag Creator
+ */
+
 namespace CWP\Core;
-
-
 
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -16,5 +18,4 @@ class MediaStopWatch
         self::$stopwatch = new StopWatch();
         self::$stopwatch->start(self::$stopWatchName);
     }
-
 }
