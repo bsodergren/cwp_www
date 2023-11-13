@@ -56,7 +56,7 @@ class HTMLDisplay
                 self::pushhtml('progress_bar', []);
                 self::$BarStarted = false;
             }
-            self::pushhtml('progressbar,_js', ['SPEED' => $update_inv]);
+            self::pushhtml('progressbar_js', ['SPEED' => $update_inv]);
         }
     }
 
