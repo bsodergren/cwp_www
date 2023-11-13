@@ -19,11 +19,11 @@ const STREAM_CLASS = 'show test-nowrap px-5 rounded-pill';
 
 class HTMLDisplay
 {
-    public static $url     = false;
+    public static $url = false;
 
     public static $timeout = 0;
 
-    public static $msg     = '';
+    public static $msg = '';
 
     public static $flushdummy;
 
@@ -32,7 +32,7 @@ class HTMLDisplay
         ob_implicit_flush(true);
         @ob_end_flush();
 
-        $flushdummy       = '';
+        $flushdummy = '';
         for ($i = 0; $i < 1200; $i++) {
             $flushdummy .= '      ';
         }
@@ -157,13 +157,13 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
     {
         $relativePath = substr($pdf_file, \strlen(__HTTP_ROOT__) + 1);
 
-        $url          = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
+        $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
         if (false == self::is_404($url)) {
             return false;
         }
 
-        $url          = 'onclick="event.stopPropagation(); OpenNewWindow(\''.$url.'\')"';
+        $url = 'onclick="event.stopPropagation(); OpenNewWindow(\''.$url.'\')"';
 
         return $url;
     }
@@ -191,13 +191,13 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
                 $start = $part['id'];
             }
 
-            $end         = $part['id'];
+            $end = $part['id'];
 
             $check_front = '';
             $check_back  = '';
 
-            $classFront  = 'Front'.$letter;
-            $classBack   = 'Back'.$letter;
+            $classFront = 'Front'.$letter;
+            $classBack  = 'Back'.$letter;
 
             if ('Back' == $part['former']) {
                 $check_back = 'checked';
@@ -208,16 +208,16 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
             $radio_check = '';
 
             if ('4pg' == $part['config']) {
-                $value       = [
+                $value = [
                     'Front' => ['value' => 'Front', 'checked' => $check_front, 'text' => 'Front', 'class' => $classFront],
                     'Back'  => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
                 ];
                 $radio_check = $this->draw_radio('former_'.$part['id'], $value);
             }
 
-            $facetrim    = MediaSettings::isFacetrim($part);
+            $facetrim = MediaSettings::isFacetrim($part);
 
-            $array       = [
+            $array = [
                 'MARKET'      => $part['market'],
                 'PUBLICATION' => $part['pub'],
                 'COUNT'       => $part['count'],
@@ -232,7 +232,7 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
         // }
 
-        $html         = $row_template->return();
+        $html = $row_template->return();
 
         return $html;
     }

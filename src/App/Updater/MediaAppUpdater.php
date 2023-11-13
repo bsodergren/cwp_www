@@ -31,7 +31,7 @@ class MediaAppUpdater
 
     public function get_content($URL)
     {
-        $ch   = curl_init();
+        $ch = curl_init();
         curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, \CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, \CURLOPT_SSL_VERIFYHOST, 2);

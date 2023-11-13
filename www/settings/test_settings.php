@@ -19,12 +19,12 @@ use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
 
-$cat           = 'server';
+$cat = 'server';
 if (isset($_GET['cat'])) {
     $cat = $_GET['cat'];
 }
 
-$table         = Media::$explorer->table('settings');
+$table = Media::$explorer->table('settings');
 $table->select('setting_group');
 $table->group('setting_group');
 foreach ($table as $id => $row) {
@@ -33,14 +33,14 @@ foreach ($table as $id => $row) {
     }
 }
 
-$table         = Media::$explorer->table('settings');
+$table = Media::$explorer->table('settings');
 $table->where('setting_cat', $cat);
 $table->order('setting_group ASC');
 // $table->group('setting_group');
 // $results = $table->fetchall();
 
 foreach ($table as $id => $row) {
-    $group                                              = '';
+    $group = '';
     if (null === $row->setting_group) {
         $group = 'A';
     } else {
@@ -59,11 +59,11 @@ foreach ($table as $id => $row) {
 }
 
 foreach ($settings as $setting_group => $setting) {
-    $settings_html   = '';
-    $checkbox_html   = '';
-    $array_html      = '';
-    $textbox_html    = '';
-    $list_html       = '';
+    $settings_html = '';
+    $checkbox_html = '';
+    $array_html    = '';
+    $textbox_html  = '';
+    $list_html     = '';
 
     $checkbox_fields = '';
     $text_fields     = '';
@@ -163,7 +163,7 @@ foreach ($settings as $setting_group => $setting) {
 
             // $description_label = Template::GetHTML('testsettings/text/'.$desc_template, $row_desc_params);
 
-            $params       = [
+            $params = [
                 'DEFINED_NAME'      => $definedName,
                 'PLACEHOLDER'       => $place_holder,
                 'VALUE'             => $value,
@@ -175,7 +175,7 @@ foreach ($settings as $setting_group => $setting) {
                 'COL_THREE'         => $col_w_three,
                 'COL_FOUR'          => $col_w_four,
             ];
-            $text_fields  = Template::GetHTML('testsettings/text/text', $params);
+            $text_fields = Template::GetHTML('testsettings/text/text', $params);
             $text_settings_html .= Template::GetHTML('testsettings/setting', ['FORM_HTML' => $text_fields,
                 'SETTING_NAME'                                                            => $definedName,
                 'SETTING_LABEL'                                                           => $description,
@@ -190,7 +190,7 @@ foreach ($settings as $setting_group => $setting) {
 
             $value_text = MediaSettings::jsonString_to_TextForm($value);
 
-            $params     = [
+            $params = [
                 'SETTING_GROUP'     => $setting_group_select_list_html,
                 'DEFINED_NAME'      => $definedName.'-array',
                 'VALUE'             => $value_text,
@@ -212,10 +212,10 @@ foreach ($settings as $setting_group => $setting) {
 
             // $description_label = Template::GetHTML('testsettings/list/'.$desc_template, $row_desc_params);
 
-            $table            = $explorer->table('pub_trim');
-            $res              = $table->order('bind ASC, pub_name ASC');
+            $table = $explorer->table('pub_trim');
+            $res   = $table->order('bind ASC, pub_name ASC');
 
-            $valueArray       = explode(',', $value);
+            $valueArray = explode(',', $value);
 
             foreach ($table->fetchall() as $row => $val) {
                 if (in_array($val->id, $valueArray)) {
@@ -225,7 +225,7 @@ foreach ($settings as $setting_group => $setting) {
                 $pub_list['not_selected'][$val->bind][] = ['id' => $val->id, 'name' => $val->pub_name];
             }
 
-            $checked          = 'checked';
+            $checked = 'checked';
             foreach ($pub_list['selected'] as $bind => $pubArray) {
                 $bind_name = Utils::bindtype($bind);
                 foreach ($pubArray as $pub) {
@@ -242,9 +242,9 @@ foreach ($settings as $setting_group => $setting) {
                 $options_group .= Template::GetHTML('testsettings/list/option_group', ['SELECT_OPTIONS' => $select_options,
                     'SELECT_LABEL'                                                                      => 'Selected Publications']);
             }
-            $checked          = '';
+            $checked = '';
 
-            $select_options   = '';
+            $select_options = '';
             foreach ($pub_list['not_selected'] as $bind => $pubArray) {
                 $bind_name      = utils::bindtype($bind);
                 $select_options = '';
@@ -262,7 +262,7 @@ foreach ($settings as $setting_group => $setting) {
                     'SELECT_LABEL'                                                                      => $bind_name]);
             }
 
-            $params           = [
+            $params = [
                 'SETTING_GROUP'     => $setting_group_select_list_html,
                 'DEFINED_NAME'      => $definedName.'-list',
                 'SELECT_OPTIONS'    => $options_group,
@@ -311,7 +311,7 @@ foreach ($settings as $setting_group => $setting) {
     // $template->template('testsettings/new_setting', ['CATEGORY' => $cat]);
 
     $setting_group_html .= Template::GetHTML('testsettings/group', [
-        'GROUP_NAME'   => $group_name_html,
+        'GROUP_NAME' => $group_name_html,
         // 'CHECKBOX_HTML' => $checkbox_html,
         'TEXTBOX_HTML' => $text_settings_html,
         // 'ARRAY_HTML' => $array_html,

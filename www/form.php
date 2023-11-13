@@ -12,22 +12,22 @@ use CWP\Utils\MediaDevice;
 require_once '.config.inc.php';
 
 define('TITLE', 'Form Editor');
-$display                       = new HTMLDisplay();
+$display = new HTMLDisplay();
 // $media = new Media();
 // $template = new Template();
 
 MediaDevice::getHeader();
 
-$row_html                      = '';
-$letter_html                   = '';
-$page_form_html                = '';
-$dropdown_links                = '';
-$next_view                     = 'job';
+$row_html       = '';
+$letter_html    = '';
+$page_form_html = '';
+$dropdown_links = '';
+$next_view      = 'job';
 // $media->job_id = $_REQUEST['job_id'];
 
-$max_forms                     = $media->get_max_drop_forms();
-$first_form                    = $media->get_first_form();
-$form_list                     = $media->get_form_list();
+$max_forms  = $media->get_max_drop_forms();
+$first_form = $media->get_first_form();
+$form_list  = $media->get_form_list();
 
 if (array_key_exists('form_number', $_REQUEST)) {
     $prev_form_number    = $_REQUEST['form_number'] - 1;
@@ -37,27 +37,27 @@ if (array_key_exists('form_number', $_REQUEST)) {
     $current_form_number = $first_form;
 }
 
-$new_forms                     = [];
+$new_forms = [];
 
-$next_form_number              = $current_form_number + 1;
+$next_form_number = $current_form_number + 1;
 
-$form_data                     = $explorer->table('form_data');
+$form_data = $explorer->table('form_data');
 $form_data->where('form_number = ?', $current_form_number);
 $form_data->where('job_id = ?', $media->job_id);
-$results                       = $form_data->fetch();
+$results = $form_data->fetch();
 
 if (empty($results)) {
     $current_form_number = $current_form_number + 1;
 }
-$sort                          = ['SORT_FORMER' => 1, 'SORT_LETTER' => 1];
+$sort = ['SORT_FORMER' => 1, 'SORT_LETTER' => 1];
 
-$result                        = $media->getFormDrops($current_form_number, $sort);
+$result = $media->getFormDrops($current_form_number, $sort);
 foreach ($result as $idx => $form_array) {
-    $form_number                                           = $form_array['form_number'];
+    $form_number = $form_array['form_number'];
     // $job_id = $form_array['job_id'];
-    $media->job_id                                         = $form_array['job_id'];
+    $media->job_id = $form_array['job_id'];
 
-    $config                                                = $media->getDropDetails($form_number);
+    $config = $media->getDropDetails($form_number);
 
     $new_forms[$form_number][$form_array['form_letter']][] = [
         'id'         => $form_array['id'],
@@ -75,7 +75,7 @@ foreach ($result as $idx => $form_array) {
 }
 
 foreach ($new_forms as $form_number => $parts) {
-    $next_button                 = 'Next';
+    $next_button = 'Next';
 
     if ($current_form_number != $first_form) {
         $dropdown_links .= template::GetHTML('/form/page_form_submit', [
@@ -90,12 +90,12 @@ foreach ($new_forms as $form_number => $parts) {
         // ]);
     }
 
-    $form_part                   = '';
+    $form_part = '';
     foreach ($form_list as $n => $list_form_number) {
         $url_form_number  = $list_form_number->form_number;
         $page_html_params = [];
         // if ($n != 0) {
-        $form_part        = '&form_number='.$url_form_number;
+        $form_part = '&form_number='.$url_form_number;
         // }
 
         $page_form_number = $list_form_number->form_number;
@@ -107,10 +107,10 @@ foreach ($new_forms as $form_number => $parts) {
             //         'PAGE_FORM_NUMBER' => 'View',
             //     ]);
             // }
-            $edit_url         = __URL_PATH__.'/form_edit.php?job_id='.$media->job_id.'&form_number='.$page_form_number;
+            $edit_url = __URL_PATH__.'/form_edit.php?job_id='.$media->job_id.'&form_number='.$page_form_number;
             $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
-                'PAGE_CLASS'       => ' btn-danger',
-                'PAGE_JS'          => ' onClick="OpenNewWindow(\''.$edit_url.'\')" ',
+                'PAGE_CLASS' => ' btn-danger',
+                'PAGE_JS'    => ' onClick="OpenNewWindow(\''.$edit_url.'\')" ',
                 // 'PAGE_FORM_URL' => $edit_url,
                 'PAGE_FORM_NUMBER' => 'Edit',
             ]);
@@ -136,11 +136,11 @@ foreach ($new_forms as $form_number => $parts) {
         $page_form_html .= template::GetHTML('/form/page_links', $page_html_params);
     }
 
-    $form_btn_class              = ' btn-info';
+    $form_btn_class = ' btn-info';
     if ($next_form_number > $max_forms) {
-        $next_view        = 'save';
-        $next_button      = 'Save Form';
-        $form_btn_class   = ' btn-success';
+        $next_view      = 'save';
+        $next_button    = 'Save Form';
+        $form_btn_class = ' btn-success';
         // $previous_form_html =' ';
         $next_form_number = $current_form_number;
     } else {
@@ -163,12 +163,12 @@ foreach ($new_forms as $form_number => $parts) {
     $form_html['NAME']           = $form_array['job_number'].' - Form Number '.$form_number.' of '.$max_forms.' - '.$config[$form_number]['config'].' - '.$config[$form_number]['bind'];
     $form_html['CHECKBOX_PARTS'] = '';
 
-    $columns                     = 12 / count($parts);
-    $ColClass                    = 'col-'.$columns;
+    $columns  = 12 / count($parts);
+    $ColClass = 'col-'.$columns;
 
     foreach ($parts as $form_letter => $form_data) {
-        $frontChecked      = '';
-        $backChecked       = '';
+        $frontChecked = '';
+        $backChecked  = '';
 
         if ($form_data[0]['former'] == 'Front') {
             $frontChecked = 'checked';
@@ -177,34 +177,34 @@ foreach ($new_forms as $form_number => $parts) {
             $backChecked = 'checked';
         }
 
-        $BtnClass          = 'btn-check';
-        $LabelClass        = 'btn btn-outline-success';
+        $BtnClass   = 'btn-check';
+        $LabelClass = 'btn btn-outline-success';
 
-        $classFront        = 'Front'.$form_letter;
-        $classBack         = 'Back'.$form_letter;
+        $classFront = 'Front'.$form_letter;
+        $classBack  = 'Back'.$form_letter;
 
         $radio_check_array = [
-            'NAME'             => 'All'.$form_letter,
-            'FRONTID'          => 'Front-'.$form_letter.'-outlined',
-            'BACKID'           => 'Back-'.$form_letter.'-outlined',
-            'COLUMS'           => $ColClass,
-            'LETTER'           => $form_letter,
+            'NAME'    => 'All'.$form_letter,
+            'FRONTID' => 'Front-'.$form_letter.'-outlined',
+            'BACKID'  => 'Back-'.$form_letter.'-outlined',
+            'COLUMS'  => $ColClass,
+            'LETTER'  => $form_letter,
 
-            'FRONTCHECKED'     => $frontChecked,
-            'BACKCHECKED'      => $backChecked,
+            'FRONTCHECKED' => $frontChecked,
+            'BACKCHECKED'  => $backChecked,
 
-            'FRONTLABELCLASS'  => $LabelClass.' all'.$classFront,
+            'FRONTLABELCLASS' => $LabelClass.' all'.$classFront,
 
             'FRONTBUTTONCLASS' => $BtnClass.' all'.$classFront,
 
-            'BACKLABELCLASS'   => $LabelClass.' all'.$classBack,
-            'BACKBUTTONCLASS'  => $BtnClass.' all'.$classBack,
+            'BACKLABELCLASS'  => $LabelClass.' all'.$classBack,
+            'BACKBUTTONCLASS' => $BtnClass.' all'.$classBack,
 
             'ALLCHECKBOXFRONT' => 'all'.$classFront,
             'ALLCHECKBOXBACK'  => 'all'.$classBack,
 
-            'CLASSFRONT'       => $classFront,
-            'CLASSBACK'        => $classBack,
+            'CLASSFRONT' => $classFront,
+            'CLASSBACK'  => $classBack,
 
         ];
 
@@ -212,9 +212,9 @@ foreach ($new_forms as $form_number => $parts) {
         $form_html['CHECKBOX_PARTS'] .= Template::GetHTML('form/quickselect/letter_select', $radio_check_array);
         $form_html['CHECKBOX_JAVA'] .= Template::GetHTML('form/quickselect/javascript', $radio_check_array);
         //$form_html['CHECKBOX_PARTS'] .= $display->draw_checkbox('quickselect['.$form_letter.'_'.$list.']', 'Front', $form_letter, 'form/checkbox');
-        $row_html          = $display->display_table_rows($form_data, $form_letter);
-        $nobindery         = MediaSettings::skipTrimmers($form_data);
-        $checkbox          = $display->draw_checkbox('nobindery_'.$form_number, $nobindery, 'No Trimmers', 'form/checkbox');
+        $row_html  = $display->display_table_rows($form_data, $form_letter);
+        $nobindery = MediaSettings::skipTrimmers($form_data);
+        $checkbox  = $display->draw_checkbox('nobindery_'.$form_number, $nobindery, 'No Trimmers', 'form/checkbox');
         $template->template('form/header', ['NUMBER' => $form_number, 'LETTER' => $form_letter, 'TRIMMERS' => $checkbox,
             'ROWS'                                   => $row_html]);
 
@@ -227,11 +227,11 @@ foreach ($new_forms as $form_number => $parts) {
 $form_html['NEXT_FORM_NUMBER'] = $next_form_number;
 $form_html['PREV_FORM_NUMBER'] = $prev_form_number;
 
-$form_html['JOB_ID']           = $media->job_id;
+$form_html['JOB_ID'] = $media->job_id;
 // $form_html['NEXT_VIEW']        = $next_view;
-$form_html['FORM_BODY_HTML']   = "\n<!-- --------------------- -->\n".$letter_html."\n<!-- --------------------- -->\n";
-$form_html['FORM_BUTTONS']     = $dropdown_links;
-$form_html['FORM_LIST_HTML']   = $page_form_html;
+$form_html['FORM_BODY_HTML'] = "\n<!-- --------------------- -->\n".$letter_html."\n<!-- --------------------- -->\n";
+$form_html['FORM_BUTTONS']   = $dropdown_links;
+$form_html['FORM_LIST_HTML'] = $page_form_html;
 
 $template->clear();
 

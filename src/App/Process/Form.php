@@ -48,7 +48,7 @@ class Form extends MediaProcess
 
                 // dd($front,$id,$letters,$value, $job_id);
 
-                $count                  = Media::$explorer->table('form_data')->where('job_id', $job_id)
+                $count = Media::$explorer->table('form_data')->where('job_id', $job_id)
                 ->where('form_number', $id)
                 ->where('form_letter', $letters)
                 ->update(['no_bindery' => $value]);
@@ -70,8 +70,8 @@ class Form extends MediaProcess
         $this->msg = 'Form finished';
 
         $this->media->excelArray();
-        $excel     = new MediaXLSX($this->media, true);
-        $break     = true;
+        $excel = new MediaXLSX($this->media, true);
+        $break = true;
     }
 
     public function Previous()
@@ -96,7 +96,7 @@ class Form extends MediaProcess
         $form_data = Media::$explorer->table('form_data');
         $form_data->where('form_number = ?', $next_form_number);
         $form_data->where('job_id = ?', $this->job_id);
-        $results   = $form_data->fetch();
+        $results = $form_data->fetch();
 
         if (empty($results)) {
             if ('Previous' == $_REQUEST['submit']) {

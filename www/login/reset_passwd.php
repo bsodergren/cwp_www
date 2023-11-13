@@ -34,8 +34,8 @@ if (array_key_exists('token', $_GET)) {
     try {
         $auth->canResetPasswordOrThrow($_GET['selector'], $_GET['token']);
 
-        $tokens['SELECTOR']      = $_GET['selector'];
-        $tokens['TOKEN']         = $_GET['token'];
+        $tokens['SELECTOR'] = $_GET['selector'];
+        $tokens['TOKEN']    = $_GET['token'];
 
         $params['SUBMIT_BUTTON'] = Template::getHTML('authentication/button/submit', ['SUBMIT_VALUE' => 'reset']);
         $params['FORM_FIELD']    = Template::getHTML('authentication/forms/reset_form', $tokens);

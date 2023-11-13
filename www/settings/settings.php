@@ -31,12 +31,12 @@ if ('lang' == $cat) {
     $text_col_width = 'col-8';
 }
 
-$col_w_one      = 'col-sm-2';
-$col_w_two      = 'col-sm-2';
-$col_w_three    = 'col-sm-4';
-$col_w_four     = 'col-sm-4';
+$col_w_one   = 'col-sm-2';
+$col_w_two   = 'col-sm-2';
+$col_w_three = 'col-sm-4';
+$col_w_four  = 'col-sm-4';
 
-$table          = Media::$explorer->table('settings');
+$table = Media::$explorer->table('settings');
 $table->select('setting_group');
 $table->group('setting_group');
 foreach ($table as $id => $row) {
@@ -45,14 +45,14 @@ foreach ($table as $id => $row) {
     }
 }
 
-$table          = Media::$explorer->table('settings');
+$table = Media::$explorer->table('settings');
 $table->where('setting_cat', $cat);
 $table->order('setting_group ASC');
 // $table->group('setting_group');
 // $results = $table->fetchall();
 
 foreach ($table as $id => $row) {
-    $group                                              = '';
+    $group = '';
     if (null === $row->setting_group) {
         $group = 'A';
     } else {
@@ -70,11 +70,11 @@ foreach ($table as $id => $row) {
     $settings[$group][$row->definedName]['group']       = $group;
 }
 foreach ($settings as $setting_group => $setting) {
-    $settings_html   = '';
-    $checkbox_html   = '';
-    $array_html      = '';
-    $textbox_html    = '';
-    $list_html       = '';
+    $settings_html = '';
+    $checkbox_html = '';
+    $array_html    = '';
+    $textbox_html  = '';
+    $list_html     = '';
 
     $checkbox_fields = '';
     $text_fields     = '';
@@ -85,12 +85,12 @@ foreach ($settings as $setting_group => $setting) {
         $group_name_html = '<div class="alert alert-warning" role="alert">'.$setting_group.'</div>';
     }
     foreach ($setting as $definedName => $array) {
-        $value_text                     = '';
-        $params                         = [];
-        $name_label                     = '';
-        $checked                        = '';
-        $notchecked                     = '';
-        $description_label              = '';
+        $value_text        = '';
+        $params            = [];
+        $name_label        = '';
+        $checked           = '';
+        $notchecked        = '';
+        $description_label = '';
 
         $id                             = $array['id'];
         $type                           = $array['type'];
@@ -120,7 +120,7 @@ foreach ($settings as $setting_group => $setting) {
                 'SELECTED'    => $selected,
                 'SELECT_NAME' => $definedName.'-group']);
 
-        $tooltip                        = 'data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"	data-bs-title="'.$tooltip_desc.'" ';
+        $tooltip = 'data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"	data-bs-title="'.$tooltip_desc.'" ';
 
         if (null == $name) {
             $name            = $definedName;
@@ -140,7 +140,7 @@ foreach ($settings as $setting_group => $setting) {
         }
 
         if ('bool' == $type) {
-            $name_label        = Template::GetHTML('settings/checkbox/'.$text_template, $row_name_params);
+            $name_label = Template::GetHTML('settings/checkbox/'.$text_template, $row_name_params);
 
             $description_label = Template::GetHTML('settings/checkbox/'.$desc_template, $row_desc_params);
 
@@ -150,7 +150,7 @@ foreach ($settings as $setting_group => $setting) {
                 $notchecked = 'checked';
             }
 
-            $params            = [
+            $params = [
                 'SETTING_GROUP'     => $setting_group_select_list_html,
                 'DEFINED_NAME'      => $definedName,
                 'TOOLTIP'           => $tooltip,
@@ -167,16 +167,16 @@ foreach ($settings as $setting_group => $setting) {
         }
 
         if ('text' == $type) {
-            $place_holder      = $value;
+            $place_holder = $value;
             if ('' == $value) {
                 $place_holder = 'no value set';
             }
 
-            $name_label        = Template::GetHTML('settings/text/'.$text_template, $row_name_params);
+            $name_label = Template::GetHTML('settings/text/'.$text_template, $row_name_params);
 
             $description_label = Template::GetHTML('settings/text/'.$desc_template, $row_desc_params);
 
-            $params            = [
+            $params = [
                 'SETTING_GROUP'     => $setting_group_select_list_html,
                 'DEFINED_NAME'      => $definedName,
                 'PLACEHOLDER'       => $place_holder,
@@ -194,13 +194,13 @@ foreach ($settings as $setting_group => $setting) {
         }
 
         if ('array' == $type) {
-            $name_label        = Template::GetHTML('settings/array/'.$text_template, $row_name_params);
+            $name_label = Template::GetHTML('settings/array/'.$text_template, $row_name_params);
 
             $description_label = Template::GetHTML('settings/array/'.$desc_template, $row_desc_params);
 
-            $value_text        = MediaSettings::jsonString_to_TextForm($value);
+            $value_text = MediaSettings::jsonString_to_TextForm($value);
 
-            $params            = [
+            $params = [
                 'SETTING_GROUP'     => $setting_group_select_list_html,
                 'DEFINED_NAME'      => $definedName.'-array',
                 'TOOLTIP'           => $tooltip,
@@ -214,19 +214,19 @@ foreach ($settings as $setting_group => $setting) {
         }
 
         if ('list' == $type) {
-            $select_options    = '';
-            $selected_options  = '';
-            $pub_list          = [];
-            $options_group     = '';
+            $select_options   = '';
+            $selected_options = '';
+            $pub_list         = [];
+            $options_group    = '';
 
-            $name_label        = Template::GetHTML('settings/list/'.$text_template, $row_name_params);
+            $name_label = Template::GetHTML('settings/list/'.$text_template, $row_name_params);
 
             $description_label = Template::GetHTML('settings/list/'.$desc_template, $row_desc_params);
 
-            $table             = $explorer->table('pub_trim');
-            $res               = $table->order('bind ASC, pub_name ASC');
+            $table = $explorer->table('pub_trim');
+            $res   = $table->order('bind ASC, pub_name ASC');
 
-            $valueArray        = explode(',', $value);
+            $valueArray = explode(',', $value);
 
             foreach ($table->fetchall() as $row => $val) {
                 if (in_array($val->id, $valueArray)) {
@@ -236,7 +236,7 @@ foreach ($settings as $setting_group => $setting) {
                 $pub_list['not_selected'][$val->bind][] = ['id' => $val->id, 'name' => $val->pub_name];
             }
 
-            $checked           = 'checked';
+            $checked = 'checked';
             foreach ($pub_list['selected'] as $bind => $pubArray) {
                 $bind_name = Utils::bindtype($bind);
                 foreach ($pubArray as $pub) {
@@ -253,9 +253,9 @@ foreach ($settings as $setting_group => $setting) {
                 $options_group .= Template::GetHTML('settings/list/option_group', ['SELECT_OPTIONS' => $select_options,
                     'SELECT_LABEL'                                                                  => 'Selected Publications']);
             }
-            $checked           = '';
+            $checked = '';
 
-            $select_options    = '';
+            $select_options = '';
             foreach ($pub_list['not_selected'] as $bind => $pubArray) {
                 $bind_name      = utils::bindtype($bind);
                 $select_options = '';
@@ -273,7 +273,7 @@ foreach ($settings as $setting_group => $setting) {
                     'SELECT_LABEL'                                                                  => $bind_name]);
             }
 
-            $params            = [
+            $params = [
                 'SETTING_GROUP'     => $setting_group_select_list_html,
                 'DEFINED_NAME'      => $definedName.'-list',
                 'TOOLTIP'           => $tooltip,
@@ -329,7 +329,7 @@ foreach ($settings as $setting_group => $setting) {
     ]);
 }
 
-$settings_html  = $template->return();
+$settings_html = $template->return();
 $template->clear();
 $template->template('settings/main', [
     'SETTING_GROUPS' => $setting_group_html,

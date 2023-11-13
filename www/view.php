@@ -27,9 +27,9 @@ $finder = new MediaFinder($media);
 
 define('TITLE', 'View Form');
 if (true == $finder->dirExists($media->xlsx_directory)) {
-    $form_number               = '';
-    $file_id                   = '';
-    $sheet_id                  = 0;
+    $form_number = '';
+    $file_id     = '';
+    $sheet_id    = 0;
     if (array_key_exists('form_number', $_REQUEST)) {
         $form_number = $_REQUEST['form_number'];
     }
@@ -45,8 +45,8 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         XLSXViewer::checkifexist($media);
     }
 
-    $result                    = $finder->search($media->xlsx_directory, '*.xlsx');
-    $found                     = false;
+    $result = $finder->search($media->xlsx_directory, '*.xlsx');
+    $found  = false;
 
     // if (!$finder->hasResults()) {
     //     XLSXViewer::checkifexist($media);
@@ -58,8 +58,8 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
     $excel_link                = '';
 
     foreach ($result as $file) {
-        $files[]                  = $file;
-        $class                    = 'enabled';
+        $files[] = $file;
+        $class   = 'enabled';
         preg_match('/.*_([FM0-9]+).xlsx/', $file, $output_array);
         [$text_form,$text_number] = explode('FM', $output_array[1]);
 
@@ -76,7 +76,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             $class               = 'disabled';
             $current_form_number = $text_number;
 
-            $url_link            = HTMLDisplay::draw_excelLink($file);
+            $url_link = HTMLDisplay::draw_excelLink($file);
             if (false != $url_link) {
                 $params['EXCEL_LINK'] = Template::GetHTML('/view/sheet_link', [
                     'PAGE_FORM_URL'    => $url_link,
@@ -109,12 +109,12 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
     }
 
     if ('' != $file_id) {
-        $reader                    = IOFactory::createReader('Xlsx');
+        $reader = IOFactory::createReader('Xlsx');
 
-        $excel_file                = $finder->getFile($files[$file_id]);
+        $excel_file = $finder->getFile($files[$file_id]);
 
-        $spreadsheet               = $reader->load($excel_file);
-        $sheet_names               = $spreadsheet->getSheetNames();
+        $spreadsheet = $reader->load($excel_file);
+        $sheet_names = $spreadsheet->getSheetNames();
 
         $params['SHEET_LIST_HTML'] = '';
         foreach ($sheet_names as $sheet_index => $sheet_name) {
@@ -126,23 +126,23 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
                     'SHEET_DISABLED'   => 'enabled',
                     'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
 
-                    'SHEET_CLASS'      => 'btn-info',
+                    'SHEET_CLASS' => 'btn-info',
                 ]);
                 continue;
             }
 
-            $class                       = 'enabled';
+            $class = 'enabled';
             if ($sheet_id == $sheet_index) {
                 $class = 'disabled';
             }
 
-            [$name,$_]                   = explode(' ', $sheet_name);
-            [$sheetName,$former]         = explode('_', $name);
+            [$name,$_]           = explode(' ', $sheet_name);
+            [$sheetName,$former] = explode('_', $name);
             if (! isset($last)) {
                 $last = '';
             }
 
-            $cellValue                   = ucwords(strtolower($spreadsheet->getSheet($sheet_index)->getCellByColumnAndRow(2, 8)->getValue()));
+            $cellValue = ucwords(strtolower($spreadsheet->getSheet($sheet_index)->getCellByColumnAndRow(2, 8)->getValue()));
 
             $sheet_form_array[$former][] = template::GetHTML('/view/sheet_link', [
                 'PAGE_FORM_URL'    => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&file_id='.$file_id.'&sheet_id='.$sheet_index,
@@ -166,7 +166,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             'SHEET_DISABLED'   => 'enabled',
             'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
 
-            'SHEET_CLASS'      => 'btn-info',
+            'SHEET_CLASS' => 'btn-info',
         ]);
         $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
             'PAGE_FORM_URL'    => __URL_PATH__.'/process.php?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=update',
@@ -174,7 +174,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             'SHEET_DISABLED'   => 'enabled',
             'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
 
-            'SHEET_CLASS'      => 'btn-info',
+            'SHEET_CLASS' => 'btn-info',
         ]);
         if (__SHOW_MAIL__ == true) {
             $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
@@ -183,17 +183,17 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
                 'SHEET_DISABLED'   => 'enabled',
                 'BUTTON_STYLE'     => 'style="--bs-bg-opacity: .5;"',
 
-                'SHEET_CLASS'      => 'btn-info',
+                'SHEET_CLASS' => 'btn-info',
             ]);
         }
         $params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
 
-        $writer                    = IOFactory::createWriter($spreadsheet, 'Html');
+        $writer = IOFactory::createWriter($spreadsheet, 'Html');
 
         $writer->setSheetIndex($sheet_id);
-        $custom_css                = $writer->generateStyles(true);
+        $custom_css = $writer->generateStyles(true);
 
-        $rep_array                 = [
+        $rep_array = [
             '{border: 1px solid black;}' => '{border: 0px dashed red;}',
             'font-size:11pt;'            => '',
             'font-size:11pt'             => '',
@@ -221,7 +221,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             $custom_css = str_replace($find, $replace, $custom_css);
         }
 
-        $message                   = $writer->generateSheetData();
+        $message = $writer->generateSheetData();
         /*
             $rep_array                 = [
                 // "page: page0'>" => "page: page0' class='scrpgbrk'>",
@@ -238,7 +238,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             $header = "<thead class='media: header'><tr><th colspan='4' class='text-center fs-1'>Media Load Flag</th></tr></thead> <tbody>";
         }
 
-        $params['MESSAGE']         = $message;
+        $params['MESSAGE'] = $message;
     }
 
     MediaDevice::getHeader('', ['CUSTOM_CSS' => $custom_css]);

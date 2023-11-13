@@ -17,7 +17,7 @@ MediaDevice::getHeader();
 // $media = new Media();
 // $template = new Template();
 
-$deleted_id  = 0;
+$deleted_id = 0;
 
 // $job_id=$_REQUEST['job_id'];
 $form_number = $_REQUEST['form_number'];
@@ -35,15 +35,15 @@ function toArray($obj)
     return $array;
 }
 
-$var         = $media->getFormDrops($form_number, ['SORT_FORMER' => 1, 'SORT_LETTER' => 1]);
+$var = $media->getFormDrops($form_number, ['SORT_FORMER' => 1, 'SORT_LETTER' => 1]);
 
-$display     = new HTMLDisplay();
+$display = new HTMLDisplay();
 
 foreach ($var as $obj) {
     $form_row[] = toArray($obj);
 }
 
-$rows_html   = '';
+$rows_html = '';
 foreach ($form_row as $idx => $row) {
     $params                    = [];
     $params['FORM_NUMBER']     = $row['form_number'];
@@ -54,8 +54,8 @@ foreach ($form_row as $idx => $row) {
     $params['DELETE_CHECKBOX'] = $display->draw_checkbox($row['id'].'_delete', '', 'delete');
     $params['SPLIT_CHECKBOX']  = $display->draw_checkbox($row['id'].'_split', '', 'split');
 
-    $classFront                = 'Front'.$letter;
-    $classBack                 = 'Back'.$letter;
+    $classFront = 'Front'.$letter;
+    $classBack  = 'Back'.$letter;
 
     if ('Back' == $row['former']) {
         $check_back = 'checked';
@@ -64,24 +64,24 @@ foreach ($form_row as $idx => $row) {
     if ('Front' == $row['former']) {
         $check_front = 'checked';
     }
-    $radio_check               = '';
+    $radio_check = '';
 
-    $value                     = [
+    $value = [
         'Front' => ['value' => 'Front', 'checked' => $check_front, 'text' => 'Front', 'class' => $classFront],
         'Back'  => ['value' => 'Back', 'checked' => $check_back, 'text' => 'Back', 'class' => $classBack],
     ];
-    $radio_check               = $display->draw_radio($row['id'].'_former', $value);
+    $radio_check = $display->draw_radio($row['id'].'_former', $value);
 
-    $params['RADIO_BTNS']      = $radio_check;
+    $params['RADIO_BTNS'] = $radio_check;
 
-    $params['FT_VALUE']        = $display->draw_checkbox($row['id'].'_facetrim', $row['face_trim'], 'Face Trim');
+    $params['FT_VALUE'] = $display->draw_checkbox($row['id'].'_facetrim', $row['face_trim'], 'Face Trim');
 
     $rows_html .= $template->return('form_edit/row', $params);
 }
 
-$body_html   = $template->return('form_edit/table_body', ['TABLE_ROWS' => $rows_html]);
+$body_html = $template->return('form_edit/table_body', ['TABLE_ROWS' => $rows_html]);
 
-$html_array  = [
+$html_array = [
     'JOB_ID'       => $job_id,
     'FORM_NUMBER'  => $form_number,
     'TABLE_BODY'   => $body_html,

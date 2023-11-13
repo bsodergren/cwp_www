@@ -23,26 +23,26 @@ $cnt     = $table->count('*');
 if ($cnt > 0) {
     foreach ($results as $k => $row) {
         unset($replacement);
-        $media                            = new Media($row);
-        $mediaDir                         = new MediaFileSystem($media->pdf_file, $media->job_number);
+        $media    = new Media($row);
+        $mediaDir = new MediaFileSystem($media->pdf_file, $media->job_number);
 
-        $url                              = __URL_PATH__.'/form.php?job_id='.$row['job_id'];
+        $url = __URL_PATH__.'/form.php?job_id='.$row['job_id'];
 
-        $text_close                       = basename($row['pdf_file'], '.pdf');
-        $pdf_url                          = HTMLDisplay::getPdfLink($row['base_dir'].'/pdf/'.$row['pdf_file']);
+        $text_close = basename($row['pdf_file'], '.pdf');
+        $pdf_url    = HTMLDisplay::getPdfLink($row['base_dir'].'/pdf/'.$row['pdf_file']);
 
-        $text_job                         = $row['job_number'];
-        $form                             = new Formr\Formr('', 'hush');
+        $text_job = $row['job_number'];
+        $form     = new Formr\Formr('', 'hush');
 
-        $hidden                           = ['job_id' => $row['job_id']];
+        $hidden = ['job_id' => $row['job_id']];
 
-        $replacement['FORM_OPEN_HTML']    = $form->open('', '', __URL_PATH__.'/process.php', 'post', '', $hidden);
+        $replacement['FORM_OPEN_HTML'] = $form->open('', '', __URL_PATH__.'/process.php', 'post', '', $hidden);
 
-        $class_create                     = 'class="btn  btn-success"';
-        $class_delete                     = 'class="btn  btn-danger"';
-        $class_normal                     = 'class="btn  btn-primary"';
+        $class_create = 'class="btn  btn-success"';
+        $class_delete = 'class="btn  btn-danger"';
+        $class_normal = 'class="btn  btn-primary"';
 
-        $num_of_forms                     = $media->number_of_forms();
+        $num_of_forms = $media->number_of_forms();
 
         if (0 == $num_of_forms) {
             $pdisabled    = ' disabled';
@@ -52,30 +52,30 @@ if ($cnt > 0) {
             $num_of_forms = 'Number of Forms: '.$num_of_forms;
         }
 
-        $replacement['TEXT_JOB']          = $text_job;
-        $replacement['JOB_ID']            = $row['job_id'];
+        $replacement['TEXT_JOB'] = $text_job;
+        $replacement['JOB_ID']   = $row['job_id'];
 
-        $replacement['HIDDEN_CLASS']      = 'collapse.show';
+        $replacement['HIDDEN_CLASS'] = 'collapse.show';
 
         if (1 == $row['hidden']) {
             $replacement['HIDDEN_CLASS'] = 'collapse';
         }
 
-        $replacement['TEXT_CLOSE']        = $text_close;
+        $replacement['TEXT_CLOSE'] = $text_close;
 
-        $replacement['TEXT_CLOSE_URL']    = $pdf_url;
-        $replacement['NUM_OF_FORMS']      = $num_of_forms;
+        $replacement['TEXT_CLOSE_URL'] = $pdf_url;
+        $replacement['NUM_OF_FORMS']   = $num_of_forms;
 
-        $rowdisabled                      = ' disabled';
-        $zdisabled                        = ' disabled';
+        $rowdisabled = ' disabled';
+        $zdisabled   = ' disabled';
 
-        $zip_file                         = $media->zip_file;
-        $xlsx_dir                         = $media->xlsx_directory;
+        $zip_file = $media->zip_file;
+        $xlsx_dir = $media->xlsx_directory;
 
         if (true == Media::get_exists('xlsx', $row['job_id']) && true == is_dir($xlsx_dir)) {
             $rowdisabled = '';
         }
-        $tooltip                          = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process.php ';
+        $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process.php ';
 
         $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('submit[process]', '', 'Process PDF Form', '', $class_normal.$pdisabled.$tooltip.'process"');
         // $form->input_submit('actSubmit', '', 'View Forms', '', class_normal.$rowdisabled);
@@ -111,7 +111,7 @@ if ($cnt > 0) {
 
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[refresh_import]', '', 'refresh import', '', $class_create.$tooltip.'refresh_import"');
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_job]', '', 'delete job', '', $class_delete.$tooltip.'delete_job"');
-        $replacement['FORM_CLOSE']        = $form->close();
+        $replacement['FORM_CLOSE'] = $form->close();
         $template->template('index/job', $replacement);
     }
 

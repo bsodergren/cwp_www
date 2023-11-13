@@ -34,7 +34,7 @@ try {
         $params['VERIFY_LINK'] = __URL_HOME__.'/login/reset_passwd.php?selector='.urlencode($selector).'&token='.urlencode($token);
         $mail->Body(Template::getHtml('authentication/email/reset', $params));
         $mail->mail();
-        $msg                   = 'Password Recovery email sent';
+        $msg = 'Password Recovery email sent';
     });
 } catch (\Delight\Auth\InvalidEmailException $e) {
     $msg = 'Invalid email address';

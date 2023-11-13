@@ -12,7 +12,7 @@ use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
 
-$form_url   = __URL_HOME__.'/process.php';
+$form_url = __URL_HOME__.'/process.php';
 define('__FORM_URL__', $form_url);
 
 /*
@@ -69,7 +69,7 @@ foreach ($paper_type as $paper) {
                 }
             }
 
-            $bg_class    = ' bg-warning-subtle ';
+            $bg_class = ' bg-warning-subtle ';
             if ('' == $val) {
                 $bg_class = ' bg-danger-subtle ';
             }
