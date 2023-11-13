@@ -9,20 +9,11 @@ use CWP\Utils\MediaDevice;
 
 require_once '.config.inc.php';
 
-$dir = 'Files/230411/1023-C_Runsheets_Itasca/XLS';
-$fs  = new MediaFileSystem();
-
-$r = $fs->dirExists($dir);
-
-$localfile = 'D:\development\cwp_app\public\www\files\MediaFolder\230411\1023-C_Runsheets_Itasca\xlsx\230411_1023-C_Runsheets_Itasca_FM1.xlsx';
-
-$remotefile = $dir.'/'.basename($localfile);
-
-$fs->save($localfile, $remotefile);
-//$r  = $fs->getContents('/');
-
 //dd($localFile, $RemoteFile);
 
 MediaDevice::getHeader();
-
+$timeout    = 15;
+$timeout    = $timeout * 1000;
+$update_inv = $timeout / 100;
+Template::echo('progress_bar', ['SPEED' => $update_inv]);
 MediaDevice::getFooter();

@@ -50,9 +50,14 @@ class Colors
         $this->background_colors['light_gray']   = '47';
     } // end __construct()
 
+    private function lower($color)
+    {
+        return  strtolower($color);
+    }
+
     public function getClassColor()
     {
-        if (isset($this->foreground_colors[$this->fg_color])) {
+        if (null !== $this->getForgroundColor($this->fg_color)) {
             return 'color:'.$this->fg_color.';';
         }
 
@@ -62,7 +67,7 @@ class Colors
     public function getColoredDiv($html, $background_color)
     {
         $class_tag = '';
-        if (isset($this->background_colors[$background_color])) {
+        if (null !== $this->getBackgroundColor($background_color)) {
             $class_tag = 'class';
         }
     }
@@ -70,7 +75,7 @@ class Colors
     // Returns colored string
     public function getColoredSpan($string, $foreground_color = null, $background_color = null)
     {
-        $this->fg_color = $foreground_color;
+        $this->fg_color = strtolower($foreground_color);
         $colored_string = '<span style="'.$this->getClassColor().'">'.$string.'</span>';
 
         return $colored_string;
@@ -81,13 +86,13 @@ class Colors
         $colored_string = '';
 
         // Check if given foreground color found
-        if (isset($this->foreground_colors[$foreground_color])) {
-            $colored_string .= "\033[".$this->foreground_colors[$foreground_color].'m';
+        if (null !== $this->getForgroundColor($foreground_color)) {
+            $colored_string .= "\033[".$this->getForgroundColor($foreground_color).'m';
         }
 
         // Check if given background color found
-        if (isset($this->background_colors[$background_color])) {
-            $colored_string .= "\033[".$this->background_colors[$background_color].'m';
+        if (null !== $this->getBackgroundColor($background_color)) {
+            $colored_string .= "\033[".$this->getBackgroundColor($background_color).'m';
         }
 
         // Add string and end coloring
@@ -95,6 +100,16 @@ class Colors
 
         return $colored_string;
     } // end getColoredString()
+
+    private function getForgroundColor($color)
+    {
+        return $this->foreground_colors[$this->lower($color)];
+    }
+
+    private function getBackgroundColor($color)
+    {
+        return $this->background_colors[$this->lower($color)];
+    }
 
     // Returns all foreground color names
     public function getForegroundColors()

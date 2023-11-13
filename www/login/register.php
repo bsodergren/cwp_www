@@ -48,7 +48,7 @@ try {
         $mail->mail();
     });
 
-    $msg = 'We have signed up a new user with the ID '.$userId;
+    $msg    = 'We have signed up a new user with the ID '.$userId;
 } catch (\Delight\Auth\InvalidEmailException $e) {
     $msg = 'Invalid email address';
 } catch (\Delight\Auth\InvalidPasswordException $e) {

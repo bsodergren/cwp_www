@@ -28,7 +28,7 @@ if (isset($_POST['divClass'])) {
         $hidden = 0;
     }
 
-    $count = $explorer->table('media_job')
+    $count        = $explorer->table('media_job')
         ->where('job_id', $id) // must be called before update()
         ->update([
             'hidden' => $hidden,
@@ -36,7 +36,7 @@ if (isset($_POST['divClass'])) {
     exit;
 }
 
-$procesClass = ucfirst(__FORM_POST__);
+$procesClass  = ucfirst(__FORM_POST__);
 if (array_key_exists('FORM_PROCESS', $_POST)) {
     if ('updateSetting' == $_POST['FORM_PROCESS']) {
         $procesClass = ucfirst('Settings');

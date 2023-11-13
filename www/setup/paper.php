@@ -17,7 +17,7 @@ foreach ($_REQUEST as $key => $data_array) {
         $field_array[$field] = $value;
     }
 
-    $count[] = $explorer->table('paper_count')->where('id', $key)->update($field_array);
+    $count[]     = $explorer->table('paper_count')->where('id', $key)->update($field_array);
 }
 
 dd($count);

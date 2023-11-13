@@ -12,20 +12,20 @@ use CWP\Utils\MediaDevice;
 require_once '.config.inc.php';
 define('TITLE', 'Import new Media drop');
 // $template = new Template();
-$files = [];
+$files                        = [];
 MediaDevice::getHeader();
-$table   = $explorer->table('media_job');
-$results = $table->fetchAssoc('job_id');
+$table                        = $explorer->table('media_job');
+$results                      = $table->fetchAssoc('job_id');
 foreach ($results as $id => $row) {
     $files[] = $row['pdf_file'];
 }
 /* connect to gmail */
 
-$locations          = new MediaFileSystem();
-$upload_directory   = $locations->getDirectory('upload', true);
-$params             = [];
-$upload_params      = [];
-$pdf_select_options = [];
+$locations                    = new MediaFileSystem();
+$upload_directory             = $locations->getDirectory('upload', true);
+$params                       = [];
+$upload_params                = [];
+$pdf_select_options           = [];
 if (1 == __IMAP_ENABLE__) {
     /* try to connect */
     $import = new EmailImport();
@@ -45,7 +45,7 @@ if (1 == __IMAP_ENABLE__) {
     // dd($import->attachments);
 }
 //dd($locations->getDirectory('pdf', false));
-$results = $locations->getContents($locations->getDirectory('pdf', false));
+$results                      = $locations->getContents($locations->getDirectory('pdf', false));
 foreach ($results as $key => $pdf_file) {
     if (! in_array($pdf_file, $files)) {
         $dropbox_options_html .= template::GetHTML('/import/dropbox/form_option', [
@@ -55,8 +55,8 @@ foreach ($results as $key => $pdf_file) {
     }
 }
 
-$import_card['SECOND_FORM'] = template::GetHTML('/import/dropbox/jobnumber', ['JN_NAME' => 'dropbox[job_number]']);
-$import_card['FIRST_FORM']  = template::GetHTML('/import/dropbox/form_select', [
+$import_card['SECOND_FORM']   = template::GetHTML('/import/dropbox/jobnumber', ['JN_NAME' => 'dropbox[job_number]']);
+$import_card['FIRST_FORM']    = template::GetHTML('/import/dropbox/form_select', [
     'SELECT_OPTIONS' => $dropbox_options_html,
     'SELECT_NAME'    => 'dropbox[pdf_file]',
 ]);
