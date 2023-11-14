@@ -6,11 +6,11 @@
 namespace CWP\Filesystem\Driver;
 
 use CWP\Core\Bootstrap;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
-use Nette\Utils\FileSystem;
-use CWP\Filesystem\MediaFileSystem;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
+use Nette\Utils\FileSystem;
 
 // use Symfony\Component\Filesystem\Filesystem;
 /*
@@ -71,12 +71,6 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function __construct()
     {
-
-
-
-
-
-
         $client = new \Google\Client();
         $client->setClientId(Bootstrap::$CONFIG['google']['clientid']);
         $client->setClientSecret(Bootstrap::$CONFIG['google']['secret']);
@@ -178,8 +172,9 @@ class MediaGoogleDrive implements MediaFileInterface
         if (str_ends_with($path, '/')) {
             $path = rtrim($path, '/');
         }
-
-        $this->google->createDirectory($path);
+        if (!str_starts_with($path, __HOME__)) {
+            $this->google->createDirectory($path);
+        }
 
         // Name
         return $path;
@@ -188,16 +183,21 @@ class MediaGoogleDrive implements MediaFileInterface
     public function getContents($path, $recursive = false)
     {
         $path = $this->path($path);
-        $contents = $this->google->listContents($path, $recursive /* is_recursive */);
-        // Fetch Items (Returns an instance of ModelCollection)
 
-        foreach ($contents as $item) {
-            if (true == $item->isFile()) {
-                $files[] = $item->path();
+        if ($this->dirExists($path)) {
+            $contents = $this->google->listContents($path, $recursive /* is_recursive */);
+            // Fetch Items (Returns an instance of ModelCollection)
+
+            foreach ($contents as $item) {
+                if (true == $item->isFile()) {
+                    $files[] = $item->path();
+                }
             }
+
+            return $files;
         }
 
-        return $files;
+        return [];
     }
 
     public function delete($file)
