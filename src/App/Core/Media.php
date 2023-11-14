@@ -531,15 +531,18 @@ class Media
 
     public static function insertJobNumber($pdf_filename, $job_number)
     {
-        $base_dir = \dirname($pdf_filename, 2);
-        $pdf_filename = basename($pdf_filename);
+        $locations     = new MediaFileSystem($pdf_filename, $job_number);
+        $pdf_directory = $locations->getDirectory('pdf', false, true);
+        //$base_dir = \dirname($pdf_filename, 2);
+        // $pdf_filename = basename($pdf_filename);
+
 
         $query = 'INSERT INTO `media_job` ?';
 
         self::$connection->query($query, [
             'job_number' => $job_number,
             'pdf_file' => $pdf_filename,
-            'base_dir' => $base_dir,
+            'base_dir' => $pdf_directory,
         ]);
 
         return self::$connection->getInsertId();

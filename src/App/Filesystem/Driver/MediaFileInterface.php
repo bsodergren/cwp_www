@@ -26,4 +26,6 @@ interface MediaFileInterface
     public function uploadFile($filename, $dropboxFilename, $options = []);
 
     public function DownloadFile($filename);
+
+    public function postSaveFile($file);
 }

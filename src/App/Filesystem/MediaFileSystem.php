@@ -34,6 +34,12 @@ class MediaFileSystem
     }
 
 
+    public function postSaveFile($postFileArray)
+    {
+        return $this->fileDriver->postSaveFile($postFileArray);
+    }
+
+
     public function getContents($path)
     {
         return $this->fileDriver->getContents($path);
@@ -49,9 +55,9 @@ class MediaFileSystem
         return $this->fileDriver->exists($file);
     }
 
-    public function uploadFile($filename, $dropboxFilename, $options = [])
+    public function uploadFile($filename, $remoteFilename, $options = [])
     {
-        return $this->fileDriver->UploadFile($filename, $dropboxFilename, $options);
+        return $this->fileDriver->UploadFile($filename, $remoteFilename, $options);
     }
 
     public function DownloadFile($filename)
@@ -84,9 +90,9 @@ class MediaFileSystem
         return $this->filename($type, $form_number, $create_dir);
     }
 
-    public function getDirectory($type = '', $create_dir = true)
+    public function getDirectory($type = '', $create_dir = true, $remote = false)
     {
-        return $this->directory($type, $create_dir);
+        return $this->directory($type, $create_dir, $remote);
     }
 
     public function filename($type = '', $form_number = '', $create_dir = false)
@@ -99,7 +105,6 @@ class MediaFileSystem
 
         $file      = basename($this->pdf_file, '.pdf');
         $filename  = $this->job_number.'_'.$file;
-
         $type      = strtolower($type);
         switch ($type) {
             case 'xlsx':
@@ -121,7 +126,7 @@ class MediaFileSystem
         }
 
         if ('' != $type) {
-            $directory = $this->directory($type, $create_dir);
+            $directory = $this->directory($type, $create_dir, true);
         }
 
         $filename  = $directory.\DIRECTORY_SEPARATOR.$filename;
@@ -130,7 +135,7 @@ class MediaFileSystem
         return $filename;
     }
 
-    public function directory($type = '', $create_dir = true)
+    public function directory($type = '', $create_dir = true, $remote = false)
     {
         $output_filename = '';
 
@@ -140,8 +145,8 @@ class MediaFileSystem
             $output_filename = $this->job_number.$output_filename;
         }
 
-        $directory       = __FILES_DIR__.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
-//dd($directory);
+
+        $directory       = __FILES_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
         $type            = strtolower($type);
         switch ($type) {
             case 'xlsx':
@@ -157,17 +162,21 @@ class MediaFileSystem
                 // } elseif (Media::$Google) {
                 //         $directory = __TEMP_DIR__;
                 // } else {
-                    $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
+                $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
                 // }
                 break;
             case 'pdf':
-                $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
+
+                if($remote == true) {
+                    $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
+                } else {
+                    $directory = __TEMP_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
+                }
+                //  dump($type, $directory, $remote);
                 break;
         }
-
-        $directory       = FileSystem::unixSlashes($directory);
+        $directory = FileSystem::platformSlashes($directory);
         $this->directory = FileSystem::normalizePath($directory);
-
         if (true == $create_dir) {
             $this->fileDriver->createFolder($directory);
         }

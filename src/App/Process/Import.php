@@ -63,15 +63,9 @@ class Import extends MediaProcess
 
         if (false == $this->error) {
             if ('' != $_FILES['the_file']['name']) {
-                $fileName      = $_FILES['the_file']['name'];
                 $fileSize      = $_FILES['the_file']['size'];
-                $fileTmpName   = $_FILES['the_file']['tmp_name'];
-
                 $locations     = new MediaFileSystem();
-                $pdf_directory = $locations->getDirectory('pdf', false);
-                $pdf_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
-                $locations->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
-
+                $pdf_file = $locations->postSaveFile($_FILES);
                 MediaQPDF::cleanPDF($pdf_file);
 
                 //        if (file_exists($pdf_file)) {
@@ -108,6 +102,7 @@ class Import extends MediaProcess
             // $media_closing = '/'.basename($fileName, '.pdf');
 
             $MediaImport   = new PDFImport();
+
             $MediaImport->Import($pdf_file, $job_number);
             if (0 == $MediaImport->status) {
                 HTMLDisplay::put("<span class='p-3 text-danger'>something went wrong</span>");

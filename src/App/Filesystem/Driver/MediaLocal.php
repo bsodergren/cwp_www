@@ -20,6 +20,21 @@ class MediaLocal implements MediaFileInterface
 
     public $job_number;
 
+    public function postSaveFile($postFileArray)
+    {
+        $fileName      = $postFileArray['the_file']['name'];
+
+        $fileTmpName   = $postFileArray['the_file']['tmp_name'];
+
+        $loc = new MediaFileSystem();
+        $pdf_directory = $loc->getDirectory('pdf', false);
+        $pdf_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
+        $loc->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
+
+        return $pdf_file;
+    }
+
+
     public function getContents($path)
     {
         $f     = new MediaFinder();

@@ -60,8 +60,8 @@ class MediaExec
 
     public function run($callback = null)
     {
-       $cmd= $this->getCommand();
-    //    dd($cmd);
+        $cmd = $this->getCommand();
+        //    dd($cmd);
 
         $this->ExecProcess->start();
         $this->ExecProcess->wait($callback);
@@ -87,7 +87,9 @@ class MediaExec
         $this->option('1-z', '--');
         $this->option('--replace-input');
         $this->option('--no-warn');
+
         $this->run($callback);
+
     }
 
     public function callback($type, $buffer): void

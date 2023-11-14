@@ -10,9 +10,10 @@ use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 use Kunnu\Dropbox\Dropbox;
-use Kunnu\Dropbox\DropboxApp;
-use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use Nette\Utils\FileSystem;
+use Kunnu\Dropbox\DropboxApp;
+use CWP\Filesystem\MediaFileSystem;
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 // use Symfony\Component\Filesystem\Filesystem;
 /*
@@ -84,8 +85,35 @@ class MediaGoogleDrive implements MediaFileInterface
         $this->google  = new \League\Flysystem\Filesystem($adapter);
 
         $localAdapter  = new \League\Flysystem\Local\LocalFilesystemAdapter('/');
-        $this->localfs = new \League\Flysystem\Filesystem($localAdapter,
-            [\League\Flysystem\Config::OPTION_VISIBILITY => \League\Flysystem\Visibility::PRIVATE]);
+        $this->localfs = new \League\Flysystem\Filesystem(
+            $localAdapter,
+            [\League\Flysystem\Config::OPTION_VISIBILITY => \League\Flysystem\Visibility::PRIVATE]
+        );
+    }
+
+
+
+    public function postSaveFile($postFileArray)
+    {
+        $fileName      = $postFileArray['the_file']['name'];
+        $fileTmpName   = $postFileArray['the_file']['tmp_name'];
+
+        $loc = new MediaFileSystem();
+        $pdf_directory = $loc->getDirectory('upload', true);
+        $upload_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
+
+        $tmpDir = __TEMP_DIR__.\DIRECTORY_SEPARATOR."MediaUpload";
+        FileSystem::createDir($tmpDir);
+        $pdf_file      = $tmpDir.\DIRECTORY_SEPARATOR.basename($fileName);
+        $res = move_uploaded_file($fileTmpName, $pdf_file);
+        if($res != true) {
+            dd($res);
+        }
+
+        $loc->UploadFile($pdf_file, $upload_file, ['autorename' => false]);
+
+        // dd($fileTmpName, $pdf_file, $upload_file);
+        return $pdf_file;
     }
 
     public function dirExists($dir)
@@ -104,9 +132,11 @@ class MediaGoogleDrive implements MediaFileInterface
     {
         $tmp_filename = basename($filename);
         $tmp_file     = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$tmp_filename;
-        if (! file_exists($tmp_file)) {
-            $this->localfs->writeStream($tmp_file, $this->google->readStream($filename));
+        if (file_exists($tmp_file)) {
+            FileSystem::delete($tmp_file);
         }
+
+        $this->localfs->writeStream($tmp_file, $this->google->readStream($filename));
 
         return $tmp_file;
     }
@@ -184,10 +214,10 @@ class MediaGoogleDrive implements MediaFileInterface
         if (file_exists($tmpFilename)) {
             Filesystem::delete($tmpFilename);
         }
-  //      dd(get_class_methods($this->google));
+        //      dd(get_class_methods($this->google));
 
         $this->localfs->writeStream($tmpFilename, $this->google->readStream($filename));
-//        $file        = $this->google->download($filename, $tmpFilename);
+        //        $file        = $this->google->download($filename, $tmpFilename);
 
         return $tmpFilename;
     }
