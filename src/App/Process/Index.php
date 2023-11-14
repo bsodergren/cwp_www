@@ -62,10 +62,9 @@ class Index extends MediaProcess
 
     public function create_zip()
     {
-        $xlsx_dir  = $this->media->xlsx_directory;
-        $zip_file  = $this->media->zip_file;
-        $zip       = new Zip();
-        $this->msg = $zip->zip($xlsx_dir, $this->job_id, $zip_file);
+
+        $zip       = new Zip($this);
+        $this->msg = $zip->zip();
         // $msg ='ZIP File Created';
     }
 

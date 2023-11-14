@@ -50,19 +50,45 @@ class AdvancedFilesystemIterator extends \ArrayIterator
 
 class Zip
 {
-    public function __construct()
+    public $xlsx_dir;
+    public $zip_file;
+    public $job_id;
+
+    public $remote_xlsx;
+    public $remote_zip;
+
+
+    public object $driver ;
+
+
+    public function __construct($object)
     {
+        $this->remote_xlsx  = $object->media->xlsx_directory;
+        $this->remote_zip  = $object->media->zip_file;
+        // $this->zip_file  = $object->media->zip_file;
+        $this->job_id = $object->job_id;
+
+
+        $this->driver = Media::getFileDriver();
+
+        $this->xlsx_dir  = $this->driver->getXLSXDir($this->remote_xlsx);
+
+        $this->zip_file = $this->driver->getZipFile($object->media->zip_file, dirname($this->xlsx_dir));
+
+        // dd($this->xlsx_dir, $this->zip_file);
+
     }
 
-    public function zip($xlsx_directory, $job_id, $zip_file)
+    public function zip()
     {
-        $rootPath = realpath($xlsx_directory);
-        $zipPath  = str_replace(basename($zip_file), '', $zip_file);
+        $rootPath = realpath($this->xlsx_dir);
+        //$zipPath  = dirname($this->zip_file);
 
-        FileSystem::createDir($zipPath);
+        $this->driver->downloadXLSXFiles($this->remote_xlsx);
+
 
         $zip      = new \ZipArchive();
-        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->open($this->zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
         $files    = (new AdvancedFilesystemIterator($rootPath))->sortByMTime();
 
@@ -78,11 +104,19 @@ class Zip
         }
 
         // Zip archive will be created only after closing object
-        $d        = $zip->close();
-        if (true === $d) {
-            Media::$explorer->table('media_job')->where('job_id', $job_id)->update(['zip_exists' => '1']);
+        $d = $zip->close();
 
+
+        if (true === $d) {
+            $this->driver->save($this->zip_file, $this->remote_zip);
+
+
+           $table = Media::$explorer->table('media_job')->where('job_id', $this->job_id)->update(['zip_exists' => 1]);
+
+            //FileSystem::delete(dirname($rootPath, 3));
             return 'Zip file created';
+
+            //FileSystem::delete(dirname($rootPath));
         }
 
         return 'zip file not created, probably a file open';

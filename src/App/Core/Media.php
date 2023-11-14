@@ -35,6 +35,9 @@ class Media
     public static $Dropbox = false;
 
     public static $Google = false;
+    public static $FileDriver;
+
+
 
     private $mediaLoc;
 
@@ -227,7 +230,7 @@ class Media
         $this->zip_directory = $this->mediaLoc->getDirectory('zip');
         $this->zip_file = $this->mediaLoc->getFilename('zip');
 
-        // dd([$this->base_dir,$this->pdf_fullname,$this->pdf_tmp_file,$this->xlsx_directory,$this->zip_directory,$this->base_dir]);
+        //     dump([$this->base_dir,$this->pdf_fullname,$this->pdf_tmp_file,$this->xlsx_directory,$this->zip_directory,$this->base_dir]);
     }
 
     public function getFilename($type = '', $form_number = '', $create_dir = '')
@@ -569,12 +572,14 @@ class Media
     public static function getFileDriver()
     {
         if (self::$Dropbox) {
+            self::$FileDriver = "Dropbox";
             return new MediaDropbox();
         }
         if (self::$Google) {
+            self::$FileDriver = "Google Drive";
             return new MediaGoogleDrive();
         }
-
+        self::$FileDriver = "Local FS";
         return new MediaLocal();
     }
 }

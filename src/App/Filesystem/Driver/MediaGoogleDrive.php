@@ -91,7 +91,20 @@ class MediaGoogleDrive implements MediaFileInterface
         );
     }
 
-
+    private function path($path, $create = false)
+    {
+        $path = Filesystem::normalizePath($path);
+        $path = Filesystem::platformSlashes($path);
+        if($create == true) {
+            if(is_dir($path)) {
+                $dir = $path;
+            } else {
+                $dir = dirname($path);
+            }
+            FileSystem::createDir($dir);
+        }
+        return $path;
+    }
 
     public function postSaveFile($postFileArray)
     {
@@ -100,11 +113,10 @@ class MediaGoogleDrive implements MediaFileInterface
 
         $loc = new MediaFileSystem();
         $pdf_directory = $loc->getDirectory('upload', true);
-        $upload_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
 
-        $tmpDir = __TEMP_DIR__.\DIRECTORY_SEPARATOR."MediaUpload";
-        FileSystem::createDir($tmpDir);
-        $pdf_file      = $tmpDir.\DIRECTORY_SEPARATOR.basename($fileName);
+        $upload_file      = $this->path($pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName), true);
+        $pdf_file = $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR."MediaUpload".\DIRECTORY_SEPARATOR.basename($fileName), true);
+
         $res = move_uploaded_file($fileTmpName, $pdf_file);
         if($res != true) {
             dd($res);
@@ -130,8 +142,8 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function getFile($filename)
     {
-        $tmp_filename = basename($filename);
-        $tmp_file     = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$tmp_filename;
+        $tmp_file = $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename));
+
         if (file_exists($tmp_file)) {
             FileSystem::delete($tmp_file);
         }
@@ -150,13 +162,12 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function createFolder($path)
     {
-        $path = Filesystem::normalizePath($path);
-
-        $path = Filesystem::unixSlashes($path);
+        $path = $this->path($path);
 
         if (str_ends_with($path, '/')) {
             $path = rtrim($path, '/');
         }
+
         $this->google->createDirectory($path);
 
         // Name
@@ -165,7 +176,7 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function getContents($path, $recursive = false)
     {
-        $path     = Filesystem::unixSlashes($path);
+        $path = $this->path($path);
         $contents = $this->google->listContents($path, $recursive /* is_recursive */);
         // Fetch Items (Returns an instance of ModelCollection)
 
@@ -180,14 +191,13 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function delete($file)
     {
-        $file = Filesystem::unixSlashes($file);
-
+        $file = $this->path($file);
         return $this->google->delete($file);
     }
 
     public function save($localfile, $remotefile, $options = [])
     {
-        $remotefile = Filesystem::unixSlashes($remotefile);
+        $remotefile = $this->path($remotefile);
 
         if (false !== $this->exists($remotefile)) {
             $this->google->delete($remotefile);
@@ -206,18 +216,16 @@ class MediaGoogleDrive implements MediaFileInterface
         return $uploadFilename;
     }
 
-    public function DownloadFile($filename)
+    public function DownloadFile($filename, $path = __TEMP_DIR__)
     {
-        // dd("Download File");
-        $tmpFilename = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename);
+
+        $tmpFilename = $this->path($path.\DIRECTORY_SEPARATOR.basename($filename), true);
 
         if (file_exists($tmpFilename)) {
             Filesystem::delete($tmpFilename);
         }
-        //      dd(get_class_methods($this->google));
 
         $this->localfs->writeStream($tmpFilename, $this->google->readStream($filename));
-        //        $file        = $this->google->download($filename, $tmpFilename);
 
         return $tmpFilename;
     }
@@ -238,4 +246,29 @@ class MediaGoogleDrive implements MediaFileInterface
         MediaDevice::getFooter();
         exit;
     }
+
+    public function downloadXLSXFiles($xlsDir)
+    {
+        $files = $this->getContents($xlsDir);
+        foreach($files as $file) {
+            $tmpFile[] = $this->DownloadFile($file, $this->getXLSXDir($xlsDir));
+        }
+    }
+
+    public function getXLSXDir($xlsDir)
+    {
+        return $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR.$xlsDir, true);
+
+    }
+
+    public function getZipFile($zipFile, $path)
+    {
+        return $this->path($path.DIRECTORY_SEPARATOR.'zip'.DIRECTORY_SEPARATOR.basename($zipFile), true);
+
+    }
+
+
+
+
+
 }

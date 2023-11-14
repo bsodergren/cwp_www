@@ -55,7 +55,7 @@ class MediaXLSX extends Media
         $calc = new Calculator($this->media);
 
         $this->xlsx_path = $this->media->getDirectory('xlsx');
-        (new MediaFileSystem)->createFolder($this->xlsx_path);
+        (new MediaFileSystem())->createFolder($this->xlsx_path);
         foreach ($this->xlsx_array as $form_number => $dataArray) {
 
             $data              = $dataArray['forms'];
@@ -124,7 +124,7 @@ class MediaXLSX extends Media
             $writer->xls_path  = $this->media->xlsx_directory;
             $new_xlsx_file     = $this->media->getfilename('xlsx', $form_number, true);
             $writer->write($new_xlsx_file);
-            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing '.basename($new_xlsx_file)]);
+            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing to '.Media::$FileDriver.' '.$new_xlsx_file]);
             $this->spreadsheet->disconnectWorksheets();
             unset($this->spreadsheet);
         }
