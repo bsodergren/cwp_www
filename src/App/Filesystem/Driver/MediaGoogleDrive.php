@@ -1,19 +1,15 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\Filesystem\Driver;
 
-use CWP\Core\MediaError;
-use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
-use CWP\Utils\MediaDevice;
-use Kunnu\Dropbox\Dropbox;
-use Nette\Utils\FileSystem;
-use Kunnu\Dropbox\DropboxApp;
 use CWP\Filesystem\MediaFileSystem;
-use Kunnu\Dropbox\Exceptions\DropboxClientException;
+use CWP\HTML\HTMLDisplay;
+use CWP\Utils\MediaDevice;
+use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
+use Nette\Utils\FileSystem;
 
 // use Symfony\Component\Filesystem\Filesystem;
 /*
@@ -74,20 +70,31 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function __construct()
     {
-        $client        = new \Google\Client();
+        $client = new \Google\Client();
         $client->setClientId('882775659043-hc67vibec4eeio5bkb1t5mdnlk1nkeju.apps.googleusercontent.com');
         $client->setClientSecret('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');
         $client->refreshToken('1//05PW3oMgnMfnwCgYIARAAGAUSNwF-L9IrWsQ6cqqq0TauLTQxBTOn63BonmoFRoFgTbHRHYLNagRbTXb6fhTNO67BmQ0-RBaa9ww');
         $client->setApplicationName('plexmediabackupserver');
 
-        $service       = new \Google\Service\Drive($client);
-        $adapter       = new \Masbug\Flysystem\GoogleDriveAdapter($service, 'CWPMediaFolder');
-        $this->google  = new \League\Flysystem\Filesystem($adapter);
+        $service = new \Google\Service\Drive($client);
+        $adapter = new \Masbug\Flysystem\GoogleDriveAdapter($service, 'CWPMediaFolder');
+        $this->google = new \League\Flysystem\Filesystem($adapter);
 
-        $localAdapter  = new \League\Flysystem\Local\LocalFilesystemAdapter('/');
+        $localAdapter = new \League\Flysystem\Local\LocalFilesystemAdapter('/',
+            PortableVisibilityConverter::fromArray([
+                'file' => [
+                    'public' => 0640,
+                    'private' => 0664,
+                ],
+                'dir' => [
+                    'public' => 0740,
+                    'private' => 7604,
+                ],
+            ])
+        );
         $this->localfs = new \League\Flysystem\Filesystem(
             $localAdapter,
-            [\League\Flysystem\Config::OPTION_VISIBILITY => \League\Flysystem\Visibility::PRIVATE]
+            // [\League\Flysystem\Config::OPTION_VISIBILITY => \League\Flysystem\Visibility::PRIVATE]
         );
     }
 
@@ -96,32 +103,31 @@ class MediaGoogleDrive implements MediaFileInterface
         $path = Filesystem::normalizePath($path);
         $path = Filesystem::platformSlashes($path);
 
-
-
-        if($create == true) {
-            if(is_dir($path)) {
+        if (true == $create) {
+            if (is_dir($path)) {
                 $dir = $path;
             } else {
-                $dir = dirname($path);
+                $dir = \dirname($path);
             }
             FileSystem::createDir($dir);
         }
+
         return $path;
     }
 
     public function postSaveFile($postFileArray)
     {
-        $fileName      = $postFileArray['the_file']['name'];
-        $fileTmpName   = $postFileArray['the_file']['tmp_name'];
+        $fileName = $postFileArray['the_file']['name'];
+        $fileTmpName = $postFileArray['the_file']['tmp_name'];
 
         $loc = new MediaFileSystem();
         $pdf_directory = $loc->getDirectory('upload', true);
 
-        $upload_file      = $this->createFolder($pdf_directory).\DIRECTORY_SEPARATOR.basename($fileName);
+        $upload_file = $this->createFolder($pdf_directory).\DIRECTORY_SEPARATOR.basename($fileName);
 
-        $pdf_file = $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR."MediaUpload".\DIRECTORY_SEPARATOR.basename($fileName), true);
+        $pdf_file = $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR.'MediaUpload'.\DIRECTORY_SEPARATOR.basename($fileName), true);
         $res = move_uploaded_file($fileTmpName, $pdf_file);
-        if($res != true) {
+        if (true != $res) {
             dd($res);
         }
 
@@ -133,9 +139,7 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function dirExists($dir)
     {
-        $r = $this->google->directoryExists($dir);
-
-        return $r;
+        return $this->google->directoryExists($dir);
     }
 
     public function search($search, $path = '/')
@@ -158,9 +162,7 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function exists($filename)
     {
-        $r = $this->google->fileExists($filename);
-
-        return $r;
+        return $this->google->fileExists($filename);
     }
 
     public function createFolder($path)
@@ -183,7 +185,7 @@ class MediaGoogleDrive implements MediaFileInterface
         // Fetch Items (Returns an instance of ModelCollection)
 
         foreach ($contents as $item) {
-            if ($item->isFile() == true) {
+            if (true == $item->isFile()) {
                 $files[] = $item->path();
             }
         }
@@ -194,6 +196,7 @@ class MediaGoogleDrive implements MediaFileInterface
     public function delete($file)
     {
         $file = $this->path($file);
+
         return $this->google->delete($file);
     }
 
@@ -210,8 +213,8 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function UploadFile($filename, $uploadFilename, $options = [])
     {
-        //dd("Upload File");
-        //dd($filename, $uploadFilename);
+        // dd("Upload File");
+        // dd($filename, $uploadFilename);
         //  $filename = __TEMP_DIR__.\DIRECTORY_SEPARATOR.basename($filename);
         $this->save($filename, $uploadFilename, $options);
 
@@ -220,7 +223,6 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function DownloadFile($filename, $path = __TEMP_DIR__)
     {
-
         $tmpFilename = $this->path($path.\DIRECTORY_SEPARATOR.basename($filename), true);
 
         if (file_exists($tmpFilename)) {
@@ -239,7 +241,7 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function error($e)
     {
-        $code    = $e->getCode();
+        $code = $e->getCode();
         $message = $e->getMessage();
 
         echo HTMLDisplay::JavaRefresh('/error.php', 0, ['type' => 'Dropbox', 'code' => $code, 'message' => $message]);
@@ -252,7 +254,7 @@ class MediaGoogleDrive implements MediaFileInterface
     public function downloadXLSXFiles($xlsDir)
     {
         $files = $this->getContents($xlsDir);
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $tmpFile[] = $this->DownloadFile($file, $this->getXLSXDir($xlsDir));
         }
     }
@@ -260,12 +262,10 @@ class MediaGoogleDrive implements MediaFileInterface
     public function getXLSXDir($xlsDir)
     {
         return $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR.$xlsDir, true);
-
     }
 
     public function getZipFile($zipFile, $path)
     {
-        return $this->path($path.DIRECTORY_SEPARATOR.'zip'.DIRECTORY_SEPARATOR.basename($zipFile), true);
-
+        return $this->path($path.\DIRECTORY_SEPARATOR.'zip'.\DIRECTORY_SEPARATOR.basename($zipFile), true);
     }
 }

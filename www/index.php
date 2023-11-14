@@ -71,7 +71,6 @@ if ($cnt > 0) {
 
         $zip_file = $media->zip_file;
         $xlsx_dir = $media->xlsx_directory;
-
         if (true == Media::get_exists('xlsx', $row['job_id']) && true == is_dir($xlsx_dir)) {
             $rowdisabled = '';
         }
@@ -92,7 +91,7 @@ if ($cnt > 0) {
         }
 
         if (__SHOW_ZIP__ == true) {
-            if (is_file($zip_file)) {
+            if ($mediaDir->exists($zip_file)) {
                 $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_zip]', '', 'delete zip', '', $class_delete.$tooltip.'delete_zip"');
             } else {
                 if (true == Media::get_exists('xlsx', $row['job_id'])) {
@@ -102,7 +101,7 @@ if ($cnt > 0) {
                 $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[create_zip]', '', 'create zip', '', $class_create.$zdisabled.$tooltip.'create_zip"');
             }
             if (__SHOW_MAIL__ == true) {
-                if (is_file($zip_file)) {
+                if ($mediaDir->exists($zip_file)) {
                     $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[email_zip]', '', 'email zip', '', $class_create.$tooltip.'email_zip"');
                 }
             }

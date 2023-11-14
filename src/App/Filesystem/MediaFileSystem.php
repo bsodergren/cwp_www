@@ -21,6 +21,7 @@ class MediaFileSystem
     public $directory;
 
     public object $fileDriver;
+    public object $localfs;
 
     public $job_number;
 
@@ -31,6 +32,7 @@ class MediaFileSystem
         $this->job_number = $job_number;
         $this->pdf_file   = $pdf_file;
         $this->fileDriver = Media::getFileDriver();
+        $this->localfs  = new MediaLocal();
     }
 
 
@@ -47,11 +49,17 @@ class MediaFileSystem
 
     public function dirExists($file)
     {
+        if(str_starts_with($file,__HOME__)){
+            return $this->localfs->dirExists($file);
+        }
         return $this->fileDriver->dirExists($file);
     }
 
     public function exists($file)
     {
+        if(str_starts_with($file,__HOME__)){
+            return $this->localfs->exists($file);
+        }
         return $this->fileDriver->exists($file);
     }
 

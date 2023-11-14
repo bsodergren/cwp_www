@@ -32,9 +32,28 @@ class Bootstrap
         $this->define('__DEBUG__', $this->isDebugSet());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->define('__URL_PATH__', $this->getURL());
-        $this->define('__HOME__', \dirname($_SERVER['DOCUMENT_ROOT'], 2));
+        $this->define('__HOME__', $this-> homeDir());
+
     }
 
+    public function homeDir()
+    {
+        if(isset($_SERVER['HOME'])) {
+            $result = $_SERVER['HOME'];
+        } else {
+            $result = getenv("HOME");
+        }
+
+        if(empty($result) && function_exists('exec')) {
+            if(strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+                $result = exec("echo %userprofile%");
+            } else {
+                $result = exec("echo ~");
+            }
+        }
+
+        return $result;
+    }
     public function directory($path)
     {
         $path = FileSystem::normalizePath($path);
