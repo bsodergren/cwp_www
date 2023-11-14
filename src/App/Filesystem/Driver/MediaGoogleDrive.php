@@ -5,11 +5,12 @@
 
 namespace CWP\Filesystem\Driver;
 
-use CWP\Filesystem\MediaFileSystem;
+use CWP\Core\Bootstrap;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
-use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use Nette\Utils\FileSystem;
+use CWP\Filesystem\MediaFileSystem;
+use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 
 // use Symfony\Component\Filesystem\Filesystem;
 /*
@@ -70,10 +71,16 @@ class MediaGoogleDrive implements MediaFileInterface
 
     public function __construct()
     {
+
+
+
+
+
+
         $client = new \Google\Client();
-        $client->setClientId('882775659043-hc67vibec4eeio5bkb1t5mdnlk1nkeju.apps.googleusercontent.com');
-        $client->setClientSecret('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');
-        $client->refreshToken('1//05PW3oMgnMfnwCgYIARAAGAUSNwF-L9IrWsQ6cqqq0TauLTQxBTOn63BonmoFRoFgTbHRHYLNagRbTXb6fhTNO67BmQ0-RBaa9ww');
+        $client->setClientId(Bootstrap::$CONFIG['google']['clientid']);
+        $client->setClientSecret(Bootstrap::$CONFIG['google']['secret']);
+        $client->refreshToken(Bootstrap::$CONFIG['google']['token']);
         $client->setApplicationName('plexmediabackupserver');
 
         $service = new \Google\Service\Drive($client);

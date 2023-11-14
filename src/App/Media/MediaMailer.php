@@ -7,9 +7,10 @@ namespace CWP\Media;
 
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
+use CWP\Filesystem\MediaFileSystem;
 
 class MediaMailer
 {
@@ -27,6 +28,8 @@ class MediaMailer
 
     public function attachment($file)
     {
+        $file = (new MediaFileSystem())->DownloadFile($file);
+
         $this->mail->addAttachment($file);
     }
 

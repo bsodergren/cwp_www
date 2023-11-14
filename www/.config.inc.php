@@ -18,7 +18,7 @@ define('__CONFIG_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Configuration');
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
 //
-// Debugger::enable();
+ Debugger::enable();
 
 Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
 //Debugger::$logSeverity  = \E_WARNING | \E_NOTICE;

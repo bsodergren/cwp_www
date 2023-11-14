@@ -20,6 +20,7 @@ class Bootstrap
         'db' => ['type','path','dbname','host','username','password'],
         'email' => ['enable','imap','username','password','folder'],
         'server' => ['filedriver','media_files','file_root','url_root'],
+        'google' => ['clientid','secret','token'],
     ];
 
     public function __construct(Config $Config)
