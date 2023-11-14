@@ -54,10 +54,9 @@ foreach ($setting['local'] as $key => $array) {
 }
 
 // $const = get_defined_constants(true);
-Media::$Dropbox = false;
-Media::$Google = true;
 
-if (Media::$Google) {
+
+if (Media::$Google || Media::$Dropbox) {
     define('__FILES_DIR__', '');
 } else {
     if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {

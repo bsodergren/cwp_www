@@ -5,6 +5,7 @@
 
 namespace CWP\Core;
 
+use CWP\Core\Media;
 use Camoo\Config\Config;
 use Nette\Utils\FileSystem;
 
@@ -14,10 +15,20 @@ class Bootstrap
 
     public object $Config;
 
+    private $configkeys = [
+        'application' => ['name','debug','register','authenticate'],
+        'db' => ['type','path','dbname','host','username','password'],
+        'email' => ['enable','imap','username','password','folder'],
+        'server' => ['filedriver','media_files','file_root','url_root'],
+    ];
+
     public function __construct(Config $Config)
     {
         $this->Config = $Config;
         self::$CONFIG = $Config->all();
+
+        $this->checkConfigValues();
+        $this->setFileDriver();
         $this->define('__DEBUG__', $this->isDebugSet());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->define('__URL_PATH__', $this->getURL());
@@ -83,5 +94,45 @@ class Bootstrap
     private function getURL()
     {
         return $this->Config['server']['url_root'];
+    }
+
+    private function setFileDriver()
+    {
+        Media::$Dropbox = false;
+        Media::$Google = false;
+
+        $filedriver = $this->Config['server']['filedriver'];
+
+        if($filedriver == 'google') {
+            Media::$Google = true;
+        }
+        if($filedriver == 'dropbox') {
+            Media::$Dropbox = true;
+        }
+    }
+    private function checkConfigValues()
+    {
+        $config = $this->Config->all();
+        $exit = false;
+        foreach($this->configkeys as $key => $sectionKeys) {
+
+            if(!array_key_exists($key, $config)) {
+                $exit = true;
+                echo "Missing [$key] section <br>";
+                continue;
+            }
+            foreach($sectionKeys as $skey) {
+                if(!array_key_exists($skey, $config[$key])) {
+                    $exit = true;
+                    echo "Missing $skey under [$key]  <br>";
+                    continue;
+                }
+            }
+        }
+
+        if($exit === true) {
+            dd($this->configkeys, $config);
+        }
+
     }
 }

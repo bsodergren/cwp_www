@@ -95,6 +95,9 @@ class MediaGoogleDrive implements MediaFileInterface
     {
         $path = Filesystem::normalizePath($path);
         $path = Filesystem::platformSlashes($path);
+
+
+
         if($create == true) {
             if(is_dir($path)) {
                 $dir = $path;
@@ -114,9 +117,9 @@ class MediaGoogleDrive implements MediaFileInterface
         $loc = new MediaFileSystem();
         $pdf_directory = $loc->getDirectory('upload', true);
 
-        $upload_file      = $this->path($pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName), true);
-        $pdf_file = $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR."MediaUpload".\DIRECTORY_SEPARATOR.basename($fileName), true);
+        $upload_file      = $this->createFolder($pdf_directory).\DIRECTORY_SEPARATOR.basename($fileName);
 
+        $pdf_file = $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR."MediaUpload".\DIRECTORY_SEPARATOR.basename($fileName), true);
         $res = move_uploaded_file($fileTmpName, $pdf_file);
         if($res != true) {
             dd($res);
@@ -163,7 +166,6 @@ class MediaGoogleDrive implements MediaFileInterface
     public function createFolder($path)
     {
         $path = $this->path($path);
-
         if (str_ends_with($path, '/')) {
             $path = rtrim($path, '/');
         }
@@ -266,9 +268,4 @@ class MediaGoogleDrive implements MediaFileInterface
         return $this->path($path.DIRECTORY_SEPARATOR.'zip'.DIRECTORY_SEPARATOR.basename($zipFile), true);
 
     }
-
-
-
-
-
 }
