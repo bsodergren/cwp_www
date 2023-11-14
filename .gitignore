@@ -36,3 +36,5 @@ temp/
 .gitignore
 .vscode/*.json
 tools/*
+~/.config/composer/.htaccess
+~/.local/share/composer/.htaccess
