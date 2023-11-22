@@ -22,7 +22,7 @@ $infotable =  "job_".$view;
 $templatePath = "createjob/view";
 $table = Media::$explorer->table($infotable);
 //$table->order('setting_type ASC');
-$results = $table->fetchPairs();
+$results = $table->fetch();
 
 dump($results);
 
