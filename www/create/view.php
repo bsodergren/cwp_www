@@ -12,7 +12,7 @@ define('__AUTH__', true);
 require_once '../.config.inc.php';
 
 define('TITLE', APP_NAME);
-$view = $_GET['v'];
+$view = $_REQUEST['v'];
 
 
 
