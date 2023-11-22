@@ -24,7 +24,6 @@ $table = Media::$explorer->table($infotable);
 
 //$table->order('setting_type ASC');
 $results = $table->fetchAssoc('name');
-dump($table);
 //$query = "SELECT name FROM ".$table; // WHERE search_table = '".$table."' ORDER BY search_id DESC LIMIT 10";
 foreach ($results as $k => $u) {
     $params['CELL_HTML'] .= Template::GetHTML($templatePath."/cell", ['NAME' => $u['name']]);
