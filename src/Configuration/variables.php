@@ -27,9 +27,9 @@ $nav_bar_links = [
     'Import' => '/import.php',
     'Trim Sizes' => '/settings/trim.php',
     'Settings' => [
-        'Market' => 'create/view.php?v=market',
-        'Publications' => 'create/view.php?v=publication',
-        'Destinations' => 'create/view.php?v=destination',
+        'Market' => '/create/view.php?v=market',
+        'Publications' => '/create/view.php?v=publication',
+        'Destinations' => '/create/view.php?v=destination',
         'Paper' => '/paper.php',
         'Language' => '/settings/language.php',
         'Local Settings' => '/settings/local.php',
