@@ -28,6 +28,10 @@ class Index extends MediaProcess
         $this->$method();
     }
 
+    public function addforms()
+    {
+        $this->url = '/create/addForm.php?job_id='.$this->job_id;
+    }
     public function email_zip()
     {
         $this->url = '/mail.php?job_id='.$this->job_id;

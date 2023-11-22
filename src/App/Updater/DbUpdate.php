@@ -50,6 +50,7 @@ class DbUpdate extends MediaUpdate
             'updateData'    => $update_data,
             'deleteData'    => $delete_data,
         ];
+
         foreach ($updates as $classmethod => $data_array) {
             $this->$classmethod($data_array);
         }

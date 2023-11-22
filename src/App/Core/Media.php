@@ -5,12 +5,13 @@
 
 namespace CWP\Core;
 
+use CWP\Utils\Utils;
+use CWP\JobCreator\Creator;
+use CWP\Media\MediaPublication;
+use CWP\Filesystem\MediaFileSystem;
+use CWP\Filesystem\Driver\MediaLocal;
 use CWP\Filesystem\Driver\MediaDropbox;
 use CWP\Filesystem\Driver\MediaGoogleDrive;
-use CWP\Filesystem\Driver\MediaLocal;
-use CWP\Filesystem\MediaFileSystem;
-use CWP\Media\MediaPublication;
-use CWP\Utils\Utils;
 
 /**
  * @property mixed $job_id
@@ -70,6 +71,11 @@ class Media
     public $form_config;
 
     public $location;
+
+
+    public static $pageType = ['2+2 pgs 4 out','2+4 pgs 2 out','4 pgs 4 out','4+2 pgs 2 out','6 pgs 2 out','4+4 pgs 2 out','8 pgs 2 out' ];
+    public static $bindType = ['PFL', 'PFM', 'PFS', 'SHS', 'PHL', 'PHM', 'PFS'];
+
 
     public function __construct($MediaDB = '')
     {
@@ -528,8 +534,15 @@ class Media
                 $individual_part['form_letter'] = $letter;
                 $individual_part['form_number'] = $form_number;
                 self::$explorer->table('form_data')->insert($individual_part);
+                $destination[] = ['name' => $individual_part['ship']];
+                $market[] =  ['name' => $individual_part['market']];
+                $publications[] =  ['name' => $individual_part['pub']];
+
             }
         }
+        Creator::ImportJobDataFromPDF($destination, 'job_destination');
+        Creator::ImportJobDataFromPDF($publications, 'job_publication');
+        Creator::ImportJobDataFromPDF($market, 'job_market');
     }
 
     public static function insertJobNumber($pdf_filename, $job_number)

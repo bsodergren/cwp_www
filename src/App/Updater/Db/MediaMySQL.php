@@ -55,7 +55,7 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
             $result = Media::$connection->query($query);
 
             foreach ($result as $row) {
-                return $row->count();
+                return  $row->cnt;
             }
         } catch (\PDOException   $e) {
             echo 'Caught exception: ',  $e->getMessage(),  $e->getCode() , "\n";

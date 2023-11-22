@@ -31,6 +31,15 @@ class Template
     {
     }
 
+    public static function getJavascript($template = '', $array = [], $error = true)
+    {
+        $template_obj        = new self();
+        $template_obj->error = $error;
+        $template_obj->template($template, $array, true);
+
+        return $template_obj->html;
+
+    }
     public static function GetHTML($template = '', $array = [], $error = true)
     {
         $template_obj        = new self();
@@ -81,9 +90,9 @@ class Template
         echo $html;
     }
 
-    private function loadTemplate($template)
+    private function loadTemplate($template, $js = false)
     {
-        $template_file = MediaDevice::getTemplateFile($template);
+        $template_file = MediaDevice::getTemplateFile($template, $js);
         if (null !== $template_file) {
             return file_get_contents($template_file).\PHP_EOL;
         }
@@ -128,9 +137,9 @@ class Template
         return $html;
     }
 
-    public function template($template, $params = [])
+    public function template($template, $params = [], $js = false)
     {
-        $template_text = $this->loadTemplate($template);
+        $template_text = $this->loadTemplate($template, $js);
         $html          = $this->parse($template_text, $params);
 
         $this->add($html);

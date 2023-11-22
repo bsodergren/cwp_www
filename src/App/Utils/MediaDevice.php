@@ -142,13 +142,18 @@ class MediaDevice
         return __THEME_DIR__.'/'.strtolower(self::$default_theme);
     }
 
-    public static function getTemplateFile($template)
+    public static function getTemplateFile($template, $js = false)
     {
-        $template      = str_replace('.html', '', $template);
 
-        $template_file = self::getThemePath().'/template/'.$template.'.html';
+        $extension = '.html';
+        if($js === true) {
+            $extension = '.js';
+        }
+        $template      = str_replace($extension, '', $template);
+
+        $template_file = self::getThemePath().'/template/'.$template.$extension ;
         if (! file_exists($template_file)) {
-            $template_file = self::getDefaultTheme().'/template/'.$template.'.html';
+            $template_file = self::getDefaultTheme().'/template/'.$template.$extension ;
             if (! file_exists($template_file)) {
                 $template_file = null;
             }

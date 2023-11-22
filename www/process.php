@@ -8,7 +8,9 @@ use CWP\HTML\HTMLDisplay;
 
 require '.config.inc.php';
 
+
 $refer_script = basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.php');
+
 if (__SCRIPT_NAME__ == $refer_script) {
     MediaError::msg('info', $refer_script.'< >'.__SCRIPT_NAME__, 0);
 }
@@ -38,15 +40,19 @@ if (isset($_POST['divClass'])) {
 }
 
 $procesClass = ucfirst(__FORM_POST__);
-if (array_key_exists('FORM_PROCESS', $_POST)) {
-    if ('updateSetting' == $_POST['FORM_PROCESS']) {
-        $procesClass = ucfirst('Settings');
+if (array_key_exists('FORM_PROCESS', $_REQUEST)) {
+    switch($_REQUEST['FORM_PROCESS']) {
+        case 'updateSetting':
+            $procesClass = ucfirst('Settings');
+            break;
+        case 'createJob':
+            $procesClass = ucfirst('createJob');
+            break;
     }
 }
 
 $procesClass = 'CWP\\Process\\'.$procesClass;
 $mediaProcess = new $procesClass($media);
-// dd($procesClass, $_REQUEST);
 $mediaProcess->run($_REQUEST);
 
 $mediaProcess->reload();
