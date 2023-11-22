@@ -21,9 +21,11 @@ MediaDevice::getHeader();
 $infotable =  "job_".$view;
 $templatePath = "createjob/view";
 $table = Media::$explorer->table($infotable);
-dump($table);
 //$table->order('setting_type ASC');
 $results = $table->fetchPairs();
+
+dump($results);
+
 //$query = "SELECT name FROM ".$table; // WHERE search_table = '".$table."' ORDER BY search_id DESC LIMIT 10";
 
 foreach ($results as $k => $u) {
