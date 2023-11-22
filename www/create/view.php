@@ -23,7 +23,7 @@ $templatePath = "createjob/view";
 $table = Media::$explorer->table($infotable);
 
 //$table->order('setting_type ASC');
-$results = $table->fetchAssoc('name');
+$results = $table->fetchPairs();
 //$query = "SELECT name FROM ".$table; // WHERE search_table = '".$table."' ORDER BY search_id DESC LIMIT 10";
 dump($results);
 foreach ($results as $k => $u) {
