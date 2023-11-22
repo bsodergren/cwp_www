@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS form_data_count;
 CREATE TABLE IF NOT EXISTS `form_data_count` (
 	`id` int  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`form_id`	int DEFAULT NULL,

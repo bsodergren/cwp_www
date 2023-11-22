@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS flag_style;
 CREATE TABLE IF NOT EXISTS `flag_style` (
   `id` integer  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`style_name`	varchar(150) NOT NULL,

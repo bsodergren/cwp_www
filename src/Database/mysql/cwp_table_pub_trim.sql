@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS pub_trim;
 CREATE TABLE IF NOT EXISTS `pub_trim` (
   `id` int NOT NULL AUTO_INCREMENT,
   `pub_name` text NOT NULL,

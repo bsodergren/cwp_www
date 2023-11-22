@@ -6,6 +6,7 @@
 namespace CWP\Process;
 
 use CWP\Core\Media;
+use CWP\Utils\Utils;
 use Nette\Utils\FileSystem;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Spreadsheet\Media\MediaXLSX;
@@ -43,7 +44,19 @@ class CreateJob extends MediaProcess
     }
     public function addForm($req)
     {
-        dd($req);
+        $media = new Media();
+        $details['config']      = $req['config'];
+        $details['bind']        = $req['bind'];
+
+        $details['count']       = Utils::toint($req['form_count']);
+
+        $details['product']     = $req['product'];
+        $details['job_id']      = $req['job_id'];
+        $details['form_number'] = $req['form_number'];
+        $return = $media->add_form_details($details);
+        $this->url = $this->addRowPage."?job_id=".$req['job_id']."&form_number=".$req['form_number'];
+
+
     }
 
     public function addRow($req)
@@ -75,6 +88,7 @@ class CreateJob extends MediaProcess
 
         Media::$connection->query($query, $data);
         Media::$connection->getInsertId();
+        $this->url = $this->addRowPage."?job_id=".$job_id."&form_number=".$form_number;
     }
 
     public function createjob($data)

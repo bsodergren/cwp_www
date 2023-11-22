@@ -77,14 +77,13 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
     {
         // $query = 'SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "'.$table.'" AND COLUMN_NAME = "'.$column.'";';
         $query = 'SHOW COLUMNS FROM `'.$table.'`  LIKE "'.$column.'";';
-
-        return $this->queryExists($query);
+        $res = $this->query($query);
+        return $res->getRowCount();
     }
 
     public function check_tableExists($table)
     {
         $query = "SELECT count(*) as cnt FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
-
         return $this->queryExists($query);
     }
 

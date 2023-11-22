@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS recent_search;
 CREATE TABLE IF NOT EXISTS `recent_search` (
     `search_id` int NOT NULL,
     `search_query` varchar(300) NOT NULL,

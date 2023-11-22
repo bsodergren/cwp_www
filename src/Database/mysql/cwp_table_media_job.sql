@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS media_job;
 CREATE TABLE IF NOT EXISTS `media_job` (
   `job_id` int  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`job_number`	int NOT NULL,

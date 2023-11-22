@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS form_data;
 CREATE TABLE IF NOT EXISTS `form_data` (
   `id` integer  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`job_id`	int NOT NULL,

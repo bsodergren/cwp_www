@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS paper_count;
 CREATE TABLE IF NOT EXISTS `paper_count` (
 	`id` integer  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`paper_id`	int NOT NULL,

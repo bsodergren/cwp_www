@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS settings;
 CREATE TABLE IF NOT EXISTS `settings` (
 	  `id` integer  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`setting_name` TEXT NOT NULL,

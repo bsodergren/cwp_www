@@ -11,9 +11,9 @@ define('__AUTH__', true);
 require_once '../.config.inc.php';
 $template_basedir = 'createjob\formRow';
 define('TITLE', APP_NAME);
+$job_id = $_GET['job_id'];
 
-$job_id = 1;
-$form_number = 2;
+$form_number = $_GET['form_number'];
 MediaDevice::getHeader();
 
 $auto_js = Template::getJavascript($template_basedir.'\autocomplete', []);
@@ -21,19 +21,18 @@ $addRow_html = Template::getHTML($template_basedir.'\addRow', ['AUTOCOMPLETE_JS'
 
 $job_table = Media::$explorer->table('form_data');
 $job_table->where('job_id = ?', $job_id);
-    $job_table->where('form_number = ?',  $form_number);
+$job_table->where('form_number = ?', $form_number);
 
-    $next = '';
-foreach ($job_table as $u)
-{
-if(isset($current_letter)){
-    if($current_letter != $u->form_letter){
-        $next = '<div class="row"><p></p></div>';
-    } else {
-        $next = '';
+$next = '';
+foreach ($job_table as $u) {
+    if(isset($current_letter)) {
+        if($current_letter != $u->form_letter) {
+            $next = '<div class="row"><p></p></div>';
+        } else {
+            $next = '';
+        }
     }
-}
-    $array = ['LETTER'=>$u->form_letter,
+    $array = ['LETTER' => $u->form_letter,
         'MARKET' => $u->market,
         'PUBLICATION' => $u->pub,
         'COUNT' => $u->count,
