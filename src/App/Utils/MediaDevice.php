@@ -5,9 +5,10 @@
 
 namespace CWP\Utils;
 
-use CWP\Browser\Browser;
-use CWP\Browser\Device;
 use CWP\Browser\Os;
+use CWP\Browser\Device;
+use CWP\Browser\Browser;
+use Nette\Utils\FileSystem;
 
 class MediaDevice
 {
@@ -149,11 +150,19 @@ class MediaDevice
         if($js === true) {
             $extension = '.js';
         }
+
         $template      = str_replace($extension, '', $template);
 
         $template_file = self::getThemePath().'/template/'.$template.$extension ;
+        $template_file = FileSystem::platformSlashes($template_file);
+        $template_file = FileSystem::normalizePath($template_file);
+
         if (! file_exists($template_file)) {
+
             $template_file = self::getDefaultTheme().'/template/'.$template.$extension ;
+            $template_file = FileSystem::platformSlashes($template_file);
+            $template_file = FileSystem::normalizePath($template_file);
+
             if (! file_exists($template_file)) {
                 $template_file = null;
             }
