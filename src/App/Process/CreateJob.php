@@ -54,7 +54,7 @@ class CreateJob extends MediaProcess
         $details['job_id']      = $req['job_id'];
         $details['form_number'] = $req['form_number'];
         $return = $media->add_form_details($details);
-        $this->url = $this->addRowPage."?job_id=".$req['job_id']."&form_number=".$req['form_number'];
+        $this->url = $this->addFormPage."?job_id=".$req['job_id'];
 
 
     }
@@ -65,10 +65,10 @@ class CreateJob extends MediaProcess
 
         $job_id = $req["job_id"];
         $form_number = $req["form_number"];
-        $letter = $req["letter"];
-        $market = $req["market"];
-        $pub = $req["publication"];
-        $ship = $req["destination"];
+        $letter = strtoupper($req["letter"]);
+        $market = strtoupper($req["market"]);
+        $pub = strtoupper($req["publication"]);
+        $ship = strtoupper($req["destination"]);
         $count = $req["count"];
 
 
@@ -93,7 +93,8 @@ class CreateJob extends MediaProcess
 
     public function createjob($data)
     {
-        $pdf_filename = 'Created By';
+        global $auth;
+        $pdf_filename = 'Created By '.$auth->getUsername();
         $job_number = $data['job_number'];
 
         $this->job_id = Media::getJobNumber($pdf_filename, $job_number);

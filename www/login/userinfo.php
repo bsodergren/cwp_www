@@ -14,7 +14,6 @@ require_once '../.config.inc.php';
 
 define('TITLE', 'User Info');
 // $template = new Template();
-
 $params['EMAIL'] = $auth->getEmail();
 $params['USERNAME'] = $auth->getUsername();
 $params['IPADDRESS'] = $auth->getIpAddress();

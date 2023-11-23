@@ -24,4 +24,5 @@ interface MediaDbAbstract
     public function change_column($table_name, $name, $type);
 
     public function reset_table($table);
+    public function tableAlterADD($table, $action, $column);
 }

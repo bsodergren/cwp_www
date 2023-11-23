@@ -31,6 +31,7 @@ class DbUpdate extends MediaUpdate
         $reset_table   = [];
         $delete_data   = [];
         $change_column = [];
+        $alter_table = [];
         $test          = false;
         $inactive      = false;
 
@@ -49,6 +50,7 @@ class DbUpdate extends MediaUpdate
             'newData'       => $new_data,
             'updateData'    => $update_data,
             'deleteData'    => $delete_data,
+            'alterTable'    => $alter_table,
         ];
 
         foreach ($updates as $classmethod => $data_array) {
@@ -117,6 +119,19 @@ class DbUpdate extends MediaUpdate
         if (file_exists($sql_file)) {
             Helpers::loadFromFile(Media::$connection, $sql_file);
         }
+    }
+
+    public function alterTable($alter_table)
+    {
+        if (\is_array($alter_table)) {
+            foreach ($alter_table as $table_name => $action) {
+                $keys = array_keys($action);
+                $method = "tableAlter".$keys[0];
+                $this->dbClassObj->$method($table_name, $action[$keys[0]][0], $action[$keys[0]][1]);
+                $this->refresh = true;
+            }
+        }
+
     }
 
     public function renameColumns($rename_column)

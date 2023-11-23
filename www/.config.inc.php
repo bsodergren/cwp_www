@@ -14,6 +14,7 @@ define('__HTTP_ROOT__', dirname(__FILE__, 1));
 define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 define('__CWP_SOURCE__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'src');
 define('__CONFIG_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Configuration');
+define('__CACHE_DIR__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'var'.\DIRECTORY_SEPARATOR.'cache');
 
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 
@@ -50,6 +51,7 @@ $boot->getDatabase();
 define('__TEMP_DIR__', sys_get_temp_dir());
 
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'path_constants.php';
+$boot->directory(__CACHE_DIR__);
 
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'boot.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'auth.php';
@@ -58,7 +60,6 @@ require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
-
 $req_file               = $_SERVER['REQUEST_URI'];
 $req                    = '?'.$_SERVER['QUERY_STRING'];
 $req_file               = str_replace(__URL_PATH__.'/', '', $req_file);

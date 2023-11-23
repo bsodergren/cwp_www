@@ -37,6 +37,7 @@ class Media
 
     public static $Google = false;
     public static $FileDriver;
+    public static $Stash;
 
 
 

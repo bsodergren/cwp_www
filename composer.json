@@ -38,7 +38,8 @@
         "smalot/pdfparser": "^2.7",
         "psr/simple-cache": "^3.0",
         "symfony/process": "^6.3",
-        "symfony/finder": "^6.3"
+        "symfony/finder": "^6.3",
+        "phlak/stash": "^7.0"
 
 
     }

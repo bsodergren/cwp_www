@@ -1,14 +1,25 @@
-<div class="container table table-dark">
-    <div class="row">
-        <div class="fs-3 row">
-            <div class="text-center nowrap col">%%NAME%%</div>
-        </div>
+<!------ --------------------------------->
+<div class="container table table-dark m-75">
+    <div class="table table-success row p-2 m-3 rounded bg-success">
+        <div class="text-center nowrap col fw-bold">%%NAME%%</div>
     </div>
-    <div class="table table-success row">
+    <div class="table table-success row p-2 m-3 rounded bg-success">
         <div class="col">
-%%TEXT_FORMS%%
-        </div>
+            <div class="card ">
 
+                <div class="card-header bg-success"> Existing Forms </div>
+
+                <div class="card-body bg-success" style="--bs-bg-opacity: .2;">
+                    <div class="text-start nowrap col">
+                        <div class="btn-group">
+                            %%FORM_BUTTONS%%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+        %%TEXT_FORMS%%
 </div>
 
+<!------ --------------------------------->

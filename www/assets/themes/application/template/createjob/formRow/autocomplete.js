@@ -1,128 +1,105 @@
-const FORM_URL = 'dataObject.php';
+var marketList = [%%MARKET_LIST%%];
+var pubList = [%%PUB_LIST%%];
+var destList = [%%DEST_LIST%%];
 
-function load_search_history(e) {
-    var search_box = e.name;
-    var search_result = e.name + '_result';
-    var search_query = document.getElementsByName(search_box)[0].value;
-    if (search_query == '') {
-        fetch(FORM_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                action: 'fetch',
-                table: search_box
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            }
-        }).then(function (response) {
-            return response.json();
-        }).then(function (responseData) {
-            if (responseData.length > 0) {
-                var html = '<ul class="list-group">';
-                html += '<li class="list-group-item d-flex justify-content-between align-items-center"><b class="text-primary"><i>Your Recent Searches</i></b></li>';
-                for (var count = 0; count < responseData.length; count++) {
-                    html += '<li class="list-group-item text-muted" style="cursor:pointer"><i class="fas fa-history mr-3"></i><span onclick="get_text(this,\'' + e.name + '\')">' + responseData[count].search_query + '</span> <i class="far fa-trash-alt float-right mt-1" onclick="delete_search_history(' + responseData[count].id + ')"></i></li>';
-                }
-                html += '</ul>';
-                document.getElementById(search_result).innerHTML = html;
-                if(document.getElementById(search_result).hidden == true){
-                    document.getElementById(search_result).hidden = false
-                }
-            }
-
-        });
-
-    }
+autocomplete(document.getElementById("search_market"), marketList);
+autocomplete(document.getElementById("search_publication"), pubList);
+autocomplete(document.getElementById("search_destination"), destList);
 
 
-}
-
-function get_text(event,name) {
-
-    var string = event.textContent;
-    var search_result = name + '_result';
-    var search_box = name;
-
-
-    //fetch api
-
-    fetch(FORM_URL, {
-
-        method: "POST",
-
-        body: JSON.stringify({
-            search_query: string,
-            table: search_box
-        }),
-
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
+function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false;}
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(a);
+        /*for each item in the array...*/
+        for (i = 0; i < arr.length; i++) {
+          /*check if the item starts with the same letters as the text field value:*/
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            /*execute a function when someone clicks on the item value (DIV element):*/
+                b.addEventListener("click", function(e) {
+                /*insert the value for the autocomplete text field:*/
+                inp.value = this.getElementsByTagName("input")[0].value;
+                /*close the list of autocompleted values,
+                (or any other open lists of autocompleted values:*/
+                closeAllLists();
+            });
+            a.appendChild(b);
+          }
         }
-    }).then(function (response) {
-
-        return response.json();
-
-    }).then(function (responseData) {
-
-        document.getElementsByName(search_box)[0].value = string;
-
-        document.getElementById(search_result).innerHTML = '';
-
     });
-
-
-
-}
-
-function hide_data(name)
-{
-    var search_result = name + '_result';
-
-
-    if(document.getElementById(search_result).hidden == false){
-    document.getElementById(search_result).hidden = true;
-    }
-
-}
-
-function load_data(e) {
-    var query = e.value;
-    var table = e.name;
-    var search_result = e.name + '_result';
-
-    if (query.length > 2) {
-        var form_data = new FormData();
-
-        form_data.append('query', query);
-        form_data.append('table', table);
-        var ajax_request = new XMLHttpRequest();
-
-        ajax_request.open('POST', FORM_URL);
-
-        ajax_request.send(form_data);
-
-        ajax_request.onreadystatechange = function () {
-            if (ajax_request.readyState == 4 && ajax_request.status == 200) {
-                var response = JSON.parse(ajax_request.responseText);
-
-                var html = '<div class="list-group">';
-
-                if (response.length > 0) {
-                    for (var count = 0; count < response.length; count++) {
-                        html += `<a href="#" class="list-group-item list-group-item-action" onclick = "get_text(this,\'${table}\')" > ${response[count].post_title}</a > `;
-                    }
-                }
-                else {
-                    html += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
-                }
-
-                html += '</div>';
-
-                document.getElementById(search_result).innerHTML = html;
-            }
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function(e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+          /*If the arrow DOWN key is pressed,
+          increase the currentFocus variable:*/
+          currentFocus++;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 38) { //up
+          /*If the arrow UP key is pressed,
+          decrease the currentFocus variable:*/
+          currentFocus--;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 13) {
+          /*If the ENTER key is pressed, prevent the form from being submitted,*/
+          e.preventDefault();
+          if (currentFocus > -1) {
+            /*and simulate a click on the "active" item:*/
+            if (x) x[currentFocus].click();
+          }
         }
+    });
+    function addActive(x) {
+      /*a function to classify an item as "active":*/
+      if (!x) return false;
+      /*start by removing the "active" class on all items:*/
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      /*add class "autocomplete-active":*/
+      x[currentFocus].classList.add("autocomplete-active");
     }
-    else {
-        document.getElementById(search_result).innerHTML = '';
+    function removeActive(x) {
+      /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = 0; i < x.length; i++) {
+        x[i].classList.remove("autocomplete-active");
+      }
     }
-}
+    function closeAllLists(elmnt) {
+      /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+      var x = document.getElementsByClassName("autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
+        if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+  }

@@ -4,6 +4,7 @@
  */
 
 use CWP\Core\Media;
+use PHLAK\Stash;
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 
@@ -19,3 +20,8 @@ if (function_exists('apache_setenv')) {
     apache_setenv('no-gzip', '1');
     apache_setenv('dont-vary', '1');
 }
+
+$stash = Stash\Cache::file(function (): void {
+    $this->setCacheDir(__CACHE_DIR__);
+});
+Media::$Stash = $stash;

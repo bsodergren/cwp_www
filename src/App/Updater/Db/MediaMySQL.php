@@ -117,4 +117,13 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
         $query  = 'TRUNCATE `'.$table_name.'`; ';
         $result = $this->query($query);
     }
+
+    public function tableAlterADD($table, $action, $column)
+    {
+
+        $query  = 'ALTER TABLE '.$table.' ADD '.strtoupper($action).'(`'.$column.'`);';
+        $result = $this->query($query);
+        // ALTER TABLE `form_data` ADD UNIQUE(`original`);
+        //
+    }
 }

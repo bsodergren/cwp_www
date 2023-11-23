@@ -14,9 +14,9 @@ if (isset($_REQUEST['query'])) {
         $table =  "job_".$_REQUEST["table"];
 
         $query = "SELECT name FROM  ".$table."
-            WHERE name LIKE '%".$condition."%'
+            WHERE lower(name) LIKE LOWER('".$condition."%')
             ORDER BY id DESC
-            LIMIT 10
+            LIMIT 5
         ";
 
 
@@ -62,6 +62,7 @@ if(isset($post_data['search_query'])) {
 	SELECT search_id FROM recent_search
 	WHERE search_query = :search_query AND
     search_table = :search_table
+    LIMIT 5
 	";
 
     $statement = $connect->prepare($query);

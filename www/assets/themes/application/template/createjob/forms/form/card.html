@@ -1,0 +1,25 @@
+<div class="table table-success row p-2 m-3 rounded bg-success">
+    <div class="col">
+        <form action="%%URL%%" method="post">
+            %%HIDDEN_FIELDS%%
+
+            <div class="card w-100  rounded bg-success" style="--bs-bg-opacity: .5;">
+                <div class="card-header bg-success  text-black fw-bold">
+                    %%CARD_HEADER%%
+                </div>
+                <div class="card-body bg-success" style="--bs-bg-opacity: .5;">
+                        %%FORMNUMBER_HTML%%
+
+                        %%FORM_PCCOUNT%%
+
+                        %%CONFIG_HTML%%
+
+                        %%BINDTYPE_HTML%%
+                </div>
+                <button type="submit" name="submit" id="submit" class="btn btn-primary" >Add Form</button>
+
+                <!-- <button type="submit" class="btn btn-primary" name="submit" value="Start Upload">Submit</button> -->
+            </div>
+        </form>
+    </div>
+</div>

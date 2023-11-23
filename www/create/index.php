@@ -15,39 +15,20 @@ define('TITLE', APP_NAME);
 
 $addJobURL =  __URL_PATH__.'/process.php';
 
+$templateBaseDir = 'createjob/job';
 MediaDevice::getHeader();
-$form = new Formr\Formr('bootstrap', 'hush');
 
-$hidden = [
-    'FORM_PROCESS' => 'createJob',
-    'action' =>'createjob'
-];
+$card_params['URL'] = $addJobURL;
 
-$params['TEXT_FORMS'] = $form->open('Createjob', '', $addJobURL, '', '', $hidden);
+$card_params['HIDDEN_FIELDS'] =  HTMLForms::draw_hidden('FORM_PROCESS', 'createJob');
+$card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('action', 'createjob');
 
-$data = [
-    'name' => 'job_number',
-    'label' => 'Job Number',
-    'id' => 'job_number',
-    'value' => '',
-    'maxlength' => '32',
-    'class' => 'input',
-    'placeholder' => 'job number...'
-];
+$card_params['CARD_HEADER'] = ' Created By '.$auth->getUsername();
+$card_params['JOBNUMBER_HTML'] = Template::GetHTML($templateBaseDir."/form/jobnumber", []);
+$card_params['JOBNAME_HTML'] = Template::GetHTML($templateBaseDir."/form/jobname", ['PLACEHOLDER' => 'Oct 2023 C-Close...']);
 
-$params['TEXT_FORMS'] .= $form->text($data);
-$data['name'] = 'media_drop';
-$data['label'] = 'Drop Name';
-$data['id'] = 'media_drop';
-$data['placeholder'] = 'Oct 2023 C-Close...';
-
-$params['TEXT_FORMS'] .= $form->text($data);
-$params['TEXT_FORMS'] .= $form->submit_button('Create Job');
-$params['TEXT_FORMS'] .= $form->close();
-
-$params['NAME'] = "Create new Job";
-
-
+$params['TEXT_FORMS'] = Template::GetHTML($templateBaseDir."/form/card", $card_params);
+$params['NAME'] = 'Add Forms to Job';
 
 $template->template('createjob/job/main', $params);
 

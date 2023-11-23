@@ -5,6 +5,7 @@ use CWP\Core\Media;
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+use CWP\JobCreator\Creator;
 use CWP\Filesystem\MediaFileSystem;
 
 define('__AUTH__', true);
@@ -16,7 +17,15 @@ $job_id = $_GET['job_id'];
 $form_number = $_GET['form_number'];
 MediaDevice::getHeader();
 
-$auto_js = Template::getJavascript($template_basedir.'/autocomplete', []);
+
+$marketList = Creator::jsList('job_market');
+$pubList = Creator::jsList('job_publication');
+$destList = Creator::jsList('job_destination');
+
+$auto_js = Template::getJavascript(
+    $template_basedir.'/autocomplete',
+    ['MARKET_LIST' => $marketList,'PUB_LIST' => $pubList,'DEST_LIST' => $destList]
+);
 $addRow_html = Template::getHTML($template_basedir.'/addRow', ['AUTOCOMPLETE_JS' => $auto_js,'FORM_NUMBER' => $form_number,'JOB_ID' => $job_id]);
 
 $job_table = Media::$explorer->table('form_data');

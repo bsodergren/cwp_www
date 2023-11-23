@@ -55,6 +55,8 @@ class Bootstrap
     }
     public function directory($path)
     {
+
+        $path = FileSystem::platformSlashes($path);
         $path = FileSystem::normalizePath($path);
         if (!is_dir($path)) {
             FileSystem::createDir($path, 511);
