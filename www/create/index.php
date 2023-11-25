@@ -23,7 +23,12 @@ $card_params['URL'] = $addJobURL;
 $card_params['HIDDEN_FIELDS'] =  HTMLForms::draw_hidden('FORM_PROCESS', 'createJob');
 $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('action', 'createjob');
 
-$card_params['CARD_HEADER'] = ' Created By '.$auth->getUsername();
+if(isset($auth)){
+    $username = $auth->getUsername();
+} else {
+    $username = "CWP User";
+}
+$card_params['CARD_HEADER'] = ' Created By '.$username;
 $card_params['JOBNUMBER_HTML'] = Template::GetHTML($templateBaseDir."/form/jobnumber", []);
 $card_params['JOBNAME_HTML'] = Template::GetHTML($templateBaseDir."/form/jobname", ['PLACEHOLDER' => 'Oct 2023 C-Close...']);
 

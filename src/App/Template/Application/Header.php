@@ -18,9 +18,9 @@ class Header extends HTMLDocument
         \define('__CUSTOM_JS__', $js);
         \define('__ONLOAD__', $onload);
 
-        $params['FAV_ICON']                            = MediaDevice::getAssetURL('image', ['/images/favicon.png']);
-        $params['CSS_SRC']                             = MediaDevice::getAssetURL('css', ['css/app.css', 'css/custom.css']);
-        $params['JS_SRC']                              = MediaDevice::getAssetURL('js', ['js/app.js', 'js/jquery-3.4.1.min.js']);
+        $params['FAV_ICON']                            = MediaDevice::getAssetURL('image', ['/images/favicon.png'],false,false);
+        $params['CSS_SRC']                             = MediaDevice::getAssetURL('css', ['css/app.css', 'css/custom.css'],false,false);
+        $params['JS_SRC']                              = MediaDevice::getAssetURL('js', ['js/app.js', 'js/jquery-3.4.1.min.js'],false,false);
 
         [$params['BOOTSTRAP'] ,$params['DEFAULT_CSS']] = self::header_CSS();
 
@@ -28,6 +28,6 @@ class Header extends HTMLDocument
         $params['UPDATES_HTML']                        = self::_headerVersionUpdates();
         $params['__MSG__']                             = self::displayMsg();
 
-        echo Template::GetHTML('base/header/header', $params);
+        echo Template::GetHTML('base/header/header', $params,false,false);
     }
 }

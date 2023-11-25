@@ -24,19 +24,19 @@ class Navbar extends HTMLDocument
 
         $navbar_right_dropdown                                    = Template::GetHTML('base/navbar/'.$doc->nav_list_dir.'/navbar_dropdown', [
             'DROPDOWN_LINKS' => $dropdown_link_html,
-            'DROPDOWN_TEXT'  => $dropddown_menu_text]);
+            'DROPDOWN_TEXT'  => $dropddown_menu_text], false,false);
 
-        $params['NAVBAR_LEFT_HTML']                               = Template::GetHTML('base/navbar/navbar_left', []);
+        $params['NAVBAR_LEFT_HTML']                               = Template::GetHTML('base/navbar/navbar_left', [], false,false);
         $params['NAVBAR_CENTER_HTML']                             = Template::GetHTML(
             'base/navbar/navbar_center',
-            ['NAVBAR_CENTER_LIST' => $latest_version_html]
+            ['NAVBAR_CENTER_LIST' => $latest_version_html], false,false
         );
         $params['NAVBAR_RIGHT_HTML']                              = Template::GetHTML('base/navbar/navbar_right', [
             'NAVBAR_RIGHT_LIST'     => $nav_link_html,
             'NAVBAR_RIGHT_DROPDOWN' => $navbar_right_dropdown,
-        ]);
+        ], false,false);
 
-        return Template::GetHTML('base/navbar/navbar', $params);
+        return Template::GetHTML('base/navbar/navbar', $params, false,false);
     }
 
     // public static function display($template = '', $params = [])

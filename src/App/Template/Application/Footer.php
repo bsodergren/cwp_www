@@ -27,11 +27,11 @@ class Footer extends HTMLDocument
                 'base/footer/settings_nav',
                 ['FOOTER_NAV_HTML'  => __FOOTER_NAV_HTML__,
                     'VERSIONS_HTML' => self::_footerVersionUpdates(),
-                ]
+            ], false,false
             );
         }
 
-        $params['END_JAVASCRIPT'] = Template::GetHTML('base/footer/javascript');
-        echo Template::GetHTML('base/footer/footer', $params);
+        $params['END_JAVASCRIPT'] = Template::GetHTML('base/footer/javascript',[], false,false);
+        echo Template::GetHTML('base/footer/footer', $params, false,false);
     }
 }

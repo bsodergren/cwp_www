@@ -5,8 +5,9 @@
 
 namespace CWP\Template;
 
-use CWP\Core\MediaSettings;
+use CWP\Core\Media;
 use CWP\Utils\MediaDevice;
+use CWP\Core\MediaSettings;
 
 /**
  * CWP Media tool.
@@ -31,29 +32,33 @@ class Template
     {
     }
 
-    public static function getJavascript($template = '', $array = [], $error = true)
+    public static function getJavascript($template = '', $array = [], $error = true, $cache = true)
     {
+
+
         $template_obj        = new self();
         $template_obj->error = $error;
-        $template_obj->template($template, $array, true);
+
+        $template_obj->template($template, $array, true,$cache);
 
         return $template_obj->html;
 
     }
-    public static function GetHTML($template = '', $array = [], $error = true)
+    public static function GetHTML($template = '', $array = [], $error = true, $cache = true)
     {
+
         $template_obj        = new self();
         $template_obj->error = $error;
-        $template_obj->template($template, $array);
+        $template_obj->template($template, $array,false,$cache);
 
         return $template_obj->html;
     }
 
-    public static function echo($template = '', $array = [], $error = true)
+    public static function echo($template = '', $array = [], $error = true, $cache = true)
     {
         $template_obj        = new self();
         $template_obj->error = $error;
-        $template_obj->template($template, $array);
+        $template_obj->template($template, $array,false,$cache);
         echo $template_obj->html;
     }
 
@@ -67,10 +72,10 @@ class Template
         $this->html = '';
     }
 
-    public function return($template = '', $array = [])
+    public function return($template = '', $array = [], $cache = true)
     {
         if ($template) {
-            $this->template($template, $array);
+            $this->template($template, $array,false,$cache);
         }
 
         $html = $this->html;
@@ -79,10 +84,10 @@ class Template
         return $html;
     }
 
-    public function render($template = '', $array = [])
+    public function render($template = '', $array = [], $cache = true)
     {
         if ($template) {
-            $this->template($template, $array);
+            $this->template($template, $array,false,$cache);
         }
 
         $html = $this->html;
@@ -137,10 +142,39 @@ class Template
         return $html;
     }
 
-    public function template($template, $params = [], $js = false)
+    public function template($template, $params = [], $js = false, $cache=true)
     {
-        $template_text = $this->loadTemplate($template, $js);
-        $html          = $this->parse($template_text, $params);
+
+        if($cache === true) {
+            $template_name = trim(str_replace(['\\','/'],"-",$template),"-");
+            $template_name_params = $template_name."_param";
+
+
+            $cache_params = Media::$Stash->get($template_name_params);
+            if($cache_params === false) {
+                Media::$Stash->put($template_name_params,$params,10);
+            }
+
+            if(is_array($cache_params) && is_array($params)) {
+                $val = array_diff_assoc($params,$cache_params);
+                if(count($val) > 0){
+                    Media::$Stash->put($template_name_params,$params,10);
+                    Media::$Stash->forget($template_name);
+                }
+            }
+
+
+            $html = Media::$Stash->get($template_name);
+
+            if($html === false) {
+                $template_text = $this->loadTemplate($template, $js);
+                $html          = $this->parse($template_text, $params);
+                Media::$Stash->put($template_name,$html,10);
+            }
+        } else {
+            $template_text = $this->loadTemplate($template, $js);
+            $html          = $this->parse($template_text, $params);
+        }
 
         $this->add($html);
 

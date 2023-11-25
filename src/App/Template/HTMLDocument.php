@@ -40,13 +40,13 @@ class HTMLDocument
                 foreach ($url as $dropdown_text => $dropdown_url) {
                     $dropdown_link_html .= $this->template->template(
                         'base/navbar/'.$this->nav_list_dir.'/navbar_link',
-                        ['DROPDOWN_URL' => $dropdown_url, 'DROPDOWN_URL_TEXT' => $dropdown_text]
+                        ['DROPDOWN_URL' => $dropdown_url, 'DROPDOWN_URL_TEXT' => $dropdown_text], false,false
                     );
                 }
 
                 continue;
             }
-            $nav_link_html .= $this->template->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text]);
+            $nav_link_html .= $this->template->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text], false,false);
         }
 
         return [$dropdown_link_html, $nav_link_html, $dropddown_menu_text];
@@ -58,14 +58,14 @@ class HTMLDocument
         $installed           = Media::$CurrentVersion;
         $dropdown_link_html  = $this->template->template(
             'base/navbar/'.$this->nav_list_dir.'/navbar_item',
-            ['DROPDOWN_TEXT' => 'Version '.$installed]
+            ['DROPDOWN_TEXT' => 'Version '.$installed], false,false
         );
 
         $latest_version_html = '';
         if (null !== $latest) {
             $dropdown_link_html .= $this->template->template(
                 'base/navbar/'.$this->nav_list_dir.'/navbar_item',
-                ['DROPDOWN_TEXT' => 'New! '.$latest]
+                ['DROPDOWN_TEXT' => 'New! '.$latest], false,false
             );
             //  $latest_version_html = $this->template->template('base/footer/version_latest', ['VERSION' => $latest]);
         }
@@ -87,17 +87,17 @@ class HTMLDocument
             $path = '/'.__FORM_POST__;
         }
 
-        $js     = trim(Template::GetHTML($path.'/javascript', [], false));
+        $js     = trim(Template::GetHTML($path.'/javascript', [], false, false));
 
-        $onload = trim(Template::GetHTML($path.'/onload', [], false));
+        $onload = trim(Template::GetHTML($path.'/onload', [], false, false));
 
         return [$js, $onload];
     }
 
     public function headerCSS()
     {
-        $bootstrap  = Template::GetHTML('base/header/bootstrap_5', [], false);
-        $custom_css = Template::GetHTML('base/header/css', [], false);
+        $bootstrap  = Template::GetHTML('base/header/bootstrap_5', [], false, false);
+        $custom_css = Template::GetHTML('base/header/css', [], false, false);
 
         return [$bootstrap, $custom_css];
     }
@@ -106,7 +106,7 @@ class HTMLDocument
     {
         $this->template->error = false;
 
-        return $this->template->template('base/header/updates');
+        return $this->template->template('base/header/updates',[], false,false);
     }
 
     public function footerVersionUpdates()
@@ -114,9 +114,9 @@ class HTMLDocument
         $latest       = Media::$VersionUpdate;
         $installed    = Media::$CurrentVersion;
         // dd($latest, $installed);
-        $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed]);
+        $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed], false,false);
         if (null != $latest) {
-            $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest]);
+            $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest], false,false);
         }
 
         return $version_html;
@@ -127,7 +127,7 @@ class HTMLDocument
         if (isset($GLOBALS)) {
             if (\is_array($GLOBALS['_REQUEST'])) {
                 if (\array_key_exists('msg', $GLOBALS['_REQUEST'])) {
-                    return Template::GetHTML('base/header/return_msg', ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])], false);
+                    return Template::GetHTML('base/header/return_msg', ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])], false,false);
                 }
             }
         }
