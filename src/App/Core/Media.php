@@ -596,4 +596,10 @@ class Media
         self::$FileDriver = "Local FS";
         return new MediaLocal();
     }
+
+
+    public static function get($name, $timeout = 5, $closure)
+    {
+        return self::$Stash->remember($name, $timeout, $closure);
+    }
 }

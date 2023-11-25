@@ -34,6 +34,10 @@ class Bootstrap
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->define('__URL_PATH__', $this->getURL());
         $this->define('__HOME__', $this->homeDir());
+        $this->directory(__ERROR_LOG_DIRECTORY__);
+        $this->directory(__CACHE_DIR__);
+
+
 
     }
 

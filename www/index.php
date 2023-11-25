@@ -4,6 +4,7 @@
  */
 
 use CWP\Core\Media;
+use CWP\Core\MediaStopWatch;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
@@ -11,6 +12,7 @@ use CWP\Utils\MediaDevice;
 define('__AUTH__', true);
 
 require_once '.config.inc.php';
+MediaStopWatch::Lap("index page");
 
 define('TITLE', APP_NAME);
 

@@ -7,9 +7,6 @@ use CWP\Core\Bootstrap;
 
 $debug_string = '';
 
-if (__DEBUG__ == 1) {
-    define('__DEBUG_STR__', "<span class='fs-6 text-success'>Debug Enabled ".__DEVICE__.'</span>');
-}
 
 define('APP_NAME', Bootstrap::$CONFIG['application']['name']);
 define('APP_ORGANIZATION', 'cwp');
@@ -21,7 +18,6 @@ $__script_name = basename($_SERVER['SCRIPT_NAME'], '.php');
 
 define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 $nav_bar_links = [
-    // 'Test' => '/test.php',
     'Home' => '/index.php',
     'Create Job' => '/create/index.php',
     'Import' => '/import.php',
@@ -36,6 +32,11 @@ $nav_bar_links = [
         'Update' => '/updater/update.php',
     ],
 ];
+
+if (__DEBUG__ == 1) {
+    define('__DEBUG_STR__', "<span class='fs-6 text-success'>Debug Enabled ".__DEVICE__.'</span>');
+    $nav_bar_links['Test'] = '/test.php';
+}
 
 if (__USE_AUTHENTICATION__ == true) {
     if ($auth->isLoggedIn()) {

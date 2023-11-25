@@ -3,22 +3,15 @@
  * CWP Media tool for load flags
  */
 
-use Camoo\Config\Config;
-use CWP\Core\Bootstrap;
 use Tracy\Debugger;
+use CWP\Core\MediaStopWatch;
 
 define('__PROJECT_ROOT__', dirname(__FILE__, 3));
 define('__PUBLIC_ROOT__', dirname(__FILE__, 2));
 define('__HTTP_ROOT__', dirname(__FILE__, 1));
 
-define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
-define('__CWP_SOURCE__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'src');
-define('__CONFIG_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Configuration');
-define('__CACHE_DIR__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'var'.\DIRECTORY_SEPARATOR.'cache');
+require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 
-require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
-
-$boot                   = new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.ini'));
 
 // if (__DEBUG__ == 1) {
 
@@ -49,21 +42,33 @@ $boot->definePath('__INC_CORE_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'core'
 $boot->getDatabase();
 
 define('__TEMP_DIR__', sys_get_temp_dir());
+MediaStopWatch::init();
 
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'path_constants.php';
-$boot->directory(__CACHE_DIR__);
+MediaStopWatch::lap("Path",[]);
 
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'boot.php';
+MediaStopWatch::lap("boot",[]);
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'auth.php';
+MediaStopWatch::lap("auth",[]);
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
-
+MediaStopWatch::lap("variables",[]);
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
+MediaStopWatch::lap("url_paths",[]);
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
+MediaStopWatch::lap("settings",[]);
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
+MediaStopWatch::lap("init",[]);
+
+
+MediaStopWatch::lap("Server REquest",[$_SERVER['REQUEST_URI'],$_SERVER['QUERY_STRING']]);
+
 $req_file               = $_SERVER['REQUEST_URI'];
 $req                    = '?'.$_SERVER['QUERY_STRING'];
 $req_file               = str_replace(__URL_PATH__.'/', '', $req_file);
+
 if ('' == $req_file) {
     header('Location:  '.__URL_PATH__.'/index.php');
     exit;
 }
+
