@@ -4,7 +4,7 @@
 
  */
 
- phpinfo();
+ xdebug_info();
  die();
 use CWP\Core\Media;
 use CWP\Template\Template;
