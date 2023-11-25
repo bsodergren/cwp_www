@@ -13,17 +13,15 @@ class MediaStopWatch
 
     public static $display = true;
 
-    public static $writeNow = true;
+    public static $writeNow = false;
 
     private static $stopwatch;
 
-    private static $io;
-
-    private static $timerLog = __ERROR_LOG_DIRECTORY__.'/timer.log';
+    private static $timerLog = __ERROR_LOG_DIRECTORY__ . '/timer.log';
 
     private static $watchArray = [];
 
-    private static $stopWatchName = 'default';
+    private static $stopWatchName = __SCRIPT_NAME__;
 
     public static function varexport($expression, $return = false)
     {
@@ -40,35 +38,63 @@ class MediaStopWatch
         }  echo $export;
     }
 
+    private static function getName($name)
+    {
+        if ($name === null) {
+            $name = self::$stopWatchName;
+        }
+
+        if(!self::$stopwatch->isStarted($name)) {
+            self::$stopwatch->start($name);
+        }
+
+        return $name;
+
+    }
+
     public static function init()
     {
-        global $_SERVER;
-        $file = self::$timerLog;
-       $string = '------------------------------------------------------------'.PHP_EOL;///self::formatPrint(implode(' ', $_SERVER['argv']), ['green', 'italic']).\PHP_EOL;
-        file_put_contents($file, $string,FILE_APPEND);
-        self::$stopwatch = new StopWatch();
-        self::$stopwatch->start(self::$stopWatchName);
 
+        $file = self::$timerLog;
+        //$string = MediaLogger::get_caller_info();
+        $string = '-----------------------'.__SCRIPT_NAME__.'-------------------------------------' . PHP_EOL;
+        file_put_contents($file, $string, FILE_APPEND);
+        self::$stopwatch = new StopWatch();
+        self::start();
     }
 
-    public static function dump($text, $var)
+
+    public static function start($event = null)
     {
-        self::$clock = (string) self::$stopwatch->getEvent(self::$stopWatchName);
+        self::getName($event);
+    }
+
+    public static function dump($text = '', $var = '', $event = null)
+    {
+        $event = self::getName($event);
+        $indent = '';
+        if($event != self::$stopWatchName) {
+            $indent = '  ';
+        }
+
+        self::$clock = (string) self::$stopwatch->getEvent($event);
         // $text = sprintf("%-20s",   $text);
         // $var = str_replace("\n"," ", var_export($var,1));
-
         $var = preg_replace('/(\s{1,})/m', ' ', var_export($var, 1));
-
+        $cmd = MediaLogger::CallingFunctionName();
         //                $var = self::varexport($var,true);
-
-        self::log([0 => [$text.' ', self::$clock.' ', $var]]);
+        self::log([0 => [$indent . self::$clock,
+        $cmd,
+        $text,
+        $var]]);
 
     }
 
-    public static function stop($text = '', $var = '')
+    public static function stop($text = '', $var = '', $event = null)
     {
-        self::$stopwatch->stop(self::$stopWatchName);
-        self::dump($text, $var);
+        $event = self::getName($event);
+        self::$stopwatch->stop($event);
+        self::dump($text, $var, $event);
         if (false === self::$writeNow) {
             self::$writeNow = true;
             self::log(self::$watchArray);
@@ -77,20 +103,21 @@ class MediaStopWatch
 
     }
 
-    public static function lap($text, $var='')
+    public static function lap($text, $var = '', $event = null)
     {
-        self::$stopwatch->lap(self::$stopWatchName);
-        self::dump($text, $var);
+        $event = self::getName($event);
+        self::$stopwatch->lap($event);
+
+        self::dump($text, $var, $event);
     }
 
     public static function log($array)
     {
-
-            if (true === self::$writeNow) {
-                self::writeLog($array);
-            } else {
-                self::$watchArray[] = $array[0];
-            }
+        if (true === self::$writeNow) {
+            self::writeLog($array);
+        } else {
+            self::$watchArray[] = $array[0];
+        }
 
     }
 
@@ -99,50 +126,72 @@ class MediaStopWatch
         $file = self::$timerLog;
         $maxtxtLen = 0;
         $maxTimeLen = 0;
+        $maxCmdLen = 0;
 
-        foreach ($array as $n => $row) {
-            $len = \strlen($row[0]);
-            if ($len > $maxtxtLen) {
-                $maxtxtLen = $len;
+        if(count($array) > 0) {
+            foreach ($array as $n => $row) {
+
+                $len1 = \strlen($row[0]);
+                if ($len1 > $maxTimeLen) {
+                    $maxTimeLen = $len1;
+                }
+
+                $len2 = \strlen($row[1]);
+                if ($len2 > $maxCmdLen) {
+                    $maxCmdLen = $len2;
+                }
+
+                $len3 = \strlen($row[2]);
+                if ($len3 > $maxtxtLen) {
+                    $maxtxtLen = $len3;
+                }
+
             }
-            $len = \strlen($row[1]);
-            if ($len > $maxTimeLen) {
-                $maxTimeLen = $len;
+            $lineArray = [];
+            foreach ($array as $n => $row) {
+                $lineArray[] = str_pad($row[0], $maxTimeLen);
+                $lineArray[] = str_pad($row[1], $maxCmdLen);
+                $lineArray[] = str_pad($row[2], $maxtxtLen);
+                $lineArray[] = $row[3];
+
+                $strArray[] = implode(", ", $lineArray);// $time.', '.$txt.', '.$var;
             }
+
+            $string = implode(\PHP_EOL, $strArray) . \PHP_EOL;
+            $string = str_replace("''", "", $string);
+            $string = str_replace("default/", "", $string);
+            //$string = var_export($strArray,1);
+            file_put_contents($file, $string, \FILE_APPEND);
         }
-
-        foreach ($array as $n => $row) {
-            $txt = str_pad($row[0], $maxtxtLen);
-            $time = str_pad($row[1], $maxTimeLen);
-            //            $cmd        = str_pad($row[2], $maxCmdLen);
-            $var = $row[2];
-
-            $strArray[] = $txt.', '.$time.', '.$var;
-        }
-
-        $string = implode(\PHP_EOL, $strArray).\PHP_EOL;
-        // $string = var_export($array,1);
-        file_put_contents($file, $string, \FILE_APPEND);
     }
 
+    public static function flushLogs()
+    {
+        if (false === self::$writeNow)
+        {
+            self::writeLog(self::$watchArray);
+        }
+    }
 
     public static function formatPrint(string $text = '', array $format = [])
     {
-        if (false == self::$display) {
-            return $text;
-        }
+        return $text;
 
-        $codes = [
-            'bold' => 1,
-            'italic' => 3, 'underline' => 4, 'strikethrough' => 9,
-            'black' => 30, 'red' => 31, 'green' => 32, 'yellow' => 33, 'blue' => 34, 'magenta' => 35, 'cyan' => 36, 'white' => 37,
-            'blackbg' => 40, 'redbg' => 41, 'greenbg' => 42, 'yellowbg' => 44, 'bluebg' => 44, 'magentabg' => 45, 'cyanbg' => 46, 'lightgreybg' => 47,
-        ];
-        $formatMap = array_map(function ($v) use ($codes) {
-            return $codes[$v];
-        }, $format);
+        // if (false == self::$display) {
+        //     return $text;
+        // }
 
-        return "\e[".implode(';', $formatMap).'m'.$text."\e[0m";
+        // $codes = [
+        //     'bold' => 1,
+        //     'italic' => 3, 'underline' => 4, 'strikethrough' => 9,
+        //     'black' => 30, 'red' => 31, 'green' => 32, 'yellow' => 33, 'blue' => 34, 'magenta' => 35, 'cyan' => 36, 'white' => 37,
+        //     'blackbg' => 40, 'redbg' => 41, 'greenbg' => 42, 'yellowbg' => 44, 'bluebg' => 44, 'magentabg' => 45, 'cyanbg' => 46, 'lightgreybg' => 47,
+        // ];
+        // $formatMap = array_map(function ($v) use ($codes) {
+        //     return $codes[$v];
+        // }, $format);
+
+        // return "\e[".implode(';', $formatMap).'m'.$text."\e[0m";
     }
 
 }

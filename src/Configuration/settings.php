@@ -7,9 +7,14 @@ use CWP\Core\Bootstrap;
 use CWP\Core\Media;
 use CWP\Core\MediaSettings;
 
-$table = Media::$explorer->table('settings');
-$table->order('setting_type ASC');
-$results = $table->fetchAssoc('id');
+$results = Media::get("settings", 120, function () {
+    $table = Media::$explorer->table('settings');
+    $table->order('setting_type ASC');
+    return $table->fetchAssoc('id');
+});
+
+
+
 
 if ($results) {
     foreach ($results as $k => $u) {
@@ -61,7 +66,7 @@ if (Media::$Google || Media::$Dropbox) {
 } else {
     if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {
         if (true == Bootstrap::$CONFIG['server']['media_files']) {
-            define('__FILES_DIR__', __HTTP_ROOT__.Bootstrap::$CONFIG['server']['media_files']);
+            define('__FILES_DIR__', __HTTP_ROOT__ . Bootstrap::$CONFIG['server']['media_files']);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace CWP\Media;
  * CWP Media tool
  */
 
+use CWP\Core\MediaLogger;
 use CWP\HTML\HTMLDisplay;
 use Nette\Utils\Callback;
 use Nette\Utils\FileSystem;
@@ -61,7 +62,7 @@ class MediaExec
     public function run($callback = null)
     {
         $cmd = $this->getCommand();
-        //    dd($cmd);
+        MediaLogger::log("command", $cmd);
 
         $this->ExecProcess->start();
         $this->ExecProcess->wait($callback);

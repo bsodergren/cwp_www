@@ -6,6 +6,8 @@
 use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
 
+define("PROCESS", true);
+
 require '.config.inc.php';
 
 

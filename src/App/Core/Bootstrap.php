@@ -7,6 +7,7 @@ namespace CWP\Core;
 
 use CWP\Core\Media;
 use Camoo\Config\Config;
+use CWP\Core\MediaLogger;
 use Nette\Utils\FileSystem;
 
 class Bootstrap
@@ -36,7 +37,7 @@ class Bootstrap
         $this->define('__HOME__', $this->homeDir());
         $this->directory(__ERROR_LOG_DIRECTORY__);
         $this->directory(__CACHE_DIR__);
-
+        MediaLogger::log("__HOME__",__HOME__);
 
 
     }
@@ -78,7 +79,9 @@ class Bootstrap
 
     public function definePath($const, $value)
     {
+        $value = FileSystem::platformSlashes($value);
         $value = FileSystem::normalizePath($value);
+
         $this->define($const, $value);
     }
 
@@ -103,6 +106,13 @@ class Bootstrap
 
     private function getUsrBin()
     {
+        $serverConf = $this->Config['server'];
+        if(array_key_exists('bin_dir', $serverConf)) {
+            if($serverConf['bin_dir'] != '') {
+                return $serverConf['bin_dir'];
+            }
+        }
+
         if (!\array_key_exists('OS', $_SERVER)) {
             return '/usr/bin';
         }

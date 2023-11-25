@@ -30,6 +30,9 @@ class HTMLDocument
 
     public function NavbarDropDown()
     {
+        $dropdown_link_html = '';
+        $nav_link_html = '';
+        $dropddown_menu_text = '';
         foreach (__NAVBAR_LINKS__ as $text => $url) {
             if (\is_array($url)) {
                 $dropddown_menu_text = $text;

@@ -87,7 +87,7 @@ if ($cnt > 0) {
         if (true == Media::get_exists('xlsx', $row['job_id']) && true == is_dir($xlsx_dir)) {
             $rowdisabled = '';
         }
-        $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process.php ';
+        $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process';
 
 
         $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('submit[process]', '', 'Process PDF Form', '', $class_normal.$pdisabled.$tooltip.'process"');

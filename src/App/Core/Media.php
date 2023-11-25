@@ -93,8 +93,9 @@ class Media
             $this->xlsx = (empty($MediaDB['xlsx_exists'])) ? '' : $MediaDB['xlsx_exists'];
             $this->zip = (empty($MediaDB['zip_exists'])) ? '' : $MediaDB['zip_exists'];
             $this->location = (empty($MediaDB['base_dir'])) ? '' : $MediaDB['base_dir'];
-
+            MediaStopWatch::lap("getDirectories Media",'',"Media Class");
             $this->getDirectories();
+            MediaStopWatch::lap("getDirectories Media",'',"Media Class");
         }
     }
 

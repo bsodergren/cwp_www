@@ -16,7 +16,6 @@ list($__filename) = explode('?', $_SERVER['REQUEST_URI']);
 $__request_name = basename($__filename, '.php');
 $__script_name = basename($_SERVER['SCRIPT_NAME'], '.php');
 
-define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 $nav_bar_links = [
     'Home' => '/index.php',
     'Create Job' => '/create/index.php',
