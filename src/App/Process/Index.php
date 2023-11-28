@@ -10,6 +10,7 @@ namespace CWP\Process;
  */
 
 use CWP\Core\MediaError;
+use CWP\Core\MediaStopWatch;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\Import\PDFImport;
@@ -54,11 +55,14 @@ class Index extends MediaProcess
         MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
+        MediaStopWatch::lap("Create Excel");
         $this->media->excelArray();
+        MediaStopWatch::lap("Excel Array");
 
         $excel     = new MediaXLSX($this->media);
-
+        MediaStopWatch::lap("Excel Object");
         $excel->writeWorkbooks();
+
         Template::echo('stream/end_page', []);
 
         $this->msg = 'XLSX Files Created';

@@ -5,19 +5,20 @@
 
 namespace CWP\Spreadsheet\Media;
 
+use CWP\Utils;
 use CWP\Core\Media;
-use CWP\Filesystem\MediaDropbox;
-use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
+use CWP\Core\MediaStopWatch;
 use CWP\Media\MediaPublication;
 use CWP\Spreadsheet\Calculator;
-use CWP\Spreadsheet\LarrySheets\LarrySheetsXLSX;
-use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
 use CWP\Spreadsheet\XLSXWriter;
-use CWP\Utils;
+use CWP\Filesystem\MediaDropbox;
+use CWP\Filesystem\MediaFileSystem;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use CWP\Spreadsheet\Slipsheets\SlipSheetXLSX;
+use CWP\Spreadsheet\LarrySheets\LarrySheetsXLSX;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class MediaXLSX extends Media
 {
@@ -52,15 +53,17 @@ class MediaXLSX extends Media
 
     public function writeWorkbooks()
     {
+
+
         $calc = new Calculator($this->media);
 
         $this->xlsx_path = $this->media->getDirectory('xlsx');
         (new MediaFileSystem())->createFolder($this->xlsx_path);
         foreach ($this->xlsx_array as $form_number => $dataArray) {
-
             $data              = $dataArray['forms'];
             // $data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
+
             $slipSheet         = new SlipSheetXLSX($this->media);
             //   $larrySheet = new LarrySheetsXLSX($this->media);
             $s_idx             = 0;
@@ -74,6 +77,7 @@ class MediaXLSX extends Media
                             $this->form_details['job_number'] = $this->job_number;
                             $this->box                        = $calc->calculateBox($this->form_details);
                             $this->addFormBoxData();
+
                             if ('full' == $this->box['packaging'] || 'half' == $this->box['packaging']) {
                                 $tmp_box    = $this->box;
                                 $full_boxes = $this->box['full_boxes'];
@@ -111,8 +115,8 @@ class MediaXLSX extends Media
                     }
                 }
             }
+           $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
 
-            $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
             // $larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
 
             $sheetIndex        = $this->spreadsheet->getIndex(
@@ -123,6 +127,7 @@ class MediaXLSX extends Media
             $writer            = new XLSXWriter($this->spreadsheet);
             $writer->xls_path  = $this->media->xlsx_directory;
             $new_xlsx_file     = $this->media->getfilename('xlsx', $form_number, true);
+
             $writer->write($new_xlsx_file);
             HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing to '.Media::$FileDriver.' '.$new_xlsx_file]);
             $this->spreadsheet->disconnectWorksheets();
@@ -146,8 +151,8 @@ class MediaXLSX extends Media
                 */
 
         $pub_value            = $this->form_details['pub'];
-        $this->trim_details   = MediaPublication::getTrimData($pub_value, $this->form_details['bind']);
 
+        $this->trim_details   = MediaPublication::getTrimData($pub_value, $this->form_details['bind']);
         $head_trim            = $this->trim_details['head_trim'];
         $foot_trim            = $this->trim_details['foot_trim'];
         $del_size             = $this->trim_details['size'];
@@ -171,6 +176,7 @@ class MediaXLSX extends Media
         $worksheet_title      = $form_number.$form_letter.'_'.$delivery;
 
         $myWorkSheet          = new Worksheet($sheetObj, $worksheet_title);
+
         $sheetObj->addSheet($myWorkSheet, $sheet_index);
         $sheet                = $sheetObj->getSheet($sheet_index);
 
@@ -193,11 +199,13 @@ class MediaXLSX extends Media
         $styles               = new MediaXLSX_Styles($sheet);
 
         $packageMethod        = str_replace(' ', '_', $this->box['packaging']);
-        $this->sheet_labels   = [];
+        // $this->sheet_labels   = [];
         $form                 = $this->$packageMethod($form);
-        $this->getLabels();
 
-        $styles->createPage($form, $this->sheet_labels, __PAGES_PER_XLSX__);
+        // $this->getLabels();
+
+        $styles->createPage($form, $this->getLabels(), __PAGES_PER_XLSX__);
+
     }
 
     public function getLabels()

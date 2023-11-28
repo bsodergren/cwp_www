@@ -7,6 +7,7 @@ namespace CWP\Spreadsheet\Media;
 
 use CWP\Core\Media;
 use CWP\Spreadsheet\Styles;
+use CWP\Core\MediaStopWatch;
 
 /**
  * CWP Media tool.
@@ -48,12 +49,13 @@ class MediaXLSX_Styles extends Styles
         $this->obj = $object;
     }
 
+
     public function sheetCommon()
     {
         $merg_rows   = [6, 7, 8, 9, 10];
 
         foreach ($merg_rows as $row) {
-            $cell = Styles::row('B', $row).':'.Styles::row('C', $row);
+            $cell = Styles::row('B', $row) . ':' . Styles::row('C', $row);
             $this->setMerge($cell);
         }
 
@@ -63,9 +65,8 @@ class MediaXLSX_Styles extends Styles
             $this->setIndent($cell);
         }
 
-        $sql         = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
+        $result = $this->getSheetStyle();
 
-        $result      = Media::$connection->fetchAll($sql);
         foreach ($result as $k => $val) {
             $col       = Styles::row($val['ecol'], $val['erow']);
             $text      = $val['text'];
@@ -146,7 +147,7 @@ class MediaXLSX_Styles extends Styles
 
     public function setColWidth($style = 'Load Flag')
     {
-        $result = Media::$connection->fetchAll("SELECT ecol,width FROM flag_style WHERE erow IS NULL and style_name = '".$style."' ORDER BY ecol ASC");
+        $result = $this->getSheetStyle($style);
 
         foreach ($result as $k => $v) {
             $columns[] = ['column' => $v['ecol'], 'width' => $v['width']];
@@ -162,11 +163,11 @@ class MediaXLSX_Styles extends Styles
         $this->setCellText(Styles::row('B', 9), $form['ship_value']);
         $this->setShrink(Styles::row('B', 7));
 
-        $this->setCellText(Styles::row('D', 6), $form['form_number'].''.$form['form_letter']);
+        $this->setCellText(Styles::row('D', 6), $form['form_number'] . '' . $form['form_letter']);
         $this->setAlign(Styles::row('D', 6), 'H');
         $this->setAlign(Styles::row('D', 6), 'V');
 
-        $this->setBorder(['cell' => Styles::row('A', 6).':'.Styles::row('C', 10),  'border' => 'allBorders']);
+        $this->setBorder(['cell' => Styles::row('A', 6) . ':' . Styles::row('C', 10),  'border' => 'allBorders']);
         $this->setBorder(['cell' => Styles::row('D', 6),  'border' => 'outline']);
 
         $this->setCellText(Styles::row('D', 7), $form['page_conf']);
@@ -193,7 +194,7 @@ class MediaXLSX_Styles extends Styles
         }
 
         if (isset($deliveryInst) && \is_array($deliveryInst)) {
-            $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 26),  'border' => 'outline']);
+            $this->setBorder(['cell' => Styles::row('A', 24) . ':' . Styles::row('D', 26),  'border' => 'outline']);
 
             foreach ($deliveryInst as $row => $data) {
                 $cellA = Styles::row('A', $row);
@@ -217,7 +218,7 @@ class MediaXLSX_Styles extends Styles
         if (true == $form['bindery_trim']) {
             $row  = 24;
 
-            $cell = Styles::row('A', $row).':'.Styles::row('D', $row);
+            $cell = Styles::row('A', $row) . ':' . Styles::row('D', $row);
             $this->setMerge($cell);
 
             // $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 24),  'border' => 'outline']);
@@ -230,8 +231,8 @@ class MediaXLSX_Styles extends Styles
 
     public function createPage($form, $sheet_labels, $copies = 1)
     {
-        $this->setColWidth();
 
+        $this->setColWidth();
         for ($i = 1; $i <= $copies; $i++) {
             Styles::$offset = $i;
             $this->setRowHeights();
@@ -247,6 +248,7 @@ class MediaXLSX_Styles extends Styles
                 }
                 $this->addSheetData($val[0], $val[1], $row, $col);
             }
+            $i=4;
         }
     }
 }

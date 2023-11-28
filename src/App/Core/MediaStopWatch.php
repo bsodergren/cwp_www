@@ -5,11 +5,13 @@
 
 namespace CWP\Core;
 
+use CWP\HTML\HTMLDisplay;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 class MediaStopWatch
 {
     public static $clock = false;
+    public static $DisplayEvent = '';
 
     public static $display = true;
 
@@ -52,6 +54,11 @@ class MediaStopWatch
 
     }
 
+    public static function display($event)
+    {
+        self::$DisplayEvent = $event;
+    }
+
     public static function init()
     {
 
@@ -72,21 +79,29 @@ class MediaStopWatch
     public static function dump($text = '', $var = '', $event = null)
     {
         $event = self::getName($event);
+
         $indent = '';
         if($event != self::$stopWatchName) {
             $indent = '  ';
         }
-
         self::$clock = (string) self::$stopwatch->getEvent($event);
         // $text = sprintf("%-20s",   $text);
         // $var = str_replace("\n"," ", var_export($var,1));
         $var = preg_replace('/(\s{1,})/m', ' ', var_export($var, 1));
         $cmd = MediaLogger::CallingFunctionName();
         //                $var = self::varexport($var,true);
+        if($event == self::$DisplayEvent) {
+            HTMLDisplay::pushhtml('stream/stopwatch/file_msg',['CLOCK' => self::$clock,
+            'CMD' => $cmd,
+            'TEXT' => $text,
+            'VAR' => $var]);
+
+        } else {
         self::log([0 => [$indent . self::$clock,
         $cmd,
         $text,
         $var]]);
+        }
 
     }
 

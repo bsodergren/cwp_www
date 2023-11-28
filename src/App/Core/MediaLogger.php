@@ -80,7 +80,7 @@ class MediaLogger
                 $html_var = str_replace('<br>', "\n\t", $html_var);
                 $html_string = DateTime::from(null).':'. $function_list.":".$text.'; '.$html_var;
 
-                $logFile = 'txt_'.$logFile;
+                $logfile = 'txt_'.$logfile;
             }
 
             $errorLogFile = __ERROR_LOG_DIRECTORY__.'/'.$logfile;

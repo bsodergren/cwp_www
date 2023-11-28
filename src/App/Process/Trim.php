@@ -33,6 +33,7 @@ class Trim extends MediaProcess
     public function trim_update()
     {
         global $_POST;
+        $deleteData = [];
         foreach ($_POST as $key => $value) {
             if ('trim_update' == $key) {
                 continue;
@@ -42,7 +43,10 @@ class Trim extends MediaProcess
                 if ('delete' == $type) {
                     if (1 == $value) {
                         $deleteData[] = $id;
+                        $cacheNames[] = $value;
                     }
+                } else if ('name' == $type) {
+                    $cacheNames[] = $value;
                 } else {
                     $updateData[$id][$type] = $value;
                 }
@@ -67,6 +71,13 @@ class Trim extends MediaProcess
 
             $count       = Media::$explorer->table('pub_trim')->where('id', $id)->update($insert_data);
         }
+        foreach ($cacheNames as  $name) {
+            if(Media::$Stash->has($name))
+            {
+                Media::$Stash->forget($name);
+            }
+        }
+
         $this->msg = 'Publications Updated';
     }
 
@@ -103,7 +114,7 @@ class Trim extends MediaProcess
         if ('' == $var) {
             $var = null;
         } else {
-            if (! str_contains($var, '/')) {
+            if (!str_contains($var, '/')) {
                 if (true == $size) {
                     $var = Utils::DelSizeToFrac($var);
                 } else {

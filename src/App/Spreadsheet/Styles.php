@@ -5,6 +5,7 @@
 
 namespace CWP\Spreadsheet;
 
+use CWP\Core\Media;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
@@ -197,5 +198,28 @@ class Styles
         ];
 
         $this->obj->getStyle($cell)->applyFromArray($styleArray);
+    }
+
+
+
+    public function getSheetStyle($style = null)
+    {
+        $name = "SheetStyle";
+
+        if($style !== null) {
+            $name =  $name . "-" . str_replace(" ", "_", $style);
+        }
+
+        $result = Media::get($name, 60, function () use ($style) {
+            if($style === null) {
+                $sql = 'SELECT ecol,erow, text,bold,font_size,h_align,v_align FROM flag_style WHERE erow IS NOT NULL;';
+            } else {
+                $sql = "SELECT ecol,width FROM flag_style WHERE erow IS NULL and style_name = '" . $style . "' ORDER BY ecol ASC";
+            }
+            return Media::$connection->fetchAll($sql);
+
+        });
+        return $result;
+
     }
 }

@@ -15,10 +15,13 @@ define('__SCRIPT_NAME__', basename($_SERVER['PHP_SELF'], '.php'));
 
 require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 $boot =  new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.ini'));
+
+ini_set('max_execution_time', '600');
 register_shutdown_function([MediaStopWatch::class, 'flushLogs']);
 
 $stash = Stash\Cache::file(function (): void {
     $this->setCacheDir(__CACHE_DIR__);
+
 });
 
 Media::$Stash = $stash;

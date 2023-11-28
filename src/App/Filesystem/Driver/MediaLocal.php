@@ -27,7 +27,7 @@ class MediaLocal implements MediaFileInterface
         $fileTmpName   = $postFileArray['the_file']['tmp_name'];
 
         $loc = new MediaFileSystem();
-        $pdf_directory = $loc->getDirectory('pdf', false);
+        $pdf_directory = $loc->getDirectory('upload', false);
         $pdf_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
         $loc->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
 

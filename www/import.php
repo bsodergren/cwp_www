@@ -21,7 +21,7 @@ foreach ($results as $id => $row) {
 /* connect to gmail */
 
 $locations = new MediaFileSystem();
-$upload_directory = $locations->getDirectory('upload', true);
+// $upload_directory = $locations->getDirectory('upload', true);
 $params = [];
 $upload_params = [];
 $pdf_select_options = [];
@@ -42,9 +42,12 @@ if (1 == __IMAP_ENABLE__) {
         $params['EMAIL_IMPORT_HTML'] = Template::GetHTML('/import/form_card', $mail_import_card);
     }
     // dd($import->attachments);
+
 }
 // dd($locations->getDirectory('pdf', false));
-$results = $locations->getContents($locations->getDirectory('pdf', false));
+$dirs = $locations->getDirectory('upload', false);
+$results = $locations->getContents($dirs);
+
 foreach ($results as $key => $pdf_file) {
     if (!in_array($pdf_file, $files)) {
         $dropbox_options_html .= template::GetHTML('/import/dropbox/form_option', [

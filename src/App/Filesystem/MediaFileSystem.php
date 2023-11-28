@@ -155,6 +155,8 @@ class MediaFileSystem
 
 
         $directory       = __FILES_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
+
+        // dump([__LINE__,$directory,$type]);
         $type            = strtolower($type);
         switch ($type) {
             case 'xlsx':
@@ -176,9 +178,11 @@ class MediaFileSystem
             case 'pdf':
 
                 if($remote == true) {
-                    $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
-                } else {
                     $directory = __TEMP_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
+
+                } else {
+                    $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
+
                 }
                 //  dump($type, $directory, $remote);
                 break;

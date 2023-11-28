@@ -10,7 +10,18 @@ define('__PROJECT_ROOT__', dirname(__FILE__, 3));
 define('__PUBLIC_ROOT__', dirname(__FILE__, 2));
 define('__HTTP_ROOT__', dirname(__FILE__, 1));
 
-require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
+xdebug_set_filter(
+    XDEBUG_FILTER_TRACING,
+    XDEBUG_PATH_EXCLUDE,
+    [ __PUBLIC_ROOT__ . "/vendor/" ]
+);
+
+xdebug_set_filter(
+    XDEBUG_FILTER_STACK,
+    XDEBUG_PATH_EXCLUDE,
+    [ __PUBLIC_ROOT__ . "/vendor/" ]
+);
+require __PUBLIC_ROOT__ . \DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 
 // if (__DEBUG__ == 1) {
@@ -32,41 +43,41 @@ require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 MediaStopWatch::$writeNow = true;
 MediaStopWatch::init();
 MediaStopWatch::dump("Start");
-$boot->definePath('__DATABASE_ROOT__', $boot->Config['db']['path'].\DIRECTORY_SEPARATOR.'database');
+$boot->definePath('__DATABASE_ROOT__', $boot->Config['db']['path'] . \DIRECTORY_SEPARATOR . 'database');
 $boot->directory(__DATABASE_ROOT__);
 
-$boot->definePath('__SQL_CONFIG_DIR__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Database');
-$boot->definePath('__SQL_UPDATES_DIR__', __SQL_CONFIG_DIR__.\DIRECTORY_SEPARATOR.'updates');
+$boot->definePath('__SQL_CONFIG_DIR__', __CWP_SOURCE__ . \DIRECTORY_SEPARATOR . 'Database');
+$boot->definePath('__SQL_UPDATES_DIR__', __SQL_CONFIG_DIR__ . \DIRECTORY_SEPARATOR . 'updates');
 
-$boot->definePath('__ASSETS_DIR__', __HTTP_ROOT__.\DIRECTORY_SEPARATOR.'assets');
-$boot->definePath('__INC_CORE_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'core');
+$boot->definePath('__ASSETS_DIR__', __HTTP_ROOT__ . \DIRECTORY_SEPARATOR . 'assets');
+$boot->definePath('__INC_CORE_DIR__', __ASSETS_DIR__ . \DIRECTORY_SEPARATOR . 'core');
 
 $boot->getDatabase();
 
 define('__TEMP_DIR__', sys_get_temp_dir());
 
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'path_constants.php';
+require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'path_constants.php';
 
 
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'boot.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'auth.php';
+require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'boot.php';
+require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'auth.php';
 
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
+require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'variables.php';
+require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'url_paths.php';
+require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'settings.php';
 
 // if (!defined("PROCESS")) {
-    require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
+require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'init.php';
 // }
 
 
 if (!defined("PROCESS")) {
     $req_file               = $_SERVER['REQUEST_URI'];
-    $req                    = '?'.$_SERVER['QUERY_STRING'];
-    $req_file               = str_replace(__URL_PATH__.'/', '', $req_file);
+    $req                    = '?' . $_SERVER['QUERY_STRING'];
+    $req_file               = str_replace(__URL_PATH__ . '/', '', $req_file);
 
     if ('' == $req_file) {
-        header('Location:  '.__URL_PATH__.'/index.php');
+        header('Location:  ' . __URL_PATH__ . '/index.php');
         exit;
     }
 }

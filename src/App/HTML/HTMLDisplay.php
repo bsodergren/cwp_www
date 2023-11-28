@@ -166,7 +166,7 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
         $relativePath = substr($excel_file, \strlen(__HTTP_ROOT__) + 1);
         $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
-        if (false == self::is_404($url)) {
+        if (true == self::is_404($url)) {
             return false;
         }
         if ('APPLICATION' == __DEVICE__) {
@@ -182,7 +182,7 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
         $url = __URL_HOME__.'/'.str_replace('\\', '/', $relativePath);
 
-        if (false == self::is_404($url)) {
+        if (true === self::is_404($url)) {
             return false;
         }
 
@@ -192,11 +192,14 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
     public static function is_404($url)
     {
         $url = str_replace(' ', '%20', $url);
-        file_get_contents($url);
-        if (\array_key_exists('4', $http_response_header)) {
-            return true;
-        }
+        @file_get_contents($url);
 
+        if (\array_key_exists('0', $http_response_header)) {
+            $response = $http_response_header[0];
+            if(str_contains($response,'404')) {
+                return true;
+            }
+        }
         return false;
     }
 

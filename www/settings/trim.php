@@ -5,6 +5,7 @@
 
 use CWP\HTML\HTMLDisplay;
 use CWP\HTML\HTMLForms;
+use CWP\Media\MediaPublication;
 use CWP\Template\Template;
 use CWP\Utils\Utils;
 
@@ -140,10 +141,13 @@ foreach ($pub_array as $bind => $row) {
                 'class' => 'form-control',
             ]
         );
+        
 
+        $cacheName = MediaPublication::CleanPublication($pub_name)."-".strtolower($bind);
         $pub_checkbox = HTMLForms::draw_checkbox('trim_'.$u['id'].'_delete', 0, '');
-
+        $hidden_pub = HTMLDisplay::draw_hidden('trim_'.$u['id'].'_name', $cacheName);
         $textbox_html .= Template::GetHTML('trim/pub_list', [
+            'TEXT_HIDDEN' => $hidden_pub,
             'PUBLICATION' => $pub_name,
             'PUB_ID' => $idx,
             'PUB_CHECKBOX' => $pub_checkbox,
