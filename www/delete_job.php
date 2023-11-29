@@ -10,28 +10,31 @@ define('TITLE', 'Media Job editor');
 
 if (array_key_exists('actSubmit', $_REQUEST)) {
     if ('Confirm' == $_REQUEST['actSubmit']) {
+        HTMLDisplay::pushhtml('stream/page_load', []);
         $media->delete_zip();
         $media->delete_xlsx();
         $media->delete_job();
     }
 
-    echo HTMLDisplay::JavaRefresh('/index.php');
+    HTMLDisplay::pushhtml('stream/page_close', []);
+//    echo HTMLDisplay::JavaRefresh('/index.php');
     exit;
 }
 
 use CWP\Utils\MediaDevice;
 
+MediaDevice::$NAVBAR = false;
 MediaDevice::getHeader();
-$form_url = __URL_PATH__.'/delete_job.php';
+$form_url = __URL_PATH__ . '/delete_job.php';
 
 $form = new Formr\Formr();
 $hidden = ['job_id' => $job_id];
 $form->open('', '', $form_url, 'post', '', $hidden);
 echo HTMLDisplay::output('Are you sure you want to delete this job <br>');
 $buttonClass = 'btn fw-bold btn-lg ';
-$form->input_submit('actSubmit', '', 'Go Back', '', 'class="'.$buttonClass.' bg-success"');
+$form->input_submit('actSubmit', '', 'Go Back', '', 'class="' . $buttonClass . ' bg-success"');
 
-$form->input_submit('actSubmit', '', 'Confirm', '', 'class="'.$buttonClass.'  bg-danger"');
+$form->input_submit('actSubmit', '', 'Confirm', '', 'class="' . $buttonClass . '  bg-danger"');
 
 $form->close();
 

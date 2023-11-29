@@ -44,6 +44,8 @@ if ($cnt > 0) {
         $hidden = ['job_id' => $row['job_id']];
         $js = ' onclick="window.open(\'about:blank\',\'print_popup\',\'width=1000,height=800\');" formtarget="print_popup" ';
 
+        $delete_js = ' onclick="window.open(\'about:blank\',\'delete_popup\',\'width=400,height=400\');" formtarget="delete_popup" ';
+
         $replacement['FORM_OPEN_HTML'] = $form->open('', '', $form_url, 'post', '', $hidden);
 
         $class_create = 'class="btn  btn-success"';
@@ -134,7 +136,7 @@ if ($cnt > 0) {
             $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[addforms]', '', 'Add Forms to Job', '', $class_normal.$tooltip.'addforms"');
         }
 
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_job]', '', 'delete job', '', $class_delete.$tooltip.'delete_job"');
+        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_job]', '', 'delete job', '', $delete_js . $class_delete.$tooltip.'delete_job"');
         $replacement['FORM_CLOSE'] = $form->close();
         $template->template('index/job', $replacement);
     }
