@@ -53,7 +53,7 @@ class Index extends MediaProcess
         \define('TITLE', 'Writing Excel files');
 
         MediaDevice::getHeader();
-        Template::echo('stream/start_page', []);
+        Template::echo('stream/start_page', ['PAGE_LOAD' => template::GetHTML('/stream/page_load', [])]);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
         MediaStopWatch::lap("Create Excel");
         $this->media->excelArray();
@@ -62,8 +62,7 @@ class Index extends MediaProcess
         $excel     = new MediaXLSX($this->media);
         MediaStopWatch::lap("Excel Object");
         $excel->writeWorkbooks();
-
-        Template::echo('stream/end_page', []);
+        Template::echo('stream/end_page', ['PAGE_CLOSE' => template::GetHTML('/stream/page_close', [])]);
 
         $this->msg = 'XLSX Files Created';
     }

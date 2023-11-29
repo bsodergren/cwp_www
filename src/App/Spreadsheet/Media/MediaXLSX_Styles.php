@@ -148,10 +148,10 @@ class MediaXLSX_Styles extends Styles
     public function setColWidth($style = 'Load Flag')
     {
         $result = $this->getSheetStyle($style);
-
         foreach ($result as $k => $v) {
             $columns[] = ['column' => $v['ecol'], 'width' => $v['width']];
         }
+
         $this->setColWidths($columns);
     }
 
@@ -248,7 +248,6 @@ class MediaXLSX_Styles extends Styles
                 }
                 $this->addSheetData($val[0], $val[1], $row, $col);
             }
-            $i=4;
         }
     }
 }

@@ -52,7 +52,7 @@ if (array_key_exists('FORM_PROCESS', $_REQUEST)) {
             break;
     }
 }
-
+dump([$procesClass,$_REQUEST]);
 $procesClass = 'CWP\\Process\\'.$procesClass;
 $mediaProcess = new $procesClass($media);
 $mediaProcess->run($_REQUEST);

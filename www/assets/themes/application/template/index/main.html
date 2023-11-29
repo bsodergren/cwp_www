@@ -9,6 +9,32 @@
     </tbody>
 </table>
 <script type="text/javascript">
+
+function createButton(id) {
+
+        console.log(id);
+        var divArr = id.split("_");
+        var action = divArr[0]+'_'+divArr[1];
+        var  job_id = divArr[2];
+
+        console.log(action,job_id);
+        // $.ajax({
+        //     type: "post",
+        //     url: "%%FORM_URL%%",
+        //     data:
+        //     {
+        //         'submit': {'create_xlsx': 'create xlsx'},
+        //         'job_id': job_id
+        //     },
+        //     cache: false,
+        //     success: function () {
+
+        //     }
+        // });
+
+}
+
+
     function clickButton(id) {
         console.log(id);
         var divArr = id.split("_");

@@ -22,6 +22,7 @@ $table = $explorer->table('media_job');
 $results = $table->fetchAssoc('job_id');
 $cnt = $table->count('*');
 
+$form_url =  __URL_PATH__.'/process.php';
 if ($cnt > 0) {
     foreach ($results as $k => $row) {
         $customJob = false;
@@ -41,8 +42,9 @@ if ($cnt > 0) {
         $form = new Formr\Formr('', 'hush');
 
         $hidden = ['job_id' => $row['job_id']];
+        $js = ' onclick="window.open(\'about:blank\',\'print_popup\',\'width=1000,height=800\');" formtarget="print_popup" ';
 
-        $replacement['FORM_OPEN_HTML'] = $form->open('', '', __URL_PATH__.'/process.php', 'post', '', $hidden);
+        $replacement['FORM_OPEN_HTML'] = $form->open('', '', $form_url, 'post', '', $hidden);
 
         $class_create = 'class="btn  btn-success"';
         $class_delete = 'class="btn  btn-danger"';
@@ -87,8 +89,8 @@ if ($cnt > 0) {
         if (true == Media::get_exists('xlsx', $row['job_id']) && true == is_dir($xlsx_dir)) {
             $rowdisabled = '';
         }
-        $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process';
-
+        $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process_';
+        //$javascript_click = ' onclick="return createButton(this.id);" ';
 
         $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('submit[process]', '', 'Process PDF Form', '', $class_normal.$pdisabled.$tooltip.'process"');
 
@@ -100,7 +102,8 @@ if ($cnt > 0) {
             $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_xlsx]', '', 'delete xlsx', '', $class_delete.$tooltip.'delete_xlsx"');
         } else {
 
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[create_xlsx]', '', 'create xlsx', '', $class_create.$pdisabled.$tooltip.'create_xlsx"');
+            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[create_xlsx]',
+             '', 'create xlsx', 'create_xlsx_'.$row['job_id'],$js.$class_create.$pdisabled.$tooltip.'create_xlsx"');
 
         }
 
@@ -140,7 +143,7 @@ if ($cnt > 0) {
 
     $template->clear();
 
-    $template->template('index/main', ['MEDIA_JOB_ROW' => $media_html]);
+    $template->template('index/main', ['MEDIA_JOB_ROW' => $media_html,'FORM_URL' => $form_url]);
 
     $template->render();
 } else {

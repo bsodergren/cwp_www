@@ -199,12 +199,12 @@ class MediaXLSX extends Media
         $styles               = new MediaXLSX_Styles($sheet);
 
         $packageMethod        = str_replace(' ', '_', $this->box['packaging']);
-        // $this->sheet_labels   = [];
+        $this->sheet_labels   = [];
         $form                 = $this->$packageMethod($form);
 
-        // $this->getLabels();
+        $this->getLabels();
 
-        $styles->createPage($form, $this->getLabels(), __PAGES_PER_XLSX__);
+        $styles->createPage($form, $this->sheet_labels, __PAGES_PER_XLSX__);
 
     }
 
