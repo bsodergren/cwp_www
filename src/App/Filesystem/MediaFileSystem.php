@@ -154,41 +154,40 @@ class MediaFileSystem
         }
 
 
-        $directory       = __FILES_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
-
-        // dump([__LINE__,$directory,$type]);
+        $dirArray       = [__FILES_DIR__,__MEDIA_FILES_DIR__,$output_filename];
         $type            = strtolower($type);
         switch ($type) {
             case 'xlsx':
-                $directory .= \DIRECTORY_SEPARATOR.__XLSX_DIRECTORY__;
+                // $dirArray = [__FILES_DIR__,__MEDIA_FILES_DIR__,__XLSX_DIRECTORY__];
+                $dirArray[] = __XLSX_DIRECTORY__;
+                break;
 
+                case 'zip':
+                    $dirArray[] = __ZIP_DIRECTORY__;
+                // $dirArray = [__FILES_DIR__,__MEDIA_FILES_DIR__,__ZIP_DIRECTORY__];
                 break;
-            case 'zip':
-                $directory .= \DIRECTORY_SEPARATOR.__ZIP_DIRECTORY__;
-                break;
-            case 'upload':
-                // if (Media::$Dropbox) {
-                //     $directory = __TEMP_DIR__;
-                // } elseif (Media::$Google) {
-                //         $directory = __TEMP_DIR__;
-                // } else {
-                $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.'Uploads';
-                // }
+
+                case 'upload':
+                if (Media::$Dropbox) {
+                    $dirArray       = [__TEMP_DIR__,'Uploads'];
+                } elseif (Media::$Google) {
+                    $dirArray       = [__TEMP_DIR__,'Uploads'];
+                } else {
+                    $dirArray       = [__FILES_DIR__,'Uploads'];
+                }
                 break;
             case 'pdf':
-
                 if($remote == true) {
-                    $directory = __TEMP_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
-
-                } else {
-                    $directory = __FILES_DIR__.\DIRECTORY_SEPARATOR.__MEDIA_FILES_DIR__.\DIRECTORY_SEPARATOR.$output_filename;
-
+                    $dirArray       = [__TEMP_DIR__,__MEDIA_FILES_DIR__,$output_filename];
                 }
-                //  dump($type, $directory, $remote);
                 break;
         }
+
+        $directory = implode(DIRECTORY_SEPARATOR,$dirArray);
         $directory = FileSystem::platformSlashes($directory);
+        $directory = rtrim($directory,DIRECTORY_SEPARATOR);
         $this->directory = FileSystem::normalizePath($directory);
+
         if (true == $create_dir) {
             $this->fileDriver->createFolder($directory);
         }

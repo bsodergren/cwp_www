@@ -28,8 +28,12 @@ class MediaLocal implements MediaFileInterface
 
         $loc = new MediaFileSystem();
         $pdf_directory = $loc->getDirectory('upload', false);
+
+
         $pdf_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
-        $loc->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
+        $res = move_uploaded_file($fileTmpName, $pdf_file);
+
+        //$loc->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
 
         return $pdf_file;
     }
@@ -95,9 +99,11 @@ class MediaLocal implements MediaFileInterface
         FileSystem::createDir($path);
     }
 
-    public function uploadFile($filename, $dropboxFilename, $options = [])
+    public function uploadFile($filename, $pdf_file, $options = [])
     {
-        $this->rename($filename, $dropboxFilename);
+        //dd([$filename, $pdf_file]);
+
+       // $this->rename($filename, $pdf_file);
     }
 
     public function DownloadFile($filename)

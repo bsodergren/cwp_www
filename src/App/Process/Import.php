@@ -40,16 +40,35 @@ class Import extends MediaProcess
         MediaDevice::getFooter();
     }
 
+
+    private function isEmpty($array,$cat,$field)
+    {
+        if ('' != $array[$cat][$field]) {
+            return $array[$cat][$field];
+        }
+        return null;
+    }
+
     public function run($req)
     {
         global $_POST;
         global $_FILES;
         $this->header();
+        $job_number = '';
 
         // These will be the only file extensions allowed
-        if ('' != $_POST['dropbox']['pdf_file']) {
-            $pdf_file   = $_POST['dropbox']['pdf_file'];
-            $job_number = $_POST['dropbox']['job_number'];
+        if ('' != $_POST['local']['pdf_file']) {
+            $pdf_file   = $_POST['local']['pdf_file'];
+            if('' != $_POST['local']['job_number']) {
+                $job_number = $_POST['local']['job_number'];
+            }
+        }
+
+
+        if ('' == $job_number) {
+            if ('' != $_POST['upload']['job_number']) {
+                $job_number = $_POST['upload']['job_number'];
+            }
         }
 
         if ('' != $_FILES['the_file']['name']) {
@@ -67,10 +86,6 @@ class Import extends MediaProcess
                 $locations     = new MediaFileSystem();
                 $pdf_file = $locations->postSaveFile($_FILES);
                 MediaQPDF::cleanPDF($pdf_file);
-
-                //        if (file_exists($pdf_file)) {
-                //            FileSystem::delete($pdf_file);
-                //        }
             }
 
             if ('' == $pdf_file) {

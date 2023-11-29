@@ -5,6 +5,7 @@
 
 namespace CWP\Media\Mail;
 
+use CWP\Core\Media;
 use CWP\Template\Template;
 
 class EmailDisplay
@@ -13,9 +14,20 @@ class EmailDisplay
 
     public function drawFileOptions()
     {
-        foreach ($this->attachments as $key => $attachment) {
-            $html .= template::GetHTML('/import/email/form_option', [
-                'OPTION_VALUE' => $attachment['filename'].'|'.$key,
+        $html = '';
+        foreach ($this->attachments as $key => $attachment)
+        {
+
+            if(is_array($attachment['JobNumber'])) {
+                $jobNumber = implode(",",$attachment['JobNumber']);
+            } else {
+                $jobNumber = $attachment['JobNumber'];
+            }
+
+            $this->addImportedPDF($attachment['name'],$jobNumber);
+
+            $html .= template::GetHTML('/import/email/job_row', [
+                'OPTION_JOB' => $jobNumber,
                 'OPTION_NAME'  => $attachment['name'],
             ]);
         }
@@ -23,51 +35,25 @@ class EmailDisplay
         return $html;
     }
 
-    public function drawJsScript()
-    {
-        $js_select_options = null;
-
-        foreach ($this->attachments as $key => $attachment) {
-            if (\array_key_exists('JobNumber', $attachment)) {
-                if (\is_array($attachment['JobNumber'])) {
-                    $option_html = '';
-                    foreach ($attachment['JobNumber'] as $number) {
-                        $option_html .= trim(template::GetHTML('/import/email/js_select_options', [
-                            'JOB_NUMBER' => $number,
-                        ]));
-                    }
-
-                    $js_select_options .= template::GetHTML(
-                        '/import/email/js_select_statement',
-                        [
-                            'JS_SELECT_KEY'     => $attachment['filename'].'|'.$key,
-                            'JS_SELECT_OPTIONS' => $option_html,
-                        ]
-                    );
-                }
-            }
-        }
-
-        if (null !== $js_select_options) {
-            return template::GetHTML(
-                '/import/email/js_select',
-                [
-                    'JS_SELECT_STATEMENTS' => $js_select_options,
-                ]
-            );
-        }
-
-        return '';
-    }
-
     public function drawSelectBox()
     {
         return template::GetHTML(
-            '/import/email/form_select',
+            '/import/email/job_list',
             [
                 'SELECT_OPTIONS' => $this->drawFileOptions(),
-                'JS_SELECT'      => $this->drawJsScript(),
             ]
         );
     }
+
+    private function addImportedPDF($pdf_filename,$jobNumber)
+    {
+
+        $query = 'INSERT IGNORE INTO `media_imports` ?';
+
+        Media::$connection->query($query, [
+            'job_number' => $jobNumber,
+            'pdf_file' => $pdf_filename
+        ]);
+    }
+
 }

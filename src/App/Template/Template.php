@@ -32,7 +32,7 @@ class Template
     {
     }
 
-    public static function getJavascript($template = '', $array = [], $error = true, $cache = true)
+    public static function getJavascript($template = '', $array = [], $error = true, $cache = false)
     {
 
 
@@ -44,7 +44,7 @@ class Template
         return $template_obj->html;
 
     }
-    public static function GetHTML($template = '', $array = [], $error = true, $cache = true)
+    public static function GetHTML($template = '', $array = [], $error = true, $cache = false)
     {
 
         $template_obj        = new self();
@@ -54,7 +54,7 @@ class Template
         return $template_obj->html;
     }
 
-    public static function echo($template = '', $array = [], $error = true, $cache = true)
+    public static function echo($template = '', $array = [], $error = true, $cache = false)
     {
         $template_obj        = new self();
         $template_obj->error = $error;
@@ -72,7 +72,7 @@ class Template
         $this->html = '';
     }
 
-    public function return($template = '', $array = [], $cache = true)
+    public function return($template = '', $array = [], $cache = false)
     {
         if ($template) {
             $this->template($template, $array,false,$cache);
@@ -84,7 +84,7 @@ class Template
         return $html;
     }
 
-    public function render($template = '', $array = [], $cache = true)
+    public function render($template = '', $array = [], $cache = false)
     {
         if ($template) {
             $this->template($template, $array,false,$cache);
@@ -118,6 +118,7 @@ class Template
         preg_match_all('/%%([A-Z_]+)%%/m', $text, $output_array);
         $params               = [];
 
+
         foreach ($output_array[1] as $n => $def) {
             if (MediaSettings::isSet($def)) {
                 $params[$def] = \constant($def);
@@ -129,6 +130,7 @@ class Template
     private function parse($text, $params = [])
     {
         $this->defaults($text);
+
         $params = array_merge($params, $this->default_params);
         if (\is_array($params)) {
             foreach ($params as $key => $value) {
@@ -142,9 +144,8 @@ class Template
         return $html;
     }
 
-    public function template($template, $params = [], $js = false, $cache=true)
+    public function template($template, $params = [], $js = false, $cache=false)
     {
-
         if($cache === true) {
             $template_name = trim(str_replace(['\\','/'],"-",$template),"-");
             $template_name_params = $template_name."_param";

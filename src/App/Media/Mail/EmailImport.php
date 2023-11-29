@@ -66,10 +66,10 @@ class EmailImport extends EmailDisplay
             $this->getAttachmentFilename(1);
             $this->getAttachmentName(1);
             $this->getAttachmentFile(1);
-
-            @imap_clearflag_full($this->imap, $this->mailId, '\\Seen');
-            imap_setflag_full($this->imap, $this->mailId, '\\Seen');
         }
+        imap_clearflag_full($this->imap, $this->mailId, '\\Seen');
+        imap_setflag_full($this->imap, $this->mailId, '\\Seen');
+       return $this->attachments[$this->mailId]['is_attachment'];
     }
 
     public function clean($name)

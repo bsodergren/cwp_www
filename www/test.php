@@ -4,8 +4,6 @@
 
  */
 
- xdebug_info();
- die();
 use CWP\Core\Media;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
@@ -17,20 +15,26 @@ require_once '.config.inc.php';
 
 MediaDevice::getHeader();
 
-
-
-$table = $explorer->table('media_job');
-$results = $table->fetchAssoc('job_id');
-$cnt = $table->count('*');
-MediaStopWatch::stop();
-$name = "Stuff";
-$value = [1,2,3,4,5];
-
-if (Media::$Stash->has($name) == false) {
-    Media::$Stash->put($name, $value, 1);
-    dump("Didnt exist");
+function getValue($array,$value)
+{
+    if('' != $array[$value]){
+        return $array[$value];
+    }
+    return null;
+}
+$array = ['var' => "stuff"];
+if($job = getValue($array,"var"))  {
+    $foo = $job;
 }
 
-dump(["get",Media::$Stash->get($name)]);
+dump($foo);
+$job = null;
+$array = ['var' => ""];
+if($job = getValue($array,"var"))  {
+    $foo = $job;
+}
+
+
+dump($foo);
 
 MediaDevice::getFooter();

@@ -3,6 +3,7 @@
  * CWP Media tool for load flags
  */
 
+use CWP\Core\Media;
 use Tracy\Debugger;
 use CWP\Core\MediaStopWatch;
 
@@ -70,6 +71,13 @@ require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'settings.php';
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'init.php';
 // }
 
+if(array_key_exists("flush",$_GET)){
+    Media::$Stash->flush();
+
+    $urlParts =  parse_url($_SERVER['REQUEST_URI']);
+    header('Location:  ' . $urlParts['path']);
+    exit;
+}
 
 if (!defined("PROCESS")) {
     $req_file               = $_SERVER['REQUEST_URI'];

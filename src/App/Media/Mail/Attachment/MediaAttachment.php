@@ -5,6 +5,7 @@
 
 namespace CWP\Media\Mail\Attachment;
 
+use CWP\Core\Media;
 use CWP\Core\MediaQPDF;
 
 trait MediaAttachment
@@ -16,16 +17,17 @@ trait MediaAttachment
                 $attachment_name     = $this->clean($attachment['name']);
                 $attachment_filename = $this->clean($attachment['filename']);
 
-                if (true == stripos($attachment_name, 'RunSheets')
-                || true == stripos($attachment_name, 'Run_Sheets')) {
+                if ($this->findRunSheets($attachment_filename) )
+                {
                     $this->attachments[$key]['name']     = $attachment_name;
                     $this->attachments[$key]['filename'] = $attachment_filename;
                     if (false == $this->fs->exists($attachment_name)) {
-                        $dropboxFilename = $this->pdf_directory.\DIRECTORY_SEPARATOR.$attachment_name;
+                        $pdf_filename = $this->pdf_directory.\DIRECTORY_SEPARATOR.$attachment_name;
                         $filename        = $this->upload_directory.\DIRECTORY_SEPARATOR.$attachment_name;
                         file_put_contents($filename, $attachment['attachment']);
                         MediaQPDF::cleanPDF($filename);
-                        $this->fs->UploadFile($filename, $dropboxFilename, ['autorename' => false]);
+                        $this->fs->UploadFile($filename, $pdf_filename, ['autorename' => false]);
+
                     }
                     unset($this->attachments[$key]['attachment']);
                 } else {
@@ -42,8 +44,13 @@ trait MediaAttachment
         if ($this->structure->parts[$i]->ifdparameters) {
             foreach ($this->structure->parts[$i]->dparameters as $object) {
                 if ('filename' == strtolower($object->attribute)) {
-                    $this->attachments[$this->mailId]['is_attachment'] = true;
                     $this->attachments[$this->mailId]['filename']      = $object->value;
+                    if ($this->findRunSheets($object->value))
+                    {
+                        $this->attachments[$this->mailId]['is_attachment'] = true;
+                    } else {
+                        unset($this->attachments[$this->mailId]);
+                    }
                 }
             }
         }
@@ -53,9 +60,15 @@ trait MediaAttachment
     {
         if ($this->structure->parts[$i]->ifdparameters) {
             foreach ($this->structure->parts[$i]->parameters as $object) {
-                if ('name' == strtolower($object->attribute)) {
-                    $this->attachments[$this->mailId]['is_attachment'] = true;
+                if ('name' == strtolower($object->attribute))
+                {
                     $this->attachments[$this->mailId]['name']          = $object->value;
+                    if ($this->findRunSheets($object->value))
+                    {
+                        $this->attachments[$this->mailId]['is_attachment'] = true;
+                    } else {
+                        unset($this->attachments[$this->mailId]);
+                    }
                 }
             }
         }
@@ -72,4 +85,16 @@ trait MediaAttachment
             }
         }
     }
+
+    private function findRunSheets($name){
+        if (str_contains($name, 'RunSheets')){
+            return true;
+        }
+        if (str_contains($name, 'Run_Sheets')){
+            return true;
+        }
+        return false;
+
+    }
+
 }
