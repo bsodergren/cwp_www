@@ -76,7 +76,10 @@ class HTMLDocument
     public function getNavbar()
     {
         if (! MediaSettings::isTrue('NO_NAV')) {
-            return MediaDevice::getNavbar();
+            if( MediaDevice::$NAVBAR == true ){
+
+                return MediaDevice::getNavbar();
+            }
         }
     }
 
@@ -105,8 +108,11 @@ class HTMLDocument
     public function headerVersionUpdates()
     {
         $this->template->error = false;
+        if( MediaDevice::$NAVBAR == true ){
 
-        return $this->template->template('base/header/updates',[], false,false);
+            return $this->template->template('base/header/updates',[], false,false);
+        }
+        return '';
     }
 
     public function footerVersionUpdates()

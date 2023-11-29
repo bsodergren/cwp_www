@@ -52,6 +52,7 @@ class Index extends MediaProcess
     {
         \define('TITLE', 'Writing Excel files');
 
+        MediaDevice::$NAVBAR = false;
         MediaDevice::getHeader();
         Template::echo('stream/start_page', ['PAGE_LOAD' => template::GetHTML('/stream/page_load', [])]);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
@@ -65,6 +66,7 @@ class Index extends MediaProcess
         Template::echo('stream/end_page', ['PAGE_CLOSE' => template::GetHTML('/stream/page_close', [])]);
 
         $this->msg = 'XLSX Files Created';
+        MediaDevice::$NAVBAR = true;
     }
 
     public function create_zip()

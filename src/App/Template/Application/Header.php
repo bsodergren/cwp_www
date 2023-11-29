@@ -24,9 +24,10 @@ class Header extends HTMLDocument
 
         [$params['BOOTSTRAP'] ,$params['DEFAULT_CSS']] = self::header_CSS();
 
-        $params['__NAVBAR__']                          = self::_getNavbar();
-        $params['UPDATES_HTML']                        = self::_headerVersionUpdates();
-        $params['__MSG__']                             = self::displayMsg();
+            $params['__NAVBAR__']                          = self::_getNavbar();
+            $params['UPDATES_HTML']                        = self::_headerVersionUpdates();
+            $params['__MSG__']                             = self::displayMsg();
+
 
         echo Template::GetHTML('base/header/header', $params,false,false);
     }

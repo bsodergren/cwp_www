@@ -16,6 +16,8 @@ class MediaDevice
 
     public static $default_theme = 'application';
 
+    public static $NAVBAR   = true;
+
     public function __construct()
     {
         self::$DEVICE = $this->run();
