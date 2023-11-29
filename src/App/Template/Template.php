@@ -146,36 +146,36 @@ class Template
 
     public function template($template, $params = [], $js = false, $cache=false)
     {
-        if($cache === true) {
-            $template_name = trim(str_replace(['\\','/'],"-",$template),"-");
-            $template_name_params = $template_name."_param";
+        // if($cache === true) {
+        //     $template_name = trim(str_replace(['\\','/'],"-",$template),"-");
+        //     $template_name_params = $template_name."_param";
 
 
-            $cache_params = Media::$Stash->get($template_name_params);
-            if($cache_params === false) {
-                Media::$Stash->put($template_name_params,$params,10);
-            }
+        //     $cache_params = Media::$Stash->get($template_name_params);
+        //     if($cache_params === false) {
+        //         Media::$Stash->put($template_name_params,$params,10);
+        //     }
 
-            if(is_array($cache_params) && is_array($params)) {
-                $val = array_diff_assoc($params,$cache_params);
-                if(count($val) > 0){
-                    Media::$Stash->put($template_name_params,$params,10);
-                    Media::$Stash->forget($template_name);
-                }
-            }
+        //     if(is_array($cache_params) && is_array($params)) {
+        //         $val = array_diff_assoc($params,$cache_params);
+        //         if(count($val) > 0){
+        //             Media::$Stash->put($template_name_params,$params,10);
+        //             Media::$Stash->forget($template_name);
+        //         }
+        //     }
 
 
-            $html = Media::$Stash->get($template_name);
+        //     $html = Media::$Stash->get($template_name);
 
-            if($html === false) {
-                $template_text = $this->loadTemplate($template, $js);
-                $html          = $this->parse($template_text, $params);
-                Media::$Stash->put($template_name,$html,10);
-            }
-        } else {
+        //     if($html === false) {
+        //         $template_text = $this->loadTemplate($template, $js);
+        //         $html          = $this->parse($template_text, $params);
+        //         Media::$Stash->put($template_name,$html,10);
+        //     }
+        // } else {
             $template_text = $this->loadTemplate($template, $js);
             $html          = $this->parse($template_text, $params);
-        }
+        // }
 
         $this->add($html);
 

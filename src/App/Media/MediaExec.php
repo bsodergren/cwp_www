@@ -91,6 +91,11 @@ class MediaExec
 
         $this->run($callback);
 
+        $tmpfile = $pdf_file.".~qpdf-orig";
+
+        if (file_exists($tmpfile)) {
+            FileSystem::delete($tmpfile);
+        }
     }
 
     public function callback($type, $buffer): void
