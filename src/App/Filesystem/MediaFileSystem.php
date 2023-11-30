@@ -11,6 +11,7 @@ namespace CWP\Filesystem;
 
 use CWP\Core\Bootstrap;
 use CWP\Core\Media;
+use CWP\Core\MediaLogger;
 use CWP\Filesystem\Driver\MediaDropbox;
 use CWP\Filesystem\Driver\MediaGoogleDrive;
 use CWP\Filesystem\Driver\MediaLocal;
@@ -153,6 +154,7 @@ class MediaFileSystem
             $output_filename = $this->job_number.$output_filename;
         }
 
+        MediaLogger::log("Directory",['type' => $type, "outputfile" => $output_filename],"filedriver.log");
 
         $dirArray       = [__FILES_DIR__,__MEDIA_FILES_DIR__,$output_filename];
         $type            = strtolower($type);
@@ -182,6 +184,7 @@ class MediaFileSystem
                 }
                 break;
         }
+        MediaLogger::log("Directory Array",['dirArray' => $dirArray],"filedriver.log");
 
         $directory = implode(DIRECTORY_SEPARATOR,$dirArray);
         $directory = FileSystem::platformSlashes($directory);

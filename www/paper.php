@@ -12,9 +12,6 @@ use CWP\Utils\MediaDevice;
 
 MediaDevice::getHeader();
 
-$form_url = __URL_HOME__.'/process.php';
-define('__FORM_URL__', $form_url);
-
 /*
 function display_array_as_row($array)
 {
@@ -103,7 +100,7 @@ foreach ($paper_type as $paper) {
     }
 }
 
-echo Template::GetHTML('paper/main', ['FORM_URL' => $form_url,
+echo Template::GetHTML('paper/main', [
     'PAPER_BODY_HTML' => $row_header_html,
     'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Update publications']),
 ]);

@@ -6,11 +6,30 @@
 use CWP\Core\Media;
 use CWP\Core\MediaSettings;
 use CWP\HTML\HTMLDisplay;
+use CWP\Process\Form;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 
 require_once '.config.inc.php';
+// array:2 [▼
+//   "job_id" => "1"
+//   "form_number" => "2"
+// ]
+if(count($_POST)> 0){
+    $form = new Form($media);
+    $form->run($_POST);
+   // dd($form->url);
+   $parts = parse_url($form->url);
+    if(array_key_exists('query',$parts)){
+        parse_str($parts['query'],$query);
+        foreach($query as $key => $value){
+            $_REQUEST[$key] = $value;
+        }
+    } else {
 
+        $form->reload();
+    }
+}
 define('TITLE', 'Form Editor');
 $display = new HTMLDisplay();
 // $media = new Media();
@@ -22,8 +41,8 @@ $row_html = '';
 $letter_html = '';
 $page_form_html = '';
 $dropdown_links = '';
-$next_view = 'job';
-// $media->job_id = $_REQUEST['job_id'];
+$next_view = 'Next';
+$media->job_id = $_REQUEST['job_id'];
 
 $max_forms = $media->get_max_drop_forms();
 $first_form = $media->get_first_form();
@@ -159,7 +178,7 @@ foreach ($new_forms as $form_number => $parts) {
         'BUTTON_VALUE' => $next_button,
     ]);
 
-    $form_html['FORM_URL'] = __URL_PATH__.'/process.php';
+    $form_html['FORM_URL'] = __URL_PATH__.'/form.php';
     $form_html['NAME'] = $form_array['job_number'].' - Form Number '.$form_number.' of '.$max_forms.' - '.$config[$form_number]['config'].' - '.$config[$form_number]['bind'];
     $form_html['CHECKBOX_PARTS'] = '';
 
@@ -223,11 +242,12 @@ foreach ($new_forms as $form_number => $parts) {
     $template->clear();
 }
 
+$form_html['FORM_NUMBER'] = $form_number;
 $form_html['NEXT_FORM_NUMBER'] = $next_form_number;
 $form_html['PREV_FORM_NUMBER'] = $prev_form_number;
 
 $form_html['JOB_ID'] = $media->job_id;
-// $form_html['NEXT_VIEW']        = $next_view;
+$form_html['NEXT_VIEW']        = $next_view;
 $form_html['FORM_BODY_HTML'] = "\n<!-- --------------------- -->\n".$letter_html."\n<!-- --------------------- -->\n";
 $form_html['FORM_BUTTONS'] = $dropdown_links;
 $form_html['FORM_LIST_HTML'] = $page_form_html;

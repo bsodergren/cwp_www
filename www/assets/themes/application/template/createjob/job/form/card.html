@@ -1,6 +1,6 @@
-<div class="table table-success row p-2 m-3 rounded bg-success">
+<div class="table table-success w-50  row d-flex aligns-items-center rounded mx-auto p-2 justify-content-center  bg-success">
     <div class="col">
-        <form action="%%URL%%" method="post">
+        <form action="%%__PROCESS_FORM__%%" method="post" class="rounded">
             %%HIDDEN_FIELDS%%
 
             <div class="card w-100  rounded bg-success" style="--bs-bg-opacity: .5;">
@@ -14,9 +14,9 @@
                     <div class="input-group mt-1">
                         %%JOBNAME_HTML%%
                     </div>
+                <button type="submit" name="submit" id="submit" class="btn btn-success w-100  text-black fw-bold" >Create Job</button>
 
                 </div>
-                <button type="submit" name="submit" id="submit" class="btn btn-primary" >Create Job</button>
 
             </div>
         </form>

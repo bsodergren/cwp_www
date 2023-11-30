@@ -94,7 +94,7 @@ class CreateJob extends MediaProcess
     public function createjob($data)
     {
         global $auth;
-        $pdf_filename = 'Created By '.$auth->getUsername();
+        $pdf_filename = 'Created By '.$data['username'];
         $job_number = $data['job_number'];
 
         $this->job_id = Media::getJobNumber($pdf_filename, $job_number);
@@ -103,7 +103,7 @@ class CreateJob extends MediaProcess
             return $this->job_id;
         }
 
-        [$month,$year,$drop] = explode(" ", $data['media_drop']);
+        [$month,$year,$drop] = explode(" ", $data['job_name']);
         $nummonth = $this->dateMap[strtoupper($month)];
         $shortyear = substr($year, 2, 2);
         $shortdrop = substr($drop, 0, 1);
@@ -121,7 +121,7 @@ class CreateJob extends MediaProcess
 
         Media::$connection->query($query, [
             'job_number' => $job_number,
-            'close' => $data['media_drop'],
+            'close' => $data['job_name'],
             'pdf_file' => $pdf_filename,
             'base_dir' => $directory,
         ]);

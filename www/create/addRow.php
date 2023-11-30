@@ -17,6 +17,7 @@ $job_id = $_GET['job_id'];
 $form_number = $_GET['form_number'];
 MediaDevice::getHeader();
 
+$button_url = __URL_PATH__."/create/addForm.php?job_id=".$job_id;
 
 $marketList = Creator::jsList('job_market');
 $pubList = Creator::jsList('job_publication');
@@ -57,7 +58,7 @@ foreach ($job_table as $u) {
 
 
 
-$template->template($template_basedir.'/main', ['ROWS' => $html_rows,'ADDROW' => $addRow_html,'NAME' => 'Test Job']);
+$template->template($template_basedir.'/main', ['ROWS' => $html_rows,'ADDROW' => $addRow_html,'NAME' => 'Test Job','BUTTON_URL'=>$button_url]);
 
 $template->render();
 

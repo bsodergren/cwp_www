@@ -13,7 +13,6 @@ require_once '../.config.inc.php';
 
 define('TITLE', APP_NAME);
 
-$addJobURL =  __URL_PATH__.'/process.php';
 
 $templateBaseDir = 'createjob/job';
 MediaDevice::getHeader();
@@ -24,11 +23,13 @@ $card_params['HIDDEN_FIELDS'] =  HTMLForms::draw_hidden('FORM_PROCESS', 'createJ
 $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('action', 'createjob');
 
 if(isset($auth)){
-    $username = $auth->getUsername();
+    $username = ' Created By '.$auth->getUsername();
+    $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('username', $auth->getUsername());
+
 } else {
-    $username = "CWP User";
+    $username = Template::GetHTML($templateBaseDir."/form/name", []);
 }
-$card_params['CARD_HEADER'] = ' Created By '.$username;
+$card_params['CARD_HEADER'] = $username;
 $card_params['JOBNUMBER_HTML'] = Template::GetHTML($templateBaseDir."/form/jobnumber", []);
 $card_params['JOBNAME_HTML'] = Template::GetHTML($templateBaseDir."/form/jobname", ['PLACEHOLDER' => 'Oct 2023 C-Close...']);
 

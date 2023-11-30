@@ -135,7 +135,7 @@ class Bootstrap
         Media::$Dropbox = false;
         Media::$Google = false;
 
-        $filedriver = $this->Config['server']['filedriver'];
+        $filedriver = strtolower($this->Config['server']['filedriver']);
 
         if($filedriver == 'google') {
             Media::$Google = true;

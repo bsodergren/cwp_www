@@ -16,7 +16,7 @@ class Navbar extends HTMLDocument
 
         [$dropdown_link_html,$nav_link_html,$dropddown_menu_text] = $doc->NavbarDropDown();
 
-        \define('__FOOTER_NAV_HTML__', $dropdown_link_html);
+        // \define('__FOOTER_NAV_HTML__', $dropdown_link_html);
 
         [$dropdown_latest,$latest_version_html]                   = $doc->NavbarLatestVersion();
 

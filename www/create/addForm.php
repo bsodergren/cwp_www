@@ -14,7 +14,6 @@ $job_id = $_GET['job_id'];
 MediaDevice::getHeader();
 $templateBaseDir = 'createjob/forms';
 
-$addJobURL =  __URL_PATH__.'/process.php';
 //Former::framework('twitterbootstrap3');
 //echo Former::text('foo')->addClass('my_class');
 // $params['TEXT_FORMS'] = $form;
@@ -34,7 +33,6 @@ foreach($result as $row) {
 
 $params['FORM_BUTTONS'] =  $form_button_links ;
 
-$card_params['URL'] = $addJobURL;
 $card_params['HIDDEN_FIELDS'] =  HTMLForms::draw_hidden('FORM_PROCESS', 'createJob');
 $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('action', 'addForm');
 $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('job_id', $job_id);

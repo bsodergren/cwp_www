@@ -18,19 +18,19 @@ function createButton(id) {
         var  job_id = divArr[2];
 
         console.log(action,job_id);
-        // $.ajax({
-        //     type: "post",
-        //     url: "%%FORM_URL%%",
-        //     data:
-        //     {
-        //         'submit': {'create_xlsx': 'create xlsx'},
-        //         'job_id': job_id
-        //     },
-        //     cache: false,
-        //     success: function () {
+        $.ajax({
+            type: "post",
+            url: "%%__FORM_URL__%%",
+            data:
+            {
+                'submit': {'create_xlsx': 'create xlsx'},
+                'job_id': job_id
+            },
+            cache: false,
+            success: function () {
 
-        //     }
-        // });
+            }
+        });
 
 }
 
@@ -54,7 +54,7 @@ function createButton(id) {
 
         $.ajax({
             type: "post",
-            url: "process.php",
+            url: "%%__FORM_URL__%%",
             data:
             {
                 'divClass': divClass,

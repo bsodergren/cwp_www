@@ -16,11 +16,11 @@ class Navbar extends HTMLDocument
 
         [$dropdown_link_html,$nav_link_html,$dropddown_menu_text] = $doc->NavbarDropDown();
 
-        \define('__FOOTER_NAV_HTML__', $dropdown_link_html);
+        // \define('__FOOTER_NAV_HTML__', $dropdown_link_html);
 
-        [$dropdown_latest,$latest_version_html] = $doc->NavbarLatestVersion();
+        // [$dropdown_latest,$latest_version_html] = $doc->NavbarLatestVersion();
 
-        $dropdown_link_html .= $dropdown_latest;
+        // $dropdown_link_html .= $dropdown_latest;
 
         $navbar_right_dropdown = Template::GetHTML('base/navbar/'.$doc->nav_list_dir.'/navbar_dropdown', [
             'DROPDOWN_LINKS' => $dropdown_link_html,

@@ -1,37 +1,27 @@
 <div class="container table table-dark">
-    <div class="row">
-        <div class="fs-3 row">
-            <div class="text-center nowrap col">%%NAME%%</div>
-        </div>
+    <div class="table table-success  aligns-items-center mx-auto p-2 justify-content-center  w-100 row p-2 m-3 rounded bg-success">
+        <div class="text-center nowrap col fw-bold">%%NAME%%</div>
     </div>
 
-    <div class="table table-success row">
+    %%ADDROW%%
+
+    <div class="table table-success w-100  row d-flex aligns-items-center mx-auto p-2 justify-content-center rounded bg-success">
         <div class="col">
-        <!-- </div> -->
-        %%ADDROW%%
-
-        <!-- </div> -->
             <div class="card">
-                <div class="card-header bg-success"> Form Details </div>
-                <!-- <div class="card-header bg-success" style="--bs-bg-opacity: .6;">
-                    <div class="row content">
-                        <div class="col-3 col-form-label">Market</div>
-                        <div for="search_publication" class="col-3 col-form-label">publication</div>
-                        <div for="search_destination" class="col-3 col-form-label">destination</div>
-                        <div for="pc_count" class="col-3 col-form-label">Count</div>
-                    </div>
-                </div> -->
-
+                <div class="card-header bg-success fw-bold">
+                    Existing Forms
+                </div>
                 <div class="card-body bg-success" style="--bs-bg-opacity: .2;">
-            %%ROWS%%
+                    <div class="text-start nowrap col">
+
+                        %%ROWS%%
+                        <a href="%%BUTTON_URL%%" class="btn btn-success w-100" style="--bs-bg-opacity: .2;" tabindex="-1" role="button" aria-disabled="true">Done</a>
+
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
-
-<input type="hidden" name="form_number" value="%%NEXT_FORM_NUMBER%%">
-<input type="hidden" name="prev_form_number" value="%%PREV_FORM_NUMBER%%">
-
-<input type="hidden" name="job_id" value="%%JOB_ID%%">
-<input type="hidden" name="view" value="%%NEXT_VIEW%%">

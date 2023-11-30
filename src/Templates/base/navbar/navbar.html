@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm p-2 fs-4">
+    <div class="container-fluid">
+        <a href="#" class="logo d-flex align-items-center">
+            <span class="navbar-brand h1 fs-3 position-relative ps-4">
+                {#TITLE#}
+                {#__DEBUG_STR__#}
+            </span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mr-auto " style="width:10%;">
+            </ul>
+
+            <div class="auto_refresh text-danger"></div>
+            <ul class="navbar-nav me-auto w-auto">
+                {if="$update>$current"}
+                <li class="nav-item "><span class="nav-link text-warning">Update Available! {$update}</span></li>
+                {/if}
+            </ul>
+
+            <ul class="navbar-nav ml-auto fs-5">
+                {loop="$nav_bar_links"}
+                <li class="nav-item"><a class="nav-link" href="{#__URL_PATH__#}{$value}">{$key}</a></li>
+                {/loop}
+
+                <div class="dropdown">
+                    <button class="dropdown-toggle nav-link" type="button" id="imgdropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="caret drop-link">Settings</span>
+                    </button>
+
+                    <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="imgdropdown">
+                        {loop="$nav_bar_dropdown"}
+                        <li class="nav-item"><a class="dropdown-item " href="{#__URL_PATH__#}{$value}"><i class="fa fa-user pr-2">{$key}</i></a></li>
+                        {/loop}
+                        <li class="nav-item">
+                            <SPAN class="dropdown-item ">
+                                {if="$update>$current"}
+                                <i class="fa fa-user text-warning pr-2"> {$update} available</i>
+                                {else}
+                                {$current}
+                                {/if}
+                            </SPAN>
+                        </li>
+
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</nav>

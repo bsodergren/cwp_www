@@ -1,0 +1,102 @@
+{include="../header"}
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th class="fs-3">Media</th>
+        </tr>
+    </thead>
+    <tbody>
+        {autoescape="off"}
+        {loop="$jobArray"}
+        <tr class="fs-5">
+            <td>
+                {$value.FORM_HTML_START}
+
+                <div class="row" id="hide_{$value.JOB_ID}" onclick="return clickButton(this.id);">
+                    <div class="col text-nowrap">Job Number: <span id="job_number" name="jobNumber_{$value.JOB_ID}">{$value.TEXT_JOB}</span>
+                        <p id="p6"></p>
+                    </div>
+                    <div class="col text-nowrap text-md">
+                        <span class="text-white rounded-pill bg-success px-4" {$value.TEXT_CLOSE_URL}>{$value.TEXT_CLOSE}</span>
+                    </div>
+                    <div class="col text-end">{$value.NUM_OF_FORMS}</div>
+                </div>
+                <div class="{$value.HIDDEN_CLASS}" id="model_{$value.JOB_ID}">
+                    <div class="row mb-2">
+                        <div class="container btn-group btn-group-lg" role="group">
+                            {$value.FORM_BUTTONS_HTML}
+                        </div>
+                    </div>
+                </div>
+                {$value.FORM_CLOSE}
+            </td>
+        </tr>
+        {/loop}
+        {/autoescape}
+
+    </tbody>
+</table>
+<script type="text/javascript">
+
+    function createButton(id) {
+
+        console.log(id);
+        var divArr = id.split("_");
+        var action = divArr[0] + '_' + divArr[1];
+        var job_id = divArr[2];
+
+        console.log(action, job_id);
+        $.ajax({
+            type: "post",
+            url: "{#__PROCESS_FORM__#}",
+            data:
+            {
+                'submit': { 'create_xlsx': 'create xlsx' },
+                'job_id': job_id
+            },
+            cache: false,
+            success: function () {
+
+            }
+        });
+
+    }
+
+
+    function clickButton(id) {
+        console.log(id);
+        var divArr = id.split("_");
+
+        let row_id = "model_" + divArr[1];
+
+        var divClass = document.getElementById(row_id).className;
+        console.log(divClass);
+
+
+        if (divClass == "collapse") {
+            document.getElementById(row_id).className = "collapse.show";
+
+        } else {
+            document.getElementById(row_id).className = "collapse";
+        }
+
+        $.ajax({
+            type: "post",
+            url: "{#__PROCESS_FORM__#}",
+            data:
+            {
+                'divClass': divClass,
+                'row_id': row_id
+            },
+            cache: false,
+            success: function () {
+
+            }
+        });
+
+
+        return false;
+    }
+</script>
+{include="../footer"}

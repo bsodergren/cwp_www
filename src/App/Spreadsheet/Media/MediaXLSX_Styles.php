@@ -238,7 +238,6 @@ class MediaXLSX_Styles extends Styles
             $this->setRowHeights();
             $this->sheetCommon();
             $this->addFormText($form);
-
             foreach ($sheet_labels as $key => $val) {
                 if (str_contains($key, '_')) {
                     [$row,$col] = explode('_', $key);

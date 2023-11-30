@@ -15,7 +15,7 @@ MediaDevice::getHeader();
 if (isset($_REQUEST['job_id'])) {
     $zip_file = $media->zip_file;
     if ($mediaDir->exists($zip_file)) {
-        $template->render('mail/main', ['__FORM_URL__' => __URL_PATH__.'/process.php', 'JOB_ID' => $_REQUEST['job_id']]);
+        $template->render('mail/main', ['JOB_ID' => $_REQUEST['job_id']]);
     }
 } else {
     echo 'No Job ID';

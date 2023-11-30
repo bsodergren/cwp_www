@@ -45,7 +45,7 @@ class MediaAppUpdater
     public function currentVersion()
     {
         if (__DEBUG__ == true) {
-            $this->current = '1.2.3';
+            $this->current = '9.9.9';
         } else {
             $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
         }

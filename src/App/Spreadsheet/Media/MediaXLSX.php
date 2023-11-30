@@ -25,7 +25,7 @@ class MediaXLSX extends Media
     protected object $spreadsheet;
 
     public object $media;
-
+    private $inputFileName = 'D:\development\cwp_app\public\src\Configuration\template.xls';
     public $xlsx_array;
 
     public $box;
@@ -63,9 +63,10 @@ class MediaXLSX extends Media
             $data              = $dataArray['forms'];
             // $data           = $dataArray;
             $this->spreadsheet = new Spreadsheet();
+            // $this->spreadsheet  = \PhpOffice\PhpSpreadsheet\IOFactory::load($this->inputFileName);
 
             $slipSheet         = new SlipSheetXLSX($this->media);
-            //   $larrySheet = new LarrySheetsXLSX($this->media);
+            // $larrySheet = new LarrySheetsXLSX($this->media);
             $s_idx             = 0;
 
             $this->media->get_form_configuration($dataArray['details']);
@@ -93,7 +94,7 @@ class MediaXLSX extends Media
                                         while ($full_boxes > 0) {
                                             $sk++;
                                             $this->box['layers_last_box'] = $this->box['layers_per_skid'];
-                                            $this->box['skid_count']      = "$sk of ".$max_boxes + 1;
+                                            $this->box['skid_count']      = "$sk of " . $max_boxes + 1;
                                             $this->form_details['count']  = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box['lift_size'];
                                             $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
                                             $full_boxes--;
@@ -101,7 +102,7 @@ class MediaXLSX extends Media
                                         }
                                         // $s_idx=$s_idx+1;
                                         $sk++;
-                                        $this->box['skid_count']       = "$sk of ".$max_boxes + 1;
+                                        $this->box['skid_count']       = "$sk of " . $max_boxes + 1;
                                         $this->box['layers_last_box']  = $tmp_box['layers_last_box'];
                                         $this->box['lifts_last_layer'] = $tmp_box['lifts_last_layer'];
                                         $this->form_details['count']   = (($this->box['layers_last_box'] * $this->box['lifts_per_layer']) + $this->box['lifts_last_layer']) * $this->box['lift_size'];
@@ -115,7 +116,7 @@ class MediaXLSX extends Media
                     }
                 }
             }
-           $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
+            $slipSheet->createSlipSheet($this->spreadsheet, $form_number, $s_idx);
 
             // $larrySheet->createslipsheet($this->spreadsheet, $form_number, $s_idx);
 
@@ -128,8 +129,8 @@ class MediaXLSX extends Media
             $writer->xls_path  = $this->media->xlsx_directory;
             $new_xlsx_file     = $this->media->getfilename('xlsx', $form_number, true);
 
+            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing to ' . Media::$FileDriver . ' ' . $new_xlsx_file]);
             $writer->write($new_xlsx_file);
-            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing to '.Media::$FileDriver.' '.$new_xlsx_file]);
             $this->spreadsheet->disconnectWorksheets();
             unset($this->spreadsheet);
         }
@@ -173,15 +174,15 @@ class MediaXLSX extends Media
             }
         }
 
-        $worksheet_title      = $form_number.$form_letter.'_'.$delivery;
+        $worksheet_title      = $form_number . $form_letter . '_' . $delivery;
 
         $myWorkSheet          = new Worksheet($sheetObj, $worksheet_title);
 
         $sheetObj->addSheet($myWorkSheet, $sheet_index);
         $sheet                = $sheetObj->getSheet($sheet_index);
 
-        $sheet->getHeaderFooter()->setOddHeader('&36&B '.__LANG_MEDIA_LOAD_FLAG);
-        $sheet->getHeaderFooter()->setOddFooter('&L&B'.__LANG_MEDIA_LOAD_FLAG.'&RPage &P of &N');
+        $sheet->getHeaderFooter()->setOddHeader('&36&B ' . __LANG_MEDIA_LOAD_FLAG);
+        $sheet->getHeaderFooter()->setOddFooter('&L&B' . __LANG_MEDIA_LOAD_FLAG . '&RPage &P of &N');
 
         $form['job_number']   = $this->form_details['job_number'];
         $form['market']       = $this->form_details['market'];
@@ -194,7 +195,7 @@ class MediaXLSX extends Media
         $form['foot_trim']    = $foot_trim;
         $form['del_size']     = $del_size;
 
-        $form['page_conf']    = $this->media->form_configuration['configuration'].' '.$this->media->form_configuration['paper_wieght'].'#';
+        $form['page_conf']    = $this->media->form_configuration['configuration'] . ' ' . $this->media->form_configuration['paper_wieght'] . '#';
 
         $styles               = new MediaXLSX_Styles($sheet);
 
@@ -263,7 +264,7 @@ class MediaXLSX extends Media
             $$var = $value;
         }
 
-        $form['packaging'] = $packaging.' skid';
+        $form['packaging'] = $packaging . ' skid';
 
         if ($full_boxes > 0) {
             $this->sheet_labels['17_C'] = [$full_boxes, __LANG_NUMBER_OF_FULL_BOXES];

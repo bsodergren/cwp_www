@@ -11,7 +11,7 @@ use CWP\Utils\MediaDevice;
 
 class HTMLDocument
 {
-    public $nav_list_dir = 'list';
+    public $nav_list_dir = 'dropdown';
 
     public $template;
 

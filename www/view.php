@@ -17,7 +17,6 @@ if ('email' == $_REQUEST['action']) {
     define('TITLE', 'Email excel zip file');
     MediaDevice::getHeader();
     $template->render('view/mail_form', [
-        '__FORM_URL__' => __URL_PATH__.'/process.php',
         'FORM_NUMBER' => $_REQUEST['form_number'],
         'JOB_ID' => $_REQUEST['job_id']]);
     MediaDevice::getFooter();
@@ -169,7 +168,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             'SHEET_CLASS' => 'btn-info',
         ]);
         $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
-            'PAGE_FORM_URL' => __URL_PATH__.'/process.php?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=update',
+            'PAGE_FORM_URL' => __PROCESS_FORM__.'?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=update',
             'PAGE_FORM_NUMBER' => 'Update Excel Sheet',
             'SHEET_DISABLED' => 'enabled',
             'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',

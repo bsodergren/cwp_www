@@ -1,59 +1,65 @@
-<div class="card">
-    <div class="card-header bg-success"> Form %%FORM_NUMBER%% Details </div>
-    <div class="card-body bg-success" style="--bs-bg-opacity: .5;">
-        <div class="row content">
-            <label for="rowLetter" class="col-1 col-form-label">Letter</label>
-            <label for="search_market" class="col-3 col-form-label">Market</label>
-            <label for="search_publication" class="col-2 col-form-label">publication</label>
-            <label for="search_destination" class="col-2 col-form-label">destination</label>
-            <label for="pc_count" class="col-2 col-form-label">Count</label>
-        </div>
-<form action="/process.php" method="post">
-        <div class="row content">
+<div class="table table-success w-100  row d-flex aligns-items-center rounded mx-auto p-2 justify-content-center  bg-success">
+    <div class="col">
+        <form action="%%__PROCESS_FORM__%%" method="post" class="rounded">
+            %%HIDDEN_FIELDS%%
 
-            <input type="hidden" name="FORM_PROCESS" value="createJob">
-            <input type="hidden" name="action" value="addRow">
-                <input type="hidden" name="job_id" value="%%JOB_ID%%">
-                <input type="hidden" name="form_number" value="%%FORM_NUMBER%%">
-                <div class="col-1">
-                    <input type="text" name="letter" class="form-control" placeholder="Type Here..." id="rowLetter" />
-                </div>
-                <div class="col-3 dropdown autocomplete" >
-                    <input type="text" name="market" class="form-control" placeholder="Type Here..." id="search_market"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                         />
-                    <span id="market_result"></span>
-                </div>
-                <div class=" col-2  dropdown">
-                    <input type="text" name="publication" class="form-control" placeholder="Type Here..."
-                        id="search_publication" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
-                    <span id="publication_result"></span>
+            <div class="card w-100   bg-success" style="--bs-bg-opacity: .5;">
+                <div class="card-header bg-success  text-black fw-bold">
+                    Form %%FORM_NUMBER%% Details
+
                 </div>
 
-                <div class="col-2 dropdown">
-                    <input type="text" name="destination" class="form-control" placeholder="Type Here..."
-                        id="search_destination" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        />
-                    <span id="destination_result"></span>
-                </div>
 
-                <div class="col-2">
-                    <input type="text" name="count" class="form-control" placeholder="Type Here..." id="pc_count" />
-                </div>
-                <div class="col">
-                    <button type="submit" name="subButton" class="btn btn-primary">
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                <div class="card-body bg-success" style="--bs-bg-opacity: .5;">
+                    <!-- -->
+                    <div class="card-text bg-success rounded text-black fw-bold">
+                        <div class="row ">
+                            <label for="rowLetter" class="col-1 col-form-label mx-1">Letter</label>
+                            <label for="search_market" class="col-3 col-form-label mx-1">Market</label>
+                            <label for="search_publication" class="col-3 col-form-label mx-1">Publication</label>
+                            <label for="search_destination" class="col-2 col-form-label mx-1">Destination</label>
+                            <label for="pc_count" class="col-2 col-form-label mx-1">Count</label>
+                        </div>
 
-                            <path  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4">
-                            </path>
-                        </svg> -->
-                        Add
-                    </button>
-                </div>
 
-        </div></form>
+                        <div class="row ">
+                            <input type="hidden" name="FORM_PROCESS" value="createJob">
+                            <input type="hidden" name="action" value="addRow">
+                            <input type="hidden" name="job_id" value="%%JOB_ID%%">
+                            <input type="hidden" name="form_number" value="%%FORM_NUMBER%%">
+                            <div class="col-1">
+                                <input type="text" name="letter" class="form-control" id="rowLetter" />
+                            </div>
+                            <div class="col-3 dropdown autocomplete">
+                                <input type="text" name="market" class="form-control" id="search_market" data-toggle="dropdown" aria-haspopup="true" />
+                                <span id="market_result"></span>
+                            </div>
+                            <div class=" col-3  dropdown">
+                                <input type="text" name="publication" class="form-control" id="search_publication" data-toggle="dropdown" aria-haspopup="true" />
+                                <span id="publication_result"></span>
+                            </div>
+
+                            <div class="col-2 dropdown">
+                                <input type="text" name="destination" class="form-control" id="search_destination" data-toggle="dropdown" aria-haspopup="true" />
+                                <span id="destination_result"></span>
+                            </div>
+
+                            <div class="col-2">
+                                <input type="text" name="count" class="form-control" id="pc_count" />
+                            </div>
+                            <div class="col-1">
+                                <button type="submit" name="subButton" class="btn fw-bold bg-success"> Add </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+
 <script>
-   %%AUTOCOMPLETE_JS%%
+    %%AUTOCOMPLETE_JS%%
 </script>

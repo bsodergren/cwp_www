@@ -11,6 +11,8 @@ $debug_string = '';
 define('APP_NAME', Bootstrap::$CONFIG['application']['name']);
 define('APP_ORGANIZATION', 'cwp');
 define('APP_OWNER', 'bjorn');
+define('APP_DESCRIPTION', 'bjorn');
+
 
 list($__filename) = explode('?', $_SERVER['REQUEST_URI']);
 $__request_name = basename($__filename, '.php');
@@ -34,7 +36,9 @@ $nav_bar_links = [
 
 if (__DEBUG__ == 1) {
     define('__DEBUG_STR__', "<span class='fs-6 text-success'>Debug Enabled ".__DEVICE__.'</span>');
-    $nav_bar_links['Test'] = '/test.php';
+    $nav_bar_links['Settings']['Test'] = '/test.php';
+    $nav_bar_links['Settings']['Clean Databases'] = '/clean.php';
+
 }
 
 if (__USE_AUTHENTICATION__ == true) {
