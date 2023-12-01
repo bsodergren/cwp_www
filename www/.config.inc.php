@@ -104,11 +104,11 @@ $templateDir[] = Filesystem::platformSlashes($TemplateCommon);
 $templateDir[] = Filesystem::platformSlashes($TemplatePages);
 foreach($commonTemplates as $tempDir)
 {
-    $templateDir[] = Filesystem::platformSlashes($TemplateCommon . $tempDir);
+    $templateDir[] = Filesystem::platformSlashes($TemplateCommon . $tempDir).DIRECTORY_SEPARATOR;
 }
-$templateDir[] = Filesystem::platformSlashes($TemplatePages . basename($_SERVER['SCRIPT_FILENAME'], ".php"));
+$templateDir[] = Filesystem::platformSlashes($TemplatePages . basename($_SERVER['SCRIPT_FILENAME'], ".php").DIRECTORY_SEPARATOR);
 
-Tpl::configure(["tpl_dir" => $templateDir,"cache_dir" => __CACHE_DIR__]);
+Tpl::configure(["tpl_dir" => $templateDir,"cache_dir" => __CACHE_DIR__,"debug"=>true]);
 //Tpl::registerPlugin( new PathReplace );
 
 $tpl_nabar_links = $nav_bar_links;
