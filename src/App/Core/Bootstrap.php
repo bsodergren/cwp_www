@@ -36,7 +36,8 @@ class Bootstrap
         $this->define('__URL_PATH__', $this->getURL());
         $this->define('__HOME__', $this->homeDir());
         $this->directory(__ERROR_LOG_DIRECTORY__);
-        $this->directory(__CACHE_DIR__);
+        $this->directory(__STASH_DIR__);
+
         MediaLogger::log("__HOME__",__HOME__);
 
 

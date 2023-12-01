@@ -6,11 +6,12 @@
 require_once '.config.inc.php';
 
 use CWP\Core\MediaError;
-use CWP\Filesystem\MediaFinder;
 use CWP\HTML\HTMLDisplay;
-use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+use CWP\Template\Pages\View;
+use CWP\Filesystem\MediaFinder;
+use CWP\Spreadsheet\XLSXViewer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if ('email' == $_REQUEST['action']) {
@@ -22,10 +23,11 @@ if ('email' == $_REQUEST['action']) {
     MediaDevice::getFooter();
     exit;
 }
-$finder = new MediaFinder($media);
 
 define('TITLE', 'View Form');
 
+
+$finder = new MediaFinder($media);
 if (true == $finder->dirExists($media->xlsx_directory)) {
     $form_number = '';
     $file_id = '';
@@ -53,7 +55,6 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
     // }
 
     $idx = 0;
-    $params['FORM_LIST_HTML'] = '';
     $params['EXCEL_DIRECTORY'] = $media->xlsx_directory;
     $excel_link = '';
 
@@ -78,24 +79,16 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
 
             $url_link = HTMLDisplay::draw_excelLink($file);
             if (false != $url_link) {
-                $params['EXCEL_LINK'] = Template::GetHTML('/view/sheet_link', [
-                    'PAGE_FORM_URL' => $url_link,
-                    'PAGE_FORM_NUMBER' => basename($file),
-                    'SHEET_DISABLED' => 'enabled',
-                    'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',
-                    'SHEET_CLASS' => 'btn-info',
-                ]);
+                $params['EXCEL_LINK'] = View::SheetLink( basename($file), $url_link, 'btn-info', '--bs-bg-opacity: .5;', 'enabled');
             }
         }
 
-        $page_form_html .= template::GetHTML('/view/form_link', [
-            'PAGE_FORM_URL' => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&file_id='.$idx,
-            'PAGE_FORM_NUMBER' => 'FM '.$text_number,
-            'FORM_DISABLED' => $class,
-        ]);
+        $page_form_html .= View::FormButton('FM ' . $text_number,
+         __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&file_id=' . $idx,
+         $class);
 
         if (0 == $idx % 9 && $idx > 0) {
-            $params['FORM_LIST_HTML'] .= template::GetHTML('/view/form_list', ['FORM_LINKS_HTML' => $page_form_html]);
+            $params['FORM_LIST_HTML'] .= View::FormButtonList( $page_form_html);
             $page_form_html = '';
         }
         ++$idx;
@@ -105,122 +98,33 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         XLSXViewer::checkifexist($media);
     }
     if ('' != $page_form_html) {
-        $params['FORM_LIST_HTML'] .= template::GetHTML('/view/form_list', ['FORM_LINKS_HTML' => $page_form_html]);
+        $params['FORM_LIST_HTML'] .= View::FormButtonList( $page_form_html);
     }
 
     if ('' != $file_id) {
-        $reader = IOFactory::createReader('Xlsx');
 
         $excel_file = $finder->getFile($files[$file_id]);
-        $spreadsheet = $reader->load($excel_file);
-        $sheet_names = $spreadsheet->getSheetNames();
+        $viewer = new XLSXViewer($excel_file, $file_id);
+        $viewer->media = $media;
 
-        $params['SHEET_LIST_HTML'] = '';
-        foreach ($sheet_names as $sheet_index => $sheet_name) {
-            if ('Quick Sheet' == $sheet_name) {
-                $quicksheet_index = $sheet_index;
-                $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
-                    'PAGE_FORM_URL' => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&file_id='.$file_id.'&sheet_id='.$sheet_index.'&quicksheet=1',
-                    'PAGE_FORM_NUMBER' => 'quicksheet',
-                    'SHEET_DISABLED' => 'enabled',
-                    'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',
+        $viewer->buildPage();
+        $params = array_merge($params,$viewer->params);
 
-                    'SHEET_CLASS' => 'btn-info',
-                ]);
-                continue;
-            }
 
-            $class = 'enabled';
-            if ($sheet_id == $sheet_index) {
-                $class = 'disabled';
-            }
+        $name[] =  "Edit Form";
+        $name[] = 'Update Excel Sheet';
+        $name[] = 'Email Updated Excel Sheet';
 
-            [$name,$_] = explode(' ', $sheet_name);
-            [$sheetName,$former] = explode('_', $name);
-            if (!isset($last)) {
-                $last = '';
-            }
 
-            $cellValue = ucwords(strtolower($spreadsheet->getSheet($sheet_index)->getCellByColumnAndRow(2, 8)->getValue()));
+        $url[] = __URL_PATH__ . '/form.php?job_id=' . $media->job_id . '&form_number=' . $current_form_number;
+        $url[] = __PROCESS_FORM__ . '?job_id=' . $media->job_id . '&form_number=' . $current_form_number . '&action=update';
+        $url[] = __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&form_number=' . $current_form_number . '&action=email';
 
-            $sheet_form_array[$former][] = template::GetHTML('/view/sheet_link', [
-                'PAGE_FORM_URL' => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&file_id='.$file_id.'&sheet_id='.$sheet_index,
-                'PAGE_FORM_NUMBER' => $sheetName.' '.$cellValue,
-                'SHEET_DISABLED' => $class,
-                'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',
-                'SHEET_CLASS' => 'bg-success',
-            ]);
-        }
 
-        foreach ($sheet_form_array as $former => $buttons) {
-            $button[0] = template::GetHTML('/view/former_button', ['FORMER_DESC' => $former]);
-            $buttons = array_merge($button, $buttons);
-            $sheet_links_html = implode("\n", $buttons);
-            $params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_links_html]);
-        }
+        $params['SHEET_LINKS'] =  View::SheetLink($name, $url,  'btn-warning', '--bs-bg-opacity: .5;', 'enabled');
 
-        $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
-            'PAGE_FORM_URL' => __URL_PATH__.'/form.php?job_id='.$media->job_id.'&form_number='.$current_form_number,
-            'PAGE_FORM_NUMBER' => 'Edit Form',
-            'SHEET_DISABLED' => 'enabled',
-            'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',
+        //$params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
 
-            'SHEET_CLASS' => 'btn-info',
-        ]);
-        $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
-            'PAGE_FORM_URL' => __PROCESS_FORM__.'?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=update',
-            'PAGE_FORM_NUMBER' => 'Update Excel Sheet',
-            'SHEET_DISABLED' => 'enabled',
-            'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',
-
-            'SHEET_CLASS' => 'btn-info',
-        ]);
-        if (__SHOW_MAIL__ == true) {
-            $params['SHEET_LINKS'] .= template::GetHTML('/view/sheet_link', [
-                'PAGE_FORM_URL' => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=email',
-                'PAGE_FORM_NUMBER' => 'Email Updated Excel Sheet',
-                'SHEET_DISABLED' => 'enabled',
-                'BUTTON_STYLE' => 'style="--bs-bg-opacity: .5;"',
-
-                'SHEET_CLASS' => 'btn-info',
-            ]);
-        }
-        $params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
-
-        $writer = IOFactory::createWriter($spreadsheet, 'Html');
-
-        $writer->setSheetIndex($sheet_id);
-        $custom_css = $writer->generateStyles(true);
-
-        $rep_array = [
-            '{border: 1px solid black;}' => '{border: 0px dashed red;}',
-            'font-size:11pt;' => '',
-            'font-size:11pt' => '',
-            ' height:5pt' => ' height:0pt',
-            ' height:25pt' => ' height:20pt',
-            ' height:30pt' => ' height:25pt',
-            ' height:35pt' => ' height:30pt',
-            'tr { height:15pt }' => 'tr { height:0pt }',
-            // 'page-break-before: always;' => 'display: none; page-break-before: always; page-break-after: auto;',
-            // 'page-break-after: always;' => 'page-break-after: auto;',
-            // '@media screen {' => '@media screen {'."\n".'.header { display: none; }',
-            // '@media print {' => '@media print {'."\n".'.header {  }
-            // ',
-        ];
-
-        if ($quicksheet_index != $sheet_id) {
-            $rep_array['page-break-before: always;'] = 'display: none; page-break-before: always; page-break-after: auto;';
-            $rep_array['page-break-after: always;'] = 'page-break-after: auto;';
-            $rep_array['@media screen {'] = '@media screen {'."\n".'.header { display: none; }';
-            $rep_array['@media print {'] = '@media print {'."\n".'.header {  }
-    ';
-        }
-
-        foreach ($rep_array as $find => $replace) {
-            $custom_css = str_replace($find, $replace, $custom_css);
-        }
-
-        $message = $writer->generateSheetData();
         /*
             $rep_array                 = [
                 // "page: page0'>" => "page: page0' class='scrpgbrk'>",
@@ -237,15 +141,13 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             $header = "<thead class='media: header'><tr><th colspan='4' class='text-center fs-1'>Media Load Flag</th></tr></thead> <tbody>";
         }
 
-        $params['MESSAGE'] = $message;
+        $params['MESSAGE'] = $viewer->getExcelPage();
     }
 
-    MediaDevice::getHeader('', ['CUSTOM_CSS' => $custom_css]);
+    $TplTemplate->assign('custom_css', $viewer->custom_css);
+    $TplTemplate->assign('Array', $params);
+    $TplTemplate->draw('body');
 
-    $template->template('view/main', $params);
-    $template->render();
-
-    MediaDevice::getFooter();
 } else {
     MediaError::msg('warning', 'Excel files are not found, try deleting and recreating');
 

@@ -38,6 +38,8 @@ class Media
     public static $Google = false;
     public static $FileDriver;
     public static $Stash;
+    public static $Obj;
+    public static $Tpl;
 
 
 
@@ -529,7 +531,6 @@ class Media
     {
         //  $config = $form_array['details']['config'];
         $forms = $form_array['forms'];
-
         foreach ($forms as $letter => $row) {
             foreach ($row as $individual_part) {
                 $individual_part['job_id'] = $this->job_id;
@@ -542,6 +543,7 @@ class Media
 
             }
         }
+
         Creator::ImportJobDataFromPDF($destination, 'job_destination');
         Creator::ImportJobDataFromPDF($publications, 'job_publication');
         Creator::ImportJobDataFromPDF($market, 'job_market');

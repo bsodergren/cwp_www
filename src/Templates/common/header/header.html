@@ -10,6 +10,11 @@
         <title>{#APP_NAME#} | {#TITLE#}</title>
 
         {include="bootstrap_5"}
+
+        {if="!empty($custom_css)"}
+        {include="css"}
+        {/if}
+
     </head>
 
     <body>

@@ -140,7 +140,7 @@ foreach ($results as $k => $row) {
 
 
     $TplTemplate->assign('jobArray',$jobArray);
-    $TplTemplate->draw('index');
+    $TplTemplate->draw('body');
 
     // */
 

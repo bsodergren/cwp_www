@@ -9,6 +9,7 @@ use CWP\Core\Media;
 use Tracy\Debugger;
 use Nette\Utils\FileSystem;
 use CWP\Core\MediaStopWatch;
+use Rain\Tpl\Plugin\PathReplace;
 
 define('__PROJECT_ROOT__', dirname(__FILE__, 3));
 define('__PUBLIC_ROOT__', dirname(__FILE__, 2));
@@ -116,15 +117,15 @@ foreach ($commonTemplates as $key => $dirs) {
 
 }
 
-
-Tpl::configure(['tpl_dir' => $templateDir, 'cache_dir' => __CACHE_DIR__ . DIRECTORY_SEPARATOR, 'debug' => __DEBUG__]);
-//Tpl::registerPlugin( new PathReplace );
+Tpl::configure([
+    'tpl_dir' => $templateDir, 'cache_dir' => __TPL_CACHE_DIR__ ,'auto_escape'=>false, 'debug' => __DEBUG__]);
 
 $tpl_nabar_links = $nav_bar_links;
 $Tplnav_bar_dropdown = $tpl_nabar_links['Settings'];
 unset($tpl_nabar_links['Settings']);
 
 $TplTemplate = new Tpl();
+Media::$Tpl = $TplTemplate;
 
 $TplTemplate->assign('nav_bar_links', $tpl_nabar_links);
 $TplTemplate->assign('nav_bar_dropdown', $Tplnav_bar_dropdown);

@@ -209,7 +209,6 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
         $start = '';
         $end = '';
         $row_template = new Template();
-
         foreach ($array as $part) {
             if ('' == $start) {
                 $start = $part['id'];
