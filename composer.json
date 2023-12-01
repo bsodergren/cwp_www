@@ -41,7 +41,7 @@
         "symfony/finder": "^6.3",
         "phlak/stash": "^7.0",
         "symfony/stopwatch": "^6.3",
-        "rain/raintpl": "^3.1"
+        "bsodergren/raintpl": "dev-master"
 
 
     }

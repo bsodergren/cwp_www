@@ -10,7 +10,6 @@ use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
 
 
-
 require_once '.config.inc.php';
 
 define('__AUTH__', true);
@@ -20,7 +19,6 @@ $table = $explorer->table('media_job');
 $results = $table->fetchAssoc('job_id');
 $cnt = $table->count('*');
 
-/*
 foreach ($results as $k => $row) {
     $customJob = false;
     unset($replacement);
@@ -142,9 +140,11 @@ foreach ($results as $k => $row) {
 
 
     $TplTemplate->assign('jobArray',$jobArray);
-    $TplTemplate->draw('index/index');
-*/
+    $TplTemplate->draw('index');
 
+    // */
+
+/*
 
 
 MediaStopWatch::Lap("index page");
@@ -287,4 +287,4 @@ if ($cnt > 0) {
 }
 
 MediaDevice::getFooter();
-//  */
+// */

@@ -94,15 +94,21 @@ if (!defined("PROCESS")) {
     }
 }
 
+$TemplateSrc = explode(DIRECTORY_SEPARATOR,__CWP_SOURCE__);
+$TemplateSrc[] = "Templates";
+$commonTemplates = ['footer','navbar','header'];
+$TemplateCommon = implode(DIRECTORY_SEPARATOR,array_merge($TemplateSrc,['common'])).DIRECTORY_SEPARATOR;
+$TemplatePages = implode(DIRECTORY_SEPARATOR,array_merge($TemplateSrc,['pages'])).DIRECTORY_SEPARATOR;
 
-$templateDir[] = Filesystem::platformSlashes(__CWP_SOURCE__ . "/Templates");
-$templateDir[] = Filesystem::platformSlashes(__CWP_SOURCE__ . "/Templates/base");
-$templateDir[] = Filesystem::platformSlashes(__CWP_SOURCE__ . "/Templates/base/header");
-$templateDir[] = Filesystem::platformSlashes(__CWP_SOURCE__ . "/Templates/base/footer");
-$templateDir[] = Filesystem::platformSlashes(__CWP_SOURCE__ . "/Templates/base/navbar");
-// $templateDir[] = Filesystem::platformSlashes(__CWP_SOURCE__."/Templates/test");
+$templateDir[] = Filesystem::platformSlashes($TemplateCommon);
+$templateDir[] = Filesystem::platformSlashes($TemplatePages);
+foreach($commonTemplates as $tempDir)
+{
+    $templateDir[] = Filesystem::platformSlashes($TemplateCommon . $tempDir);
+}
+$templateDir[] = Filesystem::platformSlashes($TemplatePages . basename($_SERVER['SCRIPT_FILENAME'], ".php"));
 
-\Rain\Tpl::configure([ "base_url"	=> null,"tpl_dir"=> $templateDir,"cache_dir"=> __CACHE_DIR__]);
+Tpl::configure(["tpl_dir" => $templateDir,"cache_dir" => __CACHE_DIR__]);
 //Tpl::registerPlugin( new PathReplace );
 
 $tpl_nabar_links = $nav_bar_links;
@@ -116,7 +122,6 @@ $TplTemplate->assign('nav_bar_dropdown', $Tplnav_bar_dropdown);
 $TplTemplate->assign('current', Media::$CurrentVersion);
 $TplTemplate->assign('update', Media::$VersionUpdate);
 
-if (\array_key_exists('msg', $GLOBALS['_REQUEST']))
-{
+if (\array_key_exists('msg', $GLOBALS['_REQUEST'])) {
     $TplTemplate->assign('return_msg', $GLOBALS['_REQUEST']['msg']);
 }
