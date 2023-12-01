@@ -94,21 +94,30 @@ if (!defined("PROCESS")) {
     }
 }
 
-$TemplateSrc = explode(DIRECTORY_SEPARATOR,__CWP_SOURCE__);
-$TemplateSrc[] = "Templates";
-$commonTemplates = ['footer','navbar','header'];
-$TemplateCommon = implode(DIRECTORY_SEPARATOR,array_merge($TemplateSrc,['common'])).DIRECTORY_SEPARATOR;
-$TemplatePages = implode(DIRECTORY_SEPARATOR,array_merge($TemplateSrc,['pages'])).DIRECTORY_SEPARATOR;
+$TemplateSrc = explode(\DIRECTORY_SEPARATOR, __CWP_SOURCE__);
+$commonTemplates = [
+    'Templates' => [
+        'common' => [
+            'footer', 'navbar', 'header'
+        ],
+        'pages' => [
+            basename($_SERVER['SCRIPT_FILENAME'], '.php')
+        ],
+    ]
+];
 
-$templateDir[] = Filesystem::platformSlashes($TemplateCommon);
-$templateDir[] = Filesystem::platformSlashes($TemplatePages);
-foreach($commonTemplates as $tempDir)
-{
-    $templateDir[] = Filesystem::platformSlashes($TemplateCommon . $tempDir).DIRECTORY_SEPARATOR;
+foreach ($commonTemplates as $key => $dirs) {
+    foreach($dirs as $keypath => $paths) {
+        foreach($paths as $path) {
+            $templatePath = array_merge($TemplateSrc, [$key,$keypath,$path]);
+            $templateDir[] = implode(DIRECTORY_SEPARATOR, $templatePath) . DIRECTORY_SEPARATOR;
+        }
+    }
+
 }
-$templateDir[] = Filesystem::platformSlashes($TemplatePages . basename($_SERVER['SCRIPT_FILENAME'], ".php").DIRECTORY_SEPARATOR);
 
-Tpl::configure(["tpl_dir" => $templateDir,"cache_dir" => __CACHE_DIR__,"debug"=>true]);
+
+Tpl::configure(['tpl_dir' => $templateDir, 'cache_dir' => __CACHE_DIR__ . DIRECTORY_SEPARATOR, 'debug' => __DEBUG__]);
 //Tpl::registerPlugin( new PathReplace );
 
 $tpl_nabar_links = $nav_bar_links;

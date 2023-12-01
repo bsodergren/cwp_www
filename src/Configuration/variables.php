@@ -39,6 +39,8 @@ if (__DEBUG__ == 1) {
     $nav_bar_links['Settings']['Test'] = '/test.php';
     $nav_bar_links['Settings']['Clean Databases'] = '/clean.php';
 
+}else {
+    define('__DEBUG_STR__', false);
 }
 
 if (__USE_AUTHENTICATION__ == true) {
