@@ -20,6 +20,7 @@ $table = $explorer->table('media_job');
 $results = $table->fetchAssoc('job_id');
 $cnt = $table->count('*');
 
+/*
 foreach ($results as $k => $row) {
     $customJob = false;
     unset($replacement);
@@ -142,10 +143,7 @@ foreach ($results as $k => $row) {
 
     $TplTemplate->assign('jobArray',$jobArray);
     $TplTemplate->draw('index/index');
-
-
-    /*
-
+*/
 
 
 
@@ -289,4 +287,4 @@ if ($cnt > 0) {
 }
 
 MediaDevice::getFooter();
-*/
+//  */
