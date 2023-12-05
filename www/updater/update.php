@@ -18,6 +18,9 @@ echo HTMLDisplay::ProgressBar('start');
 $timeout = 20;
 
 if (null === Media::$VersionUpdate) {
+    $latest = Media::$MediaAppUpdater->getLastest();
+
+    HTMLDisplay::put('Checking for latest update '.$latest, 'Blue');
     HTMLDisplay::put('Checking for Composer Updates', 'Red');
     Media::$MediaAppUpdater->composerUpdate();
 } else {

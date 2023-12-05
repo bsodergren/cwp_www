@@ -54,6 +54,7 @@ class MediaAppUpdater
     public function getLastest()
     {
         $this->latest = trim($this->get_content(self::GIT_VERSION));
+        return $this->latest;
     }
 
     public function isUpdate()
