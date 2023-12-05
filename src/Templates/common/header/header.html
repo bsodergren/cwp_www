@@ -24,8 +24,8 @@
 
     <body>
 	{if="$UseNavbar"}
-        {include="navbar"}
-		{/if}
+    {include="$navbarTemplate"}
+    {/if}
         <main role="main" class="container mt-1">
 
             {if="!empty($return_msg)"}

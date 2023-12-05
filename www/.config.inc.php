@@ -123,6 +123,9 @@ unset($tpl_nabar_links['Settings']);
 
 $TplTemplate = new Tpl();
 Media::$Tpl = $TplTemplate;
+$TplTemplate->assign('headerTemplate','../../common/header/header');
+$TplTemplate->assign('footerTemplate','../../common/footer/footer');
+$TplTemplate->assign('navbarTemplate','../../common/navbar/navbar');
 $TplTemplate->assign('UseNavbar', MediaDevice::$NAVBAR );
 $TplTemplate->assign('nav_bar_links', $tpl_nabar_links);
 $TplTemplate->assign('nav_bar_dropdown', $Tplnav_bar_dropdown);
