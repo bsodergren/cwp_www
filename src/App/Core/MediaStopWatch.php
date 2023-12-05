@@ -13,9 +13,9 @@ class MediaStopWatch
     public static $clock = false;
     public static $DisplayEvent = '';
 
-    public static $display = true;
+    public static $display = false;
 
-    public static $writeNow = false;
+    public static $writeNow = true;
 
     private static $stopwatch;
 
@@ -24,6 +24,8 @@ class MediaStopWatch
     private static $watchArray = [];
 
     private static $stopWatchName = __SCRIPT_NAME__;
+
+
 
     public static function varexport($expression, $return = false)
     {
@@ -54,26 +56,24 @@ class MediaStopWatch
 
     }
 
-    public static function display($event)
-    {
-        self::$DisplayEvent = $event;
-    }
-
     public static function init()
     {
 
-        $file = self::$timerLog;
-        //$string = MediaLogger::get_caller_info();
-        $string = '-----------------------'.__SCRIPT_NAME__.'-------------------------------------' . PHP_EOL;
-        file_put_contents($file, $string, FILE_APPEND);
-        self::$stopwatch = new StopWatch();
-        self::start();
+        if(!is_object(self::$stopwatch)) {
+            $file = self::$timerLog;
+            //$string = MediaLogger::get_caller_info();
+            $string = '-----------------------' . __SCRIPT_NAME__ . '-------------------------------------' . PHP_EOL;
+            file_put_contents($file, $string, FILE_APPEND);
+            self::$stopwatch = new StopWatch();
+            self::start();
+        }
     }
 
 
     public static function start($event = null)
     {
-        self::getName($event);
+        $event = self::getName($event);
+        self::$stopwatch->start($event);
     }
 
     public static function dump($text = '', $var = '', $event = null)
@@ -90,18 +90,12 @@ class MediaStopWatch
         $var = preg_replace('/(\s{1,})/m', ' ', var_export($var, 1));
         $cmd = MediaLogger::CallingFunctionName();
         //                $var = self::varexport($var,true);
-        if($event == self::$DisplayEvent) {
-            HTMLDisplay::pushhtml('stream/stopwatch/file_msg',['CLOCK' => self::$clock,
-            'CMD' => $cmd,
-            'TEXT' => $text,
-            'VAR' => $var]);
 
-        } else {
-        self::log([0 => [$indent . self::$clock,
+        self::log([$indent . self::$clock,
         $cmd,
         $text,
-        $var]]);
-        }
+        $var ]);
+
 
     }
 
@@ -122,16 +116,16 @@ class MediaStopWatch
     {
         $event = self::getName($event);
         self::$stopwatch->lap($event);
-
         self::dump($text, $var, $event);
     }
 
     public static function log($array)
     {
         if (true === self::$writeNow) {
-            self::writeLog($array);
+
+            self::writeLog([0 => $array]);
         } else {
-            self::$watchArray[] = $array[0];
+            self::$watchArray[] = $array;
         }
 
     }
@@ -142,7 +136,6 @@ class MediaStopWatch
         $maxtxtLen = 0;
         $maxTimeLen = 0;
         $maxCmdLen = 0;
-
         if(count($array) > 0) {
             foreach ($array as $n => $row) {
 
@@ -182,8 +175,7 @@ class MediaStopWatch
 
     public static function flushLogs()
     {
-        if (false === self::$writeNow)
-        {
+        if (false === self::$writeNow) {
             self::writeLog(self::$watchArray);
         }
     }

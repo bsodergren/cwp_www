@@ -14,6 +14,7 @@ use Smalot\PdfParser\Parser;
 class PDFImport extends MediaImport
 {
     public $form = [];
+    public $PageDetails = [];
 
     public $job_id;
 
@@ -30,7 +31,7 @@ class PDFImport extends MediaImport
             return 2;
         }
         $noPagess     = \count($pdf);
-        HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing '.$noPagess.' forms']);
+        HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing ' . $noPagess . ' forms']);
 
         $keyidx       = array_key_first($pdf);
         Media::$explorer->table('media_job')->where(
@@ -41,7 +42,7 @@ class PDFImport extends MediaImport
         ]);
 
         foreach ($pdf as $form_number => $form_info) {
-            HTMLDisplay::pushhtml('stream/import/file_msg', ['TEXT' => 'Importing form '.$form_number]);
+            HTMLDisplay::pushhtml('stream/import/file_msg', ['TEXT' => 'Importing form ' . $form_number]);
             $this->add_form_details($form_info['details']);
             $this->add_form_data($form_number, $form_info);
         }
@@ -69,7 +70,6 @@ class PDFImport extends MediaImport
     public function reImport($pdf_uploaded_file = '', $job_number = 110011, $update_form = '')
     {
         $this->job_id = Media::getJobNumber($pdf_uploaded_file, $job_number);
-
         if (null === $this->job_id) {
             return 0;
         }
@@ -113,197 +113,135 @@ class PDFImport extends MediaImport
             $page_text[$n] = trim($row[1]);
         }
 
+
         return $page_text;
     }
 
     public function parse_page($page_text)
     {
-        $page_count  = \count($page_text);
-        $form_number = $this->find_key('run#', $page_text);
-        $config_type = $this->find_key('config', $page_text);
 
+        $page_text = $this->getFormDetails($page_text);
+
+        $form_number = $this->PageDetails['form'];
+        $config_type = $this->PageDetails['config'];
         if (isset($config_type) && 'sheeter' == $config_type) {
             return;
         }
 
+
         if (isset($form_number)) {
             $this->form[$form_number]['details']['config']      = $config_type;
-            $this->form[$form_number]['details']['bind']        = $this->find_key('bind', $page_text);
+            $this->form[$form_number]['details']['bind']        = $this->PageDetails['bind'];
 
-            $this->form[$form_number]['details']['count']       = Utils::toint($this->find_key('count', $page_text));
+            $this->form[$form_number]['details']['count']       = $this->PageDetails['count'];
 
-            $this->form[$form_number]['details']['product']     = $this->find_key('production', $page_text);
+            $this->form[$form_number]['details']['product']     = $this->PageDetails['production'];
             $this->form[$form_number]['details']['job_id']      = $this->job_id;
             $this->form[$form_number]['details']['form_number'] = $form_number;
 
-            for ($idx = 0; $idx <= $page_count; $idx++) {
-                if (! isset($res)) {
-                    $res         = $this->find_first($form_number, $idx, $page_text);
-                    $current_key = key($res);
+            $page_text = array_values($page_text);
+            $page_count  = \count($page_text);
+            $pageStr = implode("|", $page_text);
+            $page_Array = explode("#" . $form_number, $pageStr);
+            unset($page_Array[0]);
+            rsort($page_Array);
+            unset($prevLetter);
+            foreach($page_Array as $i => $pageStr) {
+                $pageArr = explode("|", $pageStr);
 
-                    $idx         = $res[$current_key]['start'];
-                } else {
-                    $res2                = $this->find_end($form_number, $res, $page_text);
+                $currentLtr =  str_replace(",","",$pageArr[0]);
+                $currentLtr =  str_replace(")","",$currentLtr);
 
-                    $form_number_array[] = $res2;
-                    $r_letter            = key($res2);
-                    $idx                 = $res2[$r_letter]['stop'] + 1;
-                    unset($res);
+                array_shift($pageArr);
+
+                if(isset($prevLetter)) {
+                    $key = array_search($prevLetter, $pageArr, true);
+                    $pageArr = array_slice($pageArr, 0, $key);
                 }
+                $pageArray[$currentLtr] = $pageArr;
+                $prevLetter = $currentLtr;
+
             }
+            ksort($pageArray);
 
-            foreach ($form_number_array as $_ => $letter_array) {
-                $letter             = key($letter_array);
-
-                $start              = $letter_array[$letter]['start'];
-                $stop               = $letter_array[$letter]['stop'];
-                $form_rows[$letter] = $this->row_data($start, $stop, $page_text);
+            foreach ($pageArray as $letter => $letter_array) {
+                $form_rows[$letter] = $this->rowDdata($letter_array);
             }
             $this->form[$form_number]['forms']                  = $form_rows;
         }
     }
 
-    public function find_key($needle, $haystack, $value = '', $strict = false)
+    public function getFormDetails($page_text)
     {
-        if ('' == $value) {
-            $value = strtolower($needle);
-        }
-
-        foreach ($haystack as $k => $item) {
-            if (true == $strict) {
-                $item = trim(str_replace(',', '', $item));
-                if ('letter' == $value) {
-
-                    preg_match('/^[ABCD,]+\b/', $item, $matches);
-                    if (\count($matches) > 0) {
-
-                        if ($matches[0] == trim($needle)) {
-                            $search = true;
-                        } else {
-                            $search = false;
-                        }
-                    } else {
-                        $search = false;
-                    }
-                } else {
-                    $search = str_starts_with(strtolower($item), strtolower($needle));
-                }
-            } else {
-                $search = strpos(strtolower($item), strtolower($needle));
+        $this->PageDetails = [];
+        foreach ($page_text as $k => $line) {
+            unset($page_text[$k]);
+            if(str_contains(strtolower($line), strtolower('production'))) {
+                $printer_peices = explode(':', $line);
+                $this->PageDetails['production'] = trim(str_replace('PRINTER', '', $printer_peices[1]));
+                continue;
             }
 
-            if (false !== $search) {
-                switch ($value) {
-                    case 'run#':
-                        $form_peices    = explode('Run#', $item);
+            if(str_contains(strtolower($line), strtolower('run#'))) {
+                $form_peices    = explode('Run#', $line);
+                $this->PageDetails['form'] = trim($form_peices[1]);
+                continue;
+            }
 
-                        return trim($form_peices[1]);
 
-                    case 'production':
-                        $printer_peices = explode(':', $item);
+            if(str_contains(strtolower($line), strtolower('count'))) {
+                $peices         = explode(':', $line);
+                $this->PageDetails['count'] = Utils::toint(trim($peices[1]));
+                continue;
+            }
 
-                        return trim(str_replace('PRINTER', '', $printer_peices[1]));
+            if(str_contains(strtolower($line), strtolower('bind'))) {
+                $peices         = explode(':', $line);
+                $type           = str_replace(' ', '', $peices[1]);
 
-                    case 'count':
-                        $peices         = explode(':', $item);
-
-                        return Utils::toint(trim($peices[1]));
-
-                    case 'config':
-                        $peices         = explode(':', $item);
-                        $type           = str_replace(' ', '', $peices[1]);
-                        $type           = $this->getPageCount($type);
-
-                        return trim($type);
-
-                    case 'bind':
-                        $peices         = explode(':', $item);
-                        $type           = str_replace(' ', '', $peices[1]);
-
-                        return trim($type);
-
-                    case 'letter':
-                        return $k;
-
-                    case 'key':
-                        return $k;
-                }
-                break;
+                $this->PageDetails['bind'] = trim($type);
+                continue;
+            }
+            if(str_contains(strtolower($line), strtolower('config'))) {
+                $peices         = explode(':', $line);
+                $type           = str_replace(' ', '', $peices[1]);
+                $type           = $this->getPageCount($type);
+                $this->PageDetails['config'] = trim($type);
+                return $page_text;
             }
         }
     }
 
-    public function find_first($form_number, $start, $array)
-    {
-        $result    = [];
-        $row_count = \count($array);
-        $array     = \array_slice($array, $start, $row_count, true);
 
-        $key       = $this->find_key('#'.$form_number, $array, 'key');
-
-
-        if ($key) {
-            $peices = explode('#'.$form_number, $array[$key]);
-            $letter = str_replace(',', '', $peices[1]);
-            $letter = preg_replace('/([ABCD]+).*/', '$1', $letter);
-            $result = [$letter => ['start' => $key + 1]];
-
-            return $result;
-        }
-    }
-
-    public function find_end($form_number, $start_array, $array)
-    {
-        $result                       = [];
-
-        $row_count                    = \count($array);
-        $letter                       = key($start_array);
-
-        $start_array[$letter]['stop'] = $row_count - 1;
-        $start                        = $start_array[$letter]['start'] + 1;
-        $array                        = \array_slice($array, $start, $row_count, true);
-
-        $key                          = $this->find_key('#'.$form_number, $array, 'key');
-
-        if (null != $key) {
-            $peices   = explode('#'.$form_number, $array[$key]);
-            $t_letter = str_replace(',', '', $peices[1]);
-            if (null != $t_letter) {
-                $stop_key                     = $this->find_key($t_letter, $array, 'letter', true);
-                $start_array[$letter]['stop'] = $stop_key - 1;
-            }
-        }
-
-        return $start_array;
-    }
-
-    public function row_data($start, $stop, $page_text)
+    public function rowDdata($form_row)
     {
         $tip = ' ';
-        if (((($stop + 1) - $start) % 4) == 0) {
+
+        $rowCount = count($form_row);
+        if (($rowCount % 4) == 0) {
             $break = 3;
-        } elseif (((($stop + 1) - $start) % 5) == 0) {
+        } elseif (($rowCount % 5) == 0) {
             $break = 4;
         }
 
         $r   = 0;
         $i   = 0;
-        for ($idx = $start; $idx <= $stop; $idx++) {
+        for ($idx = 0; $idx <= $rowCount; $idx++) {
             switch ($r) {
                 case 0:
-                    $market = $page_text[$idx];
+                    $market = $form_row[$idx];
                     break;
                 case 1:
-                    $pub    = $page_text[$idx];
+                    $pub    = $form_row[$idx];
                     break;
                 case 2:
-                    $count  = str_replace(',', '', $page_text[$idx]);
+                    $count  = str_replace(',', '', $form_row[$idx]);
                     break;
                 case 3:
-                    $ship   = $page_text[$idx];
+                    $ship   = $form_row[$idx];
                     break;
                 case 4:
-                    $tip    = $page_text[$idx];
+                    $tip    = $form_row[$idx];
                     break;
             }
 
@@ -311,7 +249,7 @@ class PDFImport extends MediaImport
                 $r++;
             } else {
                 $row_array = [
-                    'original' => $market.' '.$pub.' '.$count.' '.$ship,
+                    'original' => $market . ' ' . $pub . ' ' . $count . ' ' . $ship,
                     'market'   => $market,
                     'pub'      => $pub,
                     'count'    => $count,

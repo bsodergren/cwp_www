@@ -7,6 +7,7 @@
 use Rain\Tpl;
 use CWP\Core\Media;
 use Tracy\Debugger;
+use CWP\Utils\MediaDevice;
 use Nette\Utils\FileSystem;
 use CWP\Core\MediaStopWatch;
 use Rain\Tpl\Plugin\PathReplace;
@@ -46,8 +47,10 @@ require __PUBLIC_ROOT__ . \DIRECTORY_SEPARATOR . 'bootstrap.php';
 // }
 
 // $boot->definePath('__DATABASE_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'database');
-MediaStopWatch::$writeNow = false;
+//MediaStopWatch::$writeNow = false;
 MediaStopWatch::init();
+MediaStopWatch::start();
+
 MediaStopWatch::dump("Start");
 $boot->definePath('__DATABASE_ROOT__', $boot->Config['db']['path'] . \DIRECTORY_SEPARATOR . 'database');
 $boot->directory(__DATABASE_ROOT__);
@@ -63,18 +66,12 @@ $boot->getDatabase();
 define('__TEMP_DIR__', sys_get_temp_dir());
 
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'path_constants.php';
-
-
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'boot.php';
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'auth.php';
-
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'variables.php';
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'url_paths.php';
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'settings.php';
-
-// if (!defined("PROCESS")) {
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'init.php';
-// }
 
 if(array_key_exists("flush", $_GET)) {
     Media::$Stash->flush();
@@ -109,14 +106,14 @@ $commonTemplates = [
 
 foreach ($commonTemplates as $key => $dirs) {
     foreach($dirs as $keypath => $paths) {
+        $templatePath = array_merge($TemplateSrc, [$key,$keypath]);
+        $templateDir[] = implode(DIRECTORY_SEPARATOR, $templatePath) . DIRECTORY_SEPARATOR;
         foreach($paths as $path) {
             $templatePath = array_merge($TemplateSrc, [$key,$keypath,$path]);
             $templateDir[] = implode(DIRECTORY_SEPARATOR, $templatePath) . DIRECTORY_SEPARATOR;
         }
     }
-
 }
-
 Tpl::configure([
     'tpl_dir' => $templateDir, 'cache_dir' => __TPL_CACHE_DIR__ ,'auto_escape'=>false, 'debug' => __DEBUG__]);
 
@@ -126,7 +123,7 @@ unset($tpl_nabar_links['Settings']);
 
 $TplTemplate = new Tpl();
 Media::$Tpl = $TplTemplate;
-
+$TplTemplate->assign('UseNavbar', MediaDevice::$NAVBAR );
 $TplTemplate->assign('nav_bar_links', $tpl_nabar_links);
 $TplTemplate->assign('nav_bar_dropdown', $Tplnav_bar_dropdown);
 $TplTemplate->assign('current', Media::$CurrentVersion);

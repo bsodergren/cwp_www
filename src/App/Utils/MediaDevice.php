@@ -17,6 +17,8 @@ class MediaDevice
     public static $default_theme = 'application';
 
     public static $NAVBAR   = true;
+    public static $USEJAVASCRIPT   = false;
+
 
     public function __construct()
     {

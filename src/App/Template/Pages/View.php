@@ -25,6 +25,7 @@ class View extends Rain
         );
 
     }
+
     public static function SheetLink($name, $url, $class, $style, $disabled)
     {
 

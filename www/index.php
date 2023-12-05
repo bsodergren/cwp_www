@@ -19,6 +19,11 @@ $table = $explorer->table('media_job');
 $results = $table->fetchAssoc('job_id');
 $cnt = $table->count('*');
 
+if($cnt == 0 ){
+    echo HTMLDisplay::JavaRefresh('/import.php', 0);
+    exit;
+}
+
 foreach ($results as $k => $row) {
     $customJob = false;
     unset($replacement);

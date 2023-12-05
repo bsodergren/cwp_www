@@ -574,7 +574,7 @@ class Media
         $pdf_filename = basename($pdf_filename);
 
         $job_table = self::$explorer->table('media_job');
-        $job_table->where('pdf_file = ?', $pdf_filename);
+        $job_table->where('pdf_file LIKE ?', "%".$pdf_filename."%");
         if (null !== $job_number) {
             $job_table->where('job_number = ?', $job_number);
         }

@@ -59,7 +59,6 @@ if (array_key_exists('form_number', $_REQUEST)) {
 $new_forms = [];
 
 $next_form_number = $current_form_number + 1;
-
 $form_data = $explorer->table('form_data');
 $form_data->where('form_number = ?', $current_form_number);
 $form_data->where('job_id = ?', $media->job_id);

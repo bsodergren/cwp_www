@@ -90,7 +90,7 @@ class Index extends MediaProcess
                 Template::echo('stream/start_page', []);
 
                 $import    = new PDFImport();
-                $import->reImport($this->media->pdf_fullname, $this->media->job_number);
+                $import->reImport($this->media->pdf_file, $this->media->job_number);
 
                 $this->msg = 'PDF Reimported';
                 Template::echo('stream/end_page', []);
