@@ -131,6 +131,7 @@ class MediaXLSX extends Media
 
             HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Writing to ' . Media::$FileDriver . ' ' . $new_xlsx_file]);
             $writer->write($new_xlsx_file);
+            Media::formUsed($form_number, $this->job_id);
             $this->spreadsheet->disconnectWorksheets();
             unset($this->spreadsheet);
         }

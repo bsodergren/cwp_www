@@ -31,21 +31,41 @@ class Index extends MediaProcess
 
     public function addforms()
     {
-        $this->url = '/create/addForm.php?job_id='.$this->job_id;
+        $this->url = '/create/addForm.php?job_id=' . $this->job_id;
     }
     public function email_zip()
     {
-        $this->url = '/mail.php?job_id='.$this->job_id;
+        $this->url = '/mail.php?job_id=' . $this->job_id;
     }
 
     public function process()
     {
-        $this->url = '/form.php?job_id='.$this->job_id;
+        $this->url = '/form.php?job_id=' . $this->job_id;
     }
 
     public function view_xlsx()
     {
-        $this->url = '/view.php?job_id='.$this->job_id;
+        $this->url = '/view.php?job_id=' . $this->job_id;
+    }
+    public function update_xlsx()
+    {
+        \define('TITLE', 'Updating Excel files');
+
+        MediaDevice::$NAVBAR = false;
+        MediaDevice::getHeader();
+        Template::echo('stream/start_page', ['PAGE_LOAD' => template::GetHTML('/stream/page_load', [])]);
+        HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Updating Workbooks']);
+        MediaStopWatch::lap("Create Excel");
+        $forms = $this->media->getFormUpdates($this->media->job_id);
+        foreach($forms as $f) {
+            $this->media->excelArray($f->form_number);
+            $excel     = new MediaXLSX($this->media);
+            $excel->writeWorkbooks();
+        }
+        Template::echo('stream/end_page', ['PAGE_CLOSE' => template::GetHTML('/stream/page_close', [])]);
+        $this->msg = 'XLSX Files Created';
+        MediaDevice::$NAVBAR = true;
+
     }
 
     public function create_xlsx()
@@ -122,7 +142,7 @@ class Index extends MediaProcess
 
     public function delete_job()
     {
-        $this->url = '/delete_job.php?job_id='.$this->job_id;
+        $this->url = '/delete_job.php?job_id=' . $this->job_id;
     }
 
     public function update_job($job_number)
@@ -144,7 +164,7 @@ class Index extends MediaProcess
                 dd($msg);
             }
         }
-        MediaError::msg('warning', 'There was a problem <br> '.$msg, 15);
+        MediaError::msg('warning', 'There was a problem <br> ' . $msg, 15);
         exit;
     }
 }

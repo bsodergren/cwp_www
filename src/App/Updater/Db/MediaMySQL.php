@@ -76,22 +76,22 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
     public function check_columnExists($table, $column)
     {
         // $query = 'SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = "'.$table.'" AND COLUMN_NAME = "'.$column.'";';
-        $query = 'SHOW COLUMNS FROM `'.$table.'`  LIKE "'.$column.'";';
+        $query = 'SHOW COLUMNS FROM `' . $table . '`  LIKE "' . $column . '";';
         $res = $this->query($query);
         return $res->getRowCount();
     }
 
     public function check_tableExists($table)
     {
-        $query = "SELECT count(*) as cnt FROM information_schema.tables WHERE table_schema = '".DB_DATABASE."' AND table_name = '".$table."'";
+        $query = "SELECT count(*) as cnt FROM information_schema.tables WHERE table_schema = '" . DB_DATABASE . "' AND table_name = '" . $table . "'";
         return $this->queryExists($query);
     }
 
     public function rename_column($table, $old, $new)
     {
-        $query  = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table."' AND COLUMN_NAME = '".$old."';";
+        $query  = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '" . $table . "' AND COLUMN_NAME = '" . $old . "';";
         $result = $this->fetchOne($query);
-        $query  = 'ALTER TABLE `'.$table.'` CHANGE `'.$old.'` `'.$new.'` '.$result.';';
+        $query  = 'ALTER TABLE `' . $table . '` CHANGE `' . $old . '` `' . $new . '` ' . $result . ';';
         $result = $this->query($query);
 
         return $result;
@@ -100,28 +100,41 @@ class MediaMySQL extends MediaDb implements MediaDbAbstract
     public function change_column($table_name, $name, $type)
     {
         $type   = $this->sanitizeFields($type);
-        $query  = 'ALTER TABLE `'.$table_name.'` CHANGE `'.$name.'` `'.$name.'` '.$type.';';
+        $query  = 'ALTER TABLE `' . $table_name . '` CHANGE `' . $name . '` `' . $name . '` ' . $type . ';';
         $result = $this->query($query);
     }
 
     public function create_column($table, $column, $type)
     {
-        $type   = $this->sanitizeFields($type);
-        $query  = 'ALTER TABLE '.$table.' ADD `'.$column.'` '.$type.';';
 
+        $column_type   = $this->sanitizeFields($type);
+        if(is_array($type)) {
+            foreach($type as $key => $value) {
+                if($key == "INT" || $key == "TEXT") {
+                    $column_type = $key . "(" . $value . ") " ;
+                    continue;
+                }
+                if($key == "DEFAULT") {
+                    $column_type = $column_type . $key . " " . $value ;
+                }
+            }
+        }
+
+
+        $query  = 'ALTER TABLE ' . $table . ' ADD `' . $column . '` ' . $column_type . ';';
         $result = $this->query($query);
     }
 
     public function reset_Table($table_name)
     {
-        $query  = 'TRUNCATE `'.$table_name.'`; ';
+        $query  = 'TRUNCATE `' . $table_name . '`; ';
         $result = $this->query($query);
     }
 
     public function tableAlterADD($table, $action, $column)
     {
 
-        $query  = 'ALTER TABLE '.$table.' ADD '.strtoupper($action).'(`'.$column.'`);';
+        $query  = 'ALTER TABLE ' . $table . ' ADD ' . strtoupper($action) . '(`' . $column . '`);';
         $result = $this->query($query);
         // ALTER TABLE `form_data` ADD UNIQUE(`original`);
         //

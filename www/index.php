@@ -53,6 +53,9 @@ foreach ($results as $k => $row) {
     $class_normal = 'class="btn  btn-primary"';
 
     $num_of_forms = $media->number_of_forms();
+    $updates = $media->updatedForms();
+
+
 
 
     if (0 == $num_of_forms) {
@@ -98,9 +101,20 @@ foreach ($results as $k => $row) {
 
 
     // $form->input_submit('actSubmit', '', 'View Forms', '', class_normal.$rowdisabled);
-
     if (true == Media::get_exists('xlsx', $row['job_id'])) {
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[view_xlsx]', '', 'view xlsx', '', $class_create . $tooltip . 'view_xlsx"');
+        if (0 < $updates) {
+
+
+            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit(
+                'submit[update_xlsx]',
+                '',
+                'Update xlsx',
+                'update_xlsx_' . $row['job_id'],
+                $js . $class_create . $pdisabled . $tooltip . 'update_xlsx"'
+            );
+        }
+
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_xlsx]', '', 'delete xlsx', '', $class_delete . $tooltip . 'delete_xlsx"');
     } else {
 

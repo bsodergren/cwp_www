@@ -29,22 +29,30 @@ class Form extends MediaProcess
         $job_id     = $req['job_id'];
         $skip_forms = '';
         $former     = [];
-
+        $updated = false;
         foreach ($req as $key => $value) {
             $break = false;
 
             if (str_starts_with($key, 'former')) {
                 list($_, $id) = explode('_', $key);
                 $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]);
+                if($count > 0) {
+                    $updated =  true;
+                }
             }
 
             if (str_starts_with($key, 'facetrim')) {
                 list($_, $id) = explode('_', $key);
                 $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]);
+                if($count > 0) {
+                    $updated =  true;
+                }
+
             }
 
             if (str_starts_with($key, 'nobindery')) {
                 list($_, $id, $letters) = explode('_', $key);
+                $form_number = $id;
 
                 // dd($front,$id,$letters,$value, $job_id);
 
@@ -52,13 +60,21 @@ class Form extends MediaProcess
                 ->where('form_number', $id)
                 ->where('form_letter', $letters)
                 ->update(['no_bindery' => $value]);
+                if($count > 0) {
+                    $updated =  true;
+                }
+
             }
+        }
+
+        if($updated == true) {
+            Media::formUpdated($form_number, $job_id);
         }
     }
 
     public function Edit()
     {
-        $this->url     = '/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number.'';
+        $this->url     = '/form_edit.php?job_id=' . $this->job_id . '&form_number=' . $this->form_number . '';
         $this->timeout = 0;
     }
 
@@ -110,6 +126,6 @@ class Form extends MediaProcess
         if ($next_form_number < 0) {
             $next_form_number = 1;
         }
-        $this->url = '/form.php?job_id='.$this->job_id.'&form_number='.$next_form_number.'';
+        $this->url = '/form.php?job_id=' . $this->job_id . '&form_number=' . $next_form_number . '';
     }
 }
