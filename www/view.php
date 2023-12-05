@@ -123,7 +123,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         $url[] = __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&form_number=' . $current_form_number . '&action=email';
 
 
-        $params['SHEET_LINKS'] =  View::SheetLink($name, $url, 'btn-warning', '--bs-bg-opacity: .5;', 'enabled');
+        $params['SHEET_LINKS'] .=  View::SheetLink($name, $url, 'btn-warning', '--bs-bg-opacity: .5;', 'enabled');
 
         //$params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
 
