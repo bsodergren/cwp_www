@@ -5,8 +5,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <meta name="description" content="{if="defined('APP_DESCRIPTION')"}{#APP_DESCRIPTION#}{/if}">
-        <meta name="author" content="{if="defined('APP_OWNER')"}{#APP_OWNER#}{/if}">
+        <meta name="description" content="{if=" defined('APP_DESCRIPTION')"}{#APP_DESCRIPTION#}{/if}">
+        <meta name="author" content="{if=" defined('APP_OWNER')"}{#APP_OWNER#}{/if}">
         <link rel="icon" type="image/png" href="{#__URL_HOME__#}/assets/themes/application/images/favicon.png?590900">
 
         <title>{if="defined('APP_NAME')"}{#APP_NAME#}{/if} | {if="defined('TITLE')"}{#TITLE#}{/if}</title>
@@ -17,15 +17,15 @@
         {include="css"}
         {/if}
 
-	{if="$custom_js"}
+        {if="$custom_js"}
         {include="$custom_js"}
         {/if}
     </head>
 
     <body>
-	{if="$UseNavbar"}
-    {include="$navbarTemplate"}
-    {/if}
+        {if="$UseNavbar"}
+        {include="$navbarTemplate"}
+        {/if}
         <main role="main" class="container mt-1">
 
             {if="!empty($return_msg)"}

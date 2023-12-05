@@ -23,7 +23,7 @@ class MediaAppUpdater
     public function __construct()
     {
         if (!\defined('__UPDATE_CURRENT_FILE__')) {
-            \define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
+            \define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__ . '/current.txt'));
         }
         $this->getLastest();
         $this->currentVersion();

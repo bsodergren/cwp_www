@@ -79,16 +79,18 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
 
             $url_link = HTMLDisplay::draw_excelLink($file);
             if (false != $url_link) {
-                $params['EXCEL_LINK'] = View::SheetLink( basename($file), $url_link, 'btn-info', '--bs-bg-opacity: .5;', 'enabled');
+                $params['EXCEL_LINK'] = View::SheetLink(basename($file), $url_link, 'btn-info', '--bs-bg-opacity: .5;', 'enabled');
             }
         }
 
-        $page_form_html .= View::FormButton('FM ' . $text_number,
-         __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&file_id=' . $idx,
-         $class);
+        $page_form_html .= View::FormButton(
+            'FM ' . $text_number,
+            __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&file_id=' . $idx,
+            $class
+        );
 
         if (0 == $idx % 9 && $idx > 0) {
-            $params['FORM_LIST_HTML'] .= View::FormButtonList( $page_form_html);
+            $params['FORM_LIST_HTML'] .= View::FormButtonList($page_form_html);
             $page_form_html = '';
         }
         ++$idx;
@@ -98,7 +100,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         XLSXViewer::checkifexist($media);
     }
     if ('' != $page_form_html) {
-        $params['FORM_LIST_HTML'] .= View::FormButtonList( $page_form_html);
+        $params['FORM_LIST_HTML'] .= View::FormButtonList($page_form_html);
     }
 
     if ('' != $file_id) {
@@ -108,7 +110,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         $viewer->media = $media;
 
         $viewer->buildPage();
-        $params = array_merge($params,$viewer->params);
+        $params = array_merge($params, $viewer->params);
 
 
         $name[] =  "Edit Form";
@@ -121,7 +123,7 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         $url[] = __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&form_number=' . $current_form_number . '&action=email';
 
 
-        $params['SHEET_LINKS'] =  View::SheetLink($name, $url,  'btn-warning', '--bs-bg-opacity: .5;', 'enabled');
+        $params['SHEET_LINKS'] =  View::SheetLink($name, $url, 'btn-warning', '--bs-bg-opacity: .5;', 'enabled');
 
         //$params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
 

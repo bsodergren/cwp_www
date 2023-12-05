@@ -24,9 +24,9 @@ $job_close = $result[0]->close;
 $result = Media::$explorer->table('media_forms')->where('job_id', $job_id)->select('form_number')->fetchAll();
 
 foreach($result as $row) {
-    $form_button_links .= Template::GetHTML($templateBaseDir.'/formlink', [
+    $form_button_links .= Template::GetHTML($templateBaseDir . '/formlink', [
         'PAGE_CLASS' => ' btn-success',
-        'PAGE_FORM_URL' => __URL_PATH__.'/create/addRow.php?job_id='.$job_id.'&form_number='. $row->form_number,
+        'PAGE_FORM_URL' => __URL_PATH__ . '/create/addRow.php?job_id=' . $job_id . '&form_number=' . $row->form_number,
         'PAGE_FORM_NUMBER' => $row->form_number
     ]);
 }
@@ -39,13 +39,13 @@ $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('job_id', $job_id);
 $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('product', $job_close);
 
 
-$card_params['FORMNUMBER_HTML'] = Template::GetHTML($templateBaseDir."/form/textbox", [
+$card_params['FORMNUMBER_HTML'] = Template::GetHTML($templateBaseDir . "/form/textbox", [
     'NAME' => 'form_number',
     'DESCRIPTION' => 'Form Number',
     'PLACEHOLDER' => 'Form Number',
     'LABEL_TEXT' => 'Form Number',
 ]);
-$card_params['FORM_PCCOUNT'] = Template::GetHTML($templateBaseDir."/form/textbox", [
+$card_params['FORM_PCCOUNT'] = Template::GetHTML($templateBaseDir . "/form/textbox", [
     'NAME' => 'pcs_count',
     'DESCRIPTION' => 'Pcs Count',
     'PLACEHOLDER' => 'Pcs Count',
@@ -88,26 +88,26 @@ foreach(Media::$pageType as $type) {
             break;
     }
 
-    $config_options .= Template::GetHTML($templateBaseDir."/form/form_option", [
+    $config_options .= Template::GetHTML($templateBaseDir . "/form/form_option", [
         'OPTION_VALUE' => $key,
         'OPTION_NAME' => $type
     ]);
 }
 
 foreach(Media::$bindType as $type) {
-    $bind_options .= Template::GetHTML($templateBaseDir."/form/form_option", [
+    $bind_options .= Template::GetHTML($templateBaseDir . "/form/form_option", [
         'OPTION_VALUE' => $type,
         'OPTION_NAME' => $type
     ]);
 }
 
-$card_params['BINDTYPE_HTML'] = Template::GetHTML($templateBaseDir."/form/form_select", [
+$card_params['BINDTYPE_HTML'] = Template::GetHTML($templateBaseDir . "/form/form_select", [
     'SELECT_OPTIONS' => $bind_options,
     'SELECT_NAME' => 'bind',
     'SELECT_ID' => 'BindName',
     'SELECT_DESC' => 'Book Binding',
 ]);
-$card_params['CONFIG_HTML'] = Template::GetHTML($templateBaseDir."/form/form_select", [
+$card_params['CONFIG_HTML'] = Template::GetHTML($templateBaseDir . "/form/form_select", [
     'SELECT_OPTIONS' => $config_options,
     'SELECT_NAME' => 'config',
     'SELECT_ID' => 'ConfigName',
@@ -116,7 +116,7 @@ $card_params['CONFIG_HTML'] = Template::GetHTML($templateBaseDir."/form/form_sel
 
 
 
-$params['TEXT_FORMS'] =  Template::GetHTML($templateBaseDir."/form/card", $card_params);
+$params['TEXT_FORMS'] =  Template::GetHTML($templateBaseDir . "/form/card", $card_params);
 // HTMLForms::draw_select("config","Bind Types",$types);
 
 
