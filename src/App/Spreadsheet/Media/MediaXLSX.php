@@ -54,18 +54,22 @@ class MediaXLSX extends Media
     public function writeWorkbooks()
     {
 
-
+        MediaStopWatch::dump(__CLASS__.":".__LINE__);
         $calc = new Calculator($this->media);
+        MediaStopWatch::dump(__CLASS__.":".__LINE__);
 
         $this->xlsx_path = $this->media->getDirectory('xlsx');
         (new MediaFileSystem())->createFolder($this->xlsx_path);
         foreach ($this->xlsx_array as $form_number => $dataArray) {
             $data              = $dataArray['forms'];
             // $data           = $dataArray;
+            MediaStopWatch::dump(__CLASS__.":".__LINE__);
             $this->spreadsheet = new Spreadsheet();
+            MediaStopWatch::dump(__CLASS__.":".__LINE__);
             // $this->spreadsheet  = \PhpOffice\PhpSpreadsheet\IOFactory::load($this->inputFileName);
 
             $slipSheet         = new SlipSheetXLSX($this->media);
+            MediaStopWatch::dump(__CLASS__.":".__LINE__);
             // $larrySheet = new LarrySheetsXLSX($this->media);
             $s_idx             = 0;
 
@@ -96,7 +100,10 @@ class MediaXLSX extends Media
                                             $this->box['layers_last_box'] = $this->box['layers_per_skid'];
                                             $this->box['skid_count']      = "$sk of " . $max_boxes + 1;
                                             $this->form_details['count']  = ($this->box['layers_per_skid'] * $this->box['lifts_per_layer']) * $this->box['lift_size'];
+                                            MediaStopWatch::dump(__CLASS__.":".__LINE__);
                                             $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
+                                            MediaStopWatch::dump(__CLASS__.":".__LINE__);
+
                                             $full_boxes--;
                                             $s_idx++;
                                         }
@@ -109,7 +116,10 @@ class MediaXLSX extends Media
                                     }
                                 }
                             }
+                            MediaStopWatch::dump(__CLASS__.":".__LINE__);
                             $this->createWorksheet($this->spreadsheet, $s_idx, $form_number, $form_letter);
+                            MediaStopWatch::dump(__CLASS__.":".__LINE__);
+
                             $this->form_details               = '';
                             $s_idx++;
                         }

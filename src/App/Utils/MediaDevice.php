@@ -68,8 +68,8 @@ class MediaDevice
                 return 'MOBILE';
             }
         }
-
-        return [$browser->getName(), $device->getName(), $os->getName()];
+        return 'APPLICATION';
+       // return [$browser->getName(), $device->getName(), $os->getName()];
     }
 
     private static function getDevicePath()
@@ -139,6 +139,7 @@ class MediaDevice
 
     public static function getThemePath()
     {
+       // dd(self::$DEVICE);
         return __THEME_DIR__.'/'.strtolower(self::$DEVICE);
     }
 

@@ -170,10 +170,10 @@ class MediaLogger
         $trace = debug_backtrace();
         $TraceList = '';
 
-        $class = str_pad('', self::$padding['class'], ' ');
-        $calledFile = str_pad('', self::$padding['file'], ' ');
-        $calledLine = str_pad('', self::$padding['line'], ' ');
-        $function = str_pad('', self::$padding['function'], ' ');
+        // $class = str_pad('', self::$padding['class'], ' ');
+        // $calledFile = str_pad('', self::$padding['file'], ' ');
+        // $calledLine = str_pad('', self::$padding['line'], ' ');
+        // $function = str_pad('', self::$padding['function'], ' ');
         foreach ($trace as $key => $row) {
             if (\array_key_exists('class', $row)) {
                 if (str_contains($row['class'], 'MediaLogger')) {
@@ -246,8 +246,8 @@ class MediaLogger
                 $text = basename($text);
             }
 
-            $text = substr($text, 0, self::$padding[$type]);
-            $text = str_pad($text, self::$padding[$type], ' ');
+            // $text = substr($text, 0, self::$padding[$type]);
+            // $text = str_pad($text, self::$padding[$type], ' ');
 
             return MediaStopWatch::formatPrint($text, self::$color[$type]);
         }

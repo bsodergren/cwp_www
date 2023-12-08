@@ -1,13 +1,14 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\Template;
 
 use CWP\Core\Media;
-use CWP\Utils\MediaDevice;
 use CWP\Core\MediaSettings;
+use CWP\Utils\MediaDevice;
+use CWPCLI\Core\MediaCWP;
 
 /**
  * CWP Media tool.
@@ -16,49 +17,44 @@ class Template
 {
     public static $static_html;
 
-    public $html           = '';
+    public $html = '';
 
-    public $header_html    = '';
+    public $header_html = '';
 
     public $default_params = [];
 
     public $template;
 
-    private $test          = 0;
+    private $test = 0;
 
-    public $error          = true;
+    public $error = true;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function getJavascript($template = '', $array = [], $error = true, $cache = false)
     {
-
-
-        $template_obj        = new self();
+        $template_obj = new self();
         $template_obj->error = $error;
 
-        $template_obj->template($template, $array, true,$cache);
+        $template_obj->template($template, $array, true, $cache);
 
         return $template_obj->html;
-
     }
+
     public static function GetHTML($template = '', $array = [], $error = true, $cache = false)
     {
-
-        $template_obj        = new self();
+        $template_obj = new self();
         $template_obj->error = $error;
-        $template_obj->template($template, $array,false,$cache);
+        $template_obj->template($template, $array, false, $cache);
 
         return $template_obj->html;
     }
 
     public static function echo($template = '', $array = [], $error = true, $cache = false)
     {
-        $template_obj        = new self();
+        $template_obj = new self();
         $template_obj->error = $error;
-        $template_obj->template($template, $array,false,$cache);
+        $template_obj->template($template, $array, false, $cache);
         echo $template_obj->html;
     }
 
@@ -75,7 +71,7 @@ class Template
     public function return($template = '', $array = [], $cache = false)
     {
         if ($template) {
-            $this->template($template, $array,false,$cache);
+            $this->template($template, $array, false, $cache);
         }
 
         $html = $this->html;
@@ -87,7 +83,7 @@ class Template
     public function render($template = '', $array = [], $cache = false)
     {
         if ($template) {
-            $this->template($template, $array,false,$cache);
+            $this->template($template, $array, false, $cache);
         }
 
         $html = $this->html;
@@ -104,7 +100,7 @@ class Template
 
         if (true == $this->error) {
             $template_text = '<h1>NO TEMPLATE FOUND<br>';
-            $template_text .= 'FOR <pre>'.$template.'</pre></h1> <br>';
+            $template_text .= 'FOR <pre>'.$template_file.'</pre></h1> <br>';
         } else {
             $template_text = '';
         }
@@ -116,8 +112,7 @@ class Template
     private function defaults($text)
     {
         preg_match_all('/%%([A-Z_]+)%%/m', $text, $output_array);
-        $params               = [];
-
+        $params = [];
 
         foreach ($output_array[1] as $n => $def) {
             if (MediaSettings::isSet($def)) {
@@ -134,7 +129,7 @@ class Template
         $params = array_merge($params, $this->default_params);
         if (\is_array($params)) {
             foreach ($params as $key => $value) {
-                $key  = '%%'.strtoupper($key).'%%';
+                $key = '%%'.strtoupper($key).'%%';
                 $text = str_replace($key, $value, $text);
             }
 
@@ -144,12 +139,11 @@ class Template
         return $html;
     }
 
-    public function template($template, $params = [], $js = false, $cache=false)
+    public function template($template, $params = [], $js = false, $cache = false)
     {
         // if($cache === true) {
         //     $template_name = trim(str_replace(['\\','/'],"-",$template),"-");
         //     $template_name_params = $template_name."_param";
-
 
         //     $cache_params = Media::$Stash->get($template_name_params);
         //     if($cache_params === false) {
@@ -164,7 +158,6 @@ class Template
         //         }
         //     }
 
-
         //     $html = Media::$Stash->get($template_name);
 
         //     if($html === false) {
@@ -173,13 +166,19 @@ class Template
         //         Media::$Stash->put($template_name,$html,10);
         //     }
         // } else {
+        if (!\array_key_exists('APP_CMD', $_ENV)) {
             $template_text = $this->loadTemplate($template, $js);
-            $html          = $this->parse($template_text, $params);
-        // }
+            $html = $this->parse($template_text, $params);
+            // }
 
-        $this->add($html);
+            $this->add($html);
 
-        return $html;
+            return $html;
+        }
+
+        MediaCWP::$output->writeln($params['TEXT']);
+
+        return null;
     }
 
     public function add($var)
@@ -197,7 +196,7 @@ class Template
 
         $installed = '0.0.0';
 
-        $latest    = '0.0.0';
+        $latest = '0.0.0';
 
         return [$installed, $latest];
     }
