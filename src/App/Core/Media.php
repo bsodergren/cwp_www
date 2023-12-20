@@ -250,6 +250,7 @@ class Media
     public function getFilename($type = '', $form_number = '', $create_dir = '')
     {
         return $this->mediaLoc->getFilename($type, $form_number, $create_dir);
+        return $this->mediaLoc->getFilename($type, $form_number, $create_dir);
     }
 
     public function getDirectory($type = '', $create_dir = '')
@@ -492,16 +493,16 @@ class Media
 
     public function update_job_number($job_number)
     {
-        $parts = explode(DIRECTORY_SEPARATOR,$this->base_dir);
+        $parts = explode(DIRECTORY_SEPARATOR, $this->base_dir);
 
-       // $directory = str_replace($this->base_dir)
+        // $directory = str_replace($this->base_dir)
 
         $Close = last($parts);
         array_pop($parts);
         array_pop($parts);
         $parts[] = $job_number;
         $parts[] = $Close;
-        $directory = implode(DIRECTORY_SEPARATOR,$parts);
+        $directory = implode(DIRECTORY_SEPARATOR, $parts);
 
         $data = ['job_number' => $job_number,
         'base_dir' => $directory ];

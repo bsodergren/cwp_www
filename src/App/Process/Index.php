@@ -27,12 +27,12 @@ class Index extends MediaProcess
     {
 
 
-        if(array_key_exists('submit',$req)) {
+        if(array_key_exists('submit', $req)) {
             $method = key($req['submit']);
 
             $this->$method();
 
-        } else if(array_key_exists('update_job',$req)) {
+        } elseif(array_key_exists('update_job', $req)) {
             $method = $req['update_job'];
             $this->$method($req['job_number']);
         } else {
@@ -170,25 +170,24 @@ class Index extends MediaProcess
 
         // if ($msg = null ===) {
         //     if ($msg = null === $this->media->delete_zip()) {
-                $mediaLoc = new MediaFileSystem($this->media->pdf_file, $job_number);
-                $mediaLoc->getDirectory();
+        $mediaLoc = new MediaFileSystem($this->media->pdf_file, $job_number);
+        $mediaLoc->getDirectory();
 
-//dump(posix_getpwuid(getmyuid()));
+        //dump(posix_getpwuid(getmyuid()));
 
 
-                 $olddir = dirname($this->media->base_dir,1);
-            //     $newdir = dirname($mediaLoc->directory,1);
-            //    $msg= FileSystem::makeWritable(dirname($olddir,1));
-            //    $msg2= FileSystem::makeWritable($newdir);
-            //     dd($msg,$msg2);
+        $olddir = dirname($this->media->base_dir, 1);
+        //     $newdir = dirname($mediaLoc->directory,1);
+        //    $msg= FileSystem::makeWritable(dirname($olddir,1));
+        //    $msg2= FileSystem::makeWritable($newdir);
+        //     dd($msg,$msg2);
 
-                 $msg = FileSystem::delete($olddir);
-dd($msg,$olddir);
-            //     if ($msg = null === $mediaLoc->rename($this->media->base_dir, $mediaLoc->directory)) {
-                     $this->media->update_job_number($job_number);
-                    echo HTMLDisplay::JavaRefresh('/index.php', 0);
-                // }
-                // dd($msg);
+        $msg = FileSystem::delete($olddir);
+        //     if ($msg = null === $mediaLoc->rename($this->media->base_dir, $mediaLoc->directory)) {
+        $this->media->update_job_number($job_number);
+        echo HTMLDisplay::JavaRefresh('/index.php', 0);
+        // }
+        // dd($msg);
         //     }
         // }
         MediaError::msg('warning', 'There was a problem <br> ' . $msg, 15);
