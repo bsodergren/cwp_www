@@ -18,10 +18,10 @@ $templateBaseDir = 'createjob/forms';
 //echo Former::text('foo')->addClass('my_class');
 // $params['TEXT_FORMS'] = $form;
 
-$result = Media::$explorer->table('media_job')->where('job_id', $job_id)->select('close')->fetchAll();
+$result = Media::$explorer->table('media_job')->where('job_id', $job_id)->select('close')->fetchAll(); // UPDATEME
 $job_close = $result[0]->close;
 
-$result = Media::$explorer->table('media_forms')->where('job_id', $job_id)->select('form_number')->fetchAll();
+$result = Media::$explorer->table('media_forms')->where('job_id', $job_id)->select('form_number')->fetchAll(); // UPDATEME
 
 foreach($result as $row) {
     $form_button_links .= Template::GetHTML($templateBaseDir . '/formlink', [

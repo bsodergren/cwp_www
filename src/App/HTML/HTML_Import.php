@@ -82,7 +82,7 @@ class HTML_Import
 
     public static function getImportJobNumbers($pdf_file)
     {
-        return Media::$explorer->table('media_imports')->where('pdf_file = ?', $pdf_file)->fetch();
+        return Media::$explorer->table('media_imports')->where('pdf_file = ?', $pdf_file)->fetch(); // UPDATEME
 
     }
 }

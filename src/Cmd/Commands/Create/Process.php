@@ -30,8 +30,8 @@ class Process extends MediaCWP
 
 
     public $commandList = [
-      
-      
+
+
     ];
 
     public $defaultCommands = [
@@ -49,7 +49,7 @@ class Process extends MediaCWP
     public function __construct(InputInterface $input, OutputInterface $output)
     {
         parent::boot($input, $output);
-  
+
         $this->formatter = new FormatterHelper();
         // Mediatag::$output->getFormatter()->setStyle('id', new OutputFormatterStyle('yellow'));
         // Mediatag::$output->getFormatter()->setStyle('text', new OutputFormatterStyle('green'));
@@ -58,7 +58,7 @@ class Process extends MediaCWP
         // Mediatag::$output->getFormatter()->setStyle('download', new OutputFormatterStyle('bright-blue'));
         // Mediatag::$output->getFormatter()->setStyle('file', new OutputFormatterStyle('bright-cyan'));
 
-      
+
         //        dd(IGNORE_NAME_MAP);
     }
 
@@ -67,7 +67,7 @@ class Process extends MediaCWP
 
         if (option::istrue('jobId')) {
             $job_id = Option::getValue('jobId');
-        } 
+        }
         MediaStopWatch::dump(__CLASS__.":".__LINE__);
         $media = Media::get("job_id_".$job_id,5,function() use ($job_id) {
             $job = Media::$connection->fetch('SELECT * FROM media_job WHERE job_id = ?', $job_id);
@@ -81,7 +81,7 @@ class Process extends MediaCWP
         $excel->writeWorkbooks();
 
         // MediaCWP::$Table->setHeaders(["Job ID","Close","Job Number"]);
-        // $table = Media::$explorer->table('media_job');
+        // $table = Media::$explorer->table('media_job'); // UPDATEME
         // $results = $table->fetchAssoc('job_id');
         // foreach($results as $row){
         //     MediaCWP::$Table->addRow([$row['job_id'],$row['close'],$row['job_number']]);
@@ -89,8 +89,8 @@ class Process extends MediaCWP
         //  MediaCWP::$Table->render();
 
 
-       
+
        return 1;
-   
+
     }
 }

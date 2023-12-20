@@ -10,6 +10,7 @@ use CWP\Template\Rain;
 use CWP\Utils\MediaDevice;
 use Nette\Utils\FileSystem;
 use CWP\Core\MediaStopWatch;
+use CWP\Process\MediaProcess;
 use Rain\Tpl\Plugin\PathReplace;
 
 define('__PROJECT_ROOT__', dirname(__FILE__, 3));
@@ -72,6 +73,7 @@ require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'variables.php';
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'url_paths.php';
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'settings.php';
 require_once __CONFIG_ROOT__ . \DIRECTORY_SEPARATOR . 'init.php';
+Media::$Stash->flush();
 
 if(array_key_exists("flush", $_GET)) {
     Media::$Stash->flush();
@@ -81,7 +83,8 @@ if(array_key_exists("flush", $_GET)) {
     exit;
 }
 
-if (!defined("PROCESS")) {
+if (!defined("PROCESS"))
+{
     $req_file               = $_SERVER['REQUEST_URI'];
     $req                    = '?' . $_SERVER['QUERY_STRING'];
     $req_file               = str_replace(__URL_PATH__ . '/', '', $req_file);
@@ -91,6 +94,10 @@ if (!defined("PROCESS")) {
         exit;
     }
 }
+
+// MediaProcess::Check($media);
+
+
 $RainTemplate = new Rain();
 $RainTemplate->nav_bar_links = $nav_bar_links;
 $TplTemplate = $RainTemplate->init();

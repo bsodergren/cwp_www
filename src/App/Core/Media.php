@@ -23,9 +23,13 @@ use CWP\Filesystem\Driver\MediaGoogleDrive;
  */
 class Media
 {
-    public static $explorer;
+    public static $explorer; // UPDATEME // UPDATEME
 
     public static $connection;
+
+    public static $MySQL;
+    public static $DB;
+
 
     public static $VersionUpdate;
 
@@ -258,12 +262,12 @@ class Media
         if (0 == $value) {
             $value = '';
         }
-        $result = self::$explorer->table('media_job')->where('job_id', $job_id)->update([$field . '_exists' => $value]);
+        $result = self::$explorer->table('media_job')->where('job_id', $job_id)->update([$field . '_exists' => $value]); // UPDATEME
     }
 
     public static function get_exists($field, $job_id)
     {
-        $result = self::$explorer->table('media_job')->select($field . '_exists')->where('job_id', $job_id);
+        $result = self::$explorer->table('media_job')->select($field . '_exists')->where('job_id', $job_id); // UPDATEME
         $exists = $result->fetch();
         $var_name = $field . '_exists';
         if (isset($exists->{$var_name})) {
@@ -275,12 +279,12 @@ class Media
 
     public function updatedForms()
     {
-        return self::$explorer->table('media_forms')->where('job_id', $this->job_id)->where('updated', 1)->count('*');
+        return self::$explorer->table('media_forms')->where('job_id', $this->job_id)->where('updated', 1)->count('*'); // UPDATEME
     }
 
     public function number_of_forms()
     {
-        return self::$explorer->table('media_forms')->where('job_id', $this->job_id)->count('*');
+        return self::$explorer->table('media_forms')->where('job_id', $this->job_id)->count('*'); // UPDATEME
     }
 
     public function get_form_list()
@@ -448,7 +452,7 @@ class Media
 
     public function deleteFromDatabase($table, $form_number = '')
     {
-        $table_obj = self::$explorer->table($table);
+        $table_obj = self::$explorer->table($table); // UPDATEME
         if ('' != $form_number) {
             $table_obj->where('form_number', $form_number);
         }
@@ -488,20 +492,33 @@ class Media
 
     public function update_job_number($job_number)
     {
-        $data = ['job_number' => $job_number];
-        self::$explorer->table('media_job')->where('job_id', $this->job_id)->update($data);
+        $parts = explode(DIRECTORY_SEPARATOR,$this->base_dir);
+
+       // $directory = str_replace($this->base_dir)
+
+        $Close = last($parts);
+        array_pop($parts);
+        array_pop($parts);
+        $parts[] = $job_number;
+        $parts[] = $Close;
+        $directory = implode(DIRECTORY_SEPARATOR,$parts);
+
+        $data = ['job_number' => $job_number,
+        'base_dir' => $directory ];
+
+        self::$explorer->table('media_job')->where('job_id', $this->job_id)->update($data); // UPDATEME
         $this->job_number = $job_number;
         $this->getDirectories();
     }
 
     public function updateFormRow($id, $data)
     {
-        self::$explorer->table('form_data')->where('id', $id)->update($data);
+        self::$explorer->table('form_data')->where('id', $id)->update($data); // UPDATEME
     }
 
     public function getFormRow($id)
     {
-        $row = self::$explorer->table('form_data')->get($id);
+        $row = self::$explorer->table('form_data')->get($id); // UPDATEME
 
         foreach ($row as $k => $o) {
             $res_array[$k] = $o;
@@ -524,12 +541,12 @@ class Media
 
     public function deleteSlipSheets()
     {
-        self::$explorer->table('form_data_count')->where('job_id', $this->job_id)->delete();
+        self::$explorer->table('form_data_count')->where('job_id', $this->job_id)->delete(); // UPDATEME
     }
 
     public function add_form_details($form_array)
     {
-        self::$explorer->table('media_forms')->insert($form_array);
+        self::$explorer->table('media_forms')->insert($form_array); // UPDATEME
         self::formUpdated($form_array['form_number'], $form_array['job_id']);
     }
 
@@ -542,7 +559,7 @@ class Media
                 $individual_part['job_id'] = $this->job_id;
                 $individual_part['form_letter'] = $letter;
                 $individual_part['form_number'] = $form_number;
-                self::$explorer->table('form_data')->insert($individual_part);
+                self::$explorer->table('form_data')->insert($individual_part); // UPDATEME
                 $destination[] = ['name' => $individual_part['ship']];
                 $market[] =  ['name' => $individual_part['market']];
                 $publications[] =  ['name' => $individual_part['pub']];
@@ -579,7 +596,7 @@ class Media
         $job_id = null;
         $pdf_filename = basename($pdf_filename);
 
-        $job_table = self::$explorer->table('media_job');
+        $job_table = self::$explorer->table('media_job'); // UPDATEME
         $job_table->where('pdf_file LIKE ?', "%" . $pdf_filename . "%");
         if (null !== $job_number) {
             $job_table->where('job_number = ?', $job_number);
@@ -608,17 +625,17 @@ class Media
 
     public static function formUpdated($form_number, $job_id)
     {
-        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number) ->update(['updated' => 1]);
+        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number) ->update(['updated' => 1]); // UPDATEME
     }
 
     public static function formUsed($form_number, $job_id)
     {
-        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number) ->update(['updated' => 0]);
+        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number) ->update(['updated' => 0]); // UPDATEME
     }
 
     public static function getFormUpdates($job_id)
     {
-        return self::$explorer->table('media_forms')->where('job_id', $job_id)->where('updated', 1);
+        return self::$explorer->table('media_forms')->where('job_id', $job_id)->where('updated', 1); // UPDATEME
     }
 
 

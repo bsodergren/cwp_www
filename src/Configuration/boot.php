@@ -6,6 +6,7 @@
 use CWP\Core\Media;
 use CWP\Core\MediaSetup;
 use CWP\Updater\DbUpdate;
+use CWP\Database\Database;
 use CWP\Core\MediaStopWatch;
 use Nette\Database\Explorer;
 use Nette\Database\Structure;
@@ -24,6 +25,7 @@ $explorer = new Explorer($connection, $structure, $conventions, $storage);
 
 Media::$connection = $connection;
 Media::$explorer = $explorer;
+Media::$MySQL = new Database();
 
 new MediaSetup();
 

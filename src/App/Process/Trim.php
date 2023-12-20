@@ -58,7 +58,7 @@ class Trim extends MediaProcess
                 if (\array_key_exists($key, $updateData)) {
                     unset($updateData[$key]);
                 }
-                $count = Media::$explorer->table('pub_trim')->where('id', $key)->delete();
+                $count = Media::$explorer->table('pub_trim')->where('id', $key)->delete(); // UPDATEME
             }
         }
         foreach ($updateData as $id => $data) {
@@ -69,7 +69,7 @@ class Trim extends MediaProcess
                 'delivered_size' => $this->cleanTrimPost($data['size'], true),
             ];
 
-            $count       = Media::$explorer->table('pub_trim')->where('id', $id)->update($insert_data);
+            $count       = Media::$explorer->table('pub_trim')->where('id', $id)->update($insert_data); // UPDATEME
         }
         foreach ($cacheNames as  $name) {
             if(Media::$Stash->has($name))
@@ -102,7 +102,7 @@ class Trim extends MediaProcess
                 'face_trim'      => $face_trim,
                 'delivered_size' => $delivered_size,
             ];
-            $res            = Media::$explorer->table('pub_trim')->insert($data);
+            $res            = Media::$explorer->table('pub_trim')->insert($data); // UPDATEME
             $this->msg      = 'Publication Added';
         } else {
             $this->msg = 'No publication named';

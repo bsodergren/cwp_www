@@ -21,7 +21,7 @@ class AdvancedFilesystemIterator extends \ArrayIterator
         if (preg_match('/^sortBy(.*)/', $name, $m)) {
             return $this->sort('get'.$m[1]);
         }
-        throw new MemberAccessException('Method '.$methodName.' not exists');
+        throw new \MemberAccessException('Method '.$methodName.' not exists');
     }
 
     public function sort($method)
@@ -67,12 +67,10 @@ class Zip
         $this->job_id = $object->job_id;
 
         $this->driver = Media::getFileDriver();
-
         $this->xlsx_dir = $this->driver->getXLSXDir($this->remote_xlsx);
 
         $this->zip_file = $this->driver->getZipFile($object->media->zip_file, \dirname($this->xlsx_dir));
 
-        // dd($this->xlsx_dir, $this->zip_file);
     }
 
     public function zip()
@@ -102,8 +100,10 @@ class Zip
 
         if (true === $d) {
             $this->driver->save($this->zip_file, $this->remote_zip);
-            $table = Media::$explorer->table('media_job')->where('job_id', $this->job_id)->update(['zip_exists' => 1]);
-            FileSystem::delete(\dirname($this->xlsx_dir, 1));
+            $table = Media::$explorer->table('media_job')->where('job_id', $this->job_id)->update(['zip_exists' => 1]); // UPDATEME
+            if($this->driver->tmpDirectory !== false){
+                FileSystem::delete(\dirname($this->driver->tmpDirectory, 1));
+            }
             return 'Zip file created';
 
 

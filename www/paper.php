@@ -39,7 +39,7 @@ function display_array_as_row($array)
 }
 */
 
-$paper_type = $explorer->table('paper_type');
+$paper_type = $explorer->table('paper_type'); // UPDATEME
 // $paper_type->limit(4);
 foreach ($paper_type as $paper) {
     $header_param['PAPER_INFO'] = $paper->paper_wieght.' '.$paper->paper_size.' '.$paper->pages;

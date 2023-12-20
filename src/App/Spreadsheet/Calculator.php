@@ -35,8 +35,8 @@ class Calculator
         $paper_size   = $this->media->form_configuration['paper_size'];
         $config       = str_replace('pg', '', $config);
 
-        $res          = Media::$explorer->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch();
-        $res          = Media::$explorer->table('paper_count')->where('paper_id', $res['id'])->fetch();
+        $res          = Media::$explorer->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch(); // UPDATEME
+        $res          = Media::$explorer->table('paper_count')->where('paper_id', $res['id'])->fetch(); // UPDATEME
 
         foreach ($res as $var => $value) {
             $$var = $value;

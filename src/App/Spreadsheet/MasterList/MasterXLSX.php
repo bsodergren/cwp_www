@@ -169,7 +169,7 @@ class MasterXLSX extends Media
             unset($this->spreadsheet);
         }
 
-        Media::$explorer->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
+        Media::$explorer->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]); // UPDATEME
     }
 
     public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
@@ -331,8 +331,8 @@ class MasterXLSX extends Media
         $paper_size       = $this->media->form_configuration['paper_size'];
         $config           = str_replace('pg', '', $config);
 
-        $res              = Media::$explorer->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch();
-        $res              = Media::$explorer->table('paper_count')->where('paper_id', $res['id'])->fetch();
+        $res              = Media::$explorer->table('paper_type')->select('id')->where('paper_wieght = ?  AND paper_size = ?  AND pages = ?', $paper_wieght, $paper_size, $config)->fetch(); // UPDATEME
+        $res              = Media::$explorer->table('paper_count')->where('paper_id', $res['id'])->fetch(); // UPDATEME
 
         foreach ($res as $var => $value) {
             $$var = $value;
@@ -417,12 +417,12 @@ class MasterXLSX extends Media
         $form_box_data['bind']        = $this->form_details['bind'];
 
         $form_box_data['former']      = $this->form_details['former'];
-        $count                        = Media::$explorer->table('form_data_count')
+        $count                        = Media::$explorer->table('form_data_count') // UPDATEME
             ->where('form_id', $this->form_details['form_id'])
             ->update($form_box_data);
         if (0 == $count) {
             $form_box_data['form_id'] = $this->form_details['form_id'];
-            $count                    = Media::$explorer->table('form_data_count')->insert($form_box_data);
+            $count                    = Media::$explorer->table('form_data_count')->insert($form_box_data); // UPDATEME
         }
     }
 
@@ -442,10 +442,10 @@ class MasterXLSX extends Media
         }
 
         if (true === $get) {
-            $res = Media::$explorer->table('pub_trim')->select('head_trim,foot_trim,delivered_size')->where('pub_name = ?  AND bind = ? ', $pub, $b)->fetch();
+            $res = Media::$explorer->table('pub_trim')->select('head_trim,foot_trim,delivered_size')->where('pub_name = ?  AND bind = ? ', $pub, $b)->fetch(); // UPDATEME
             if (null == $res) {
                 $insert = true;
-                $res    = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
+                $res    = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]); // UPDATEME
             }
 
             if (\is_object($res)) {

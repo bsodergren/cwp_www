@@ -1,0 +1,12 @@
+<?php
+
+namespace  CWP\Database\Map;
+
+use CWP\Database\dbObject;
+
+
+
+class %%CLASSNAME%% extends dbObject {
+     protected $dbTable = "%%TABLE%%";
+
+}

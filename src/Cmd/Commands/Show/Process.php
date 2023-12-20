@@ -27,8 +27,8 @@ class Process extends MediaCWP
 
 
     public $commandList = [
-      
-      
+
+
     ];
 
     public $defaultCommands = [
@@ -55,14 +55,14 @@ class Process extends MediaCWP
         // Mediatag::$output->getFormatter()->setStyle('download', new OutputFormatterStyle('bright-blue'));
         // Mediatag::$output->getFormatter()->setStyle('file', new OutputFormatterStyle('bright-cyan'));
 
-      
+
         //        dd(IGNORE_NAME_MAP);
     }
 
     public function exec($option = null)
     {
         MediaCWP::$Table->setHeaders(["Job ID","Close","Job Number"]);
-        $table = Media::$explorer->table('media_job');
+        $table = Media::$explorer->table('media_job'); // UPDATEME
         $results = $table->fetchAssoc('job_id');
         foreach($results as $row){
             MediaCWP::$Table->addRow([$row['job_id'],$row['close'],$row['job_number']]);
@@ -70,8 +70,8 @@ class Process extends MediaCWP
          MediaCWP::$Table->render();
 
 
-       
+
        return 1;
-   
+
     }
 }

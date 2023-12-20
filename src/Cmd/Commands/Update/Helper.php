@@ -27,7 +27,7 @@ trait Helper
     public function listJobs()
     {
         MediaCWP::$Table->setHeaders(["Job ID","Close","Job Number"]);
-        $table = Media::$explorer->table('media_job');
+        $table = Media::$explorer->table('media_job'); // UPDATEME
         $results = $table->fetchAssoc('job_id');
         foreach($results as $row){
             MediaCWP::$Table->addRow([$row['job_id'],$row['close'],$row['job_number']]);
@@ -35,7 +35,7 @@ trait Helper
          MediaCWP::$Table->render();
 
 
-       
+
        return 1;
        // dd($results);
 

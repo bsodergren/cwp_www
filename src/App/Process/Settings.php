@@ -77,7 +77,7 @@ class Settings extends MediaProcess
                     // }
                 }
 
-                $count = Media::$explorer->table('settings')->where('definedName', $key)->update([$field => $value]);
+                $count = Media::$explorer->table('settings')->where('definedName', $key)->update([$field => $value]); // UPDATEME
                 //   echo $template->render('process/update_setting', ['KEY' => $key, 'VALUE' => $value, 'FIELD' => $field]);
 
                 ob_flush();
@@ -89,7 +89,7 @@ class Settings extends MediaProcess
                     $new_settiings['setting_value'] = null;
                 }
 
-                Media::$explorer->table('settings')->insert($new_settiings);
+                Media::$explorer->table('settings')->insert($new_settiings); // UPDATEME
                 // echo "Added " . $new_settiings['definedName'] . " with " . $new_settiings['value'] . " <br>";
                 ob_flush();
             }

@@ -5,6 +5,7 @@
 
 use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
+use CWP\Process\MediaProcess;
 
 define("PROCESS", true);
 
@@ -32,7 +33,7 @@ if (isset($_POST['divClass'])) {
         $hidden = 0;
     }
 
-    $count = $explorer->table('media_job')
+    $count = $explorer->table('media_job') // UPDATEME
         ->where('job_id', $id) // must be called before update()
         ->update([
             'hidden' => $hidden,
@@ -56,7 +57,6 @@ if (array_key_exists('FORM_PROCESS', $_REQUEST)) {
 
 $procesClass = 'CWP\\Process\\'.$procesClass;
 
-//dd($procesClass,$_REQUEST);
 $mediaProcess = new $procesClass($media);
 $mediaProcess->run($_REQUEST);
 

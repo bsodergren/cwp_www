@@ -50,7 +50,7 @@ class MediaPublication
 //             if (null == $res) {
 //                 $insert = true;
 
-//                 $res    = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
+//                 $res    = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]); // UPDATEME
 //             }
 
 
@@ -75,10 +75,10 @@ class MediaPublication
         if(Media::$Stash->has($cacheName)) {
            $trim_details = Media::$Stash->get($cacheName);
         } else {
-            $res = Media::$explorer->table('pub_trim')->select('head_trim,foot_trim,delivered_size')->where('pub_name = ?  AND bind = ? ', $pub, $b)->fetch();
+            $res = Media::$explorer->table('pub_trim')->select('head_trim,foot_trim,delivered_size')->where('pub_name = ?  AND bind = ? ', $pub, $b)->fetch(); // UPDATEME
             if (null == $res) {
-                $res = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]);
-                $trim_details = ['pub' => $publication, 'bind' => $bind, 'head_trim' => $head, 
+                $res = Media::$explorer->table('pub_trim')->insert(['pub_name' => $pub, 'bind' => $b]); // UPDATEME
+                $trim_details = ['pub' => $publication, 'bind' => $bind, 'head_trim' => $head,
                 'foot_trim' => $foot, 'size' => $size];
             } else {
                 if (\is_object($res)) {

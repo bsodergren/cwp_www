@@ -146,7 +146,7 @@ class MediaXLSX extends Media
             unset($this->spreadsheet);
         }
 
-        Media::$explorer->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]);
+        Media::$explorer->table('media_job')->where('job_id', $this->media->job_id)->update(['xlsx_exists' => 1]); // UPDATEME
     }
 
     public function createWorksheet($sheetObj, $sheet_index, $form_number, $form_letter)
@@ -353,13 +353,13 @@ class MediaXLSX extends Media
             }
         }
 
-        $count         = Media::$explorer->table('form_data_count')
+        $count         = Media::$explorer->table('form_data_count') // UPDATEME
             ->where('form_id', $this->form_details['form_id'])
             ->update($form_box_data);
 
         if (0 == $count) {
             $form_box_data['form_id'] = $this->form_details['form_id'];
-            $count                    = Media::$explorer->table('form_data_count')->insert($form_box_data);
+            $count                    = Media::$explorer->table('form_data_count')->insert($form_box_data); // UPDATEME
         }
     }
 }

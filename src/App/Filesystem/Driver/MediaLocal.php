@@ -5,20 +5,17 @@
 
 namespace CWP\Filesystem\Driver;
 
-use CWP\Filesystem\MediaFileSystem;
+use Nette\Utils\FileSystem;
 use CWP\Filesystem\MediaFinder;
 use Nette\InvalidStateException;
-use Nette\Utils\FileSystem;
-use Symfony\Component\Filesystem\Exception\IOException;
+use CWP\Filesystem\Driver\MediaFS;
+use CWP\Filesystem\MediaFileSystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Exception\IOException;
 
-class MediaLocal implements MediaFileInterface
+class MediaLocal extends MediaFS implements MediaFileInterface
 {
-    public $directory;
 
-    public $pdf_file;
-
-    public $job_number;
 
     public function postSaveFile($postFileArray)
     {
@@ -52,10 +49,7 @@ class MediaLocal implements MediaFileInterface
 
     public function exists($file)
     {
-        //dd($file);
 
-        // $directory = (new MediaFileSystem())->directory('upload', true);
-        // $file  = $directory.\DIRECTORY_SEPARATOR.$file;
         return file_exists($file);
     }
 
@@ -85,9 +79,9 @@ class MediaLocal implements MediaFileInterface
 
         try {
             if (false == FileSystem::rename($old, $new)) {
-                throw new InvalidStateException();
+                throw new \Nette\InvalidStateException();
             }
-        } catch (InvalidStateException $e) {
+        } catch (\Nette\InvalidStateException $e) {
             $msg = $e->getMessage();
         }
 
@@ -101,9 +95,7 @@ class MediaLocal implements MediaFileInterface
 
     public function uploadFile($filename, $pdf_file, $options = [])
     {
-        //dd([$filename, $pdf_file]);
 
-       // $this->rename($filename, $pdf_file);
     }
 
     public function DownloadFile($filename)
@@ -131,4 +123,5 @@ class MediaLocal implements MediaFileInterface
     {
         return $filename;
     }
+
 }

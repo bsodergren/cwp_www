@@ -6,11 +6,12 @@
 namespace CWP\Filesystem\Driver;
 
 use CWP\Core\Bootstrap;
-use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
-use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use Nette\Utils\FileSystem;
+use CWP\Filesystem\Driver\MediaFS;
+use CWP\Filesystem\MediaFileSystem;
+use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 
 // use Symfony\Component\Filesystem\Filesystem;
 /*
@@ -61,13 +62,14 @@ $item
 ]
 */
 
-class MediaGoogleDrive implements MediaFileInterface
+class MediaGoogleDrive extends MediaFS implements MediaFileInterface
 {
     public object $google;
 
     public object $localfs;
 
     private $upload_dir = '\Uploads';
+    public $tmpDirectory = false;
 
     public function __construct()
     {
@@ -99,22 +101,6 @@ class MediaGoogleDrive implements MediaFileInterface
         );
     }
 
-    private function path($path, $create = false)
-    {
-        $path = Filesystem::normalizePath($path);
-        $path = Filesystem::platformSlashes($path);
-
-        if (true == $create) {
-            if (is_dir($path)) {
-                $dir = $path;
-            } else {
-                $dir = \dirname($path);
-            }
-            FileSystem::createDir($dir);
-        }
-
-        return $path;
-    }
 
     public function postSaveFile($postFileArray)
     {
@@ -214,7 +200,7 @@ class MediaGoogleDrive implements MediaFileInterface
         if (false !== $this->exists($remotefile)) {
             $this->google->delete($remotefile);
         }
-
+        $this->tmpDirectory = $localfile;
         $this->google->writeStream($remotefile, $this->localfs->readStream($localfile));
     }
 

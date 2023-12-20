@@ -35,7 +35,7 @@ class Form extends MediaProcess
 
             if (str_starts_with($key, 'former')) {
                 list($_, $id) = explode('_', $key);
-                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]);
+                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]); // UPDATEME
                 if($count > 0) {
                     $updated =  true;
                 }
@@ -43,7 +43,7 @@ class Form extends MediaProcess
 
             if (str_starts_with($key, 'facetrim')) {
                 list($_, $id) = explode('_', $key);
-                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]);
+                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]); // UPDATEME
                 if($count > 0) {
                     $updated =  true;
                 }
@@ -56,7 +56,7 @@ class Form extends MediaProcess
 
                 // dd($front,$id,$letters,$value, $job_id);
 
-                $count = Media::$explorer->table('form_data')->where('job_id', $job_id)
+                $count = Media::$explorer->table('form_data')->where('job_id', $job_id) // UPDATEME
                 ->where('form_number', $id)
                 ->where('form_letter', $letters)
                 ->update(['no_bindery' => $value]);
@@ -109,7 +109,7 @@ class Form extends MediaProcess
         global $_REQUEST;
 
         nextForm:
-        $form_data = Media::$explorer->table('form_data');
+        $form_data = Media::$explorer->table('form_data'); // UPDATEME
         $form_data->where('form_number = ?', $next_form_number);
         $form_data->where('job_id = ?', $this->job_id);
         $results = $form_data->fetch();

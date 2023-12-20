@@ -14,7 +14,7 @@ define('TITLE', 'Import new Media drop');
 // $template = new Template();
 $files = [];
 MediaDevice::getHeader();
-$table = $explorer->table('media_job');
+$table = $explorer->table('media_job'); // UPDATEME
 $results = $table->fetchAssoc('job_id');
 foreach ($results as $id => $row) {
     $files[] = $row['pdf_file'];

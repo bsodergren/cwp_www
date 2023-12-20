@@ -9,24 +9,37 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
+use CWP\Utils\Zip;
 use CWP\Core\MediaError;
-use CWP\Core\MediaStopWatch;
-use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaExport;
-use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Utils\Zip;
+use Nette\Utils\FileSystem;
+use CWP\Core\MediaStopWatch;
+use CWP\Media\Import\PDFImport;
+use CWP\Filesystem\MediaFileSystem;
+use CWP\Spreadsheet\Media\MediaXLSX;
 
 class Index extends MediaProcess
 {
     public function run($req)
     {
-        $method = key($req['submit']);
 
-        $this->$method();
+
+        if(array_key_exists('submit',$req)) {
+            $method = key($req['submit']);
+
+            $this->$method();
+
+        } else if(array_key_exists('update_job',$req)) {
+            $method = $req['update_job'];
+            $this->$method($req['job_number']);
+        } else {
+            dd($req);
+        }
+
+
     }
 
     public function addforms()
@@ -151,19 +164,33 @@ class Index extends MediaProcess
             MediaError::msg('warning', 'There was a problem <br> the job number was incorrect');
         }
 
-        if ($msg = null === $this->media->delete_xlsx()) {
-            if ($msg = null === $this->media->delete_zip()) {
+        $msg_xlsx =  $this->media->delete_xlsx();
+        $msg_zip =  $this->media->delete_zip();
+
+
+        // if ($msg = null ===) {
+        //     if ($msg = null === $this->media->delete_zip()) {
                 $mediaLoc = new MediaFileSystem($this->media->pdf_file, $job_number);
                 $mediaLoc->getDirectory();
-                if ($msg = null === $mediaLoc->rename($this->media->base_dir, $mediaLoc->directory)) {
-                    $this->media->update_job_number($job_number);
-                    dd($this->media, $mediaLoc);
 
+//dump(posix_getpwuid(getmyuid()));
+
+
+                 $olddir = dirname($this->media->base_dir,1);
+            //     $newdir = dirname($mediaLoc->directory,1);
+            //    $msg= FileSystem::makeWritable(dirname($olddir,1));
+            //    $msg2= FileSystem::makeWritable($newdir);
+            //     dd($msg,$msg2);
+
+                 $msg = FileSystem::delete($olddir);
+dd($msg,$olddir);
+            //     if ($msg = null === $mediaLoc->rename($this->media->base_dir, $mediaLoc->directory)) {
+                     $this->media->update_job_number($job_number);
                     echo HTMLDisplay::JavaRefresh('/index.php', 0);
-                }
-                dd($msg);
-            }
-        }
+                // }
+                // dd($msg);
+        //     }
+        // }
         MediaError::msg('warning', 'There was a problem <br> ' . $msg, 15);
         exit;
     }

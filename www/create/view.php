@@ -20,7 +20,7 @@ MediaDevice::getHeader();
 
 $infotable =  "job_".$view;
 $templatePath = "createjob/view";
-$table = Media::$explorer->table($infotable);
+$table = Media::$explorer->table($infotable); // UPDATEME
 
 //$table->order('setting_type ASC');
 $results = $table->fetchAssoc('name');

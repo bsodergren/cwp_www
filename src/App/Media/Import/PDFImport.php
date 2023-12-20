@@ -34,7 +34,7 @@ class PDFImport extends MediaImport
         HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing ' . $noPagess . ' forms']);
 
         $keyidx       = array_key_first($pdf);
-        Media::$explorer->table('media_job')->where(
+        Media::$explorer->table('media_job')->where( // UPDATEME
             'job_id',
             $this->job_id
         )->update([

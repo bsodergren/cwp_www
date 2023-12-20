@@ -8,7 +8,7 @@ use CWP\Core\Media;
 use CWP\Core\MediaSettings;
 
 $results = Media::get("settings", 120, function () {
-    $table = Media::$explorer->table('settings');
+    $table = Media::$explorer->table('settings'); // UPDATEME
     $table->order('setting_type ASC');
     return $table->fetchAssoc('id');
 });

@@ -99,6 +99,7 @@ class Bootstrap
         }
 
         $this->define('__DATABASE_DSN__', $database_dsn);
+        $this->define('DB_HOST', $this->Config['db']['host']);
         $this->define('DB_DATABASE', $this->Config['db']['dbname']);
         $this->define('DB_USERNAME', $this->Config['db']['username']);
         $this->define('DB_PASSWORD', $this->Config['db']['password']);

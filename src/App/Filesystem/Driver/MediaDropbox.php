@@ -10,13 +10,15 @@ use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 use Kunnu\Dropbox\Dropbox;
-use Kunnu\Dropbox\DropboxApp;
-use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use Nette\Utils\FileSystem;
+use Kunnu\Dropbox\DropboxApp;
+use CWP\Filesystem\Driver\MediaFS;
+use CWP\Filesystem\MediaFileSystem;
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 // use Symfony\Component\Filesystem\Filesystem;
 
-class MediaDropbox implements MediaFileInterface
+class MediaDropbox extends MediaFS implements MediaFileInterface
 {
     public object $dropbox;
 
@@ -34,6 +36,29 @@ class MediaDropbox implements MediaFileInterface
         } catch (DropboxClientException $e) {
             $this->error($e);
         }
+    }
+
+
+    public function postSaveFile($postFileArray)
+    {
+        $fileName = $postFileArray['the_file']['name'];
+        $fileTmpName = $postFileArray['the_file']['tmp_name'];
+
+        $loc = new MediaFileSystem();
+        $pdf_directory = $loc->getDirectory('upload', true);
+
+        $upload_file = $this->createFolder($pdf_directory).\DIRECTORY_SEPARATOR.basename($fileName);
+
+        $pdf_file = $this->path(__TEMP_DIR__.\DIRECTORY_SEPARATOR.'MediaUpload'.\DIRECTORY_SEPARATOR.basename($fileName), true);
+        $res = move_uploaded_file($fileTmpName, $pdf_file);
+        if (true != $res) {
+            dd($res);
+        }
+
+        $loc->UploadFile($pdf_file, $upload_file, ['autorename' => false]);
+
+        // dd($fileTmpName, $pdf_file, $upload_file);
+        return $pdf_file;
     }
 
     public function dirExists($dir)

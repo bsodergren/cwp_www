@@ -14,7 +14,7 @@ require_once '.config.inc.php';
 define('__AUTH__', true);
 define('TITLE', APP_NAME);
 
-$table = $explorer->table('media_job');
+$table = $explorer->table('media_job'); // UPDATEME
 $results = $table->fetchAssoc('job_id');
 $cnt = $table->count('*');
 

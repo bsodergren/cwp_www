@@ -24,7 +24,7 @@ if (isset($_GET['cat'])) {
     $cat = $_GET['cat'];
 }
 
-$table = Media::$explorer->table('settings');
+$table = Media::$explorer->table('settings'); // UPDATEME
 $table->select('setting_group');
 $table->group('setting_group');
 foreach ($table as $id => $row) {
@@ -33,7 +33,7 @@ foreach ($table as $id => $row) {
     }
 }
 
-$table = Media::$explorer->table('settings');
+$table = Media::$explorer->table('settings'); // UPDATEME
 $table->where('setting_cat', $cat);
 $table->order('setting_group ASC');
 // $table->group('setting_group');
@@ -212,7 +212,7 @@ foreach ($settings as $setting_group => $setting) {
 
             // $description_label = Template::GetHTML('testsettings/list/'.$desc_template, $row_desc_params);
 
-            $table = $explorer->table('pub_trim');
+            $table = $explorer->table('pub_trim'); // UPDATEME
             $res = $table->order('bind ASC, pub_name ASC');
 
             $valueArray = explode(',', $value);

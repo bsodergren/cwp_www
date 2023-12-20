@@ -21,7 +21,7 @@ MediaDevice::getHeader();
 
 $null_style = 'background-color : #94f9b2;';
 
-$table = $explorer->table('pub_trim');
+$table = $explorer->table('pub_trim'); // UPDATEME
 $table->order('bind DESC, delivered_size ASC, pub_name ASC');
 $results = $table->fetchAssoc('id');
 
@@ -141,7 +141,7 @@ foreach ($pub_array as $bind => $row) {
                 'class' => 'form-control',
             ]
         );
-        
+
 
         $cacheName = MediaPublication::CleanPublication($pub_name)."-".strtolower($bind);
         $pub_checkbox = HTMLForms::draw_checkbox('trim_'.$u['id'].'_delete', 0, '');

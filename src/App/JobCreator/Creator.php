@@ -20,7 +20,7 @@ class Creator
             return Media::$Stash->get($table);
         }
 
-        $market_table = Media::$explorer->table($table);
+        $market_table = Media::$explorer->table($table); // UPDATEME
         foreach($market_table as $row) {
             $marketArray[] = $row->name;
         }

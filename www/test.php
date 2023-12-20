@@ -10,7 +10,7 @@ define('TITLE', APP_NAME);
 
 
 
-$table = $explorer->table('media_job');
+$table = $explorer->table('media_job'); // UPDATEME
 $results = $table->fetchAssoc('job_id');
 $cnt = $table->count('*');
 
