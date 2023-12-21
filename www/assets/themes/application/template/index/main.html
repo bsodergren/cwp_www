@@ -8,22 +8,26 @@
         %%MEDIA_JOB_ROW%%
     </tbody>
 </table>
+higahsfdigfhasdhfiosdiofhisdfihsd
 <script type="text/javascript">
 
-function createButton(id) {
+    function OpenNewWindow(MyPath) {
+        window.open(MyPath, "", "");
+    }
+    function createButton(id) {
 
         console.log(id);
         var divArr = id.split("_");
-        var action = divArr[0]+'_'+divArr[1];
-        var  job_id = divArr[2];
+        var action = divArr[0] + '_' + divArr[1];
+        var job_id = divArr[2];
 
-        console.log(action,job_id);
+        console.log(action, job_id);
         $.ajax({
             type: "post",
             url: "%%__FORM_URL__%%",
             data:
             {
-                'submit': {'create_xlsx': 'create xlsx'},
+                'submit': { 'create_xlsx': 'create xlsx' },
                 'job_id': job_id
             },
             cache: false,
@@ -32,7 +36,7 @@ function createButton(id) {
             }
         });
 
-}
+    }
 
 
     function clickButton(id) {

@@ -4,10 +4,11 @@
  */
 
 use CWP\Core\Media;
-use CWP\Core\MediaStopWatch;
-use CWP\Filesystem\MediaFileSystem;
+use CWP\Core\Bootstrap;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
+use CWP\Core\MediaStopWatch;
+use CWP\Filesystem\MediaFileSystem;
 
 require_once '.config.inc.php';
 
@@ -145,6 +146,10 @@ foreach ($results as $k => $row) {
     }
     if (true == Media::get_exists('xlsx', $row['job_id'])) {
         $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[upload]', '', 'Export to Google', '', $class_create.$tooltip.'Google"');
+        $replacement['FORM_BUTTONS_HTML'] .=  '<a '.$class_create.' href="" onclick="OpenNewWindow(\''.Bootstrap::$CONFIG['google']['sharelink'].'\')">Open Google Drive</a>';
+
+        //$form->input_submit('submit[share_link]', '', 'Open Google Drive', '', $class_create.$tooltip.'Google"');
+
     }
     //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('export_job', '', 'Export Job', '', $class_create.$tooltip.'export"');
     if($customJob === false) {

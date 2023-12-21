@@ -10,6 +10,7 @@ namespace CWP\Process;
  */
 
 use CWP\Utils\Zip;
+use CWP\Core\Bootstrap;
 use CWP\Core\MediaError;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaExport;
@@ -191,6 +192,13 @@ class Index extends MediaProcess
     public function delete_job()
     {
         $this->url = '/delete_job.php?job_id=' . $this->job_id;
+    }
+
+    public function share_link()
+    {
+        //$this->url = Bootstrap::$CONFIG['google']['sharelink'];
+        echo HTMLDisplay::redirect(Bootstrap::$CONFIG['google']['sharelink'], 0);
+        exit;
     }
 
     public function update_job($job_number)

@@ -91,6 +91,10 @@ class HTMLDisplay
         echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
     }
 
+    public static function redirect($url, $timeout = 0, $msg = '')
+    {
+        echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
+    }
     public static function pushhtml($template, $params = [])
     {
         $params['MSG_CLASS'] = MSG_CLASS;
@@ -196,7 +200,7 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
         if (\array_key_exists('0', $http_response_header)) {
             $response = $http_response_header[0];
-            if(str_contains($response,'404')) {
+            if(str_contains($response, '404')) {
                 return true;
             }
         }
