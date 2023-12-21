@@ -83,7 +83,8 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
         $adapter = new \Masbug\Flysystem\GoogleDriveAdapter($service, 'CWPMediaFolder');
         $this->google = new \League\Flysystem\Filesystem($adapter);
 
-        $localAdapter = new \League\Flysystem\Local\LocalFilesystemAdapter('/',
+        $localAdapter = new \League\Flysystem\Local\LocalFilesystemAdapter(
+            '/',
             PortableVisibilityConverter::fromArray([
                 'file' => [
                     'public' => 0640,
@@ -159,6 +160,7 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
             $path = rtrim($path, '/');
         }
         if (!str_starts_with($path, __HOME__)) {
+
             $this->google->createDirectory($path);
         }
 

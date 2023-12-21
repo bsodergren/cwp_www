@@ -97,7 +97,7 @@ foreach ($results as $k => $row) {
     $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process_';
     //$javascript_click = ' onclick="return createButton(this.id);" ';
 
-    $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('submit[process]', '', 'Process PDF Form', '', $class_normal . $pdisabled . $tooltip . 'process"');
+    $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('submit[process]', '', 'Edit Media Drop', '', $class_normal . $pdisabled . $tooltip . 'process"');
 
 
     // $form->input_submit('actSubmit', '', 'View Forms', '', class_normal.$rowdisabled);
@@ -127,11 +127,6 @@ foreach ($results as $k => $row) {
         );
 
     }
-
-    if (true == Media::get_exists('xlsx', $row['job_id'])) {
-        //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('create_slip', '', 'create_slip', '', $class_create.$tooltip.'create_slip"');
-    }
-
     if (__SHOW_ZIP__ == true) {
         if ($mediaDir->exists($zip_file)) {
             $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_zip]', '', 'delete zip', '', $class_delete . $tooltip . 'delete_zip"');
@@ -147,6 +142,9 @@ foreach ($results as $k => $row) {
                 $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[email_zip]', '', 'email zip', '', $class_create . $tooltip . 'email_zip"');
             }
         }
+    }
+    if (true == Media::get_exists('xlsx', $row['job_id'])) {
+        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[upload]', '', 'Export to Google', '', $class_create.$tooltip.'Google"');
     }
     //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('export_job', '', 'Export Job', '', $class_create.$tooltip.'export"');
     if($customJob === false) {

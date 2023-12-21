@@ -43,14 +43,14 @@ class MediaFileSystem
     }
 
 
-    public function getContents($path)
+    public function getContents($path, $ext = '*.pdf')
     {
-        return $this->fileDriver->getContents($path);
+        return $this->fileDriver->getContents($path, $ext);
     }
 
     public function dirExists($file)
     {
-        if(str_starts_with($file,__HOME__)){
+        if(str_starts_with($file, __HOME__)) {
             return $this->localfs->dirExists($file);
         }
         return $this->fileDriver->dirExists($file);
@@ -58,7 +58,7 @@ class MediaFileSystem
 
     public function exists($file)
     {
-        if(str_starts_with($file,__HOME__)){
+        if(str_starts_with($file, __HOME__)) {
             return $this->localfs->exists($file);
         }
         return $this->fileDriver->exists($file);
@@ -154,7 +154,7 @@ class MediaFileSystem
             $output_filename = $this->job_number.$output_filename;
         }
 
-        MediaLogger::log("Directory",['type' => $type, "outputfile" => $output_filename],"filedriver.log");
+        MediaLogger::log("Directory", ['type' => $type, "outputfile" => $output_filename], "filedriver.log");
 
         $dirArray       = [__FILES_DIR__,__MEDIA_FILES_DIR__,$output_filename];
         $type            = strtolower($type);
@@ -164,12 +164,12 @@ class MediaFileSystem
                 $dirArray[] = __XLSX_DIRECTORY__;
                 break;
 
-                case 'zip':
-                    $dirArray[] = __ZIP_DIRECTORY__;
+            case 'zip':
+                $dirArray[] = __ZIP_DIRECTORY__;
                 // $dirArray = [__FILES_DIR__,__MEDIA_FILES_DIR__,__ZIP_DIRECTORY__];
                 break;
 
-                case 'upload':
+            case 'upload':
                 if (Media::$Dropbox) {
                     $dirArray       = [__TEMP_DIR__,'Uploads'];
                 } elseif (Media::$Google) {
@@ -184,11 +184,11 @@ class MediaFileSystem
                 }
                 break;
         }
-        MediaLogger::log("Directory Array",['dirArray' => $dirArray],"filedriver.log");
+        MediaLogger::log("Directory Array", ['dirArray' => $dirArray], "filedriver.log");
 
-        $directory = implode(DIRECTORY_SEPARATOR,$dirArray);
+        $directory = implode(DIRECTORY_SEPARATOR, $dirArray);
         $directory = FileSystem::platformSlashes($directory);
-        $directory = rtrim($directory,DIRECTORY_SEPARATOR);
+        $directory = rtrim($directory, DIRECTORY_SEPARATOR);
         $this->directory = FileSystem::normalizePath($directory);
 
         if (true == $create_dir) {

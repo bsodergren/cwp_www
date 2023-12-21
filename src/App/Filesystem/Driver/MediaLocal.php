@@ -15,8 +15,6 @@ use Symfony\Component\Filesystem\Exception\IOException;
 
 class MediaLocal extends MediaFS implements MediaFileInterface
 {
-
-
     public function postSaveFile($postFileArray)
     {
         $fileName      = $postFileArray['the_file']['name'];
@@ -36,10 +34,12 @@ class MediaLocal extends MediaFS implements MediaFileInterface
     }
 
 
-    public function getContents($path)
+    public function getContents($path, $ext = '*.pdf')
     {
+
+
         $f     = new MediaFinder();
-        $array = $f->search($path, '*.pdf');
+        $array = $f->search($path, $ext);
         foreach ($array as $file) {
             $return[] =  $file;
         }

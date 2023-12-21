@@ -20,6 +20,7 @@ use CWP\Core\MediaStopWatch;
 use CWP\Media\Import\PDFImport;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Filesystem\Driver\MediaGoogleDrive;
 
 class Index extends MediaProcess
 {
@@ -29,7 +30,6 @@ class Index extends MediaProcess
 
         if(array_key_exists('submit', $req)) {
             $method = key($req['submit']);
-
             $this->$method();
 
         } elseif(array_key_exists('update_job', $req)) {
@@ -138,6 +138,41 @@ class Index extends MediaProcess
         $export->exportZip();
     }
 
+
+
+    public function upload()
+    {
+
+        \define('TITLE', 'Uploading to Google Drive');
+        MediaDevice::getHeader();
+        Template::echo('stream/start_page', []);
+
+        $google = new MediaGoogleDrive();
+        $mediaLoc = new MediaFileSystem($this->media->pdf_file, $this->media->job_number);
+        $mediaLoc->getDirectory();
+        $excelDir = $mediaLoc->directory . DIRECTORY_SEPARATOR . "xlsx";
+        $basePath = dirname($mediaLoc->directory, 2);
+        $filePath = str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
+        $google->createFolder($filePath);
+        HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Created DIR ' . $filePath]);
+
+        $files = $mediaLoc->getContents($excelDir, '*.xlsx');
+
+        foreach($files as $filename) {
+            $remoteFilename = basename($filename);
+            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Uploading ' . $remoteFilename]);
+            $uploadFilename = $filePath . DIRECTORY_SEPARATOR . $remoteFilename;
+            $google->UploadFile($filename, $uploadFilename);
+        }
+
+
+        $this->msg = 'Files Uploaded to google drive';
+        Template::echo('stream/end_page', []);
+    }
+
+
+
+
     public function delete_zip()
     {
         if ($msg = null === $this->media->delete_zip()) {
@@ -160,18 +195,26 @@ class Index extends MediaProcess
 
     public function update_job($job_number)
     {
+        $google = new MediaGoogleDrive();
+
         if (6 != \strlen($job_number)) {
             MediaError::msg('warning', 'There was a problem <br> the job number was incorrect');
         }
 
-        $msg_xlsx =  $this->media->delete_xlsx();
-        $msg_zip =  $this->media->delete_zip();
+        $this->media->delete_xlsx();
+        $this->media->delete_zip();
 
+        $mediaLoc = new MediaFileSystem($this->media->pdf_file, $this->media->job_number);
+        $mediaLoc->getDirectory();
+        //$excelDir = $mediaLoc->directory . DIRECTORY_SEPARATOR . "xlsx";
+        $basePath = dirname($mediaLoc->directory, 2);
+        $filePath = str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
+        $google->delete(dirname($filePath, 1));
 
         // if ($msg = null ===) {
         //     if ($msg = null === $this->media->delete_zip()) {
-        $mediaLoc = new MediaFileSystem($this->media->pdf_file, $job_number);
-        $mediaLoc->getDirectory();
+        // $mediaLoc = new MediaFileSystem($this->media->pdf_file, $job_number);
+        // $mediaLoc->getDirectory();
 
         //dump(posix_getpwuid(getmyuid()));
 
