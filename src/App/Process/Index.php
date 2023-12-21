@@ -144,6 +144,10 @@ class Index extends MediaProcess
     public function upload()
     {
 
+        $pathPrefix = '';
+        if (__DEBUG__ == 1) {
+            $pathPrefix = '\Dev';
+        }
         \define('TITLE', 'Uploading to Google Drive');
         MediaDevice::getHeader();
         Template::echo('stream/start_page', []);
@@ -153,7 +157,7 @@ class Index extends MediaProcess
         $mediaLoc->getDirectory();
         $excelDir = $mediaLoc->directory . DIRECTORY_SEPARATOR . "xlsx";
         $basePath = dirname($mediaLoc->directory, 2);
-        $filePath = str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
+        $filePath = $pathPrefix.str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
         $google->createFolder($filePath);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Created DIR ' . $filePath]);
 
@@ -211,12 +215,15 @@ class Index extends MediaProcess
 
         $this->media->delete_xlsx();
         $this->media->delete_zip();
-
+        $pathPrefix = '';
+        if (__DEBUG__ == 1) {
+            $pathPrefix = '\Dev';
+        }
         $mediaLoc = new MediaFileSystem($this->media->pdf_file, $this->media->job_number);
         $mediaLoc->getDirectory();
         //$excelDir = $mediaLoc->directory . DIRECTORY_SEPARATOR . "xlsx";
         $basePath = dirname($mediaLoc->directory, 2);
-        $filePath = str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
+        $filePath = $pathPrefix . str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
         $google->delete(dirname($filePath, 1));
 
         // if ($msg = null ===) {
