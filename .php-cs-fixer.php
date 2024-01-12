@@ -17,25 +17,25 @@ return (new PhpCsFixer\Config())->setRules([
         'operators' => ['=>' => null],
     ],
     'blank_line_after_namespace' => true,
-    'blank_line_after_opening_tag'                => true,
-    'blank_line_before_statement'                 => [
+    'blank_line_after_opening_tag' => true,
+    'blank_line_before_statement' => [
         'statements' => ['return'],
     ],
-    'braces'                                      => true,
-    'cast_spaces'                                 => true,
-    'class_attributes_separation'                 => [
+    'braces' => true,
+    'cast_spaces' => true,
+    'class_attributes_separation' => [
         'elements' => [
-            'const'        => 'one',
-            'method'       => 'one',
-            'property'     => 'one',
+            'const' => 'one',
+            'method' => 'one',
+            'property' => 'one',
             'trait_import' => 'none',
         ],
     ],
-    // 'class_definition'                            => [
-    //     'multi_line_extends_each_single_line' => true,
-    //     'single_item_single_line'             => true,
-    //     'single_line'                         => true,
-    // ],
+    'class_definition' => [
+        'multi_line_extends_each_single_line' => true,
+        'single_item_single_line' => true,
+        'single_line' => true,
+    ],
     // 'concat_space'                                => [
     //     'spacing' => 'none',
     // ],
@@ -128,7 +128,7 @@ return (new PhpCsFixer\Config())->setRules([
     // 'simplified_null_return'                      => false, // disabled as "risky"
     // 'single_blank_line_at_eof'                    => true,
     // 'single_blank_line_before_namespace'          => true,
-    'single_class_element_per_statement'          => [
+    'single_class_element_per_statement' => [
         'elements' => ['const', 'property'],
     ],
 
@@ -146,10 +146,10 @@ return (new PhpCsFixer\Config())->setRules([
     // 'trailing_comma_in_multiline'                 => ['elements' => ['arrays']],
     // 'trim_array_spaces'                           => true,
     // 'unary_operator_spaces'                       => true,
-    // 'visibility_required'                         => [
-    //     'elements' => ['method', 'property'],
-    // ],
-    // 'whitespace_after_comma_in_array'             => true,
+    'visibility_required' => [
+        'elements' => ['method', 'property'],
+    ],
+    'whitespace_after_comma_in_array' => true,
     '@PhpCsFixer' => true,
     '@PSR12:risky' => true,
     '@PER-CS1.0' => true,
@@ -168,20 +168,20 @@ return (new PhpCsFixer\Config())->setRules([
     // 'header_comment' => ['header' => $fileHeaderComment,
     // 'comment_type' => 'PHPDoc', 'location' => 'after_open', 'separate' => 'bottom'],
     // 'modernize_strpos' => true,
-    // 'get_class_to_class_keyword' => true,
+    'get_class_to_class_keyword' => true,
     // 'braces'                                      => [
     //     'allow_single_line_closure'                   => true,
     //     'position_after_functions_and_oop_constructs' => 'same',
     // ],
     'no_unused_imports' => true,
 
-    'binary_operator_spaces'                      => [
-        'operators' => [
-            '=>'  => 'single_space',
-            '='   => 'single_space',
-            '===' => 'single_space',
-        ],
-    ],
+    // 'binary_operator_spaces'                      => [
+    //     'operators' => [
+    //         '=>'  => 'single_space',
+    //         '='   => 'single_space',
+    //         '===' => 'single_space',
+    //     ],
+    // ],
 ])
     ->setRiskyAllowed(true)
     ->setCacheFile('.php-cs-fixer.cache')
