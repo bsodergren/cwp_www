@@ -3,6 +3,8 @@
  * CWP Media Load Flag Creator
  */
 
+use CWP\Template\Template;
+use CWP\Template\HTMLDocument;
 use CWP\Updater\MediaAppUpdater;
 
 define('NO_DB_CHECK', true);
@@ -15,4 +17,8 @@ require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 
 $appUpdate = new MediaAppUpdater();
 
-echo $appUpdate->isUpdate();
+$update = $appUpdate->isUpdate();
+if($update != '') {
+    return Template::GetHTML('base/header/updates', ['VERSION_UPDATES' => $update]);
+}
+echo '';
