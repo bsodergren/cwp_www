@@ -19,6 +19,7 @@ $appUpdate = new MediaAppUpdater();
 
 $update = $appUpdate->isUpdate();
 if($update != '') {
-    return Template::GetHTML('base/header/updates', ['VERSION_UPDATES' => $update]);
+    echo Template::GetHTML('base/header/updates', ['VERSION_UPDATES' => $update]);
+    exit;
 }
 echo '';
