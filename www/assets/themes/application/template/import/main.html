@@ -1,12 +1,9 @@
-<form action="%%__PROCESS_FORM__%%" method="post"
-		class="w-50 m-3 rounded bg-success" target="print_popup"
-		style="--bs-bg-opacity: .5;" enctype="multipart/form-data">
-	<input type="hidden" name="FORM_PROCESS" value="Importing PDF File">
-
-	%%EMAIL_IMPORT_HTML%%
+<form action="%%__PROCESS_FORM__%%" method="post" class="w-50 m-3 rounded bg-success" target="print_popup" style="--bs-bg-opacity: .5;" enctype="multipart/form-data">
+    <input type="hidden" name="FORM_PROCESS" value="Importing PDF File">
+    %%EMAIL_IMPORT_HTML%%
 
     %%DROPBOX_FILES_HTML%%
 
-	%%UPLOAD_IMPORT_HTML%%
-
+    %%UPLOAD_IMPORT_HTML%%
+    %%UPLOAD_BACKUP_HTML%%
 </form>

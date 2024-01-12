@@ -101,8 +101,17 @@ class Index extends MediaProcess
 
     public function create_zip()
     {
-        $zip = new Zip($this);
-        $this->msg = $zip->zip();
+        $zip = new Zip();
+        $this->msg = $zip->zipExcelFiles($this);
+        // $this->msg = $zip->zip();
+        // $msg ='ZIP File Created';
+    }
+
+    public function export()
+    {
+        $ex = new Export();
+        $this->msg = $ex->export($this->job_id);
+        // $this->msg = $zip->zip();
         // $msg ='ZIP File Created';
     }
 

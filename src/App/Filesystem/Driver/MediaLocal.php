@@ -1,47 +1,43 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Filesystem\Driver;
 
-use Nette\Utils\FileSystem;
-use CWP\Filesystem\MediaFinder;
-use Nette\InvalidStateException;
-use CWP\Filesystem\Driver\MediaFS;
 use CWP\Filesystem\MediaFileSystem;
-use Symfony\Component\Finder\Finder;
+use CWP\Filesystem\MediaFinder;
+use Nette\Utils\FileSystem;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Finder\Finder;
 
 class MediaLocal extends MediaFS implements MediaFileInterface
 {
-    public function postSaveFile($postFileArray)
+    public function postSaveFile($postFileArray, $pdf = true)
     {
-        $fileName      = $postFileArray['the_file']['name'];
+        $fileName = $postFileArray['name'];
 
-        $fileTmpName   = $postFileArray['the_file']['tmp_name'];
+        $fileTmpName = $postFileArray['tmp_name'];
+        $pdf_directory = __FILES_DIR__;
+        if (true === $pdf) {
+            // $loc = new MediaFileSystem();
+            $pdf_directory = (new MediaFileSystem())->getDirectory('upload', false);
+        }
 
-        $loc = new MediaFileSystem();
-        $pdf_directory = $loc->getDirectory('upload', false);
-
-
-        $pdf_file      = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
+        $pdf_file = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
+        // $this->delete($pdf_file);
         $res = move_uploaded_file($fileTmpName, $pdf_file);
-
-        //$loc->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
+        // $loc->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
 
         return $pdf_file;
     }
 
-
     public function getContents($path, $ext = '*.pdf')
     {
-
-
-        $f     = new MediaFinder();
+        $f = new MediaFinder();
         $array = $f->search($path, $ext);
         foreach ($array as $file) {
-            $return[] =  $file;
+            $return[] = $file;
         }
 
         return $return;
@@ -49,7 +45,6 @@ class MediaLocal extends MediaFS implements MediaFileInterface
 
     public function exists($file)
     {
-
         return file_exists($file);
     }
 
@@ -88,6 +83,24 @@ class MediaLocal extends MediaFS implements MediaFileInterface
         return $msg;
     }
 
+    public function copy($old, $new, $overwrite = true)
+    {
+        $msg = null;
+        $old = FileSystem::platformSlashes($old);
+
+        $new = FileSystem::platformSlashes($new);
+
+        try {
+            if (false == FileSystem::copy($old, $new, $overwrite)) {
+                throw new \Nette\InvalidStateException();
+            }
+        } catch (\Nette\InvalidStateException $e) {
+            $msg = $e->getMessage();
+        }
+
+        return $msg;
+    }
+
     public function createFolder($path)
     {
         FileSystem::createDir($path);
@@ -95,7 +108,6 @@ class MediaLocal extends MediaFS implements MediaFileInterface
 
     public function uploadFile($filename, $pdf_file, $options = [])
     {
-
     }
 
     public function DownloadFile($filename)
@@ -124,4 +136,8 @@ class MediaLocal extends MediaFS implements MediaFileInterface
         return $filename;
     }
 
+    public function write($remotefile, $contents)
+    {
+        FileSystem::write($remotefile, $contents);
+    }
 }

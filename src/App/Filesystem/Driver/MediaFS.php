@@ -1,5 +1,8 @@
 <?php
+
 namespace CWP\Filesystem\Driver;
+
+use CWP\Filesystem\MediaFileSystem;
 use Nette\Utils\FileSystem;
 
 class MediaFS
@@ -13,24 +16,21 @@ class MediaFS
 
     public function save($localfile, $remotefile, $options = [])
     {
-
     }
 
     public function downloadXLSXFiles($xlsDir)
     {
-
     }
 
     public function getXLSXDir($xlsDir)
     {
-        return $this->path($xlsDir,true);
+        return $this->path($xlsDir, true);
     }
 
     public function getZipFile($zipFile, $path)
     {
         return $this->path($path.\DIRECTORY_SEPARATOR.'zip'.\DIRECTORY_SEPARATOR.basename($zipFile), true);
     }
-
 
     public function path($path, $create = false)
     {

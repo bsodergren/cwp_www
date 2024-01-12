@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 use CWP\Filesystem\MediaFileSystem;
@@ -40,14 +40,12 @@ if (1 == __IMAP_ENABLE__) {
             $import->mailId = $m;
 
             $has = $import->hasAttachment();
-            if($has === true){
+            if (true === $has) {
                 $hasAttachment = true;
             }
         }
 
-        if($hasAttachment === true)
-        {
-
+        if (true === $hasAttachment) {
             $import->moveAttachments();
             $import->getJobNumbers();
 
@@ -63,11 +61,11 @@ $dirs = $locations->getDirectory('upload', false);
 $results = $locations->getContents($dirs);
 foreach ($results as $key => $pdf_file) {
     if (!in_array($pdf_file, $files)) {
-        $pdfArray[] = ["name" => basename($pdf_file), 'filename' => $pdf_file];
+        $pdfArray[] = ['name' => basename($pdf_file), 'filename' => $pdf_file];
     }
 }
 
-if(count($pdfArray) > 0){
+if (count($pdfArray) > 0) {
     $import_card['FIRST_FORM'] = HTML_Import::drawSelectBox($pdfArray);
 
     $import_card['CARD_HEADER'] = 'Import from Folder';
@@ -77,9 +75,14 @@ if(count($pdfArray) > 0){
 /* close the connection */
 $import_card['CARD_HEADER'] = 'Upload from Computer';
 $import_card['SECOND_FORM'] = template::GetHTML('/import/upload/form_text', ['JN_NAME' => 'upload[job_number]']);
-$import_card['FIRST_FORM'] = template::GetHTML('/import/upload/form_upload', []);
-$import_card['BUTTON_SUBMIT'] = template::GetHTML('/import/form_submit', []);
+$import_card['FIRST_FORM'] = template::GetHTML('/import/upload/form_upload', ['UPLOAD_NAME' => 'the_file']);
+// $import_card['BUTTON_SUBMIT'] = template::GetHTML('/import/form_submit', []);
 $params['UPLOAD_IMPORT_HTML'] = template::GetHTML('/import/form_card', $import_card);
+
+$backup_card['CARD_HEADER'] = 'Import from backup';
+$backup_card['FIRST_FORM'] = template::GetHTML('/import/upload/form_upload', ['UPLOAD_NAME' => 'backup_file']);
+$backup_card['BUTTON_SUBMIT'] = template::GetHTML('/import/form_submit', []);
+$params['UPLOAD_BACKUP_HTML'] = template::GetHTML('/import/form_card', $backup_card);
 
 $template->render('import/main', $params);
 

@@ -1,17 +1,16 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Filesystem\Driver;
 
 use CWP\Core\Bootstrap;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
-use Nette\Utils\FileSystem;
-use CWP\Filesystem\Driver\MediaFS;
-use CWP\Filesystem\MediaFileSystem;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
+use Nette\Utils\FileSystem;
 
 // use Symfony\Component\Filesystem\Filesystem;
 /*
@@ -102,7 +101,6 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
         );
     }
 
-
     public function postSaveFile($postFileArray)
     {
         $fileName = $postFileArray['the_file']['name'];
@@ -160,7 +158,6 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
             $path = rtrim($path, '/');
         }
         if (!str_starts_with($path, __HOME__)) {
-
             $this->google->createDirectory($path);
         }
 
@@ -232,6 +229,22 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
     public function rename($old, $new)
     {
         return null;
+    }
+
+    public function copy($old, $new, $overwrite = true)
+    {
+        return $this->google->copy($old, $new);
+        // return null;
+    }
+
+    public function write($remotefile, $contents)
+    {
+        $remotefile = $this->path($remotefile);
+
+        if (false !== $this->exists($remotefile)) {
+            $this->google->delete($remotefile);
+        }
+        $this->google->writeStream($remotefile, $contents);
     }
 
     public function error($e)

@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Utils;
@@ -59,57 +59,57 @@ class Zip
 
     public object $driver;
 
-    public function __construct($object)
+    public function __construct()
+    {
+        $this->driver = Media::getFileDriver();
+    }
+
+    public function zipExcelFiles($object)
     {
         $this->remote_xlsx = $object->media->xlsx_directory;
         $this->remote_zip = $object->media->zip_file;
         // $this->zip_file  = $object->media->zip_file;
         $this->job_id = $object->job_id;
-
-        $this->driver = Media::getFileDriver();
         $this->xlsx_dir = $this->driver->getXLSXDir($this->remote_xlsx);
 
         $this->zip_file = $this->driver->getZipFile($object->media->zip_file, \dirname($this->xlsx_dir));
+        $this->driver->downloadXLSXFiles($this->remote_xlsx);
+        $d = $this->zip($this->zip_file, $this->xlsx_dir);
+        if (true === $d) {
+            $this->driver->save($this->zip_file, $this->remote_zip);
+            $table = Media::$explorer->table('media_job')->where('job_id', $this->job_id)->update(['zip_exists' => 1]); // UPDATEME
+            if (false !== $this->driver->tmpDirectory) {
+                FileSystem::delete(\dirname($this->driver->tmpDirectory, 1));
+            }
 
+            return 'Zip file created';
+        }
+
+        return 'zip file not created, probably a file open';
     }
 
-    public function zip()
+    public function zip($zipFile, $zipPath)
     {
         // $zipPath  = dirname($this->zip_file);
 
-        $this->driver->downloadXLSXFiles($this->remote_xlsx);
-
         $zip = new \ZipArchive();
-        $zip->open($this->zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->open($zipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
-        $files = (new AdvancedFilesystemIterator($this->xlsx_dir))->sortByMTime();
+        $files = (new AdvancedFilesystemIterator($zipPath))->sortByMTime();
 
         foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
             if (!$file->isDir()) {
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, \strlen($this->xlsx_dir) + 1);
+                $relativePath = substr($filePath, \strlen($zipPath) + 1);
                 // Add current file to archive
                 $zip->addFile($filePath, $relativePath);
             }
         }
 
         // Zip archive will be created only after closing object
-        $d = $zip->close();
-
-        if (true === $d) {
-            $this->driver->save($this->zip_file, $this->remote_zip);
-            $table = Media::$explorer->table('media_job')->where('job_id', $this->job_id)->update(['zip_exists' => 1]); // UPDATEME
-            if($this->driver->tmpDirectory !== false){
-                FileSystem::delete(\dirname($this->driver->tmpDirectory, 1));
-            }
-            return 'Zip file created';
-
-
-        }
-
-        return 'zip file not created, probably a file open';
+        return $zip->close();
     }
 
     public function exportZip($pdf_file, $jsonFile)

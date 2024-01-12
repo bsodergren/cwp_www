@@ -1,14 +1,13 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
-use PHLAK\Stash;
-
-use CWP\Core\Bootstrap;
 use Camoo\Config\Config;
-use CWP\Core\MediaStopWatch;
+use CWP\Core\Bootstrap;
 use CWP\Core\Media;
+use CWP\Core\MediaStopWatch;
+use PHLAK\Stash;
 
 define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 define('__CWP_SOURCE__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'src');
@@ -28,7 +27,7 @@ require __COMPOSER_DIR__.\DIRECTORY_SEPARATOR.'autoload.php';
 $boot = new Bootstrap(new Config(__PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'config.ini'));
 
 ini_set('max_execution_time', '600');
-register_shutdown_function([MediaStopWatch::class, 'flushLogs']);
+// register_shutdown_function([MediaStopWatch::class, 'flushLogs']);
 
 $stash = Stash\Cache::file(function (): void {
     $this->setCacheDir(__STASH_DIR__);

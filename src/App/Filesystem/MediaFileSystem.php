@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Filesystem;
@@ -9,11 +9,8 @@ namespace CWP\Filesystem;
  * CWP Media tool
  */
 
-use CWP\Core\Bootstrap;
 use CWP\Core\Media;
 use CWP\Core\MediaLogger;
-use CWP\Filesystem\Driver\MediaDropbox;
-use CWP\Filesystem\Driver\MediaGoogleDrive;
 use CWP\Filesystem\Driver\MediaLocal;
 use Nette\Utils\FileSystem;
 
@@ -31,17 +28,15 @@ class MediaFileSystem
     public function __construct($pdf_file = null, $job_number = null)
     {
         $this->job_number = $job_number;
-        $this->pdf_file   = $pdf_file;
+        $this->pdf_file = $pdf_file;
         $this->fileDriver = Media::getFileDriver();
-        $this->localfs  = new MediaLocal();
+        $this->localfs = new MediaLocal();
     }
 
-
-    public function postSaveFile($postFileArray)
+    public function postSaveFile($postFileArray, $pdf = true)
     {
-        return $this->fileDriver->postSaveFile($postFileArray);
+        return $this->fileDriver->postSaveFile($postFileArray, $pdf);
     }
-
 
     public function getContents($path, $ext = '*.pdf')
     {
@@ -50,17 +45,19 @@ class MediaFileSystem
 
     public function dirExists($file)
     {
-        if(str_starts_with($file, __HOME__)) {
+        if (str_starts_with($file, __HOME__)) {
             return $this->localfs->dirExists($file);
         }
+
         return $this->fileDriver->dirExists($file);
     }
 
     public function exists($file)
     {
-        if(str_starts_with($file, __HOME__)) {
+        if (str_starts_with($file, __HOME__)) {
             return $this->localfs->exists($file);
         }
+
         return $this->fileDriver->exists($file);
     }
 
@@ -89,9 +86,19 @@ class MediaFileSystem
         return $this->fileDriver->rename($old, $new);
     }
 
+    public function copy($old, $new, $overwrite = true)
+    {
+        return $this->fileDriver->copy($old, $new, $overwrite);
+    }
+
     public function save($filename, $path)
     {
         return $this->fileDriver->save($filename, $path);
+    }
+
+    public function write($file, $contents)
+    {
+        $this->fileDriver->write($file, $contents);
     }
 
     public function getFilename($type = '', $form_number = '', $create_dir = false)
@@ -108,13 +115,13 @@ class MediaFileSystem
     {
         $directory = '';
 
-        if (! isset($this->pdf_file)) {
+        if (!isset($this->pdf_file)) {
             return false;
         }
 
-        $file      = basename($this->pdf_file, '.pdf');
-        $filename  = $this->job_number.'_'.$file;
-        $type      = strtolower($type);
+        $file = basename($this->pdf_file, '.pdf');
+        $filename = $this->job_number.'_'.$file;
+        $type = strtolower($type);
         switch ($type) {
             case 'xlsx':
                 $filename = $filename.'_FM'.$form_number.'.xlsx';
@@ -138,8 +145,8 @@ class MediaFileSystem
             $directory = $this->directory($type, $create_dir, true);
         }
 
-        $filename  = $directory.\DIRECTORY_SEPARATOR.$filename;
-        $filename  = FileSystem::normalizePath($filename);
+        $filename = $directory.\DIRECTORY_SEPARATOR.$filename;
+        $filename = FileSystem::normalizePath($filename);
 
         return $filename;
     }
@@ -154,10 +161,10 @@ class MediaFileSystem
             $output_filename = $this->job_number.$output_filename;
         }
 
-        MediaLogger::log("Directory", ['type' => $type, "outputfile" => $output_filename], "filedriver.log");
+        MediaLogger::log('Directory', ['type' => $type, 'outputfile' => $output_filename], 'filedriver.log');
 
-        $dirArray       = [__FILES_DIR__,__MEDIA_FILES_DIR__,$output_filename];
-        $type            = strtolower($type);
+        $dirArray = [__FILES_DIR__, __MEDIA_FILES_DIR__, $output_filename];
+        $type = strtolower($type);
         switch ($type) {
             case 'xlsx':
                 // $dirArray = [__FILES_DIR__,__MEDIA_FILES_DIR__,__XLSX_DIRECTORY__];
@@ -171,20 +178,20 @@ class MediaFileSystem
 
             case 'upload':
                 if (Media::$Dropbox) {
-                    $dirArray       = [__TEMP_DIR__,'Uploads'];
+                    $dirArray = [__TEMP_DIR__, 'Uploads'];
                 } elseif (Media::$Google) {
-                    $dirArray       = [__TEMP_DIR__,'Uploads'];
+                    $dirArray = [__TEMP_DIR__, 'Uploads'];
                 } else {
-                    $dirArray       = [__FILES_DIR__,'Uploads'];
+                    $dirArray = [__FILES_DIR__, 'Uploads'];
                 }
                 break;
             case 'pdf':
-                if($remote == true) {
-                    $dirArray       = [__TEMP_DIR__,__MEDIA_FILES_DIR__,$output_filename];
+                if (true == $remote) {
+                    $dirArray = [__TEMP_DIR__, __MEDIA_FILES_DIR__, $output_filename];
                 }
                 break;
         }
-        MediaLogger::log("Directory Array", ['dirArray' => $dirArray], "filedriver.log");
+        MediaLogger::log('Directory Array', ['dirArray' => $dirArray], 'filedriver.log');
 
         $directory = implode(DIRECTORY_SEPARATOR, $dirArray);
         $directory = FileSystem::platformSlashes($directory);

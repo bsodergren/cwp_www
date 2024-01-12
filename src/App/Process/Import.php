@@ -9,6 +9,7 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
+use CWP\Core\Media;
 use CWP\Core\MediaQPDF;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
@@ -21,9 +22,11 @@ class Import extends MediaProcess
     public $error = false;
 
     // Store errors here
-    public $fileExtensionsAllowed = ['pdf'];
+    public $fileExtensionsAllowed = ['pdf', 'zip'];
 
     public $page_end;
+    public $extractDir;
+    public $pdf_name;
 
     public function header()
     {
@@ -55,6 +58,20 @@ class Import extends MediaProcess
         $this->header();
         $job_number = '';
 
+        $locations = new MediaFileSystem();
+
+        if ('' != $_FILES['backup_file']['name']) {
+            $this->extractDir = __FILES_DIR__.DIRECTORY_SEPARATOR.'backupDir';
+            $backupFile = $locations->postSaveFile($_FILES['backup_file'], false);
+
+            $this->unzip($backupFile);
+            $this->doBackup();
+            $this->url = 'index.php';
+            $this->timeout = 500;
+
+            return true;
+        }
+
         // These will be the only file extensions allowed
         if ('' != $_POST['local']['pdf_file']) {
             $pdf_file = $_POST['local']['pdf_file'];
@@ -81,8 +98,7 @@ class Import extends MediaProcess
         if (false == $this->error) {
             if ('' != $_FILES['the_file']['name']) {
                 $fileSize = $_FILES['the_file']['size'];
-                $locations = new MediaFileSystem();
-                $pdf_file = $locations->postSaveFile($_FILES);
+                $pdf_file = $locations->postSaveFile($_FILES['the_file']);
                 MediaQPDF::cleanPDF($pdf_file);
             }
 
@@ -126,6 +142,57 @@ class Import extends MediaProcess
                 HTMLDisplay::put("<span class='p-3 text-danger'>File failed</span>");
                 HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');
             }
+        }
+    }
+
+    public function doBackup()
+    {
+        $json_file = $this->extractDir.DIRECTORY_SEPARATOR.'backup.json';
+        $array = json_decode(file_get_contents($json_file), true);
+        $this->job_id = Media::getJobNumber($this->pdf_file, $array['job_number']);
+        if (null === $this->job_id) {
+            $this->job_id = Media::insertJobNumber($this->pdf_file, $array['job_number']);
+        }
+
+        Media::$explorer->table('media_job')->where( // UPDATEME
+            'job_id',
+            $this->job_id
+        )->update([
+            'close' => $array['close'],
+        ]);
+
+        foreach ($array['forms'] as $form_number => $values) {
+            $form = ['config' => $values['config'],
+            'bind' => $values['bind'],
+            'count' => $values['count'],
+            'product' => $array['close'],
+            'job_id' => $this->job_id,
+            'form_number' => $form_number, ];
+             $res[] = Media::$explorer->table('media_forms')->insert($form);
+            foreach ($values['data'] as $k => $form_values) {
+                $form_values = array_merge($form_values, ['form_number' => $form_number, 'job_id' => $this->job_id]);
+                Media::$explorer->table('form_data')->insert($form_values);
+
+            }
+        }
+
+
+        $this->msg = "Imported job?";
+    }
+
+    public function unzip($file)
+    {
+        $locations = new MediaFileSystem();
+
+        $zip = new \ZipArchive();
+        if (true === $zip->open($file)) {
+            $pdf_name = basename($zip->getNameIndex(0), '.pdf');
+            $this->pdf_name = $zip->getNameIndex(0);
+            $this->extractDir = $this->extractDir.DIRECTORY_SEPARATOR.$pdf_name;
+            $locations->createFolder($this->extractDir);
+            $zip->extractTo($this->extractDir);
+            $zip->close();
+            $this->pdf_file = $this->extractDir.DIRECTORY_SEPARATOR.$this->pdf_name;
         }
     }
 }
