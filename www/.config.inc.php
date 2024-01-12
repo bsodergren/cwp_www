@@ -83,8 +83,7 @@ if(array_key_exists("flush", $_GET)) {
     exit;
 }
 
-if (!defined("PROCESS"))
-{
+if (!defined("PROCESS")) {
     $req_file               = $_SERVER['REQUEST_URI'];
     $req                    = '?' . $_SERVER['QUERY_STRING'];
     $req_file               = str_replace(__URL_PATH__ . '/', '', $req_file);

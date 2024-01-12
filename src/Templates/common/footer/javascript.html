@@ -1,4 +1,12 @@
 <script type="text/javascript">
+
+
+$(function() {
+    setInterval(function(){
+        $('.auto_refresh').load('{#__UPDATER_VERSION__#}');
+    },{#__UPDATER_REFRESH__#});
+});
+
   document.querySelectorAll("#job_number").forEach(function(node) {
     node.ondblclick = function() {
       var val = this.innerHTML;
