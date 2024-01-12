@@ -166,6 +166,7 @@ class PDFImport extends MediaImport
 
     public function getFormDetails($page_text)
     {
+        dd($page_text);
         $this->PageDetails = [];
         foreach ($page_text as $k => $line) {
             unset($page_text[$k]);
