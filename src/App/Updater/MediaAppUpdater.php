@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Updater;
@@ -13,7 +13,7 @@ use Nette\Utils\FileSystem;
 class MediaAppUpdater
 {
     public const GIT_VERSION = 'https://raw.githubusercontent.com/bsodergren/cwp_www/main/current.txt';
-
+    // public const GIT_VERSION = 'https://github.com/bsodergren/cwp_www/blob/main/current.txt';
     public $latest;
 
     public $current;
@@ -23,7 +23,7 @@ class MediaAppUpdater
     public function __construct()
     {
         if (!\defined('__UPDATE_CURRENT_FILE__')) {
-            \define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__ . '/current.txt'));
+            \define('__UPDATE_CURRENT_FILE__', FileSystem::normalizePath(__PUBLIC_ROOT__.'/current.txt'));
         }
         $this->getLastest();
         $this->currentVersion();
@@ -31,7 +31,6 @@ class MediaAppUpdater
 
     public function get_content($URL)
     {
-
         $ch = curl_init();
         curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, \CURLOPT_SSL_VERIFYPEER, 0);
@@ -50,12 +49,15 @@ class MediaAppUpdater
             $this->current = '9.9.9';
         } else {
             $this->current = trim(file_get_contents(__UPDATE_CURRENT_FILE__));
+            // // data-code-text
+            // dd($this->current);
         }
     }
 
     public function getLastest()
     {
-        $this->latest = trim($this->get_content(self::GIT_VERSION));
+        $this->latest = trim(file_get_contents(self::GIT_VERSION));
+
         return $this->latest;
     }
 
