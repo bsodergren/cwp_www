@@ -58,7 +58,7 @@ foreach ($job_table as $u) {
 
 
 
-$template->template($template_basedir.'/main', ['ROWS' => $html_rows,'ADDROW' => $addRow_html,'NAME' => 'Test Job','BUTTON_URL'=>$button_url]);
+$template->template($template_basedir.'/main', ['ROWS' => $html_rows,'ADDROW' => $addRow_html,'NAME' => 'Test Job','BUTTON_URL' => $button_url]);
 
 $template->render();
 
