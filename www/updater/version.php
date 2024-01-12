@@ -4,8 +4,11 @@
  */
 
 use CWP\Template\Template;
+
 use CWP\Utils\MediaDevice;
+
 use CWP\Template\HTMLDocument;
+
 use CWP\Updater\MediaAppUpdater;
 
 define('NO_DB_CHECK', true);
