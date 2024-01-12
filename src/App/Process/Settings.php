@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Process;
@@ -27,35 +27,35 @@ class Settings extends MediaProcess
                     continue;
                 }
 
-                if (! str_contains($key, '-')) {
+                if (!str_contains($key, '-')) {
                     $field = 'setting_value';
                 }
 
                 if (str_contains($key, 'setting_')) {
-                    $field                 = $key;
+                    $field = $key;
                     $new_settiings[$field] = $value;
                     continue;
                 }
                 if (str_contains($key, '-group')) {
-                    $pcs   = explode('-', $key);
-                    $key   = $pcs[0];
+                    $pcs = explode('-', $key);
+                    $key = $pcs[0];
                     $field = 'setting_'.$pcs[1];
                 }
                 if (str_contains($key, '-description')) {
-                    $pcs   = explode('-', $key);
-                    $key   = $pcs[0];
+                    $pcs = explode('-', $key);
+                    $key = $pcs[0];
                     $field = 'setting_'.$pcs[1];
                 }
 
                 if (str_contains($key, '-name')) {
-                    $pcs   = explode('-', $key);
-                    $key   = $pcs[0];
+                    $pcs = explode('-', $key);
+                    $key = $pcs[0];
                     $field = 'setting_'.$pcs[1];
                 }
 
                 if (str_contains($key, '-array')) {
-                    $pcs   = explode('-', $key);
-                    $key   = $pcs[0];
+                    $pcs = explode('-', $key);
+                    $key = $pcs[0];
                     $field = 'setting_value';
                     $value = trim($value);
                     if ('' != $value) {
@@ -64,8 +64,8 @@ class Settings extends MediaProcess
                 }
 
                 if (str_contains($key, '-list')) {
-                    $pcs   = explode('-', $key);
-                    $key   = $pcs[0];
+                    $pcs = explode('-', $key);
+                    $key = $pcs[0];
                     $field = 'setting_value';
                     if (\is_array($value)) {
                         $value = implode(',', $value);

@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Process;
@@ -15,7 +15,7 @@ class Form extends MediaProcess
     public function run($req)
     {
         $this->form_number = $req['form_number'];
-        $method            = str_replace(' ', '', $req['submit']);
+        $method = str_replace(' ', '', $req['submit']);
         $this->updateForm($req);
         if (method_exists($this, $method)) {
             $this->$method();
@@ -26,28 +26,27 @@ class Form extends MediaProcess
 
     public function updateForm($req)
     {
-        $job_id     = $req['job_id'];
+        $job_id = $req['job_id'];
         $skip_forms = '';
-        $former     = [];
+        $former = [];
         $updated = false;
         foreach ($req as $key => $value) {
             $break = false;
 
             if (str_starts_with($key, 'former')) {
                 list($_, $id) = explode('_', $key);
-                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]); // UPDATEME
-                if($count > 0) {
-                    $updated =  true;
+                $count = Media::$explorer->table('form_data')->where('id', $id)->update(['former' => $value]); // UPDATEME
+                if ($count > 0) {
+                    $updated = true;
                 }
             }
 
             if (str_starts_with($key, 'facetrim')) {
                 list($_, $id) = explode('_', $key);
-                $count        = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]); // UPDATEME
-                if($count > 0) {
-                    $updated =  true;
+                $count = Media::$explorer->table('form_data')->where('id', $id)->update(['face_trim' => $value]); // UPDATEME
+                if ($count > 0) {
+                    $updated = true;
                 }
-
             }
 
             if (str_starts_with($key, 'nobindery')) {
@@ -60,21 +59,20 @@ class Form extends MediaProcess
                 ->where('form_number', $id)
                 ->where('form_letter', $letters)
                 ->update(['no_bindery' => $value]);
-                if($count > 0) {
-                    $updated =  true;
+                if ($count > 0) {
+                    $updated = true;
                 }
-
             }
         }
 
-        if($updated == true) {
+        if (true == $updated) {
             Media::formUpdated($form_number, $job_id);
         }
     }
 
     public function Edit()
     {
-        $this->url     = '/form_edit.php?job_id=' . $this->job_id . '&form_number=' . $this->form_number . '';
+        $this->url = '/form_edit.php?job_id='.$this->job_id.'&form_number='.$this->form_number.'';
         $this->timeout = 0;
     }
 
@@ -126,6 +124,6 @@ class Form extends MediaProcess
         if ($next_form_number < 0) {
             $next_form_number = 1;
         }
-        $this->url = '/form.php?job_id=' . $this->job_id . '&form_number=' . $next_form_number . '';
+        $this->url = '/form.php?job_id='.$this->job_id.'&form_number='.$next_form_number.'';
     }
 }

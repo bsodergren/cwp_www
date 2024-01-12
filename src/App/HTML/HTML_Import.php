@@ -1,17 +1,14 @@
 <?php
-namespace CWP\HTML;
 
+namespace CWP\HTML;
 
 use CWP\Core\Media;
 use CWP\Template\Template;
 
 class HTML_Import
 {
-
-
     public static function drawFileOptions($params)
     {
-
         $html = '';
 
         foreach ($params as $key => $attachment) {
@@ -41,7 +38,7 @@ class HTML_Import
                     $js_select_options .= template::GetHTML(
                         '/import/file/js_select_statement',
                         [
-                            'JS_SELECT_KEY'     => $attachment['name'],
+                            'JS_SELECT_KEY' => $attachment['name'],
                             'JS_SELECT_OPTIONS' => $option_html,
                         ]
                     );
@@ -61,21 +58,20 @@ class HTML_Import
         return '';
     }
 
-    public  static function drawSelectBox($pdfArray)
+    public static function drawSelectBox($pdfArray)
     {
-
-
-        foreach($pdfArray as $k => $data){
+        foreach ($pdfArray as $k => $data) {
             $v = self::getImportJobNumbers($data['name']);
             $params[] = ['name' => $data['name'],
-            'JobNumber' => explode(",",$v->job_number),
+            'JobNumber' => explode(',', $v->job_number),
             'filename' => $data['filename']];
         }
+
         return template::GetHTML(
             '/import/file/form_select',
             [
                 'SELECT_OPTIONS' => self::drawFileOptions($params),
-                'JS_SELECT'      => self::drawJsScript($params),
+                'JS_SELECT' => self::drawJsScript($params),
             ]
         );
     }
@@ -83,6 +79,5 @@ class HTML_Import
     public static function getImportJobNumbers($pdf_file)
     {
         return Media::$explorer->table('media_imports')->where('pdf_file = ?', $pdf_file)->fetch(); // UPDATEME
-
     }
 }

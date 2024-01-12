@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Process;
@@ -39,7 +39,7 @@ class View extends MediaProcess
     public function run($req)
     {
         $this->form_number = $req['form_number'];
-        $method            = $req['action'];
+        $method = $req['action'];
 
         $this->$method();
     }
@@ -48,11 +48,11 @@ class View extends MediaProcess
     {
         global $_POST;
 
-        $finder    = new Finder();
+        $finder = new Finder();
 
         $finder->files()->in($this->media->xlsx_directory)->name('*.xlsx')->notName('~*')->sortByName(true);
 
-        if (! $finder->hasResults()) {
+        if (!$finder->hasResults()) {
             XLSXViewer::checkifexist($this->media);
         }
 
@@ -65,10 +65,10 @@ class View extends MediaProcess
             }
         }
 
-        $sendto    = $_POST['mailto'];
-        $sendname  = $_POST['rcpt_name'];
+        $sendto = $_POST['mailto'];
+        $sendname = $_POST['rcpt_name'];
 
-        $mail      = new MediaMailer();
+        $mail = new MediaMailer();
         $mail->recpt($sendto, $sendname);
 
         $mail->attachment($pdf_file);
@@ -85,11 +85,11 @@ class View extends MediaProcess
         $this->header();
         $this->media->excelArray($this->form_number);
         $this->media->deleteFromDatabase('form_data_count', $this->form_number);
-        $excel     = new MediaXLSX($this->media);
+        $excel = new MediaXLSX($this->media);
         $excel->writeWorkbooks();
 
         ob_flush();
-        $msg       = 'XLSX Files Created';
+        $msg = 'XLSX Files Created';
         $this->msg;
         $this->url = '/view.php?job_id='.$this->job_id.'&form_number='.$this->form_number;
     }

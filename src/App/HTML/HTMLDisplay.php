@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\HTML;
@@ -19,7 +19,6 @@ const STREAM_CLASS = 'show test-nowrap px-5 rounded-pill';
 
 \define('MSG_CLASS', 'bg-opacity-75 fs-3 '.STREAM_CLASS);
 \define('HEADER_CLASS', 'bg-opacity-50 mx-5 fs-6 '.STREAM_CLASS);
-
 
 class HTMLDisplay
 {
@@ -95,6 +94,7 @@ class HTMLDisplay
     {
         echo Template::GetHTML('js_refresh_window', ['_URL' => $url, '_SECONDS' => $timeout]);
     }
+
     public static function pushhtml($template, $params = [])
     {
         $params['MSG_CLASS'] = MSG_CLASS;
@@ -200,10 +200,11 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
         if (\array_key_exists('0', $http_response_header)) {
             $response = $http_response_header[0];
-            if(str_contains($response, '404')) {
+            if (str_contains($response, '404')) {
                 return true;
             }
         }
+
         return false;
     }
 

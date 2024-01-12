@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Process;
@@ -16,7 +16,7 @@ class Trim extends MediaProcess
     {
         global $_POST;
 
-        $form      = new Formr('bootstrap4');
+        $form = new Formr('bootstrap4');
 
         if ($form->submitted()) {
             if (\array_key_exists('trim_update', $_POST)) {
@@ -45,7 +45,7 @@ class Trim extends MediaProcess
                         $deleteData[] = $id;
                         $cacheNames[] = $value;
                     }
-                } else if ('name' == $type) {
+                } elseif ('name' == $type) {
                     $cacheNames[] = $value;
                 } else {
                     $updateData[$id][$type] = $value;
@@ -63,17 +63,16 @@ class Trim extends MediaProcess
         }
         foreach ($updateData as $id => $data) {
             $insert_data = [
-                'head_trim'      => $this->cleanTrimPost($data['head']),
-                'foot_trim'      => $this->cleanTrimPost($data['foot']),
-                'face_trim'      => $this->cleanTrimPost($data['face']),
+                'head_trim' => $this->cleanTrimPost($data['head']),
+                'foot_trim' => $this->cleanTrimPost($data['foot']),
+                'face_trim' => $this->cleanTrimPost($data['face']),
                 'delivered_size' => $this->cleanTrimPost($data['size'], true),
             ];
 
-            $count       = Media::$explorer->table('pub_trim')->where('id', $id)->update($insert_data); // UPDATEME
+            $count = Media::$explorer->table('pub_trim')->where('id', $id)->update($insert_data); // UPDATEME
         }
-        foreach ($cacheNames as  $name) {
-            if(Media::$Stash->has($name))
-            {
+        foreach ($cacheNames as $name) {
+            if (Media::$Stash->has($name)) {
                 Media::$Stash->forget($name);
             }
         }
@@ -87,23 +86,23 @@ class Trim extends MediaProcess
 
         $publication = $_POST['publication'];
         if ('' != $publication) {
-            $bind           = $_POST['bind'];
+            $bind = $_POST['bind'];
 
-            $head_trim      = $this->cleanTrimPost($_POST['head_trim']);
-            $foot_trim      = $this->cleanTrimPost($_POST['foot_trim']);
-            $face_trim      = $this->cleanTrimPost($_POST['face_trim']);
+            $head_trim = $this->cleanTrimPost($_POST['head_trim']);
+            $foot_trim = $this->cleanTrimPost($_POST['foot_trim']);
+            $face_trim = $this->cleanTrimPost($_POST['face_trim']);
             $delivered_size = $this->cleanTrimPost($_POST['delivered_size'], true);
 
-            $data           = [
-                'pub_name'       => MediaPublication::CleanPublication($publication),
-                'bind'           => $bind,
-                'head_trim'      => $head_trim,
-                'foot_trim'      => $foot_trim,
-                'face_trim'      => $face_trim,
+            $data = [
+                'pub_name' => MediaPublication::CleanPublication($publication),
+                'bind' => $bind,
+                'head_trim' => $head_trim,
+                'foot_trim' => $foot_trim,
+                'face_trim' => $face_trim,
                 'delivered_size' => $delivered_size,
             ];
-            $res            = Media::$explorer->table('pub_trim')->insert($data); // UPDATEME
-            $this->msg      = 'Publication Added';
+            $res = Media::$explorer->table('pub_trim')->insert($data); // UPDATEME
+            $this->msg = 'Publication Added';
         } else {
             $this->msg = 'No publication named';
         }

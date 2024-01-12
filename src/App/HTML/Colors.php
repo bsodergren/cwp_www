@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\HTML;

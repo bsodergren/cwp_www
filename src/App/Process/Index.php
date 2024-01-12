@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Process;
@@ -9,58 +9,55 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
-use CWP\Utils\Zip;
 use CWP\Core\Bootstrap;
 use CWP\Core\MediaError;
+use CWP\Core\MediaStopWatch;
+use CWP\Filesystem\Driver\MediaGoogleDrive;
+use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
+use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaExport;
+use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+use CWP\Utils\Zip;
 use Nette\Utils\FileSystem;
-use CWP\Core\MediaStopWatch;
-use CWP\Media\Import\PDFImport;
-use CWP\Filesystem\MediaFileSystem;
-use CWP\Spreadsheet\Media\MediaXLSX;
-use CWP\Filesystem\Driver\MediaGoogleDrive;
 
 class Index extends MediaProcess
 {
     public function run($req)
     {
-
-
-        if(array_key_exists('submit', $req)) {
+        if (array_key_exists('submit', $req)) {
             $method = key($req['submit']);
             $this->$method();
-
-        } elseif(array_key_exists('update_job', $req)) {
+        } elseif (array_key_exists('update_job', $req)) {
             $method = $req['update_job'];
             $this->$method($req['job_number']);
         } else {
             dd($req);
         }
-
-
     }
 
     public function addforms()
     {
-        $this->url = '/create/addForm.php?job_id=' . $this->job_id;
+        $this->url = '/create/addForm.php?job_id='.$this->job_id;
     }
+
     public function email_zip()
     {
-        $this->url = '/mail.php?job_id=' . $this->job_id;
+        $this->url = '/mail.php?job_id='.$this->job_id;
     }
 
     public function process()
     {
-        $this->url = '/form.php?job_id=' . $this->job_id;
+        $this->url = '/form.php?job_id='.$this->job_id;
     }
 
     public function view_xlsx()
     {
-        $this->url = '/view.php?job_id=' . $this->job_id;
+        $this->url = '/view.php?job_id='.$this->job_id;
     }
+
     public function update_xlsx()
     {
         \define('TITLE', 'Updating Excel files');
@@ -69,17 +66,16 @@ class Index extends MediaProcess
         MediaDevice::getHeader();
         Template::echo('stream/start_page', ['PAGE_LOAD' => template::GetHTML('/stream/page_load', [])]);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Updating Workbooks']);
-        MediaStopWatch::lap("Create Excel");
+        MediaStopWatch::lap('Create Excel');
         $forms = $this->media->getFormUpdates($this->media->job_id);
-        foreach($forms as $f) {
+        foreach ($forms as $f) {
             $this->media->excelArray($f->form_number);
-            $excel     = new MediaXLSX($this->media);
+            $excel = new MediaXLSX($this->media);
             $excel->writeWorkbooks();
         }
         Template::echo('stream/end_page', ['PAGE_CLOSE' => template::GetHTML('/stream/page_close', [])]);
         $this->msg = 'XLSX Files Created';
         MediaDevice::$NAVBAR = true;
-
     }
 
     public function create_xlsx()
@@ -90,12 +86,12 @@ class Index extends MediaProcess
         MediaDevice::getHeader();
         Template::echo('stream/start_page', ['PAGE_LOAD' => template::GetHTML('/stream/page_load', [])]);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Creating Workbooks']);
-        MediaStopWatch::lap("Create Excel");
+        MediaStopWatch::lap('Create Excel');
         $this->media->excelArray();
-        MediaStopWatch::lap("Excel Array");
+        MediaStopWatch::lap('Excel Array');
 
-        $excel     = new MediaXLSX($this->media);
-        MediaStopWatch::lap("Excel Object");
+        $excel = new MediaXLSX($this->media);
+        MediaStopWatch::lap('Excel Object');
         $excel->writeWorkbooks();
         Template::echo('stream/end_page', ['PAGE_CLOSE' => template::GetHTML('/stream/page_close', [])]);
 
@@ -105,8 +101,7 @@ class Index extends MediaProcess
 
     public function create_zip()
     {
-
-        $zip       = new Zip($this);
+        $zip = new Zip($this);
         $this->msg = $zip->zip();
         // $msg ='ZIP File Created';
     }
@@ -123,7 +118,7 @@ class Index extends MediaProcess
 
                 Template::echo('stream/start_page', []);
 
-                $import    = new PDFImport();
+                $import = new PDFImport();
                 $import->reImport($this->media->pdf_file, $this->media->job_number);
 
                 $this->msg = 'PDF Reimported';
@@ -139,11 +134,8 @@ class Index extends MediaProcess
         $export->exportZip();
     }
 
-
-
     public function upload()
     {
-
         $pathPrefix = '';
         if (__DEBUG__ == 1) {
             $pathPrefix = '\Dev';
@@ -155,28 +147,24 @@ class Index extends MediaProcess
         $google = new MediaGoogleDrive();
         $mediaLoc = new MediaFileSystem($this->media->pdf_file, $this->media->job_number);
         $mediaLoc->getDirectory();
-        $excelDir = $mediaLoc->directory . DIRECTORY_SEPARATOR . "xlsx";
+        $excelDir = $mediaLoc->directory.DIRECTORY_SEPARATOR.'xlsx';
         $basePath = dirname($mediaLoc->directory, 2);
-        $filePath = $pathPrefix.str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
+        $filePath = $pathPrefix.str_replace($basePath, '', $mediaLoc->directory()); // . DIRECTORY_SEPARATOR . "xlsx";
         $google->createFolder($filePath);
-        HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Created DIR ' . $filePath]);
+        HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Created DIR '.$filePath]);
 
         $files = $mediaLoc->getContents($excelDir, '*.xlsx');
 
-        foreach($files as $filename) {
+        foreach ($files as $filename) {
             $remoteFilename = basename($filename);
-            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Uploading ' . $remoteFilename]);
-            $uploadFilename = $filePath . DIRECTORY_SEPARATOR . $remoteFilename;
+            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Uploading '.$remoteFilename]);
+            $uploadFilename = $filePath.DIRECTORY_SEPARATOR.$remoteFilename;
             $google->UploadFile($filename, $uploadFilename);
         }
-
 
         $this->msg = 'Files Uploaded to google drive';
         Template::echo('stream/end_page', []);
     }
-
-
-
 
     public function delete_zip()
     {
@@ -187,20 +175,20 @@ class Index extends MediaProcess
 
     public function delete_xlsx()
     {
-        $msg       = $this->media->delete_xlsx();
+        $msg = $this->media->delete_xlsx();
         //                $this->media->deleteSlipSheets();
-        $msg       = $this->media->delete_zip();
+        $msg = $this->media->delete_zip();
         $this->msg = 'Zip and excel files removed';
     }
 
     public function delete_job()
     {
-        $this->url = '/delete_job.php?job_id=' . $this->job_id;
+        $this->url = '/delete_job.php?job_id='.$this->job_id;
     }
 
     public function share_link()
     {
-        //$this->url = Bootstrap::$CONFIG['google']['sharelink'];
+        // $this->url = Bootstrap::$CONFIG['google']['sharelink'];
         echo HTMLDisplay::redirect(Bootstrap::$CONFIG['google']['sharelink'], 0);
         exit;
     }
@@ -221,9 +209,9 @@ class Index extends MediaProcess
         }
         $mediaLoc = new MediaFileSystem($this->media->pdf_file, $this->media->job_number);
         $mediaLoc->getDirectory();
-        //$excelDir = $mediaLoc->directory . DIRECTORY_SEPARATOR . "xlsx";
+        // $excelDir = $mediaLoc->directory . DIRECTORY_SEPARATOR . "xlsx";
         $basePath = dirname($mediaLoc->directory, 2);
-        $filePath = $pathPrefix . str_replace($basePath, "", $mediaLoc->directory());// . DIRECTORY_SEPARATOR . "xlsx";
+        $filePath = $pathPrefix.str_replace($basePath, '', $mediaLoc->directory()); // . DIRECTORY_SEPARATOR . "xlsx";
         $google->delete(dirname($filePath, 1));
 
         // if ($msg = null ===) {
@@ -231,8 +219,7 @@ class Index extends MediaProcess
         // $mediaLoc = new MediaFileSystem($this->media->pdf_file, $job_number);
         // $mediaLoc->getDirectory();
 
-        //dump(posix_getpwuid(getmyuid()));
-
+        // dump(posix_getpwuid(getmyuid()));
 
         $olddir = dirname($this->media->base_dir, 1);
         //     $newdir = dirname($mediaLoc->directory,1);
@@ -248,7 +235,7 @@ class Index extends MediaProcess
         // dd($msg);
         //     }
         // }
-        MediaError::msg('warning', 'There was a problem <br> ' . $msg, 15);
+        MediaError::msg('warning', 'There was a problem <br> '.$msg, 15);
         exit;
     }
 }
