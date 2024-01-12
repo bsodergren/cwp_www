@@ -156,7 +156,7 @@ class PDFImport extends MediaImport
                 $prevLetter = $currentLtr;
             }
             ksort($pageArray);
-
+            dd($pageArray);
             foreach ($pageArray as $letter => $letter_array) {
                 $form_rows[$letter] = $this->rowDdata($letter_array);
             }
@@ -166,7 +166,6 @@ class PDFImport extends MediaImport
 
     public function getFormDetails($page_text)
     {
-        dd($page_text);
         $this->PageDetails = [];
         foreach ($page_text as $k => $line) {
             unset($page_text[$k]);
