@@ -9,12 +9,11 @@
             <ul class="navbar-nav mr-auto " style="width:10%;">
             </ul>
 
-            <div class="auto_refresh text-danger"></div>
             <ul class="navbar-nav me-auto w-auto">
 			{if="defined('__DEBUG_STR__')"} <li class="nav-item ">{#__DEBUG_STR__#}</li>{/if}
-				
+
                 {if="$update>$current"}
-                <li class="nav-item "><span class="nav-link text-warning">Update Available! {$update}</span></li>
+                <li class="nav-item auto_refresh"></li>
                 {/if}
             </ul>
 
@@ -30,7 +29,7 @@
 
                     <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="imgdropdown">
                         {loop="$nav_bar_dropdown"}
-                        <li class="nav-item"><a class="dropdown-item " href="{#__URL_PATH__#}{$value}"><i 
+                        <li class="nav-item"><a class="dropdown-item " href="{#__URL_PATH__#}{$value}"><i
 						class="fa fa-user pr-2">{$key}</i></a></li>
                         {/loop}
                         <li class="nav-item">
