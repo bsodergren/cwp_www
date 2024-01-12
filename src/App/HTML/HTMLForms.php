@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\HTML;
@@ -17,9 +17,13 @@ class HTMLForms
         return Template::GetHTML($template.'/input', $params);
     }
 
-    public static function draw_select($name, $text, $options = [], $style = null)
+    public static function draw_select($name, $text, $options = [], $style = null, $NoOption = false)
     {
         $option_html = '';
+        if (false !== $NoOption) {
+            $option_html = Template::GetHTML('elements/select/option', ['OPTION_VALUE' => null, 'OPTION_TEXT' => $NoOption]);
+        }
+
         if (\count($options) > 0) {
             foreach ($options as $optiontext => $value) {
                 $option_html .= Template::GetHTML('elements/select/option', ['OPTION_VALUE' => $value, 'OPTION_TEXT' => $optiontext]);
@@ -97,7 +101,4 @@ class HTMLForms
 
         return Template::GetHTML('elements/text/text', $params);
     }
-
-
-
 }
