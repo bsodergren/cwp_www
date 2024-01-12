@@ -1,13 +1,11 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Core;
 
-use CWP\Core\Media;
 use Camoo\Config\Config;
-use CWP\Core\MediaLogger;
 use Nette\Utils\FileSystem;
 
 class Bootstrap
@@ -17,11 +15,11 @@ class Bootstrap
     public object $Config;
 
     private $configkeys = [
-        'application' => ['name','debug','register','authenticate'],
-        'db' => ['type','path','dbname','host','username','password'],
-        'email' => ['enable','imap','username','password','folder'],
-        'server' => ['filedriver','media_files','file_root','url_root'],
-        'google' => ['clientid','secret','token'],
+        'application' => ['name', 'debug', 'register', 'authenticate'],
+        'db' => ['type', 'path', 'dbname', 'host', 'username', 'password'],
+        'email' => ['enable', 'imap', 'username', 'password', 'folder'],
+        'server' => ['filedriver', 'media_files', 'file_root', 'url_root'],
+        'google' => ['clientid', 'secret', 'token'],
     ];
 
     public function __construct(Config $Config)
@@ -38,30 +36,28 @@ class Bootstrap
         $this->directory(__ERROR_LOG_DIRECTORY__);
         $this->directory(__STASH_DIR__);
 
-        MediaLogger::log("__HOME__",__HOME__);
-
-
+        MediaLogger::log('__HOME__', __HOME__);
     }
 
     public function homeDir()
     {
-        if(function_exists('posix_getpwuid')) {
-            $result =  posix_getpwuid(getmyuid())['dir'];
+        if (function_exists('posix_getpwuid')) {
+            $result = posix_getpwuid(getmyuid())['dir'];
         }
 
-        if(empty($result) && function_exists('exec')) {
-            if(strncasecmp(PHP_OS, 'WIN', 3) === 0) {
-                $result = exec("echo %userprofile%");
+        if (empty($result) && function_exists('exec')) {
+            if (0 === strncasecmp(PHP_OS, 'WIN', 3)) {
+                $result = exec('echo %userprofile%');
             } else {
-                $result = exec("echo ~");
+                $result = exec('echo ~');
             }
         }
 
         return $result;
     }
+
     public function directory($path)
     {
-
         $path = FileSystem::platformSlashes($path);
         $path = FileSystem::normalizePath($path);
         if (!is_dir($path)) {
@@ -109,8 +105,8 @@ class Bootstrap
     private function getUsrBin()
     {
         $serverConf = $this->Config['server'];
-        if(array_key_exists('bin_dir', $serverConf)) {
-            if($serverConf['bin_dir'] != '') {
+        if (array_key_exists('bin_dir', $serverConf)) {
+            if ('' != $serverConf['bin_dir']) {
                 return $serverConf['bin_dir'];
             }
         }
@@ -139,26 +135,26 @@ class Bootstrap
 
         $filedriver = strtolower($this->Config['server']['filedriver']);
 
-        if($filedriver == 'google') {
+        if ('google' == $filedriver) {
             Media::$Google = true;
         }
-        if($filedriver == 'dropbox') {
+        if ('dropbox' == $filedriver) {
             Media::$Dropbox = true;
         }
     }
+
     private function checkConfigValues()
     {
         $config = $this->Config->all();
         $exit = false;
-        foreach($this->configkeys as $key => $sectionKeys) {
-
-            if(!array_key_exists($key, $config)) {
+        foreach ($this->configkeys as $key => $sectionKeys) {
+            if (!array_key_exists($key, $config)) {
                 $exit = true;
                 echo "Missing [$key] section <br>";
                 continue;
             }
-            foreach($sectionKeys as $skey) {
-                if(!array_key_exists($skey, $config[$key])) {
+            foreach ($sectionKeys as $skey) {
+                if (!array_key_exists($skey, $config[$key])) {
                     $exit = true;
                     echo "Missing $skey under [$key]  <br>";
                     continue;
@@ -166,9 +162,8 @@ class Bootstrap
             }
         }
 
-        if($exit === true) {
+        if (true === $exit) {
             dd($this->configkeys, $config);
         }
-
     }
 }

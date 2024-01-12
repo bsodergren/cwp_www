@@ -1,21 +1,18 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 use CWP\Core\Media;
 use CWP\Core\MediaSetup;
-use CWP\Updater\DbUpdate;
 use CWP\Database\Database;
-use CWP\Core\MediaStopWatch;
-use Nette\Database\Explorer;
-use Nette\Database\Structure;
-use Nette\Database\Connection;
+use CWP\Updater\DbUpdate;
 use CWP\Updater\MediaAppUpdater;
 use Nette\Caching\Storages\DevNullStorage;
+use Nette\Database\Connection;
 use Nette\Database\Conventions\DiscoveredConventions;
-
-
+use Nette\Database\Explorer;
+use Nette\Database\Structure;
 
 $connection = new Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
 $storage = new DevNullStorage();

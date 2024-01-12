@@ -1,17 +1,17 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Core;
 
-use CWP\Utils\Utils;
-use CWP\JobCreator\Creator;
-use CWP\Media\MediaPublication;
-use CWP\Filesystem\MediaFileSystem;
-use CWP\Filesystem\Driver\MediaLocal;
 use CWP\Filesystem\Driver\MediaDropbox;
 use CWP\Filesystem\Driver\MediaGoogleDrive;
+use CWP\Filesystem\Driver\MediaLocal;
+use CWP\Filesystem\MediaFileSystem;
+use CWP\JobCreator\Creator;
+use CWP\Media\MediaPublication;
+use CWP\Utils\Utils;
 
 /**
  * @property mixed $job_id
@@ -30,7 +30,6 @@ class Media
     public static $MySQL;
     public static $DB;
 
-
     public static $VersionUpdate;
 
     public static $CurrentVersion;
@@ -44,8 +43,6 @@ class Media
     public static $Stash;
     public static $Obj;
     public static $Tpl;
-
-
 
     private $mediaLoc;
 
@@ -79,10 +76,8 @@ class Media
 
     public $location;
 
-
-    public static $pageType = ['2+2 pgs 4 out','2+4 pgs 2 out','4 pgs 4 out','4+2 pgs 2 out','6 pgs 2 out','4+4 pgs 2 out','8 pgs 2 out' ];
+    public static $pageType = ['2+2 pgs 4 out', '2+4 pgs 2 out', '4 pgs 4 out', '4+2 pgs 2 out', '6 pgs 2 out', '4+4 pgs 2 out', '8 pgs 2 out'];
     public static $bindType = ['PFL', 'PFM', 'PFS', 'SHS', 'PHL', 'PHM', 'PFS'];
-
 
     public function __construct($MediaDB = '')
     {
@@ -99,9 +94,9 @@ class Media
             $this->xlsx = (empty($MediaDB['xlsx_exists'])) ? '' : $MediaDB['xlsx_exists'];
             $this->zip = (empty($MediaDB['zip_exists'])) ? '' : $MediaDB['zip_exists'];
             $this->location = (empty($MediaDB['base_dir'])) ? '' : $MediaDB['base_dir'];
-            MediaStopWatch::lap("getDirectories Media", '', "Media Class");
+            MediaStopWatch::lap('getDirectories Media', '', 'Media Class');
             $this->getDirectories();
-            MediaStopWatch::lap("getDirectories Media", '', "Media Class");
+            MediaStopWatch::lap('getDirectories Media', '', 'Media Class');
         }
     }
 
@@ -238,7 +233,7 @@ class Media
         $this->base_dir = $this->mediaLoc->getDirectory();
 
         $this->pdf_fullname = $this->mediaLoc->getFilename('pdf');
-        $this->pdf_tmp_file = $this->pdf_fullname . '.~qpdf-orig';
+        $this->pdf_tmp_file = $this->pdf_fullname.'.~qpdf-orig';
 
         $this->xlsx_directory = $this->mediaLoc->getDirectory('xlsx');
         $this->zip_directory = $this->mediaLoc->getDirectory('zip');
@@ -250,6 +245,7 @@ class Media
     public function getFilename($type = '', $form_number = '', $create_dir = '')
     {
         return $this->mediaLoc->getFilename($type, $form_number, $create_dir);
+
         return $this->mediaLoc->getFilename($type, $form_number, $create_dir);
     }
 
@@ -263,14 +259,14 @@ class Media
         if (0 == $value) {
             $value = '';
         }
-        $result = self::$explorer->table('media_job')->where('job_id', $job_id)->update([$field . '_exists' => $value]); // UPDATEME
+        $result = self::$explorer->table('media_job')->where('job_id', $job_id)->update([$field.'_exists' => $value]); // UPDATEME
     }
 
     public static function get_exists($field, $job_id)
     {
-        $result = self::$explorer->table('media_job')->select($field . '_exists')->where('job_id', $job_id); // UPDATEME
+        $result = self::$explorer->table('media_job')->select($field.'_exists')->where('job_id', $job_id); // UPDATEME
         $exists = $result->fetch();
-        $var_name = $field . '_exists';
+        $var_name = $field.'_exists';
         if (isset($exists->{$var_name})) {
             return Utils::toint($exists->{$var_name});
         }
@@ -290,14 +286,14 @@ class Media
 
     public function get_form_list()
     {
-        $sql = 'SELECT form_number FROM media_forms WHERE `job_id` = ' . $this->job_id;
+        $sql = 'SELECT form_number FROM media_forms WHERE `job_id` = '.$this->job_id;
 
         return self::$connection->fetchAll($sql);
     }
 
     public function get_max_drop_forms()
     {
-        $sql = 'SELECT DISTINCT(`form_number`) as max FROM `media_forms` WHERE `job_id` = ' . $this->job_id . '  ORDER BY `max` DESC limit 1';
+        $sql = 'SELECT DISTINCT(`form_number`) as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.'  ORDER BY `max` DESC limit 1';
         $result = self::$connection->fetch($sql);
 
         return $result['max'];
@@ -305,7 +301,7 @@ class Media
 
     public function get_first_form()
     {
-        $sql = 'SELECT `form_number` as max FROM `media_forms` WHERE `job_id` = ' . $this->job_id . ' ORDER BY `max` ASC limit 1';
+        $sql = 'SELECT `form_number` as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.' ORDER BY `max` ASC limit 1';
         $result = self::$connection->fetch($sql);
 
         return $result['max'];
@@ -316,10 +312,10 @@ class Media
         $form = '';
 
         if (true == $form_number) {
-            $form = ' and `form_number`= ' . $form_number;
+            $form = ' and `form_number`= '.$form_number;
         }
 
-        $sql = 'SELECT * FROM `media_forms` WHERE `job_id` = ' . $this->job_id . $form;
+        $sql = 'SELECT * FROM `media_forms` WHERE `job_id` = '.$this->job_id.$form;
 
         $result = self::$connection->query($sql);
 
@@ -348,10 +344,10 @@ class Media
             }
 
             if (isset($sort_query)) {
-                $add = $sort_query . ', ';
+                $add = $sort_query.', ';
             }
 
-            $sort_query = $add . ' `f`.`' . $field . '` ' . $sort[$key];
+            $sort_query = $add.' `f`.`'.$field.'` '.$sort[$key];
         }
 
         return $sort_query;
@@ -360,7 +356,7 @@ class Media
     public function getFormDrops($form_number = '', $sort = [])
     {
         if (true == $form_number) {
-            $FORM_SEQ = ' and `f`.`form_number` = ' . $form_number;
+            $FORM_SEQ = ' and `f`.`form_number` = '.$form_number;
         }
 
         $sort_query = $this->sortFormDrops('form_letter', 'SORT_LETTER', $sort);
@@ -369,12 +365,12 @@ class Media
         $sort_query = $this->sortFormDrops('former', 'SORT_FORMER', $sort, $sort_query);
 
         if (isset($sort_query)) {
-            $sort_query = ' ORDER BY ' . $sort_query;
+            $sort_query = ' ORDER BY '.$sort_query;
         } else {
             $sort_query = '';
         }
 
-        $sql = 'SELECT `f`.`id`,`f`.`job_id`,`f`.`form_number`,`f`.`form_letter`,`f`.`market`,`f`.`pub`,`f`.`count`,`f`.`ship`,`f`.`former`,`f`.`face_trim`,`f`.`no_bindery`,`m`.`job_number`, `m`.`pdf_file` FROM `form_data` f, `media_job` m WHERE ( `f`.`job_id` = ' . $this->job_id . ' and `m`.`job_id` = ' . $this->job_id . $FORM_SEQ . ' ) ' . $sort_query;
+        $sql = 'SELECT `f`.`id`,`f`.`job_id`,`f`.`form_number`,`f`.`form_letter`,`f`.`market`,`f`.`pub`,`f`.`count`,`f`.`ship`,`f`.`former`,`f`.`face_trim`,`f`.`no_bindery`,`m`.`job_number`, `m`.`pdf_file` FROM `form_data` f, `media_job` m WHERE ( `f`.`job_id` = '.$this->job_id.' and `m`.`job_id` = '.$this->job_id.$FORM_SEQ.' ) '.$sort_query;
 
         return self::$connection->fetchAll($sql);
     }
@@ -505,7 +501,7 @@ class Media
         $directory = implode(DIRECTORY_SEPARATOR, $parts);
 
         $data = ['job_number' => $job_number,
-        'base_dir' => $directory ];
+        'base_dir' => $directory];
 
         self::$explorer->table('media_job')->where('job_id', $this->job_id)->update($data); // UPDATEME
         $this->job_number = $job_number;
@@ -562,9 +558,8 @@ class Media
                 $individual_part['form_number'] = $form_number;
                 self::$explorer->table('form_data')->insert($individual_part); // UPDATEME
                 $destination[] = ['name' => $individual_part['ship']];
-                $market[] =  ['name' => $individual_part['market']];
-                $publications[] =  ['name' => $individual_part['pub']];
-
+                $market[] = ['name' => $individual_part['market']];
+                $publications[] = ['name' => $individual_part['pub']];
             }
         }
 
@@ -575,11 +570,10 @@ class Media
 
     public static function insertJobNumber($pdf_filename, $job_number)
     {
-        $locations     = new MediaFileSystem($pdf_filename, $job_number);
+        $locations = new MediaFileSystem($pdf_filename, $job_number);
         $pdf_directory = $locations->getDirectory('pdf', false, true);
-        //$base_dir = \dirname($pdf_filename, 2);
+        // $base_dir = \dirname($pdf_filename, 2);
         // $pdf_filename = basename($pdf_filename);
-
 
         $query = 'INSERT INTO `media_job` ?';
 
@@ -598,7 +592,7 @@ class Media
         $pdf_filename = basename($pdf_filename);
 
         $job_table = self::$explorer->table('media_job'); // UPDATEME
-        $job_table->where('pdf_file LIKE ?', "%" . $pdf_filename . "%");
+        $job_table->where('pdf_file LIKE ?', '%'.$pdf_filename.'%');
         if (null !== $job_number) {
             $job_table->where('job_number = ?', $job_number);
         }
@@ -613,34 +607,34 @@ class Media
     public static function getFileDriver()
     {
         if (self::$Dropbox) {
-            self::$FileDriver = "Dropbox";
+            self::$FileDriver = 'Dropbox';
+
             return new MediaDropbox();
         }
         if (self::$Google) {
-            self::$FileDriver = "Google Drive";
+            self::$FileDriver = 'Google Drive';
+
             return new MediaGoogleDrive();
         }
-        self::$FileDriver = "Local FS";
+        self::$FileDriver = 'Local FS';
+
         return new MediaLocal();
     }
 
     public static function formUpdated($form_number, $job_id)
     {
-        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number) ->update(['updated' => 1]); // UPDATEME
+        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number)->update(['updated' => 1]); // UPDATEME
     }
 
     public static function formUsed($form_number, $job_id)
     {
-        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number) ->update(['updated' => 0]); // UPDATEME
+        $count = self::$explorer->table('media_forms')->where('job_id', $job_id)->where('form_number', $form_number)->update(['updated' => 0]); // UPDATEME
     }
 
     public static function getFormUpdates($job_id)
     {
         return self::$explorer->table('media_forms')->where('job_id', $job_id)->where('updated', 1); // UPDATEME
     }
-
-
-
 
     public static function get($name, $timeout = 5, $closure)
     {

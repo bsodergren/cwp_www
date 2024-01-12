@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Core;
@@ -135,7 +135,7 @@ class MediaSettings
 
             $array = array_merge($arr2, $nav_array);
 
-        // $arr2['dropdown'] = $nav_array;
+            // $arr2['dropdown'] = $nav_array;
         } else {
             $array = explode("\n", $setting_str);
             $array = array_map('trim', $array);

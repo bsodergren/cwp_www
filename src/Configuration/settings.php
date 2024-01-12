@@ -1,20 +1,18 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 use CWP\Core\Bootstrap;
 use CWP\Core\Media;
 use CWP\Core\MediaSettings;
 
-$results = Media::get("settings", 120, function () {
+$results = Media::get('settings', 120, function () {
     $table = Media::$explorer->table('settings'); // UPDATEME
     $table->order('setting_type ASC');
+
     return $table->fetchAssoc('id');
 });
-
-
-
 
 if ($results) {
     foreach ($results as $k => $u) {
@@ -60,13 +58,12 @@ foreach ($setting['local'] as $key => $array) {
 
 // $const = get_defined_constants(true);
 
-
 if (Media::$Google || Media::$Dropbox) {
     define('__FILES_DIR__', '');
 } else {
     if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {
         if (true == Bootstrap::$CONFIG['server']['media_files']) {
-            define('__FILES_DIR__', __HTTP_ROOT__ . Bootstrap::$CONFIG['server']['media_files']);
+            define('__FILES_DIR__', __HTTP_ROOT__.Bootstrap::$CONFIG['server']['media_files']);
         }
     }
 }

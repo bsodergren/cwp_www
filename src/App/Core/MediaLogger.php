@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Core;
@@ -10,9 +10,9 @@ namespace CWP\Core;
  */
 
 use CWP\HTML\Colors;
+use Nette\Database\Helpers;
 use Nette\IOException;
 use Nette\Utils\DateTime;
-use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
 
 class log
@@ -52,41 +52,38 @@ class MediaLogger
 
     public static function log($text, $var = '', $logfile = 'default.log', $html = false)
     {
-            $function_list = self::CallingFunctionName();
+        $function_list = self::CallingFunctionName();
 
-            $html_var = '';
-            $html_string = '';
-            $html_msg = '';
-            $html_func = '';
+        $html_var = '';
+        $html_string = '';
+        $html_msg = '';
+        $html_func = '';
 
-            if (\is_array($var) || \is_object($var)) {
-                $html_var = "\n".self::printCode($var);
-            } else {
-                $html_var = $var;
-            }
-            // $html_var = htmlentities($html_var);
-            // $html_var = '<pre>' . $html_var . '</pre>';
+        if (\is_array($var) || \is_object($var)) {
+            $html_var = "\n".self::printCode($var);
+        } else {
+            $html_var = $var;
+        }
+        // $html_var = htmlentities($html_var);
+        // $html_var = '<pre>' . $html_var . '</pre>';
 
-            if (true == $html) {
-                $html_string = json_encode([
-                    'TIMESTAMP' => DateTime::from(null),
-                    'FUNCTION' => $function_list,
-                    'MSG_TEXT' => $text,
-                    'MSG_VALUE' => $html_var,
-                ]);
-            } else {
+        if (true == $html) {
+            $html_string = json_encode([
+                'TIMESTAMP' => DateTime::from(null),
+                'FUNCTION' => $function_list,
+                'MSG_TEXT' => $text,
+                'MSG_VALUE' => $html_var,
+            ]);
+        } else {
+            $html_var = str_replace('<br>', "\n\t", $html_var);
+            $html_string = DateTime::from(null).':'.$function_list.':'.$text.'; '.$html_var;
 
+            $logfile = 'txt_'.$logfile;
+        }
 
-                $html_var = str_replace('<br>', "\n\t", $html_var);
-                $html_string = DateTime::from(null).':'. $function_list.":".$text.'; '.$html_var;
+        $errorLogFile = __ERROR_LOG_DIRECTORY__.'/'.$logfile;
 
-                $logfile = 'txt_'.$logfile;
-            }
-
-            $errorLogFile = __ERROR_LOG_DIRECTORY__.'/'.$logfile;
-
-            Log::append($errorLogFile, $html_string."\n");
-
+        Log::append($errorLogFile, $html_string."\n");
     }
 
     public static function echo($msg, $var = '', $indent = 0)
@@ -163,7 +160,6 @@ class MediaLogger
             exit(\PHP_EOL);
         }
     }
-
 
     public static function CallingFunctionName()
     {
@@ -254,6 +250,4 @@ class MediaLogger
 
         return null;
     }
-
-
 }

@@ -1,12 +1,10 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 namespace CWP\Core;
 
-use CWP\Filesystem\MediaFileSystem;
-use CWP\HTML\HTMLDisplay;
 use CWP\Media\MediaExec;
 use Nette\Utils\FileSystem;
 
