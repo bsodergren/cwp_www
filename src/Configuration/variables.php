@@ -28,6 +28,7 @@ $nav_bar_links = [
         'Publications' => '/create/view.php?v=publication',
         'Destinations' => '/create/view.php?v=destination',
         'Paper' => '/paper.php',
+        'Email List' => '/settings/email.php',
         'Language' => '/settings/language.php',
         'Local Settings' => '/settings/local.php',
         'Update' => '/updater/update.php',
@@ -39,7 +40,7 @@ if (__DEBUG__ == 1) {
     $nav_bar_links['Settings']['Test'] = '/test.php';
     $nav_bar_links['Settings']['Clean Databases'] = '/clean.php';
 
-}else {
+} else {
     define('__DEBUG_STR__', false);
 }
 

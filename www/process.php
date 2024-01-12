@@ -51,10 +51,14 @@ if (array_key_exists('FORM_PROCESS', $_REQUEST)) {
         case 'createJob':
             $procesClass = ucfirst('createJob');
             break;
+        case 'updateEmail':
+        case 'addEmail':
+            $procesClass = ucfirst('emailList');
+            break;
     }
 }
 
-
+// dd([$procesClass, $_REQUEST]);
 $procesClass = 'CWP\\Process\\'.$procesClass;
 
 $mediaProcess = new $procesClass($media);

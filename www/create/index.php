@@ -2,11 +2,12 @@
 
 
 use CWP\Core\Media;
+use CWP\HTML\HTMLForms;
 use CWP\HTML\HTMLDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+use CWP\HTML\Forms\CardForm;
 use CWP\Filesystem\MediaFileSystem;
-use CWP\HTML\HTMLForms;
 
 define('__AUTH__', true);
 require_once '../.config.inc.php';
@@ -17,12 +18,14 @@ define('TITLE', APP_NAME);
 $templateBaseDir = 'createjob/job';
 MediaDevice::getHeader();
 
+$updateCard = new CardForm("updateCard", "updateEmail");
+
 $card_params['URL'] = $addJobURL;
 
 $card_params['HIDDEN_FIELDS'] =  HTMLForms::draw_hidden('FORM_PROCESS', 'createJob');
 $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('action', 'createjob');
 
-if(isset($auth)){
+if(isset($auth)) {
     $username = ' Created By '.$auth->getUsername();
     $card_params['HIDDEN_FIELDS'] .= HTMLForms::draw_hidden('username', $auth->getUsername());
 
