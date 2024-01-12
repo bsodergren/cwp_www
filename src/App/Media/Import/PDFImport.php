@@ -140,7 +140,6 @@ class PDFImport extends MediaImport
             unset($page_Array[0]);
             rsort($page_Array);
             unset($prevLetter);
-            dd($page_Array);
 
             foreach ($page_Array as $i => $pageStr) {
                 $pageArr = explode('|', $pageStr);

@@ -99,6 +99,7 @@ class Import extends MediaProcess
             if ('' != $_FILES['the_file']['name']) {
                 $fileSize = $_FILES['the_file']['size'];
                 $pdf_file = $locations->postSaveFile($_FILES['the_file']);
+                dd($pdf_file);
                 MediaQPDF::cleanPDF($pdf_file);
             }
 
@@ -168,16 +169,14 @@ class Import extends MediaProcess
             'product' => $array['close'],
             'job_id' => $this->job_id,
             'form_number' => $form_number, ];
-             $res[] = Media::$explorer->table('media_forms')->insert($form);
+            $res[] = Media::$explorer->table('media_forms')->insert($form);
             foreach ($values['data'] as $k => $form_values) {
                 $form_values = array_merge($form_values, ['form_number' => $form_number, 'job_id' => $this->job_id]);
                 Media::$explorer->table('form_data')->insert($form_values);
-
             }
         }
 
-
-        $this->msg = "Imported job?";
+        $this->msg = 'Imported job?';
     }
 
     public function unzip($file)
