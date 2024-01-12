@@ -94,9 +94,6 @@ if (!defined("PROCESS")) {
     }
 }
 
-// MediaProcess::Check($media);
-
-
 $RainTemplate = new Rain();
 $RainTemplate->nav_bar_links = $nav_bar_links;
 $TplTemplate = $RainTemplate->init();
