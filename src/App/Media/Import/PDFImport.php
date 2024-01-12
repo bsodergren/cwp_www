@@ -140,6 +140,8 @@ class PDFImport extends MediaImport
             unset($page_Array[0]);
             rsort($page_Array);
             unset($prevLetter);
+            dd($page_Array);
+
             foreach ($page_Array as $i => $pageStr) {
                 $pageArr = explode('|', $pageStr);
 
@@ -156,7 +158,6 @@ class PDFImport extends MediaImport
                 $prevLetter = $currentLtr;
             }
             ksort($pageArray);
-            dd($pageArray);
             foreach ($pageArray as $letter => $letter_array) {
                 $form_rows[$letter] = $this->rowDdata($letter_array);
             }
