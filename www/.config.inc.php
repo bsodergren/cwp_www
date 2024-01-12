@@ -28,7 +28,7 @@ require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 
 // if (__DEBUG__ == 1) {
 
-Debugger::enable();
+// Debugger::enable();
 
 //     Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
 //     //Debugger::$logSeverity  = \E_WARNING | \E_NOTICE;
