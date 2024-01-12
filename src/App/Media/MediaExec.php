@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Media;
@@ -25,7 +25,7 @@ class MediaExec
 
     // public $optArray = [];
 
-    public $cmdArgs  = [];
+    public $cmdArgs = [];
 
     public function __construct()
     {
@@ -62,7 +62,7 @@ class MediaExec
     public function run($callback = null)
     {
         $cmd = $this->getCommand();
-        MediaLogger::log("command", $cmd);
+        MediaLogger::log('command', $cmd);
 
         $this->ExecProcess->start();
         $this->ExecProcess->wait($callback);
@@ -79,7 +79,7 @@ class MediaExec
 
     public function cleanPdf($pdf_file)
     {
-        $qdf_cmd  = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
+        $qdf_cmd = FileSystem::normalizePath(__BIN_DIR__.'/qpdf');
         $pdf_file = FileSystem::normalizePath($pdf_file);
         $callback = Callback::check([$this, 'callback']);
         $this->command($qdf_cmd);
@@ -91,10 +91,10 @@ class MediaExec
 
         $this->run($callback);
 
-        $tmpfile = $pdf_file.".~qpdf-orig";
+        $tmpfile = $pdf_file.'.~qpdf-orig';
 
         if (file_exists($tmpfile)) {
-            FileSystem::delete($tmpfile);
+            //  FileSystem::delete($tmpfile);
         }
     }
 

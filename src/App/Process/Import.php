@@ -99,7 +99,6 @@ class Import extends MediaProcess
             if ('' != $_FILES['the_file']['name']) {
                 $fileSize = $_FILES['the_file']['size'];
                 $pdf_file = $locations->postSaveFile($_FILES['the_file']);
-                dd($pdf_file);
                 MediaQPDF::cleanPDF($pdf_file);
             }
 
