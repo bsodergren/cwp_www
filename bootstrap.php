@@ -14,8 +14,10 @@ define('__COMPOSER_DIR__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'vendor');
 define('__CWP_SOURCE__', __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'src');
 define('__CMD_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Cmd');
 define('__CMD_CONFIG__', __CMD_ROOT__.\DIRECTORY_SEPARATOR.'Config');
+
 define('__CONFIG_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Configuration');
 define('__ERROR_LOG_DIRECTORY__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'var'.\DIRECTORY_SEPARATOR.'logs');
+
 define('__CACHE_DIR__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'var'.\DIRECTORY_SEPARATOR.'cache');
 define('__STASH_DIR__', __CACHE_DIR__.\DIRECTORY_SEPARATOR.'stash'.\DIRECTORY_SEPARATOR);
 
@@ -33,4 +35,3 @@ $stash = Stash\Cache::file(function (): void {
 });
 
 Media::$Stash = $stash;
-
