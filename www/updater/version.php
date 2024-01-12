@@ -14,9 +14,13 @@ use CWP\Updater\MediaAppUpdater;
 define('NO_DB_CHECK', true);
 
 define('__PROJECT_ROOT__', dirname(__FILE__, 4));
+
 define('__PUBLIC_ROOT__', dirname(__FILE__, 3));
+
 define('__HTTP_ROOT__', dirname(__FILE__, 2));
+
 define('__LAYOUT_DIR__', \DIRECTORY_SEPARATOR.'assets');
+
 define('__LAYOUT_ROOT__', __HTTP_ROOT__.__LAYOUT_DIR__);
 define('__THEME_DIR__', __LAYOUT_ROOT__.\DIRECTORY_SEPARATOR.'themes');
 require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
