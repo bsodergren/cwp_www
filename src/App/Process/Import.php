@@ -17,6 +17,8 @@ use CWP\Media\Import\PDFImport;
 use CWP\Media\Mail\EmailDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+use Nette\Utils\FileSystem;
+
 
 class Import extends MediaProcess
 {
@@ -63,10 +65,11 @@ class Import extends MediaProcess
 
         if ('' != $_FILES['backup_file']['name']) {
             $this->extractDir = __FILES_DIR__.DIRECTORY_SEPARATOR.'backupDir';
+
             $backupFile = $locations->postSaveFile($_FILES['backup_file'], false);
 
             $this->unzip($backupFile);
-            $this->doBackup();
+            $this->doBackup($backupFile);
             $this->url = 'index.php';
             $this->timeout = 500;
 
@@ -149,10 +152,16 @@ class Import extends MediaProcess
         }
     }
 
-    public function doBackup()
+    public function doBackup($backupFile)
     {
         $json_file = $this->extractDir.DIRECTORY_SEPARATOR.'backup.json';
         $array = json_decode(file_get_contents($json_file), true);
+
+        $pdf_directory = (new MediaFileSystem())->getDirectory('upload', false);
+
+        Filesystem::copy($this->pdf_file, $pdf_directory.DIRECTORY_SEPARATOR.basename($this->pdf_file));
+        $this->pdf_file = $pdf_directory.DIRECTORY_SEPARATOR.basename($this->pdf_file);
+
         $this->job_id = Media::getJobNumber($this->pdf_file, $array['job_number']);
         if (null === $this->job_id) {
             $this->job_id = Media::insertJobNumber($this->pdf_file, $array['job_number']);
@@ -179,6 +188,9 @@ class Import extends MediaProcess
             }
         }
 
+        Filesystem::delete($this->extractDir);
+        Filesystem::delete($backupFile);
+
         $this->msg = 'Imported job?';
     }
 
@@ -191,6 +203,8 @@ class Import extends MediaProcess
             $pdf_name = basename($zip->getNameIndex(0), '.pdf');
             $this->pdf_name = $zip->getNameIndex(0);
             $this->extractDir = $this->extractDir.DIRECTORY_SEPARATOR.$pdf_name;
+            $this->extractDir = FileSystem::platformSlashes($this->extractDir);
+
             $locations->createFolder($this->extractDir);
             $zip->extractTo($this->extractDir);
             $zip->close();
