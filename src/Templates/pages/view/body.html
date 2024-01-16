@@ -26,11 +26,9 @@
             document.execCommand('copy');//copy it
         }
         $(elem).next().text('text copied');
-        { noparse }
+
         setTimeout(function () { $(elem).next().text(''); }, 1000);//
-        {
-            /noparse}
-        }
+    }
 </script>
 
 <div class="container-fluid align-content-center" style="width:700px;">
