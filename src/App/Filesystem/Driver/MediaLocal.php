@@ -26,6 +26,10 @@ class MediaLocal extends MediaFS implements MediaFileInterface
 
         $pdf_file = $pdf_directory.\DIRECTORY_SEPARATOR.basename($fileName);
         // $this->delete($pdf_file);
+
+        $fileTmpName = FileSystem::platformSlashes($fileTmpName);
+        $pdf_file = FileSystem::platformSlashes($pdf_file);
+
         $res = move_uploaded_file($fileTmpName, $pdf_file);
         // $loc->UploadFile($fileTmpName, $pdf_file, ['autorename' => false]);
 
