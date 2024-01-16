@@ -72,7 +72,7 @@ class Rain extends Tpl
 
     }
 
-    protected static function drawTpl($template, $varName, $varValue)
+    protected static function drawTpl($template, $varName, $varValue): string
     {
 
         $Tpl = new Tpl();

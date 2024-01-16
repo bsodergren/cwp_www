@@ -25,7 +25,7 @@ class Calculator
     public function calculateBox($form_details)
     {
         $face_trim    = $form_details['face_trim'];
-        $pcs          = str_replace(',', '', trim($form_details['count']));
+        $pcs          = (int) $form_details['count'];
         $config       = $this->media->form_configuration['configuration'];
         $paper_wieght = $this->media->form_configuration['paper_wieght'];
         $carton_size  = $this->media->form_configuration['carton_size'];

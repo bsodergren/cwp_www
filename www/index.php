@@ -7,6 +7,7 @@ use CWP\Core\Bootstrap;
 use CWP\Core\Media;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
+use CWP\Template\Pages\Index;
 
 require_once '.config.inc.php';
 
@@ -23,6 +24,7 @@ if (0 == $cnt) {
 }
 
 foreach ($results as $k => $row) {
+    $run_refresh = false;
     $customJob = false;
     unset($replacement);
     $media = new Media($row);
@@ -56,6 +58,7 @@ foreach ($results as $k => $row) {
 
     if (0 == $num_of_forms) {
         if (false === $customJob) {
+            $run_refresh = true;
             $num_of_forms = '<input type="submit" name="actSubmit" value="Run Refresh Import" id="actSubmit" class="btn btn-danger">';
         }
         $pdisabled = ' disabled';
@@ -82,7 +85,6 @@ foreach ($results as $k => $row) {
     $replacement['NUM_OF_FORMS'] = $num_of_forms;
 
     $rowdisabled = ' disabled';
-    $zdisabled = ' disabled';
 
     $zip_file = $media->zip_file;
     $xlsx_dir = $media->xlsx_directory;
@@ -90,64 +92,62 @@ foreach ($results as $k => $row) {
         $rowdisabled = '';
     }
     $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process_';
-    // $javascript_click = ' onclick="return createButton(this.id);" ';
 
-    $replacement['FORM_BUTTONS_HTML'] = $form->input_submit('submit[process]', '', 'Edit Media Drop', '', $class_normal.$pdisabled.$tooltip.'process"');
+    $replacement['FORM_BUTTONS_HTML'] .= Index::hrefLink($url, 'Edit Media Drop', $class_normal.$pdisabled);
 
-    // $form->input_submit('actSubmit', '', 'View Forms', '', class_normal.$rowdisabled);
-    if (true == Media::get_exists('xlsx', $row['job_id'])) {
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[view_xlsx]', '', 'view xlsx', '', $class_create.$tooltip.'view_xlsx"');
-        if (0 < $updates) {
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit(
-                'submit[update_xlsx]',
-                '',
-                'Update xlsx',
-                'update_xlsx_'.$row['job_id'],
-                $js.$class_create.$pdisabled.$tooltip.'update_xlsx"'
-            );
-        }
+    if (false === $run_refresh) {
 
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_xlsx]', '', 'delete xlsx', '', $class_delete.$tooltip.'delete_xlsx"');
-    } else {
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit(
-            'submit[create_xlsx]',
-            '',
-            'create xlsx',
-            'create_xlsx_'.$row['job_id'],
-            $js.$class_create.$pdisabled.$tooltip.'create_xlsx"'
-        );
-    }
-    if (__SHOW_ZIP__ == true) {
-        if ($mediaDir->exists($zip_file)) {
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_zip]', '', 'delete zip', '', $class_delete.$tooltip.'delete_zip"');
+
+        if (true == Media::get_exists('xlsx', $row['job_id'])) {
+            $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('view_xlsx', '', '', '', $class_create.$tooltip.'view_xlsx"');
+            if (0 < $updates) {
+                $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('update_xlsx','','','update_xlsx_'.$row['job_id'],$js.$class_create.$pdisabled.$tooltip.'update_xlsx"');
+            }
+
+            $replacement['FORM_DELETE_HTML'] .= Index::ButtonLink('delete_xlsx', '', '', '', $class_delete.$tooltip.'delete_xlsx"');
         } else {
-            if (true == Media::get_exists('xlsx', $row['job_id'])) {
-                $zdisabled = '';
-            }
-
-            $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[create_zip]', '', 'create zip', '', $class_create.$zdisabled.$tooltip.'create_zip"');
+            $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('create_xlsx','','','create_xlsx_'.$row['job_id'],$js.$class_create.$pdisabled.$tooltip.'create_xlsx"');
         }
-        if (__SHOW_MAIL__ == true) {
+
+
+        if (__SHOW_ZIP__ == true) {
             if ($mediaDir->exists($zip_file)) {
-                $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[email_zip]', '', 'email zip', '', $class_create.$tooltip.'email_zip"');
+                $replacement['FORM_DELETE_HTML'] .= Index::ButtonLink('delete_zip', '', '', '', $class_delete.$tooltip.'delete_zip"');
+            } else {
+                if (true == Media::get_exists('xlsx', $row['job_id'])) {
+                $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('create_zip', '', '', '', $class_create.$tooltip.'create_zip"');
+
+                }
+
+            }
+
+
+            if (__SHOW_MAIL__ == true) {
+                if ($mediaDir->exists($zip_file)) {
+                    $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('email_zip', '', '', '', $class_create.$tooltip.'email_zip"');
+                }
             }
         }
-    }
-    if (true == Media::get_exists('xlsx', $row['job_id'])) {
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[upload]', '', 'Export to Google', '', $class_create.$tooltip.'Google"');
-        $replacement['FORM_BUTTONS_HTML'] .= '<a '.$class_create.' href="" onclick="OpenNewWindow(\''.Bootstrap::$CONFIG['google']['sharelink'].'\')">Open Google Drive</a>';
 
-        // $form->input_submit('submit[share_link]', '', 'Open Google Drive', '', $class_create.$tooltip.'Google"');
+
+        if (true == Media::get_exists('xlsx', $row['job_id'])) {
+            $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('upload', '', 'Export to Google', '', $class_create.$tooltip.'Google"');
+            $replacement['FORM_BUTTONS_HTML'] .= Index::hrefLink('#', 'Open Google Drive', $class_create, 'onclick="OpenNewWindow(\''.Bootstrap::$CONFIG['google']['sharelink'].'\')"');
+        }
     }
-    //   $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('export_job', '', 'Export Job', '', $class_create.$tooltip.'export"');
+
     if (false === $customJob) {
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[refresh_import]', '', 'refresh import', '', $class_create.$tooltip.'refresh_import"');
+        $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('refresh_import', '', '', '', $class_create.$tooltip.'refresh_import"');
     } else {
-        $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[addforms]', '', 'Add Forms to Job', '', $class_normal.$tooltip.'addforms"');
+        $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('addforms', '', 'Add Forms to Job', '', $class_normal.$tooltip.'addforms"');
     }
-    $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[export]', '', 'Export Job', '', $class_create.$tooltip.'export_job"');
 
-    $replacement['FORM_BUTTONS_HTML'] .= $form->input_submit('submit[delete_job]', '', 'delete job', '', $delete_js.$class_delete.$tooltip.'delete_job"');
+    if (false === $run_refresh) {
+        $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('export', '', '' , '', $class_create.$tooltip.'export_job"');
+    }
+
+    $replacement['FORM_DELETE_HTML'] .= Index::ButtonLink('delete_job', '', '', '', $delete_js.$class_delete.$tooltip.'delete_job"');
+
     $replacement['FORM_CLOSE'] = $form->close();
     $jobArray[] = $replacement;
 }

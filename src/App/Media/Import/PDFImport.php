@@ -79,10 +79,23 @@ class PDFImport extends MediaImport
         if ('' != $media_job_id) {
             $this->job_id = $media_job_id;
         }
+
         if (file_exists($file)) {
-            $parser = new Parser();
+            $config = new \Smalot\PdfParser\Config();
+            // $config->setDataTmFontInfoHasToBeIncluded(true);
+
+            $config->setFontSpaceLimit(-20);
+            $config->setIgnoreEncryption(true);
+
+            // // Memory limit to use when de-compressing files, in bytes
+            // $config->setDecodeMemoryLimit(10000000);
+
+            // $parser = new Parser();
+            $parser = new Parser([], $config);
+
             $pdf = $parser->parseFile($file);
             $pages = $pdf->getPages();
+
             if ('' != $form_number) {
                 --$form_number;
                 $page_text = [];
@@ -94,7 +107,7 @@ class PDFImport extends MediaImport
                 foreach ($pages as $page) {
                     $page_text = [];
 
-                    $text = $page->getDataTm();
+                    $text = $page->getText();
 
                     $page_text = $this->cleanPdfText($text);
                     $this->parse_page($page_text);
@@ -105,9 +118,20 @@ class PDFImport extends MediaImport
 
     public function cleanPdfText($text)
     {
-        foreach ($text as $n => $row) {
-            // $page_text[$n] = trim(str_replace("&","and", $row[1]));
-            $page_text[$n] = trim($row[1]);
+        $text = str_replace("\t", "','", $text);
+        $text = str_replace('  ', '', $text);
+
+        $page_text = explode("\n", $text);
+        foreach ($page_text as $n => $row) {
+            $row = trim($row);
+            if (str_contains($row, "','")) {
+                $text = "'".trim($row)."'";
+                // $text = preg_replace('/\'([0-9]+),([0-9]+)\s([a-zA-Z]+)?\s?(.*)\'/m', "'$1$2','$3','$4'", $text);
+                $text = preg_replace('/\'([0-9]+),([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
+                $page_text[$n] = $text;
+            } else {
+                $page_text[$n] = trim($row);
+            }
         }
 
         return $page_text;
@@ -136,27 +160,35 @@ class PDFImport extends MediaImport
             $page_text = array_values($page_text);
             $page_count = \count($page_text);
             $pageStr = implode('|', $page_text);
+            // $pageStr = str_replace('\t', ',', $pageStr);
             $page_Array = explode('#'.$form_number, $pageStr);
+
             unset($page_Array[0]);
             rsort($page_Array);
             unset($prevLetter);
 
             foreach ($page_Array as $i => $pageStr) {
                 $pageArr = explode('|', $pageStr);
-
                 $currentLtr = str_replace(',', '', $pageArr[0]);
                 $currentLtr = str_replace(')', '', $currentLtr);
 
                 array_shift($pageArr);
+                // dump([$pageArr, $currentLtr]);
 
                 if (isset($prevLetter)) {
-                    $key = array_search($prevLetter, $pageArr, true);
+                    foreach ($pageArr as $k => $str) {
+                        if (str_starts_with($str, $prevLetter.'MNI')) {
+                            $key = $k;
+                            break;
+                        }
+                    }
                     $pageArr = array_slice($pageArr, 0, $key);
                 }
                 $pageArray[$currentLtr] = $pageArr;
                 $prevLetter = $currentLtr;
             }
             ksort($pageArray);
+
             foreach ($pageArray as $letter => $letter_array) {
                 $form_rows[$letter] = $this->rowDdata($letter_array);
             }
@@ -166,7 +198,8 @@ class PDFImport extends MediaImport
 
     public function getFormDetails($page_text)
     {
-        $this->PageDetails = [];
+        unset($this->PageDetails); // = [];
+
         foreach ($page_text as $k => $line) {
             unset($page_text[$k]);
             if (str_contains(strtolower($line), strtolower('production'))) {
@@ -201,58 +234,63 @@ class PDFImport extends MediaImport
                 $this->PageDetails['config'] = trim($type);
 
                 return $page_text;
+
+                continue;
             }
         }
     }
 
     public function rowDdata($form_row)
     {
-        $tip = ' ';
-        dump($form_row);
-        $rowCount = count($form_row);
-        if (($rowCount % 4) == 0) {
-            $break = 3;
-        } elseif (($rowCount % 5) == 0) {
-            $break = 4;
-        }
+        // $tip = ' ';
 
-        $r = 0;
-        $i = 0;
-        for ($idx = 0; $idx <= $rowCount; ++$idx) {
-            switch ($r) {
-                case 0:
-                    $market = $form_row[$idx];
-                    break;
-                case 1:
-                    $pub = $form_row[$idx];
-                    break;
-                case 2:
-                    $count = str_replace(',', '', $form_row[$idx]);
-                    break;
-                case 3:
-                    $ship = $form_row[$idx];
-                    break;
-                case 4:
-                    $tip = $form_row[$idx];
-                    break;
-            }
+        foreach ($form_row as $i => $rowData) {
+            // $rowData = str_replace("'", '', $rowData);
 
-            if ($r < $break) {
-                ++$r;
-            } else {
-                $row_array = [
-                    'original' => $market.' '.$pub.' '.$count.' '.$ship,
-                    'market' => $market,
-                    'pub' => $pub,
-                    'count' => $count,
-                    'ship' => $ship,
-                    'tip' => $tip,
-                ];
-                $r = 0;
-                $rows[$i] = $row_array;
-                ++$i;
-            }
+            list($market, $pub, $count, $ship, $tip) = explode(',', $rowData);
+            $rows[$i] = [
+                'original' => $rowData,
+                'market' => trim($market, "'"),
+                'pub' => trim($pub, "'"),
+                'count' => trim($count, "'"),
+                'ship' => trim($ship, "'"),
+                'tip' => trim($tip, "'"),
+            ];
         }
+        //     switch ($r) {
+        //         case 0:
+        //             $market = $form_row[$idx];
+        //             break;
+        //         case 1:
+        //             $pub = $form_row[$idx];
+        //             break;
+        //         case 2:
+        //             $count = str_replace(',', '', $form_row[$idx]);
+        //             break;
+        //         case 3:
+        //             $ship = $form_row[$idx];
+        //             break;
+        //         case 4:
+        //             $tip = $form_row[$idx];
+        //             break;
+        //     }
+
+        //     if ($r < $break) {
+        //         ++$r;
+        //     } else {
+        //         $row_array = [
+        //             'original' => $market.' '.$pub.' '.$count.' '.$ship,
+        //             'market' => $market,
+        //             'pub' => $pub,
+        //             'count' => $count,
+        //             'ship' => $ship,
+        //             'tip' => $tip,
+        //         ];
+        //         $r = 0;
+        //         $rows[$i] = $row_array;
+        //         ++$i;
+        //     }
+        // }
 
         return $rows;
     }

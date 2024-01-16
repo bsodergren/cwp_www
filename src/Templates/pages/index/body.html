@@ -23,8 +23,9 @@
                 </div>
                 <div class="{$value.HIDDEN_CLASS}" id="model_{$value.JOB_ID}">
                     <div class="row mb-2">
-                        <div class="container btn-group btn-group-lg" role="group">
+                        <div class="container btn-group btn-group-md" role="group">
                             {$value.FORM_BUTTONS_HTML}
+                            {$value.FORM_DELETE_HTML}
                         </div>
                     </div>
                 </div>
@@ -38,13 +39,11 @@
 </table>
 <script type="text/javascript">
 
-function OpenNewWindow(MyPath) {
-    window.open(MyPath, "GoogleDrive", "location=center,height=600,width=1280");
-}
+    function OpenNewWindow(MyPath) {
+        window.open(MyPath, "GoogleDrive", "location=center,height=600,width=1280");
+    }
     function createButton(id) {
-        console.log("fsdfsdfsd");
 
-        console.log(id);
         var divArr = id.split("_");
         var action = divArr[0] + '_' + divArr[1];
         var job_id = divArr[2];

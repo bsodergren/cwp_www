@@ -14,6 +14,7 @@ use CWP\Core\MediaQPDF;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Media\Import\PDFImport;
+use CWP\Media\Mail\EmailDisplay;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
 
@@ -100,6 +101,8 @@ class Import extends MediaProcess
                 $fileSize = $_FILES['the_file']['size'];
                 $pdf_file = $locations->postSaveFile($_FILES['the_file']);
                 MediaQPDF::cleanPDF($pdf_file);
+
+                EmailDisplay::addImportedPDF($_FILES['the_file']['name'],$job_number);
             }
 
             if ('' == $pdf_file) {
@@ -133,6 +136,7 @@ class Import extends MediaProcess
             $MediaImport = new PDFImport();
 
             $MediaImport->Import($pdf_file, $job_number);
+
             if (0 == $MediaImport->status) {
                 HTMLDisplay::put("<span class='p-3 text-danger'>something went wrong</span>");
                 HTMLDisplay::put(' Click on <a href="'.__URL_PATH__.'/index.php">Home</a> to Continue ');

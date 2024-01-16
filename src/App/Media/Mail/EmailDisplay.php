@@ -24,7 +24,7 @@ class EmailDisplay
                 $jobNumber = $attachment['JobNumber'];
             }
 
-            $this->addImportedPDF($attachment['name'],$jobNumber);
+            self::addImportedPDF($attachment['name'],$jobNumber);
 
             $html .= template::GetHTML('/import/email/job_row', [
                 'OPTION_JOB' => $jobNumber,
@@ -45,7 +45,7 @@ class EmailDisplay
         );
     }
 
-    private function addImportedPDF($pdf_filename,$jobNumber)
+    public static function addImportedPDF($pdf_filename,$jobNumber)
     {
 
         $query = 'INSERT IGNORE INTO `media_imports` ?';

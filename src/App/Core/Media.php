@@ -429,12 +429,12 @@ class Media
 
     public function delete_job()
     {
-        $this->delete_form();
-        $this->deleteFromDatabase('media_job');
+       $this->delete_form();
+       $this->deleteFromDatabase('media_job');
 
         //   MediaFileSystem::delete($this->pdf_file);
         //   MediaFileSystem::delete($this->pdf_tmp_file);
-        (new MediaFileSystem())->delete($this->base_dir);
+        (new MediaFileSystem())->delete( dirname($this->base_dir,1) );
     }
 
     public function delete_form($form_number = '')

@@ -87,7 +87,7 @@ class MediaExec
         $this->option('--pages', '.');
         $this->option('1-z', '--');
         $this->option('--replace-input');
-        $this->option('--no-warn');
+        // $this->option('--no-warn');
 
         $this->run($callback);
 
