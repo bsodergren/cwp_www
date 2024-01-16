@@ -3,11 +3,12 @@
  * CWP Media Load Flag Creator.
  */
 
-use CWP\Core\Bootstrap;
 use CWP\Core\Media;
-use CWP\Filesystem\MediaFileSystem;
+use CWP\Core\Bootstrap;
 use CWP\HTML\HTMLDisplay;
+use CWP\Core\MediaSettings;
 use CWP\Template\Pages\Index;
+use CWP\Filesystem\MediaFileSystem;
 
 require_once '.config.inc.php';
 
@@ -43,7 +44,7 @@ foreach ($results as $k => $row) {
 
     $hidden = ['job_id' => $row['job_id']];
 
-    $js = ' onclick="window.open(\'about:blank\',\'print_popup\',\'width=1000,height=800\');" formtarget="print_popup" ';
+    $js = ' onclick="window.open(\'about:blank\',\'\',\'width=1000,height=800\');" formtarget="print_popup" ';
 
     $delete_js = ' onclick="window.open(\'about:blank\',\'delete_popup\',\'width=400,height=400\');" formtarget="delete_popup" ';
 
@@ -131,8 +132,12 @@ foreach ($results as $k => $row) {
 
 
         if (true == Media::get_exists('xlsx', $row['job_id'])) {
-            $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('upload', '', 'Export to Google', '', $class_create.$tooltip.'Google"');
-            $replacement['FORM_BUTTONS_HTML'] .= Index::hrefLink('#', 'Open Google Drive', $class_create, 'onclick="OpenNewWindow(\''.Bootstrap::$CONFIG['google']['sharelink'].'\')"');
+            if(MediaSettings::GoogleAvail()){
+
+                $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('upload', '', 'Export to Google', '', $class_create.$tooltip.'Google"');
+                $replacement['FORM_BUTTONS_HTML'] .= Index::hrefLink('#', 'Open Google Drive', $class_create,
+                'onclick="OpenNewWindow(\''.__GOOGLE_SHARE_URL__.'\')"');
+            }
         }
     }
 

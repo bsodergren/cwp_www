@@ -73,9 +73,9 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
     public function __construct()
     {
         $client = new \Google\Client();
-        $client->setClientId(Bootstrap::$CONFIG['google']['clientid']);
-        $client->setClientSecret(Bootstrap::$CONFIG['google']['secret']);
-        $client->refreshToken(Bootstrap::$CONFIG['google']['token']);
+        $client->setClientId(__GOOGLE_CLIENTID__);
+        $client->setClientSecret(__GOOGLE_SECRET__);
+        $client->refreshToken(__GOOGLE_TOKEN__);
         $client->setApplicationName('plexmediabackupserver');
 
         $service = new \Google\Service\Drive($client);

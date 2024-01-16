@@ -68,6 +68,45 @@ class MediaSettings
         return 0;
     }
 
+
+
+
+    public static function DropboxAvail()
+    {
+
+        if(0 == self::isTrue('__DROPBOX_AUTH_TOKEN__')){
+            return false;
+        }
+        if(0 == self::isTrue('__DROPBOX_APP_KEY__')){
+            return false;
+        }
+        if(0 == self::isTrue('__DROPBOX_APP_SECRET__')){
+            return false;
+        }
+
+        return true;
+
+    }
+    public static function GoogleAvail()
+    {
+
+        if(0 == self::isTrue('__GOOGLE_CLIENTID__')){
+
+            return false;
+        }
+        if(0 == self::isTrue('__GOOGLE_SECRET__')){
+            return false;
+        }
+        if(0 == self::isTrue('__GOOGLE_TOKEN__')){
+            return false;
+        }
+        if(0 == self::isTrue('__GOOGLE_SHARE_URL__')){
+            return false;
+        }
+        return true;
+
+    }
+
     public static function jsonString_to_TextForm($string)
     {
         $value_text = '';

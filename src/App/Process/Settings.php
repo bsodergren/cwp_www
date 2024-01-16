@@ -18,7 +18,6 @@ class Settings extends MediaProcess
     public function run($req)
     {
         $form = new Formr('bootstrap4');
-
         if ($form->submitted()) {
             $this->url = '/index.php';
             // get our form values and assign them to a variable
@@ -48,9 +47,10 @@ class Settings extends MediaProcess
                 }
 
                 if (str_contains($key, '-name')) {
-                    $pcs = explode('-', $key);
-                    $key = $pcs[0];
-                    $field = 'setting_'.$pcs[1];
+                    continue;
+                    // $pcs = explode('-', $key);
+                    // $key = $pcs[0];
+                    // $field = 'setting_'.$pcs[1];
                 }
 
                 if (str_contains($key, '-array')) {
@@ -77,11 +77,14 @@ class Settings extends MediaProcess
                     // }
                 }
 
+               // dump([ $key,$field, $value]);
                 $count = Media::$explorer->table('settings')->where('definedName', $key)->update([$field => $value]); // UPDATEME
                 //   echo $template->render('process/update_setting', ['KEY' => $key, 'VALUE' => $value, 'FIELD' => $field]);
 
                 ob_flush();
             }
+            //dd("fsd");
+
             if ('' != $new_settiings['setting_definedName']) {
                 $new_settiings['definedName'] = $new_settiings['setting_definedName'];
                 unset($new_settiings['setting_definedName']);

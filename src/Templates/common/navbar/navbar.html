@@ -10,8 +10,10 @@
             </ul>
 
             <ul class="navbar-nav me-auto w-auto">
-			{if="defined('__DEBUG_STR__')"} <li class="nav-item ">{#__DEBUG_STR__#}</li>{/if}
+			{if="defined('__DEBUG_STR__')"} <li class="nav-item ">{#__DEBUG_STR__#}</li>
 
+            {/if}
+   <li class="nav-item ">gsd{$current}</li>
                 {if="$update>$current"}
                 <li class="nav-item auto_refresh"></li>
                 {/if}

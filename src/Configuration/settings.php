@@ -57,6 +57,7 @@ foreach ($setting['local'] as $key => $array) {
 }
 
 // $const = get_defined_constants(true);
+Bootstrap::setFileDriver();
 
 if (Media::$Google || Media::$Dropbox) {
     define('__FILES_DIR__', '');

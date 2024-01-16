@@ -17,11 +17,15 @@ class Form extends MediaProcess
         $this->form_number = $req['form_number'];
         $method = str_replace(' ', '', $req['submit']);
         $this->updateForm($req);
-        if (method_exists($this, $method)) {
-            $this->$method();
-        } else {
-            dd($method);
+
+        // CheckMethod:
+        if (!method_exists($this, $method))
+        {
+             dd("missing Method",  $method);
+            // goto CheckMethod;
         }
+
+        $this->$method();
     }
 
     public function updateForm($req)

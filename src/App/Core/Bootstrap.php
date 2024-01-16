@@ -6,6 +6,7 @@
 namespace CWP\Core;
 
 use Camoo\Config\Config;
+use CWP\Core\MediaSettings;
 use Nette\Utils\FileSystem;
 
 class Bootstrap
@@ -28,7 +29,7 @@ class Bootstrap
         self::$CONFIG = $Config->all();
 
         $this->checkConfigValues();
-        $this->setFileDriver();
+      //  $this->setFileDriver();
         $this->define('__DEBUG__', $this->isDebugSet());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
         $this->define('__URL_PATH__', $this->getURL());
@@ -128,19 +129,27 @@ class Bootstrap
         return $this->Config['server']['url_root'];
     }
 
-    private function setFileDriver()
+    public static function setFileDriver()
     {
         Media::$Dropbox = false;
         Media::$Google = false;
+        //$filedriver = strtolower($this->Config['server']['filedriver']);
 
-        $filedriver = strtolower($this->Config['server']['filedriver']);
-
-        if ('google' == $filedriver) {
-            Media::$Google = true;
-        }
-        if ('dropbox' == $filedriver) {
+        if( __USE_DROPBOX__ == 1 && __USE_GOOGLE__ == 0)
+        {
+            if(MediaSettings::DropboxAvail())
+            {
             Media::$Dropbox = true;
+            }
         }
+        if( __USE_DROPBOX__ == 0 && __USE_GOOGLE__ == 1)
+        {
+            if(MediaSettings::GoogleAvail())
+            {
+                Media::$Google = true;
+            }
+        }
+
     }
 
     private function checkConfigValues()
