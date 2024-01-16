@@ -60,7 +60,7 @@ $update_data = [
            '__IMAP_ENABLE__' => ['setting_group' => 'iMap'],
            '__IMAP_HOST__' => ['setting_group' => 'iMap'],
            '__IMAP_USER__' => ['setting_group' => 'iMap'],
-           '__IMAP_PASSWD__	' => ['setting_group' => 'iMap'],
+           '__IMAP_PASSWD__' => ['setting_group' => 'iMap'],
            '__IMAP_FOLDER__' => ['setting_group' => 'iMap'],
            '__SHOW_ZIP__' => ['setting_group' => 'Misc'],
            '__SHOW_MAIL__' => ['setting_group' => 'iMap'],

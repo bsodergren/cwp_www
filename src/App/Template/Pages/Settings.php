@@ -74,6 +74,7 @@ class Settings extends Template
             'COL_ONE' => $this->col_w_one,
             'COL_TWO' => $this->col_w_two,
             'COL_THREE' => $this->col_w_three,
+            'ROW_PADDING' => 'pb-1',
         ];
 
         $parameters = array_merge($default, $params);
@@ -102,13 +103,17 @@ class Settings extends Template
         if ('' == $this->value) {
             $place_holder = 'no value set';
         }
+        $template = 'text';
 
+        if(strlen($this->value) > 36){
+            $template = 'textbox';
+        }
         $params = [
             'PLACEHOLDER' => $place_holder,
             'VALUE' => $this->value,
         ];
 
-        return $this->settingsTemplate('settings/text/text', $params);
+        return $this->settingsTemplate('settings/'.$template.'/text', $params);
     }
 
     public function List()
