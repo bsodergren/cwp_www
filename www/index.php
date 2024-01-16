@@ -44,7 +44,7 @@ foreach ($results as $k => $row) {
 
     $hidden = ['job_id' => $row['job_id']];
 
-    $js = ' onclick="window.open(\'about:blank\',\'\',\'width=1000,height=800\');" formtarget="print_popup" ';
+    $js = ' onclick="window.open(\'about:blank\',\'print_popup\',\'width=1000,height=800\');" formtarget="print_popup" ';
 
     $delete_js = ' onclick="window.open(\'about:blank\',\'delete_popup\',\'width=400,height=400\');" formtarget="delete_popup" ';
 
