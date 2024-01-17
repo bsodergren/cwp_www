@@ -10,10 +10,10 @@
             </ul>
 
             <ul class="navbar-nav me-auto w-auto">
-			{if="defined('__DEBUG_STR__')"} <li class="nav-item ">{#__DEBUG_STR__#}</li>
+                {if="defined('__DEBUG_STR__')"} <li class="nav-item ">{#__DEBUG_STR__#}</li>
 
-            {/if}
-   <li class="nav-item ">gsd{$current}</li>
+                {/if}
+                <li class="nav-item ">gsd{$current}</li>
                 {if="$update>$current"}
                 <li class="nav-item auto_refresh"></li>
                 {/if}
@@ -31,9 +31,18 @@
 
                     <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="imgdropdown">
                         {loop="$nav_bar_dropdown"}
-                        <li class="nav-item"><a class="dropdown-item " href="{#__URL_PATH__#}{$value}"><i
-						class="fa fa-user pr-2">{$key}</i></a></li>
+
+                        {if="$value=='divider'"}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {else}
+                        <li class="nav-item"><a class="dropdown-item " href="{#__URL_PATH__#}{$value}"><i class="fa fa-user pr-2">{$key}</i></a></li>
+                        {/if}
                         {/loop}
+
+
+
                         <li class="nav-item">
                             <SPAN class="dropdown-item ">
                                 {if="$update>$current"}

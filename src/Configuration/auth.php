@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 use CWP\Core\Bootstrap;
@@ -10,11 +10,11 @@ use CWP\HTML\HTMLDisplay;
  * CWP Media tool for load flags.
  */
 
-if (__DEBUG__ == 0) {
-    define('__USE_AUTHENTICATION__', Bootstrap::$CONFIG['application']['authenticate']);
-} else {
-    define('__USE_AUTHENTICATION__', false);
-}
+// if (__DEBUG__ == 0) {
+define('__USE_AUTHENTICATION__', Bootstrap::$CONFIG['application']['authenticate']);
+// } else {
+// define('__USE_AUTHENTICATION__', false);
+// }
 
 if (__USE_AUTHENTICATION__ == true) {
     $db = new PDO(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);

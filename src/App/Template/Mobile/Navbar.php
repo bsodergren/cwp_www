@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Template\Mobile;
@@ -11,20 +11,22 @@ class Navbar extends Template
 {
     public static function display($template = '', $params = [])
     {
-        $templateObj                  = new Template();
+        $templateObj = new Template();
 
-        $nav_link_html                = '';
-        $dropddown_menu_text          = '';
-        $dropdown_link_html           = '';
-        $nav_list_dir                 = 'dropdown';
-        $dropdown_divider             = null;
-        [$installed,$latest]          = self::VersionText();
+        $nav_link_html = '';
+        $dropddown_menu_text = '';
+        $dropdown_link_html = '';
+        $nav_list_dir = 'dropdown';
+        $dropdown_divider = null;
+        [$installed,$latest] = self::VersionText();
 
         foreach (__NAVBAR_LINKS__ as $text => $url) {
             if (\is_array($url)) {
                 $dropddown_menu_text = $text;
 
                 foreach ($url as $dropdown_text => $dropdown_url) {
+                    dump($dropdown_text);
+
                     $dropdown_link_html .= $templateObj->template(
                         'base/navbar/'.$nav_list_dir.'/navbar_link',
                         ['DROPDOWN_URL' => $dropdown_url, 'DROPDOWN_URL_TEXT' => $dropdown_text]
@@ -40,7 +42,7 @@ class Navbar extends Template
         //            define('__FOOTER_NAV_HTML__', $dropdown_link_html);
 
         $dropdown_link_html .= $dropdown_divider;
-        $latest_version_html          = '';
+        $latest_version_html = '';
         if (null != $latest) {
             $dropdown_link_html .= $templateObj->template(
                 'base/navbar/'.$nav_list_dir.'/navbar_item',
@@ -56,14 +58,14 @@ class Navbar extends Template
             ['DROPDOWN_TEXT' => 'Version '.$installed]
         );
 
-        $navbar_right_dropdown        = $templateObj->template('base/navbar/'.$nav_list_dir.'/navbar_dropdown', [
+        $navbar_right_dropdown = $templateObj->template('base/navbar/'.$nav_list_dir.'/navbar_dropdown', [
             'DROPDOWN_LINKS' => $dropdown_link_html,
-            'DROPDOWN_TEXT'  => $dropddown_menu_text]);
+            'DROPDOWN_TEXT' => $dropddown_menu_text]);
 
-        $params['NAVBAR_LEFT_HTML']   = $templateObj->template('base/navbar/navbar_left', []);
+        $params['NAVBAR_LEFT_HTML'] = $templateObj->template('base/navbar/navbar_left', []);
         $params['NAVBAR_CENTER_HTML'] = $templateObj->template('base/navbar/navbar_center', ['NAVBAR_CENTER_LIST' => $latest_version_html]);
-        $params['NAVBAR_RIGHT_HTML']  = $templateObj->template('base/navbar/navbar_right', [
-            'NAVBAR_RIGHT_LIST'     => $nav_link_html,
+        $params['NAVBAR_RIGHT_HTML'] = $templateObj->template('base/navbar/navbar_right', [
+            'NAVBAR_RIGHT_LIST' => $nav_link_html,
             'NAVBAR_RIGHT_DROPDOWN' => $navbar_right_dropdown,
         ]);
 

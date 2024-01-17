@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Template;
@@ -22,7 +22,7 @@ class HTMLDocument
 
     public static function __callStatic($method, $args)
     {
-        $new    = new self();
+        $new = new self();
         $method = str_replace('_', '', $method);
 
         return $new->$method();
@@ -38,15 +38,20 @@ class HTMLDocument
                 $dropddown_menu_text = $text;
 
                 foreach ($url as $dropdown_text => $dropdown_url) {
+                    if($dropdown_url == 'divider'){
+                        $dropdown_link_html .= $this->template->template(
+                            'base/navbar/'.$this->nav_list_dir.'/navbar_divider',[]);
+                        continue;
+                    }
                     $dropdown_link_html .= $this->template->template(
                         'base/navbar/'.$this->nav_list_dir.'/navbar_link',
-                        ['DROPDOWN_URL' => $dropdown_url, 'DROPDOWN_URL_TEXT' => $dropdown_text], false,false
+                        ['DROPDOWN_URL' => $dropdown_url, 'DROPDOWN_URL_TEXT' => $dropdown_text], false, false
                     );
                 }
 
                 continue;
             }
-            $nav_link_html .= $this->template->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text], false,false);
+            $nav_link_html .= $this->template->template('base/navbar/navbar_item_link', ['NAV_LINK_URL' => $url, 'NAV_LINK_TEXT' => $text], false, false);
         }
 
         return [$dropdown_link_html, $nav_link_html, $dropddown_menu_text];
@@ -54,18 +59,18 @@ class HTMLDocument
 
     public function NavbarLatestVersion()
     {
-        $latest              = Media::$VersionUpdate;
-        $installed           = Media::$CurrentVersion;
-        $dropdown_link_html  = $this->template->template(
+        $latest = Media::$VersionUpdate;
+        $installed = Media::$CurrentVersion;
+        $dropdown_link_html = $this->template->template(
             'base/navbar/'.$this->nav_list_dir.'/navbar_item',
-            ['DROPDOWN_TEXT' => 'Version '.$installed], false,false
+            ['DROPDOWN_TEXT' => 'Version '.$installed], false, false
         );
 
         $latest_version_html = '';
         if (null !== $latest) {
             $dropdown_link_html .= $this->template->template(
                 'base/navbar/'.$this->nav_list_dir.'/navbar_item',
-                ['DROPDOWN_TEXT' => 'New! '.$latest], false,false
+                ['DROPDOWN_TEXT' => 'New! '.$latest], false, false
             );
             //  $latest_version_html = $this->template->template('base/footer/version_latest', ['VERSION' => $latest]);
         }
@@ -75,9 +80,8 @@ class HTMLDocument
 
     public function getNavbar()
     {
-        if (! MediaSettings::isTrue('NO_NAV')) {
-            if( MediaDevice::$NAVBAR == true ){
-
+        if (!MediaSettings::isTrue('NO_NAV')) {
+            if (true == MediaDevice::$NAVBAR) {
                 return MediaDevice::getNavbar();
             }
         }
@@ -85,12 +89,12 @@ class HTMLDocument
 
     public function headerJS()
     {
-        $path   = '/'.__SCRIPT_NAME__;
+        $path = '/'.__SCRIPT_NAME__;
         if (MediaSettings::isTrue('__FORM_POST__')) {
             $path = '/'.__FORM_POST__;
         }
 
-        $js     = trim(Template::GetHTML($path.'/javascript', [], false, false));
+        $js = trim(Template::GetHTML($path.'/javascript', [], false, false));
 
         $onload = trim(Template::GetHTML($path.'/onload', [], false, false));
 
@@ -99,7 +103,7 @@ class HTMLDocument
 
     public function headerCSS()
     {
-        $bootstrap  = Template::GetHTML('base/header/bootstrap_5', [], false, false);
+        $bootstrap = Template::GetHTML('base/header/bootstrap_5', [], false, false);
         $custom_css = Template::GetHTML('base/header/css', [], false, false);
 
         return [$bootstrap, $custom_css];
@@ -108,21 +112,21 @@ class HTMLDocument
     public function headerVersionUpdates()
     {
         $this->template->error = false;
-        if( MediaDevice::$NAVBAR == true ){
-
-            return $this->template->template('base/header/updates',[], false,false);
+        if (true == MediaDevice::$NAVBAR) {
+            return $this->template->template('base/header/updates', [], false, false);
         }
+
         return '';
     }
 
     public function footerVersionUpdates()
     {
-        $latest       = Media::$VersionUpdate;
-        $installed    = Media::$CurrentVersion;
+        $latest = Media::$VersionUpdate;
+        $installed = Media::$CurrentVersion;
         // dd($latest, $installed);
-        $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed], false,false);
+        $version_html = Template::GetHTML('base/footer/version_current', ['VERSION' => $installed], false, false);
         if (null != $latest) {
-            $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest], false,false);
+            $version_html = Template::GetHTML('base/footer/version_latest', ['VERSION' => $latest], false, false);
         }
 
         return $version_html;
@@ -133,7 +137,7 @@ class HTMLDocument
         if (isset($GLOBALS)) {
             if (\is_array($GLOBALS['_REQUEST'])) {
                 if (\array_key_exists('msg', $GLOBALS['_REQUEST'])) {
-                    return Template::GetHTML('base/header/return_msg', ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])], false,false);
+                    return Template::GetHTML('base/header/return_msg', ['MSG' => urldecode($GLOBALS['_REQUEST']['msg'])], false, false);
                 }
             }
         }

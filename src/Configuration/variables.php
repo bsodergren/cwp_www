@@ -18,7 +18,7 @@ $__script_name = basename($_SERVER['SCRIPT_NAME'], '.php');
 
 $nav_bar_links = [
     'Home' => '/index.php',
-    'Create Job' => '/create/index.php',
+    // 'Create Job' => '/create/index.php',
     'Import' => '/import.php',
     'Trim Sizes' => '/settings/trim.php',
     'Settings' => [
@@ -27,18 +27,22 @@ $nav_bar_links = [
         // 'Destinations' => '/create/view.php?v=destination',
         'Paper' => '/paper.php',
         'Email List' => '/settings/email.php',
+                'xxx' => 'divider',
+
         'Language' => '/settings/language.php',
         'Local Settings' => '/settings/local.php',
         'Update' => '/updater/update.php',
     ],
 ];
-
+ define('__DEBUG_STR__', false);
 if (__DEBUG__ == 1) {
-    define('__DEBUG_STR__', "<span class='fs-6 text-success'>Debug Enabled ".__DEVICE__.'</span>');
+  //  define('__DEBUG_STR__', "<span class='fs-6 text-success'>Debug Enabled ".__DEVICE__.'</span>');
+    $nav_bar_links['Settings']['debug'] = 'divider';
     $nav_bar_links['Settings']['Test'] = '/test.php';
     $nav_bar_links['Settings']['Clean Databases'] = '/clean.php';
+    $nav_bar_links['Settings']['debug2'] = 'divider';
 } else {
-    define('__DEBUG_STR__', false);
+
 }
 
 if (__USE_AUTHENTICATION__ == true) {
