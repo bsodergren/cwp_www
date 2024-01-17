@@ -23,14 +23,15 @@ class PDFImport extends MediaImport
         $this->processPdf($pdf_file, $this->job_id, $update_form);
 
         $pdf = $this->form;
+        $noPagess = \count($pdf);
 
-        if (0 == \count($pdf)) {
+        if (0 ==  $noPagess) {
             $this->deleteFromDatabase('media_job');
             $this->status = 2;
 
             return 2;
         }
-        $noPagess = \count($pdf);
+
         HTMLDisplay::pushhtml('stream/import/msg', ['TEXT' => 'Importing '.$noPagess.' forms']);
 
         $keyidx = array_key_first($pdf);
@@ -79,39 +80,21 @@ class PDFImport extends MediaImport
         if ('' != $media_job_id) {
             $this->job_id = $media_job_id;
         }
-
         if (file_exists($file)) {
             $config = new \Smalot\PdfParser\Config();
-            // $config->setDataTmFontInfoHasToBeIncluded(true);
 
             $config->setFontSpaceLimit(-20);
-            $config->setIgnoreEncryption(true);
 
-            // // Memory limit to use when de-compressing files, in bytes
-            // $config->setDecodeMemoryLimit(10000000);
-
-            // $parser = new Parser();
             $parser = new Parser([], $config);
 
             $pdf = $parser->parseFile($file);
             $pages = $pdf->getPages();
 
-            if ('' != $form_number) {
-                --$form_number;
-                $page_text = [];
+            foreach ($pages as $page) {
+                $text = $page->getText();
+                $formRow = $this->cleanPdfText($text);
 
-                $text = $pages[$form_number]->getDataTm();
-                $page_text = $this->cleanPdfText($text);
-                $this->parse_page($page_text);
-            } else {
-                foreach ($pages as $page) {
-                    $page_text = [];
-
-                    $text = $page->getText();
-
-                    $page_text = $this->cleanPdfText($text);
-                    $this->parse_page($page_text);
-                }
+                $this->parse_page($formRow);
             }
         }
     }
@@ -119,28 +102,40 @@ class PDFImport extends MediaImport
     public function cleanPdfText($text)
     {
         $text = str_replace("\t", "','", $text);
-        $text = str_replace('  ', '', $text);
-
         $page_text = explode("\n", $text);
+
+        $formRow = [];
+        $letter = '';
         foreach ($page_text as $n => $row) {
-            $row = trim($row);
+            $row = preg_replace('/\s+/', ' ', $row);
+            if (Utils::contains($row, ['MNI', '(', 'Market', 'Tip Prod', 'Ltr Lap', '#', 'SHEETS'])) {
+                if (preg_match('/(#[0-9]+)([A-Z,]+)/', $row, $match)) {
+                    $letter = str_replace(',', '', $match[2]);
+                }
+                if (Utils::contains($row, ['Run#'])) {
+                    continue;
+                }
+                unset($page_text[$n]);
+                continue;
+            }
+
             if (str_contains($row, "','")) {
                 $text = "'".trim($row)."'";
-                // $text = preg_replace('/\'([0-9]+),([0-9]+)\s([a-zA-Z]+)?\s?(.*)\'/m', "'$1$2','$3','$4'", $text);
                 $text = preg_replace('/\'([0-9]+),([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
-                $page_text[$n] = $text;
+                $text = preg_replace('/\'([a-zA-Z ]+), ([a-zA-Z ]+)\'/', "'$1','$2'", $text);
+                $formRow[$letter][] = $text;
+                unset($page_text[$n]);
             } else {
                 $page_text[$n] = trim($row);
             }
         }
+        $this->getFormDetails($page_text);
 
-        return $page_text;
+        return $formRow;
     }
 
-    public function parse_page($page_text)
+    public function parse_page($formData)
     {
-        $page_text = $this->getFormDetails($page_text);
-
         $form_number = $this->PageDetails['form'];
         $config_type = $this->PageDetails['config'];
         if (isset($config_type) && 'sheeter' == $config_type) {
@@ -157,41 +152,10 @@ class PDFImport extends MediaImport
             $this->form[$form_number]['details']['job_id'] = $this->job_id;
             $this->form[$form_number]['details']['form_number'] = $form_number;
 
-            $page_text = array_values($page_text);
-            $page_count = \count($page_text);
-            $pageStr = implode('|', $page_text);
-            // $pageStr = str_replace('\t', ',', $pageStr);
-            $page_Array = explode('#'.$form_number, $pageStr);
-
-            unset($page_Array[0]);
-            rsort($page_Array);
-            unset($prevLetter);
-
-            foreach ($page_Array as $i => $pageStr) {
-                $pageArr = explode('|', $pageStr);
-                $currentLtr = str_replace(',', '', $pageArr[0]);
-                $currentLtr = str_replace(')', '', $currentLtr);
-
-                array_shift($pageArr);
-                // dump([$pageArr, $currentLtr]);
-
-                if (isset($prevLetter)) {
-                    foreach ($pageArr as $k => $str) {
-                        if (str_starts_with($str, $prevLetter.'MNI')) {
-                            $key = $k;
-                            break;
-                        }
-                    }
-                    $pageArr = array_slice($pageArr, 0, $key);
-                }
-                $pageArray[$currentLtr] = $pageArr;
-                $prevLetter = $currentLtr;
-            }
-            ksort($pageArray);
-
-            foreach ($pageArray as $letter => $letter_array) {
+            foreach ($formData as $letter => $letter_array) {
                 $form_rows[$letter] = $this->rowDdata($letter_array);
             }
+
             $this->form[$form_number]['forms'] = $form_rows;
         }
     }
@@ -199,7 +163,6 @@ class PDFImport extends MediaImport
     public function getFormDetails($page_text)
     {
         unset($this->PageDetails); // = [];
-
         foreach ($page_text as $k => $line) {
             unset($page_text[$k]);
             if (str_contains(strtolower($line), strtolower('production'))) {
@@ -223,7 +186,6 @@ class PDFImport extends MediaImport
             if (str_contains(strtolower($line), strtolower('bind'))) {
                 $peices = explode(':', $line);
                 $type = str_replace(' ', '', $peices[1]);
-
                 $this->PageDetails['bind'] = trim($type);
                 continue;
             }
@@ -233,8 +195,6 @@ class PDFImport extends MediaImport
                 $type = $this->getPageCount($type);
                 $this->PageDetails['config'] = trim($type);
 
-                return $page_text;
-
                 continue;
             }
         }
@@ -242,11 +202,7 @@ class PDFImport extends MediaImport
 
     public function rowDdata($form_row)
     {
-        // $tip = ' ';
-
         foreach ($form_row as $i => $rowData) {
-            // $rowData = str_replace("'", '', $rowData);
-
             list($market, $pub, $count, $ship, $tip) = explode(',', $rowData);
             $rows[$i] = [
                 'original' => $rowData,
@@ -257,40 +213,6 @@ class PDFImport extends MediaImport
                 'tip' => trim($tip, "'"),
             ];
         }
-        //     switch ($r) {
-        //         case 0:
-        //             $market = $form_row[$idx];
-        //             break;
-        //         case 1:
-        //             $pub = $form_row[$idx];
-        //             break;
-        //         case 2:
-        //             $count = str_replace(',', '', $form_row[$idx]);
-        //             break;
-        //         case 3:
-        //             $ship = $form_row[$idx];
-        //             break;
-        //         case 4:
-        //             $tip = $form_row[$idx];
-        //             break;
-        //     }
-
-        //     if ($r < $break) {
-        //         ++$r;
-        //     } else {
-        //         $row_array = [
-        //             'original' => $market.' '.$pub.' '.$count.' '.$ship,
-        //             'market' => $market,
-        //             'pub' => $pub,
-        //             'count' => $count,
-        //             'ship' => $ship,
-        //             'tip' => $tip,
-        //         ];
-        //         $r = 0;
-        //         $rows[$i] = $row_array;
-        //         ++$i;
-        //     }
-        // }
 
         return $rows;
     }

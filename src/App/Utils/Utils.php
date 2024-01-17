@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Utils;
@@ -40,7 +40,7 @@ class Utils
 
     public static function skipFile($filename)
     {
-        $f    = fopen($filename, 'r');
+        $f = fopen($filename, 'r');
         $line = fgets($f);
         fclose($f);
 
@@ -49,11 +49,11 @@ class Utils
 
     public static function setSkipFile($filename)
     {
-        if (! self::skipFile($filename)) {
+        if (!self::skipFile($filename)) {
             $replacement = '<?php';
             $replacement .= ' #skip';
             $__db_string = FileSystem::read($filename);
-            $__db_write  = str_replace('<?php', $replacement, $__db_string);
+            $__db_write = str_replace('<?php', $replacement, $__db_string);
             FileSystem::write($filename, $__db_write);
         }
     }
@@ -85,22 +85,22 @@ class Utils
 
     public static function fracToFloat($number)
     {
-        $float  = '000';
+        $float = '000';
         $digits = '0';
 
         if (0 != $number) {
             preg_match('/([0-9]+-?)?([0-9]+)?\/?([0-9]+)?/', $number, $output_array);
-            $float  = '000';
+            $float = '000';
             $digits = $output_array[1];
             $digits = str_replace('-', '', $digits);
             if (\array_key_exists(2, $output_array)) {
                 if ('' == $output_array[2]) {
-                    $digits          = 0;
+                    $digits = 0;
                     $output_array[2] = $output_array[1];
                 }
 
-                $num   = $output_array[2];
-                $den   = $output_array[3];
+                $num = $output_array[2];
+                $den = $output_array[3];
                 $float = fdiv($num, $den);
                 $float = str_replace('0.', '', $float);
                 $float = str_pad($float, 3, '0', \STR_PAD_RIGHT);
@@ -112,7 +112,7 @@ class Utils
 
     public static function floatToFrac($f)
     {
-        $f           = (float) $f;
+        $f = (float) $f;
 
         // keep the original sign so that the numerator could be converted later
         $is_negative = ($f < 0);
@@ -121,12 +121,12 @@ class Utils
         }
 
         // get the part before the floating point
-        $int         = floor($f);
+        $int = floor($f);
 
         // make the float belonging to the interval [0, 1)
-        $flt         = $f - $int;
+        $flt = $f - $int;
         // strip the zero and the floating point
-        $flt         = substr($flt, 2);
+        $flt = substr($flt, 2);
         if ('' == $flt) {
             $flt = 0;
         }
@@ -141,10 +141,10 @@ class Utils
             $val *= -1;
         }
 
-        $num         = (int) $val;
-        $den         = 10 ** $len;
-        $f           = new Fraction($num, $den);
-        $string      = str_replace(' ', '-', $f->toString());
+        $num = (int) $val;
+        $den = 10 ** $len;
+        $f = new Fraction($num, $den);
+        $string = str_replace(' ', '-', $f->toString());
 
         return $string;
     }
@@ -152,8 +152,8 @@ class Utils
     public static function DelSizeToFrac($dec)
     {
         [$height,$width] = explode(' x ', $dec);
-        $size_height     = self::floattofrac($height);
-        $size_width      = self::floattofrac($width);
+        $size_height = self::floattofrac($height);
+        $size_width = self::floattofrac($width);
 
         return $size_height.' x '.$size_width;
     }
@@ -161,9 +161,16 @@ class Utils
     public static function DelSizeToFloat($frac)
     {
         [$height,$width] = explode(' x ', $frac);
-        $size_height     = self::fracToFloat($height);
-        $size_width      = self::fracToFloat($width);
+        $size_height = self::fracToFloat($height);
+        $size_width = self::fracToFloat($width);
 
         return $size_height.' x '.$size_width;
+    }
+
+    public static function contains($string, $array, $caseSensitive = true)
+    {
+        $strippedString = $caseSensitive ? str_replace($array, '', $string) : str_ireplace($array, '', $string);
+
+        return $strippedString !== $string;
     }
 }
