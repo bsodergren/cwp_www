@@ -5,6 +5,7 @@ namespace CWP\Process;
 use CWP\Core\Media;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\Utils\Zip;
+use Nette\Utils\FileSystem;
 
 class Export extends MediaProcess
 {
@@ -12,6 +13,7 @@ class Export extends MediaProcess
     private $backupArray = [];
 
     private $backupDir;
+    private $tempDir;
 
     private $zip_file;
 
@@ -20,9 +22,12 @@ class Export extends MediaProcess
     public function __construct()
     {
         $this->explorer = Media::$explorer;
-        $this->backupDir = __TEMP_DIR__.DIRECTORY_SEPARATOR.'mediaBackup'.DIRECTORY_SEPARATOR.bin2hex(random_bytes(5));
+
+        $this->tempDir = FileSystem::platformSlashes(__TEMP_DIR__.DIRECTORY_SEPARATOR.'mediaBackup'.DIRECTORY_SEPARATOR.bin2hex(random_bytes(5)));
+        $this->backupDir = FileSystem::platformSlashes(__FILES_DIR__.DIRECTORY_SEPARATOR.'mediaBackup');
         $this->fs = new MediaFileSystem();
         $this->fs->createFolder($this->backupDir);
+        $this->fs->createFolder($this->tempDir);
     }
 
     public function export($job_id)
@@ -31,6 +36,8 @@ class Export extends MediaProcess
         $this->backupPDF();
         $this->writeJson();
         $this->zipFiles();
+
+        $this->download();
 
         return 'Exported ';
     }
@@ -69,23 +76,40 @@ class Export extends MediaProcess
     {
         $pdf_file = $this->backupArray['pdf_file'];
         $pdf_name = basename($this->backupArray['pdf_file'], '.pdf');
-        $this->fs->copy($pdf_file, $this->backupDir.DIRECTORY_SEPARATOR.$pdf_name.'.pdf');
+        $this->fs->copy($pdf_file, $this->tempDir.DIRECTORY_SEPARATOR.$pdf_name.'.pdf');
         $this->backupArray['pdf_file'] = $pdf_name.'.pdf';
 
-        $this->zip_file = __FILES_DIR__.DIRECTORY_SEPARATOR.'backup_'.$pdf_name.'.zip';
+        $this->zip_file = $this->backupDir.DIRECTORY_SEPARATOR.'backup_'.$pdf_name.'.zip';
     }
 
     private function writeJson()
     {
         $string = json_encode($this->backupArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $json_file = $this->tempDir.DIRECTORY_SEPARATOR.'backup.json';
 
-        $this->fs->write($this->backupDir.DIRECTORY_SEPARATOR.'backup.json', $string);
+        $this->fs->write($json_file, $string);
     }
 
     private function zipFiles()
     {
         $zip = new Zip();
-        $d = $zip->zip($this->zip_file, $this->backupDir);
-        $this->fs->delete($this->backupDir);
+
+        $d = $zip->zip($this->zip_file, $this->tempDir);
+        $this->fs->delete($this->tempDir);
+    }
+
+    private function download()
+    {
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: public');
+        header('Content-Description: File Transfer');
+        header('Content-type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="'.basename($this->zip_file).'"');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: '.filesize($this->zip_file));
+        ob_end_flush();
+        @readfile($this->zip_file);
     }
 }
