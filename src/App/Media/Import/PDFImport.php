@@ -6,6 +6,7 @@
 namespace CWP\Media\Import;
 
 use CWP\Core\Media;
+use CWP\Core\MediaLogger;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\Utils;
@@ -120,8 +121,19 @@ class PDFImport extends MediaImport
 
             if (str_contains($row, "','")) {
                 $text = "'".trim($row)."'";
-                $text = preg_replace('/\'([0-9]+),?([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
+                MediaLogger::file(__FUNCTION__.'.txt', '--------------------------------------');
+                MediaLogger::file(__FUNCTION__.'.txt', $text);
+
+                preg_match('/(.*)\'([a-zA-Z ]+)?([0-9 ,]+) ([ a-zA-Z]+)\'/', $text, $output_array);
+                if (true == $output_array[2]) {
+                    $output_array[2] = "'".$output_array[2]."',";
+                }
+                $text = $output_array[1].$output_array[2]."'".$output_array[3]."','".$output_array[4]."'";
+                // $text = preg_replace('/\'([0-9]+),?([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
+                MediaLogger::file(__FUNCTION__.'.txt', $text);
                 $text = preg_replace('/\'([a-zA-Z ]+), ([a-zA-Z ]+)\'/', "'$1','$2'", $text);
+                MediaLogger::file(__FUNCTION__.'.txt', $text);
+
                 $formRow[$letter][] = $text;
                 unset($page_text[$n]);
             } else {
@@ -203,7 +215,8 @@ class PDFImport extends MediaImport
     public function rowDdata($form_row)
     {
         foreach ($form_row as $i => $rowData) {
-            list($market, $pub, $count, $ship, $tip) = explode(',', $rowData);
+            list($market, $pub, $count, $ship, $tip) = str_getcsv($rowData, ',', "'");
+            MediaLogger::file(__FUNCTION__.'.txt', [$market, $pub, $count, $ship, $tip]);
             $rows[$i] = [
                 'original' => $rowData,
                 'market' => trim($market, "'"),
