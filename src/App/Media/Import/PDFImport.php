@@ -121,8 +121,6 @@ class PDFImport extends MediaImport
 
             if (str_contains($row, "','")) {
                 $text = "'".trim($row)."'";
-                MediaLogger::file(__FUNCTION__.'.txt', '--------------------------------------');
-                MediaLogger::file(__FUNCTION__.'.txt', $text);
 
                 preg_match('/(.*)\'([a-zA-Z ]+)?([0-9 ,]+) ([ a-zA-Z]+)\'/', $text, $output_array);
                 if (true == $output_array[2]) {
@@ -130,9 +128,7 @@ class PDFImport extends MediaImport
                 }
                 $text = $output_array[1].$output_array[2]."'".$output_array[3]."','".$output_array[4]."'";
                 // $text = preg_replace('/\'([0-9]+),?([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
-                MediaLogger::file(__FUNCTION__.'.txt', $text);
                 $text = preg_replace('/\'([a-zA-Z ]+), ([a-zA-Z ]+)\'/', "'$1','$2'", $text);
-                MediaLogger::file(__FUNCTION__.'.txt', $text);
 
                 $formRow[$letter][] = $text;
                 unset($page_text[$n]);
@@ -216,7 +212,6 @@ class PDFImport extends MediaImport
     {
         foreach ($form_row as $i => $rowData) {
             list($market, $pub, $count, $ship, $tip) = str_getcsv($rowData, ',', "'");
-            MediaLogger::file(__FUNCTION__.'.txt', [$market, $pub, $count, $ship, $tip]);
             $rows[$i] = [
                 'original' => $rowData,
                 'market' => trim($market, "'"),
