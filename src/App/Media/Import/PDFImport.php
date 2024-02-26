@@ -25,7 +25,7 @@ class PDFImport extends MediaImport
         $pdf = $this->form;
         $noPagess = \count($pdf);
 
-        if (0 ==  $noPagess) {
+        if (0 == $noPagess) {
             $this->deleteFromDatabase('media_job');
             $this->status = 2;
 
@@ -93,7 +93,6 @@ class PDFImport extends MediaImport
             foreach ($pages as $page) {
                 $text = $page->getText();
                 $formRow = $this->cleanPdfText($text);
-
                 $this->parse_page($formRow);
             }
         }
@@ -121,7 +120,7 @@ class PDFImport extends MediaImport
 
             if (str_contains($row, "','")) {
                 $text = "'".trim($row)."'";
-                $text = preg_replace('/\'([0-9]+),([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
+                $text = preg_replace('/\'([0-9]+),?([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
                 $text = preg_replace('/\'([a-zA-Z ]+), ([a-zA-Z ]+)\'/', "'$1','$2'", $text);
                 $formRow[$letter][] = $text;
                 unset($page_text[$n]);
@@ -129,6 +128,7 @@ class PDFImport extends MediaImport
                 $page_text[$n] = trim($row);
             }
         }
+
         $this->getFormDetails($page_text);
 
         return $formRow;

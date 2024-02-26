@@ -32,25 +32,7 @@ class log
 
 class MediaLogger
 {
-    public static function getErrorLogs()
-    {
-        $err_array = [];
-
-        if ($all = opendir(__ERROR_LOG_DIRECTORY__)) {
-            while ($file = readdir($all)) {
-                if (!is_dir(__ERROR_LOG_DIRECTORY__.'/'.$file)) {
-                    if (preg_match('/(log)$/', $file)) {
-                        $err_array[] = filesystem::normalizePath(__ERROR_LOG_DIRECTORY__.'/'.$file);
-                    } // end if
-                } // end if
-            } // end while
-            closedir($all);
-        } // end if
-
-        return $err_array;
-    }
-
-    public static function log($text, $var = '', $logfile = 'default.log', $html = false)
+    private static function logger($text = '', $var = '', $html = false)
     {
         $function_list = self::CallingFunctionName();
 
@@ -77,12 +59,52 @@ class MediaLogger
         } else {
             $html_var = str_replace('<br>', "\n\t", $html_var);
             $html_string = DateTime::from(null).':'.$function_list.':'.$text.'; '.$html_var;
+        }
 
+        return $html_string;
+    }
+
+    public static function file($logfile = 'default.txt', $var = '', $html = false)
+    {
+        if (!str_contains($logfile, DIRECTORY_SEPARATOR)) {
+            $logfile = __DIR__.DIRECTORY_SEPARATOR.$logfile;
+        }
+
+        if (true === $html) {
+            $logfile = str_replace('.txt', '.html', $logfile);
+        }
+
+        $html_string = self::logger('', $var, $html);
+        Log::append($logfile, $html_string."\n");
+    }
+
+    public static function getErrorLogs()
+    {
+        $err_array = [];
+
+        if ($all = opendir(__ERROR_LOG_DIRECTORY__)) {
+            while ($file = readdir($all)) {
+                if (!is_dir(__ERROR_LOG_DIRECTORY__.'/'.$file)) {
+                    if (preg_match('/(log)$/', $file)) {
+                        $err_array[] = filesystem::normalizePath(__ERROR_LOG_DIRECTORY__.'/'.$file);
+                    } // end if
+                } // end if
+            } // end while
+            closedir($all);
+        } // end if
+
+        return $err_array;
+    }
+
+    public static function log($text, $var = '', $logfile = 'default.log', $html = false)
+    {
+        $html_string = self::logger($text, $var, $html);
+
+        if (true !== $html) {
             $logfile = 'txt_'.$logfile;
         }
 
         $errorLogFile = __ERROR_LOG_DIRECTORY__.'/'.$logfile;
-
         Log::append($errorLogFile, $html_string."\n");
     }
 
@@ -147,10 +169,10 @@ class MediaLogger
     ];
 
     private static $color = [
-        'file' => ['red'],
-        'class' => ['yellow'],
-        'function' => ['blue'],
-        'line' => ['green'],
+    'file' => ['red'],
+    'class' => ['yellow'],
+    'function' => ['blue'],
+    'line' => ['green'],
     ];
 
     public static function print_array($array, $die = 0)
@@ -230,6 +252,7 @@ class MediaLogger
     private static function returnTrace($type, $row)
     {
         // return $row[$type];
+        MediaStopWatch::$display = false;
 
         if ($row[$type]) {
             $text = $row[$type];
