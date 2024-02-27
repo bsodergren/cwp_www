@@ -1,31 +1,46 @@
 <?php
 /**
- * CWP Media Load Flag Creator
+ * CWP Media Load Flag Creator.
  */
 
 require_once '.config.inc.php';
 
+use CWP\Core\Media;
 use CWP\Core\MediaError;
+use CWP\Filesystem\MediaFinder;
 use CWP\HTML\HTMLDisplay;
+use CWP\HTML\HTMLForms;
+use CWP\Spreadsheet\XLSXViewer;
+use CWP\Template\Pages\View;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Template\Pages\View;
-use CWP\Filesystem\MediaFinder;
-use CWP\Spreadsheet\XLSXViewer;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if ('email' == $_REQUEST['action']) {
     define('TITLE', 'Email excel zip file');
+
+    $table = Media::$explorer->table('email_list'); // UPDATEME
+    $table->select('id,name,email');
+    foreach ($table as $id => $row) {
+        $optionArray[$row->name] = $row->email;
+    }
+
+    $select_html = HTMLForms::draw_select('email', 'Bind Style', $optionArray, $null_style, '');
+
     MediaDevice::getHeader();
-    $template->render('view/mail_form', [
-        'FORM_NUMBER' => $_REQUEST['form_number'],
-        'JOB_ID' => $_REQUEST['job_id']]);
+
+    if (isset($_REQUEST['job_id'])) {
+        $template->render('mail/main', [
+                    'FORM_HIDDEN' => HTMLForms::draw_hidden('form_number', $_REQUEST['form_number']),
+
+            'JOB_ID' => $_REQUEST['job_id'],
+             'DROPDOWN_EMAILS' => $select_html]);
+    }
+
     MediaDevice::getFooter();
     exit;
 }
 
 define('TITLE', 'View Form');
-
 
 $finder = new MediaFinder($media);
 if (true == $finder->dirExists($media->xlsx_directory)) {
@@ -84,8 +99,8 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         }
 
         $page_form_html .= View::FormButton(
-            'FM ' . $text_number,
-            __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&file_id=' . $idx,
+            'FM '.$text_number,
+            __URL_PATH__.'/view.php?job_id='.$media->job_id.'&file_id='.$idx,
             $class
         );
 
@@ -104,7 +119,6 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
     }
 
     if ('' != $file_id) {
-
         $excel_file = $finder->getFile($files[$file_id]);
         $viewer = new XLSXViewer($excel_file, $file_id);
         $viewer->media = $media;
@@ -112,20 +126,17 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         $viewer->buildPage();
         $params = array_merge($params, $viewer->params);
 
-
-        $name[] =  "Edit Form";
+        $name[] = 'Edit Form';
         $name[] = 'Update Excel Sheet';
         $name[] = 'Email Updated Excel Sheet';
 
+        $url[] = __URL_PATH__.'/form.php?job_id='.$media->job_id.'&form_number='.$current_form_number;
+        $url[] = __PROCESS_FORM__.'?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=update';
+        $url[] = __URL_PATH__.'/view.php?job_id='.$media->job_id.'&form_number='.$current_form_number.'&action=email';
 
-        $url[] = __URL_PATH__ . '/form.php?job_id=' . $media->job_id . '&form_number=' . $current_form_number;
-        $url[] = __PROCESS_FORM__ . '?job_id=' . $media->job_id . '&form_number=' . $current_form_number . '&action=update';
-        $url[] = __URL_PATH__ . '/view.php?job_id=' . $media->job_id . '&form_number=' . $current_form_number . '&action=email';
+        $params['SHEET_LINKS'] .= View::SheetLink($name, $url, 'btn-warning', '--bs-bg-opacity: .5;', 'enabled');
 
-
-        $params['SHEET_LINKS'] .=  View::SheetLink($name, $url, 'btn-warning', '--bs-bg-opacity: .5;', 'enabled');
-
-        //$params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
+        // $params['SHEET_LIST_HTML'] .= template::GetHTML('/view/sheet_list', ['SHEET_LINKS_HTML' => $sheet_edit_html]);
 
         /*
             $rep_array                 = [
@@ -149,7 +160,6 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
     $TplTemplate->assign('custom_css', $viewer->custom_css);
     $TplTemplate->assign('Array', $params);
     $TplTemplate->draw('body');
-
 } else {
     MediaError::msg('warning', 'Excel files are not found, try deleting and recreating');
 

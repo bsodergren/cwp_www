@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Spreadsheet;
@@ -17,23 +17,27 @@ class XLSXWriter extends Xlsx
 
     public function write($filename)
     {
-
         if (Media::$Dropbox) {
-            $this->saveFile(new MediaDropBox,$filename);
+            $this->saveFile($filename, new MediaDropBox());
         } elseif (Media::$Google) {
-            $this->saveFile(new MediaGoogleDrive,$filename);
+            $this->saveFile($filename, new MediaGoogleDrive());
         } else {
-            parent::save($filename);
+            $this->saveFile($filename);
         }
     }
 
-    private function saveFile($object,$filename)
+    private function saveFile($filename, $object = null)
     {
-        $filename     = basename($filename);
-        $tmp_file     = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$filename;
-        $remote_name = $this->xls_path.\DIRECTORY_SEPARATOR.$filename;
-        parent::save($tmp_file);
-        $file         = $object->save($tmp_file, $remote_name);
-        FileSystem::delete($tmp_file);
+        $r_filename = '';
+        if (null === $object) {
+            parent::save($filename);
+        } else {
+            $filename = basename($filename);
+            $tmp_file = __TEMP_DIR__.\DIRECTORY_SEPARATOR.$filename;
+            $r_filename = $this->xls_path.\DIRECTORY_SEPARATOR.$filename;
+            parent::save($tmp_file);
+            $filename = $object->save($tmp_file, $r_filename);
+            FileSystem::delete($tmp_file);
+        }
     }
 }
