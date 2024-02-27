@@ -6,7 +6,6 @@
 namespace CWP\Media\Import;
 
 use CWP\Core\Media;
-use CWP\Core\MediaLogger;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\Utils;
@@ -216,7 +215,7 @@ class PDFImport extends MediaImport
                 'original' => $rowData,
                 'market' => trim($market, "'"),
                 'pub' => trim($pub, "'"),
-                'count' => trim($count, "'"),
+                'count' => Utils::toint(trim($count, "'")),
                 'ship' => trim($ship, "'"),
                 'tip' => trim($tip, "'"),
             ];

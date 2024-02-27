@@ -25,8 +25,6 @@ class Navbar extends Template
                 $dropddown_menu_text = $text;
 
                 foreach ($url as $dropdown_text => $dropdown_url) {
-                    dump($dropdown_text);
-
                     $dropdown_link_html .= $templateObj->template(
                         'base/navbar/'.$nav_list_dir.'/navbar_link',
                         ['DROPDOWN_URL' => $dropdown_url, 'DROPDOWN_URL_TEXT' => $dropdown_text]
