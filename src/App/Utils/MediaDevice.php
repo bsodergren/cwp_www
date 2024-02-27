@@ -1,24 +1,23 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Utils;
 
-use CWP\Browser\Os;
-use CWP\Browser\Device;
 use CWP\Browser\Browser;
+use CWP\Browser\Device;
+use CWP\Browser\Os;
 use Nette\Utils\FileSystem;
 
 class MediaDevice
 {
-    public static $DEVICE        = 'APPLICATION';
+    public static $DEVICE = 'APPLICATION';
 
     public static $default_theme = 'application';
 
-    public static $NAVBAR   = true;
-    public static $USEJAVASCRIPT   = false;
-
+    public static $NAVBAR = true;
+    public static $USEJAVASCRIPT = false;
 
     public function __construct()
     {
@@ -27,8 +26,8 @@ class MediaDevice
 
     public function run()
     {
-        $device  = new Device();
-        $os      = new Os();
+        $device = new Device();
+        $os = new Os();
         $browser = new Browser();
 
         /*
@@ -50,7 +49,7 @@ class MediaDevice
          *
          *
          */
-
+        // return 'APPLICATION';
         if ('Edge' == $browser->getName()) {
             if ('Windows' == $os->getName()) {
                 return 'DESKTOP';
@@ -68,8 +67,9 @@ class MediaDevice
                 return 'MOBILE';
             }
         }
+
         return 'APPLICATION';
-       // return [$browser->getName(), $device->getName(), $os->getName()];
+        // return [$browser->getName(), $device->getName(), $os->getName()];
     }
 
     private static function getDevicePath()
@@ -109,13 +109,14 @@ class MediaDevice
         $html = null;
 
         foreach ($files as $file) {
-            $filePath = self::getThemepath().'/'.$file;
-            $url      = __URL_LAYOUT__.'/'.strtolower(self::$DEVICE).'/'.$file;
-            if (! file_exists($filePath)) {
-                $filePath = self::getDefaultTheme().'/'.$file;
-                $url      = __URL_LAYOUT__.'/'.strtolower(self::$default_theme).'/'.$file;
-                if (! file_exists($filePath)) {
+            $filePath = self::getThemepath(__LAYOUT_URL_PATH__).DIRECTORY_SEPARATOR.$file;
+            $url = __URL_LAYOUT__.'/'.strtolower(self::$DEVICE).'/'.$file;
+            if (!file_exists($filePath)) {
+                $filePath = self::getDefaultTheme(__LAYOUT_URL_PATH__).DIRECTORY_SEPARATOR.$file;
+                $url = __URL_LAYOUT__.'/'.strtolower(self::$default_theme).'/'.$file;
+                if (!file_exists($filePath)) {
                     $url = null;
+                    dd($filePath);
                 }
             }
             if (null !== $url) {
@@ -137,38 +138,36 @@ class MediaDevice
         return $html;
     }
 
-    public static function getThemePath()
+    public static function getThemePath($dir = __THEME_DIR__)
     {
-       // dd(self::$DEVICE);
-        return __THEME_DIR__.'/'.strtolower(self::$DEVICE);
+        // dd(self::$DEVICE);
+        return $dir.'/'.strtolower(self::$DEVICE);
     }
 
-    public static function getDefaultTheme()
+    public static function getDefaultTheme($dir = __THEME_DIR__)
     {
-        return __THEME_DIR__.'/'.strtolower(self::$default_theme);
+        return $dir.'/'.strtolower(self::$default_theme);
     }
 
     public static function getTemplateFile($template, $js = false)
     {
-
         $extension = '.html';
-        if($js === true) {
+        if (true === $js) {
             $extension = '.js';
         }
 
-        $template      = str_replace($extension, '', $template);
+        $template = str_replace($extension, '', $template);
 
-        $template_file = self::getThemePath().'/template/'.$template.$extension ;
+        $template_file = self::getThemePath().DIRECTORY_SEPARATOR.$template.$extension;
         $template_file = FileSystem::platformSlashes($template_file);
         $template_file = FileSystem::normalizePath($template_file);
 
-        if (! file_exists($template_file)) {
-
-            $template_file = self::getDefaultTheme().'/template/'.$template.$extension ;
+        if (!file_exists($template_file)) {
+            $template_file = self::getDefaultTheme().DIRECTORY_SEPARATOR.$template.$extension;
             $template_file = FileSystem::platformSlashes($template_file);
             $template_file = FileSystem::normalizePath($template_file);
 
-            if (! file_exists($template_file)) {
+            if (!file_exists($template_file)) {
                 $template_file = null;
             }
         }
