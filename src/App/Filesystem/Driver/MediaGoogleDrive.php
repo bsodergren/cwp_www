@@ -5,7 +5,6 @@
 
 namespace CWP\Filesystem\Driver;
 
-use CWP\Core\Bootstrap;
 use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
@@ -197,8 +196,10 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
         $remotefile = $this->path($remotefile);
 
         if (false !== $this->exists($remotefile)) {
+            HTMLDisplay::pushhtml('stream/excel/file_del_msg', ['TEXT' => 'Deleting '.$remotefile]);
             $this->google->delete($remotefile);
         }
+
         $this->tmpDirectory = $localfile;
         $this->google->writeStream($remotefile, $this->localfs->readStream($localfile));
     }
