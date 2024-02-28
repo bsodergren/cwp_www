@@ -40,7 +40,7 @@ if (isset($_POST['divClass'])) {
     exit;
 }
 
-$procesClass = ucfirst(__FORM_POST__);
+$procesClass = str_replace(" ","_",ucfirst(str_replace("_"," ",__FORM_POST__)));
 if (array_key_exists('FORM_PROCESS', $_REQUEST)) {
     switch ($_REQUEST['FORM_PROCESS']) {
         case 'updateSetting':
