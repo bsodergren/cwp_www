@@ -11,6 +11,17 @@ use CWP\Utils\MediaDevice;
 
 trait File
 {
+    public function getExcelSheet($form_number)
+    {
+        $mediaLoc = new MediaFileSystem($this->media->pdf_file, $this->media->job_number);
+        $mediaLoc->getDirectory();
+        $excelDir = $mediaLoc->directory.DIRECTORY_SEPARATOR.'xlsx';
+        $basePath = dirname($mediaLoc->directory, 2);
+        $mediaFind = new MediaFinder($this->media);
+        $files = $mediaFind->search($excelDir, '*FM'.$form_number.'.xlsx');
+        dd($files);
+    }
+
     public function upload($form_number = null)
     {
         $pathPrefix = '';

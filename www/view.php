@@ -30,7 +30,9 @@ if ('email' == $_REQUEST['action']) {
 
     if (isset($_REQUEST['job_id'])) {
         $template->render('mail/main', [
-                    'FORM_HIDDEN' => HTMLForms::draw_hidden('form_number', $_REQUEST['form_number']),
+                    'FORM_HIDDEN' =>
+                    HTMLForms::draw_hidden('form_number', $_REQUEST['form_number']).
+                    HTMLForms::draw_hidden('action', 'send'),
 
             'JOB_ID' => $_REQUEST['job_id'],
              'DROPDOWN_EMAILS' => $select_html]);

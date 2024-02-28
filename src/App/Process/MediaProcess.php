@@ -20,6 +20,7 @@ class MediaProcess
     public $msg = '';
 
     public $timeout = '0';
+    public $request = [];
 
     public static function Check($media)
     {

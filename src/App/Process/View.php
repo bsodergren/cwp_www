@@ -10,11 +10,11 @@ namespace CWP\Process;
  */
 
 use CWP\Media\MediaMailer;
+use CWP\Process\Traits\File;
+use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Process\Traits\File;
-use CWP\Spreadsheet\XLSXViewer;
-use CWP\Spreadsheet\Media\MediaXLSX;
 use Symfony\Component\Finder\Finder;
 
 class View extends MediaProcess
@@ -41,9 +41,9 @@ class View extends MediaProcess
 
     public function run($req)
     {
+        $this->request = $req;
         $this->form_number = $req['form_number'];
         $method = $req['action'];
-
         $this->$method();
     }
 
@@ -67,16 +67,20 @@ class View extends MediaProcess
                 $pdf_file = $file->getRealPath();
             }
         }
-
         $sendto = $_POST['mailto'];
         $sendname = $_POST['rcpt_name'];
+
+        $product = $this->request['product'];
+        $job_number = $this->media->job_number;
 
         $mail = new MediaMailer();
         $mail->recpt($sendto, $sendname);
 
         $mail->attachment($pdf_file);
         $mail->subject($product.' '.$job_number);
-        $mail->Body(Template::GetHTML('mail/body', ['PRODUCT_NAME' => $product, 'JOB_NUMBER' => $job_number]));
+        $mail->Body(Template::GetHTML('mail/body_update', ['PRODUCT_NAME' => $product,
+        'JOB_NUMBER' => $job_number,
+        'FILE_NAME' => basename($pdf_file)]));
         $mail->mail();
 
         $this->msg = 'XLSX File emailed';
