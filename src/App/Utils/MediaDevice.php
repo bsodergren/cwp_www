@@ -49,7 +49,7 @@ class MediaDevice
          *
          *
          */
-        return 'APPLICATION';
+        //return 'APPLICATION';
         if ('Edge' == $browser->getName()) {
             if ('Windows' == $os->getName()) {
                 return 'DESKTOP';
