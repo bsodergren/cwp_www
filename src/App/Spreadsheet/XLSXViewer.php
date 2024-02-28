@@ -1,14 +1,12 @@
 <?php
 /**
- * CWP Media tool for load flags
+ * CWP Media tool for load flags.
  */
 
 namespace CWP\Spreadsheet;
 
-use Rain\Tpl;
 use CWP\Core\Media;
 use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Template\Pages\View;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -34,7 +32,6 @@ class XLSXViewer
     public $spreadsheet;
     public $sheet_id;
 
-
     public function __construct($excel_file, $file_id)
     {
         global $_REQUEST;
@@ -46,13 +43,10 @@ class XLSXViewer
         $this->reader = IOFactory::createReader('Xlsx');
         $this->spreadsheet = $this->reader->load($excel_file);
         $this->sheet_names = $this->spreadsheet->getSheetNames();
-
-
     }
 
     public function getExcelPage()
     {
-
         $writer = IOFactory::createWriter($this->spreadsheet, 'Html');
 
         $writer->setSheetIndex($this->sheet_id);
@@ -77,8 +71,8 @@ class XLSXViewer
         if ($this->quicksheet_index != $this->sheet_id) {
             $rep_array['page-break-before: always;'] = 'display: none; page-break-before: always; page-break-after: auto;';
             $rep_array['page-break-after: always;'] = 'page-break-after: auto;';
-            $rep_array['@media screen {'] = '@media screen {' . "\n" . '.header { display: none; }';
-            $rep_array['@media print {'] = '@media print {' . "\n" . '.header {  }
+            $rep_array['@media screen {'] = '@media screen {'."\n".'.header { display: none; }';
+            $rep_array['@media print {'] = '@media print {'."\n".'.header {  }
     ';
         }
 
@@ -87,14 +81,14 @@ class XLSXViewer
         }
 
         $this->custom_css = $custom_css;
+
         return $writer->generateSheetData();
-
-
     }
+
     public function buildPage()
     {
         foreach ($this->sheet_names as $sheet_index => $sheet_name) {
-            if($this->QuickSheet($sheet_index, $sheet_name) == true) {
+            if (true == $this->QuickSheet($sheet_index, $sheet_name)) {
                 continue;
             }
 
@@ -113,14 +107,12 @@ class XLSXViewer
                 $this->spreadsheet->getSheet($sheet_index)->getCellByColumnAndRow(2, 8)->getValue()
             ));
             $sheet_form_array[$former][] = View::SheetLink(
-                $sheetName . ' ' . $cellValue,
-                __URL_PATH__ . '/view.php?job_id=' . $this->media->job_id . '&file_id=' . $this->file_id . '&sheet_id=' . $sheet_index,
+                $sheetName.' '.$cellValue,
+                __URL_PATH__.'/view.php?job_id='.$this->media->job_id.'&file_id='.$this->file_id.'&sheet_id='.$sheet_index,
                 'btn-success',
                 '--bs-bg-opacity: .5;',
                 $class,
             );
-
-
         }
 
         foreach ($sheet_form_array as $former => $buttons) {
@@ -128,24 +120,22 @@ class XLSXViewer
             $buttons = array_merge($button, $buttons);
             $sheet_links_html = implode("\n", $buttons);
             $this->params['SHEET_LIST_HTML'] .= View::SheetList($sheet_links_html);
-
         }
     }
-
 
     public function QuickSheet($sheet_index, $sheet_name)
     {
         if ('Quick Sheet' == $sheet_name) {
             $this->quicksheet_index = $sheet_index;
 
-
-            $this->params['SHEET_LINKS'] .= View::SheetLink(
+            $this->params['QUICK_SHEET'] = View::SheetLink(
                 'quicksheet',
-                __URL_PATH__ . '/view.php?job_id=' . $this->media->job_id . '&file_id=' . $this->file_id . '&sheet_id=' . $sheet_index . '&quicksheet=1',
+                __URL_PATH__.'/view.php?job_id='.$this->media->job_id.'&file_id='.$this->file_id.'&sheet_id='.$sheet_index.'&quicksheet=1',
                 'btn-info',
                 '--bs-bg-opacity: .5;',
                 'enabled'
             );
+
             return true;
         }
 
@@ -162,12 +152,8 @@ class XLSXViewer
         }
 
         $media->excelArray($form_number);
-        $excel       = new MediaXLSX($media, true);
+        $excel = new MediaXLSX($media, true);
 
-        echo HTMLDisplay::JavaRefresh('/view.php?' . $_SERVER['QUERY_STRING'], 0);
+        echo HTMLDisplay::JavaRefresh('/view.php?'.$_SERVER['QUERY_STRING'], 0);
     }
-
-
-
-
 }

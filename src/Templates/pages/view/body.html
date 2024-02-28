@@ -32,11 +32,11 @@
 </script>
 
 <div class="container-fluid align-content-center" style="width:700px;">
-    <div class="row text-center">
+    <!-- <div class="row text-center">
         <span>Excel files are located in the following directory</span>
         <span class="btn rounded-pill bg-secondary" onclick="copy(this)">{$Array.EXCEL_DIRECTORY}</span>
         <span class="fs-4 rounded-pill bg-danger"></span>
-    </div>
+    </div> -->
 
     <div class="row">
         {$Array.FORM_LIST_HTML}
@@ -63,6 +63,13 @@
     <div class="row">
         <p></p>
     </div>
+    <div class="row">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" aria-label="group">{$Array.QUICK_SHEET}
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="group">
