@@ -30,8 +30,7 @@ if ('email' == $_REQUEST['action']) {
 
     if (isset($_REQUEST['job_id'])) {
         $template->render('mail/main', [
-                    'FORM_HIDDEN' =>
-                    HTMLForms::draw_hidden('form_number', $_REQUEST['form_number']).
+                    'FORM_HIDDEN' => HTMLForms::draw_hidden('form_number', $_REQUEST['form_number']).
                     HTMLForms::draw_hidden('action', 'send'),
 
             'JOB_ID' => $_REQUEST['job_id'],
@@ -72,12 +71,11 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
     // }
 
     $idx = 0;
-    $params['EXCEL_DIRECTORY'] = $media->xlsx_directory;
     $excel_link = '';
 
     foreach ($result as $file) {
         $files[] = $file;
-        $class = 'enabled';
+        $class = ' ';
         preg_match('/.*_([FM0-9]+).xlsx/', $file, $output_array);
         [$text_form,$text_number] = explode('FM', $output_array[1]);
 
@@ -91,14 +89,15 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         }
 
         if ($file_id == $idx) {
-            $class = 'disabled';
-            $current_form_number = $text_number;
-
-            $url_link = HTMLDisplay::draw_excelLink($file);
-            if (false != $url_link) {
-                $params['EXCEL_LINK'] = View::SheetLink(basename($file), $url_link, 'btn-info', '--bs-bg-opacity: .5;', 'enabled');
-            }
+            $class = 'active';
         }
+        //     $current_form_number = $text_number;
+
+        //     $url_link = HTMLDisplay::draw_excelLink($file);
+        //     if (false != $url_link) {
+        //         $params['EXCEL_LINK'] = View::SheetLink(basename($file), $url_link, 'btn-info', '--bs-bg-opacity: .5;', 'enabled');
+        //     }
+        // }
 
         $page_form_html .= View::FormButton(
             'FM '.$text_number,
@@ -106,9 +105,9 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             $class
         );
 
-        if (0 == $idx % 9 && $idx > 0) {
+         if (0 == $idx % 9 && $idx > 0) {
             $params['FORM_LIST_HTML'] .= View::FormButtonList($page_form_html);
-            $page_form_html = '';
+           $page_form_html = '';
         }
         ++$idx;
     }
