@@ -10,14 +10,17 @@ namespace CWP\Process;
  */
 
 use CWP\Media\MediaMailer;
-use CWP\Spreadsheet\Media\MediaXLSX;
-use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+use CWP\Process\Traits\File;
+use CWP\Spreadsheet\XLSXViewer;
+use CWP\Spreadsheet\Media\MediaXLSX;
 use Symfony\Component\Finder\Finder;
 
 class View extends MediaProcess
 {
+    use File;
+
     public $form_number;
 
     public $page_end;
@@ -91,6 +94,13 @@ class View extends MediaProcess
         ob_flush();
         $msg = 'XLSX Files Created';
         $this->msg;
+        $this->url = '/view.php?job_id='.$this->job_id.'&form_number='.$this->form_number;
+    }
+
+    public function google()
+    {
+        $this->upload($this->form_number);
+        $this->msg = 'XLSX Files Uploaded to Google Drive';
         $this->url = '/view.php?job_id='.$this->job_id.'&form_number='.$this->form_number;
     }
 }

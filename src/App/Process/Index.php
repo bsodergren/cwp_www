@@ -9,22 +9,26 @@ namespace CWP\Process;
  * CWP Media tool
  */
 
+use CWP\Utils\Zip;
 use CWP\Core\Bootstrap;
 use CWP\Core\MediaError;
-use CWP\Core\MediaStopWatch;
-use CWP\Filesystem\Driver\MediaGoogleDrive;
-use CWP\Filesystem\MediaFileSystem;
 use CWP\HTML\HTMLDisplay;
-use CWP\Media\Import\PDFImport;
 use CWP\Media\MediaExport;
-use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
-use CWP\Utils\Zip;
 use Nette\Utils\FileSystem;
+use CWP\Core\MediaStopWatch;
+use CWP\Process\Traits\File;
+use CWP\Filesystem\MediaFinder;
+use CWP\Media\Import\PDFImport;
+use CWP\Filesystem\MediaFileSystem;
+use CWP\Spreadsheet\Media\MediaXLSX;
+use CWP\Filesystem\Driver\MediaGoogleDrive;
 
 class Index extends MediaProcess
 {
+    use File;
+
     public function run($req)
     {
         if (array_key_exists('submit', $req)) {
@@ -143,37 +147,7 @@ class Index extends MediaProcess
         $export->exportZip();
     }
 
-    public function upload()
-    {
-        $pathPrefix = '';
-        if (__DEBUG__ == 1) {
-            $pathPrefix = '\Dev';
-        }
-        \define('TITLE', 'Uploading to Google Drive');
-        MediaDevice::getHeader();
-        Template::echo('stream/start_page', []);
 
-        $google = new MediaGoogleDrive();
-        $mediaLoc = new MediaFileSystem($this->media->pdf_file, $this->media->job_number);
-        $mediaLoc->getDirectory();
-        $excelDir = $mediaLoc->directory.DIRECTORY_SEPARATOR.'xlsx';
-        $basePath = dirname($mediaLoc->directory, 2);
-        $filePath = $pathPrefix.str_replace($basePath, '', $mediaLoc->directory()); // . DIRECTORY_SEPARATOR . "xlsx";
-        $google->createFolder($filePath);
-        HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Created DIR '.$filePath]);
-
-        $files = $mediaLoc->getContents($excelDir, '*.xlsx');
-
-        foreach ($files as $filename) {
-            $remoteFilename = basename($filename);
-            HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Uploading '.$remoteFilename]);
-            $uploadFilename = $filePath.DIRECTORY_SEPARATOR.$remoteFilename;
-            $google->UploadFile($filename, $uploadFilename);
-        }
-
-        $this->msg = 'Files Uploaded to google drive';
-        Template::echo('stream/end_page', []);
-    }
 
     public function delete_zip()
     {
