@@ -90,8 +90,8 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
 
         if ($file_id == $idx) {
             $class = 'active';
+            $current_form_number = $text_number;
         }
-        //     $current_form_number = $text_number;
 
         //     $url_link = HTMLDisplay::draw_excelLink($file);
         //     if (false != $url_link) {
