@@ -28,6 +28,10 @@ foreach ($results as $k => $row) {
     $run_refresh = false;
     $customJob = false;
     unset($replacement);
+    $firstGroup = '';
+    $secondGroup = '';
+    $deleteGroup = '';
+
     $media = new Media($row);
     $mediaDir = new MediaFileSystem($media->pdf_file, $media->job_number);
 
@@ -37,6 +41,7 @@ foreach ($results as $k => $row) {
     if (str_contains($text_close, 'Created')) {
         $customJob = true;
     }
+
     $pdf_url = HTMLDisplay::getPdfLink($row['base_dir'].'/pdf/'.$row['pdf_file']);
 
     $text_job = $row['job_number'];
@@ -50,9 +55,7 @@ foreach ($results as $k => $row) {
 
     $replacement['FORM_HTML_START'] = $form->open('', '', __PROCESS_FORM__, 'post', '', $hidden);
 
-    $class_create = 'class="btn  btn-success"';
-    $class_delete = 'class="btn  btn-danger"';
-    $class_normal = 'class="btn  btn-primary"';
+
 
     $num_of_forms = $media->number_of_forms();
     $updates = $media->updatedForms();
@@ -89,71 +92,66 @@ foreach ($results as $k => $row) {
 
     $zip_file = $media->zip_file;
     $xlsx_dir = $media->xlsx_directory;
-    if (true == Media::get_exists('xlsx', $row['job_id']) && true == is_dir($xlsx_dir)) {
+
+    $xlsr_exists = Media::get_exists('xlsx', $row['job_id']);
+
+
+    if (true == $xlsr_exists && true == is_dir($xlsx_dir)) {
         $rowdisabled = '';
     }
     $tooltip = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="process_';
 
-    $replacement['FORM_BUTTONS_HTML'] .= Index::hrefLink($url, 'Edit Media Drop', $class_normal.$pdisabled);
+    $firstGroup .= Index::firstGroupLink($url, 'Edit Media Drop', $pdisabled);
 
     if (false === $run_refresh) {
 
+        if (true == $xlsr_exists )
+        {
+            $firstGroup .= Index::firstGroup('view_xlsx', '', '', '', $tooltip.'view_xlsx"');
 
-        if (true == Media::get_exists('xlsx', $row['job_id'])) {
-            $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('view_xlsx', '', '', '', $class_create.$tooltip.'view_xlsx"');
+            if(MediaSettings::GoogleAvail())
+            {
+                $secondGroup.= Index::secondGroup('upload', '', 'Export to Google', '', $tooltip.'Google"');
+                $secondGroup.= Index::firstGroupLink('#', 'Open Google Drive', '', 'onclick="OpenNewWindow(\''.__GOOGLE_SHARE_URL__.'\')"');
+            }
+
             if (0 < $updates) {
-                $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('update_xlsx','','','update_xlsx_'.$row['job_id'],$js.$class_create.$pdisabled.$tooltip.'update_xlsx"');
+                $secondGroup .= Index::secondGroup('update_xlsx','','','update_xlsx_'.$row['job_id'],$js.$pdisabled.$tooltip.'update_xlsx"');
             }
 
-            $replacement['FORM_DELETE_HTML'] .= Index::ButtonLink('delete_xlsx', '', '', '', $class_delete.$tooltip.'delete_xlsx"');
-        } else {
-            $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('create_xlsx','','','create_xlsx_'.$row['job_id'],$js.$class_create.$pdisabled.$tooltip.'create_xlsx"');
-        }
-
-
-        if (__SHOW_ZIP__ == true) {
-            if ($mediaDir->exists($zip_file)) {
-                $replacement['FORM_DELETE_HTML'] .= Index::ButtonLink('delete_zip', '', '', '', $class_delete.$tooltip.'delete_zip"');
-            } else {
-                if (true == Media::get_exists('xlsx', $row['job_id'])) {
-                $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('create_zip', '', '', '', $class_create.$tooltip.'create_zip"');
-
-                }
-
-            }
-
-
-            if (__SHOW_MAIL__ == true) {
+            if (__SHOW_ZIP__ == true) {
                 if ($mediaDir->exists($zip_file)) {
-                    $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('email_zip', '', '', '', $class_create.$tooltip.'email_zip"');
+                    $deleteGroup .= Index::deleteGroup('delete_zip', '', '', '', $tooltip.'delete_zip"');
+                    if (__SHOW_MAIL__ == true) {
+                        $firstGroup .= Index::firstGroup('email_zip', '', '', '', $tooltip.'email_zip"');
+                    }
                 }
+
             }
-        }
 
-
-        if (true == Media::get_exists('xlsx', $row['job_id'])) {
-            if(MediaSettings::GoogleAvail()){
-
-                $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('upload', '', 'Export to Google', '', $class_create.$tooltip.'Google"');
-                $replacement['FORM_BUTTONS_HTML'] .= Index::hrefLink('#', 'Open Google Drive', $class_create,
-                'onclick="OpenNewWindow(\''.__GOOGLE_SHARE_URL__.'\')"');
-            }
+            $secondGroup.= Index::secondGroup('create_zip', '', '', '', $tooltip.'create_zip"');
+            $deleteGroup .= Index::deleteGroup('delete_xlsx', '', '', '', $tooltip.'delete_xlsx"');
+        } else {
+            $firstGroup .= Index::firstGroup('create_xlsx','','','create_xlsx_'.$row['job_id'],$js.$pdisabled.$tooltip.'create_xlsx"');
         }
     }
 
     if (false === $customJob) {
-        $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('refresh_import', '', '', '', $class_create.$tooltip.'refresh_import"');
+        $deleteGroup .= Index::deleteGroup('refresh_import', '', '', '', $tooltip.'refresh_import"');
     } else {
-        $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('addforms', '', 'Add Forms to Job', '', $class_normal.$tooltip.'addforms"');
+        $firstGroup .= Index::firstGroup('addforms', '', 'Add Forms to Job', '', $tooltip.'addforms"');
     }
 
     if (false === $run_refresh) {
-        $replacement['FORM_BUTTONS_HTML'] .= Index::ButtonLink('export', '', '' , '', $class_create.$tooltip.'export_job"');
+        $deleteGroup .= Index::secondGroup('export', '', '' , '', $tooltip.'export_job"');
     }
 
-    $replacement['FORM_DELETE_HTML'] .= Index::ButtonLink('delete_job', '', '', '', $delete_js.$class_delete.$tooltip.'delete_job"');
+    $deleteGroup .= Index::deleteGroup('delete_job', '', '', '', $delete_js.$tooltip.'delete_job"');
 
     $replacement['FORM_CLOSE'] = $form->close();
+    $replacement['FORM_BUTTONS_HTML'] = $firstGroup;
+    $replacement['FORM_EXTRA_HTML'] = $secondGroup;
+    $replacement['FORM_DELETE_HTML'] = $deleteGroup;
     $jobArray[] = $replacement;
 }
 

@@ -6,10 +6,31 @@ use CWP\Template\Rain;
 
 class Index extends Rain
 {
+   private static $class_create = 'class="btn  btn-success"';
+   private static $class_delete = 'class="btn  btn-danger"';
+   private static $class_normal = 'class="btn  btn-primary"';
 
+    public static function firstGroup($name, $str='', $text='', $id='', $extra)
+    {
+        $extra = self::$class_create  . $extra;
+        return self::ButtonLink($name, $str, $text, $id, $extra);
+    }
+    public static function secondGroup($name, $str='', $text='', $id='', $extra)
+    {
+        $extra = self::$class_normal . $extra;
+        return self::ButtonLink($name, $str, $text, $id, $extra);
+    }
+    public static function deleteGroup($name, $str='', $text='', $id='', $extra)
+    {
+        $extra = self::$class_delete  . $extra;
+        return self::ButtonLink($name, $str, $text, $id, $extra);
+    }
 
-
-
+    public static function firstGroupLink($url, $text='', $class='', $javascript='')
+    {
+        $class = self::$class_create  . $class;
+        return self::hrefLink($url, $text, $class, $javascript);
+    }
 
     public static function hrefLink($url, $text='', $class='', $javascript='') : string
     {

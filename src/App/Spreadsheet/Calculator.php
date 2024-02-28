@@ -27,7 +27,7 @@ class Calculator
     public function calculateBox($form_details)
     {
         $face_trim = $form_details['face_trim'];
-        $pcs = Utils::toint($form_details['count']);
+        $pcs = (int) Utils::toint($form_details['count']);
         // (int) $form_details['count'];
         $config = $this->media->form_configuration['configuration'];
         $paper_wieght = $this->media->form_configuration['paper_wieght'];

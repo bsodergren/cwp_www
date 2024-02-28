@@ -12,19 +12,33 @@
             <td>
                 {$value.FORM_HTML_START}
 
-                <div class="row" id="hide_{$value.JOB_ID}" onclick="return clickButton(this.id);">
-                    <div class="col text-nowrap">Job Number: <span id="job_number" name="jobNumber_{$value.JOB_ID}">{$value.TEXT_JOB}</span>
+                <div class="row" id="hide_{$value.JOB_ID}"
+                    onclick="return clickButton(this.id);">
+                    <div class="col text-nowrap">Job Number: <span
+                            id="job_number"
+                            name="jobNumber_{$value.JOB_ID}">{$value.TEXT_JOB}</span>
                         <p id="p6"></p>
                     </div>
                     <div class="col text-nowrap text-md">
-                        <span class="text-white rounded-pill bg-success px-4" {$value.TEXT_CLOSE_URL}>{$value.TEXT_CLOSE}</span>
+                        <span class="text-white rounded-pill bg-success px-4"
+                            {$value.TEXT_CLOSE_URL}>{$value.TEXT_CLOSE}</span>
                     </div>
                     <div class="col text-end">{$value.NUM_OF_FORMS}</div>
                 </div>
                 <div class="{$value.HIDDEN_CLASS}" id="model_{$value.JOB_ID}">
                     <div class="row mb-2">
-                        <div class="container btn-group btn-group-md" role="group">
+
+                        <div class="btn-group mb-2" role="group"
+                            aria-label="Default button group">
                             {$value.FORM_BUTTONS_HTML}
+                        </div>
+                        <div class="btn-group mb-2" role="group"
+                            aria-label="Default button group">
+                            {$value.FORM_EXTRA_HTML}
+                        </div>
+
+                        <div class="btn-group" role="group"
+                            aria-label="Delete button Group">
                             {$value.FORM_DELETE_HTML}
                         </div>
                     </div>
