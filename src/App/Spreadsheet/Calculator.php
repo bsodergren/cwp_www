@@ -24,6 +24,14 @@ class Calculator
         $this->media = $media;
     }
 
+
+    private function frontFormer()
+    {
+
+
+        
+    }
+
     public function calculateBox($form_details)
     {
         $face_trim = $form_details['face_trim'];

@@ -19,9 +19,8 @@ class Form extends MediaProcess
         $this->updateForm($req);
 
         // CheckMethod:
-        if (!method_exists($this, $method))
-        {
-             dd("missing Method",  $method);
+        if (!method_exists($this, $method)) {
+            dd('missing Method', $method);
             // goto CheckMethod;
         }
 
@@ -57,11 +56,8 @@ class Form extends MediaProcess
                 list($_, $id, $letters) = explode('_', $key);
                 $form_number = $id;
 
-                // dd($front,$id,$letters,$value, $job_id);
-
-                $count = Media::$explorer->table('form_data')->where('job_id', $job_id) // UPDATEME
-                ->where('form_number', $id)
-                ->where('form_letter', $letters)
+                $count = Media::$explorer->table('form_data')
+                ->where('id', $id)
                 ->update(['no_bindery' => $value]);
                 if ($count > 0) {
                     $updated = true;

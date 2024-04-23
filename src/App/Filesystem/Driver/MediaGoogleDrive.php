@@ -79,7 +79,11 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
 
         $service = new \Google\Service\Drive($client);
         $adapter = new \Masbug\Flysystem\GoogleDriveAdapter($service, 'CWPMediaFolder');
-        $this->google = new \League\Flysystem\Filesystem($adapter);
+        $this->google = new \League\Flysystem\Filesystem($adapter,
+        
+            [\League\Flysystem\Config::OPTION_VISIBILITY => \League\Flysystem\Visibility::PUBLIC]
+        
+    );
 
         $localAdapter = new \League\Flysystem\Local\LocalFilesystemAdapter(
             '/',
