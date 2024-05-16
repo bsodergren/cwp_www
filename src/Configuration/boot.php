@@ -13,7 +13,6 @@ use Nette\Database\Connection;
 use Nette\Database\Conventions\DiscoveredConventions;
 use Nette\Database\Explorer;
 use Nette\Database\Structure;
-
 $connection = new Connection(__DATABASE_DSN__, DB_USERNAME, DB_PASSWORD);
 $storage = new DevNullStorage();
 $structure = new Structure($connection, $storage);

@@ -134,7 +134,6 @@ class Bootstrap
         Media::$Dropbox = false;
         Media::$Google = false;
         //$filedriver = strtolower($this->Config['server']['filedriver']);
-
         if( __USE_DROPBOX__ == 1 && __USE_GOOGLE__ == 0)
         {
             if(MediaSettings::DropboxAvail())

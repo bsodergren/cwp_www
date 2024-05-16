@@ -28,7 +28,7 @@ require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 
 // if (__DEBUG__ == 1) {
 
-// Debugger::enable();
+Debugger::enable();
 
 //     Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
 //     //Debugger::$logSeverity  = \E_WARNING | \E_NOTICE;
@@ -59,6 +59,8 @@ $boot->definePath('__INC_CORE_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'core'
 $boot->getDatabase();
 
 define('__TEMP_DIR__', sys_get_temp_dir());
+// define('__TEMP_DIR__', __CWP_SOURCE__.DIRECTORY_SEPARATOR.'var/tmp');
+Media::$Stash->flush();
 
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'path_constants.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'boot.php';
@@ -67,7 +69,7 @@ require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
-Media::$Stash->flush();
+
 
 if (array_key_exists('flush', $_GET)) {
     Media::$Stash->flush();

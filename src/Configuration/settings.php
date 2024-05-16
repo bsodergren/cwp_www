@@ -13,7 +13,6 @@ $results = Media::get('settings', 120, function () {
 
     return $table->fetchAssoc('id');
 });
-
 if ($results) {
     foreach ($results as $k => $u) {
         $setting[$u['setting_cat']][$u['definedName']] = [
@@ -26,6 +25,7 @@ if ($results) {
             'require' => $u['require'],
         ];
     }
+
     define('__SETTINGS__', $setting);
 }
 
@@ -40,6 +40,7 @@ foreach ($setting['local'] as $key => $array) {
             }
         }
     }
+
 }
 
 foreach ($setting['lang'] as $key => $array) {
@@ -58,6 +59,7 @@ foreach ($setting['local'] as $key => $array) {
 
 // $const = get_defined_constants(true);
 Bootstrap::setFileDriver();
+
 
 if (Media::$Google || Media::$Dropbox) {
     define('__FILES_DIR__', '');

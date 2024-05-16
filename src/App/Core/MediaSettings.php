@@ -86,6 +86,9 @@ class MediaSettings
 
     public static function GoogleAvail()
     {
+        if( __USE_GOOGLE__ == 0){
+            return false;
+        }
         if (0 == self::isTrue('__GOOGLE_CLIENTID__')) {
             return false;
         }
