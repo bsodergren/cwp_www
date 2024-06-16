@@ -42,3 +42,8 @@ src/var/*
 www/cwp/files/**
 .env
 .php-cs-fixer.cache
+.env-server
+var/cache/stash/3cc1d5a427a45820b04fe30f78a972b784952460.cache.php
+var/cache/stash/d23fde208365ac1b22e941dd3956104496c1cdff.cache.php
+var/logs/txt_default.log
+var/logs/txt_filedriver.log
