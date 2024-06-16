@@ -1,0 +1,47 @@
+<div class="col bg-primary bg-gradient fs-5 fw-bold text-bg-primary" style="max-width: 270px">
+    <form id="videoRefreshOrDelete" onsubmit="return false;">
+        {$DELETE_ID}
+        <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+            <button class="btn text-bg-info" onclick="getNextVideo({$FILE_ID});" type="button">next</button>
+
+            <button type="button" class="btn text-bg-primary" id="RefreshBtn"
+            data-bs-toggle="modal" data-bs-target="#exampleModal2" onclick="clickButton(this,false);" name="submit" value="update_file">{L VideoCard_Refresh_Btn}</button>
+            <button type="button" class="btn text-bg-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">{L VideoCard_Delete_Btn}</button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Video File</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file from the server?</p>
+            </div>
+            <div class="modal-footer">
+                <form id="videoRefreshOrDelete" onsubmit="return false;">
+                    {$DELETE_ID}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-danger" onclick="clickButton(this,true);" type="button" name="submit" value="delete_file">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel2">Updating Video File</h1>
+            </div>
+            <div class="modal-body">
+                <p>Will reload automagicly</p>
+            </div>
+        </div>
+    </div>
+</div>

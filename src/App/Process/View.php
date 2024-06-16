@@ -13,7 +13,7 @@ use CWP\Media\MediaMailer;
 use CWP\Process\Traits\File;
 use CWP\Spreadsheet\Media\MediaXLSX;
 use CWP\Spreadsheet\XLSXViewer;
-use CWP\Template\Template;
+use  CWPDisplay\Template\Template;
 use CWP\Utils\MediaDevice;
 use Symfony\Component\Finder\Finder;
 

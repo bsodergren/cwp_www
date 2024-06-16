@@ -5,8 +5,8 @@
 
 namespace CWP\Core;
 
-use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
+use  CWPDisplay\HTML\HTMLDisplay;
+use  CWPDisplay\Template\Template;
 use CWP\Utils\Utils;
 use Nette\Database\Connection;
 use Nette\Database\Helpers;
@@ -83,7 +83,7 @@ class MediaSetup
 
     public static function reload($time = 3)
     {
-        echo HTMLDisplay::JavaRefresh('/index.php', $time);
+        echo Elements::JavaRefresh('/index.php', $time);
         exit;
     }
 }

@@ -1,0 +1,94 @@
+.nav-btn {
+    list-style-type: none;
+}
+
+.sidenav-pos {
+    position: fixed;
+    top: 60px;
+}
+
+.nav-tabs .nav-link {
+    padding: 10px 10px 10px 10px;
+}
+
+.container-sidenav {
+    position: absolute;
+    left: 145px;
+    top: 65px;
+    width: 90%;
+    z-index: -1;
+    padding-bottom: 35px;
+
+
+}
+
+.nav-sidebar {
+    /* width: 180px; */
+    position: absolute;
+    left: -30px;
+    top: 10px;
+    list-style-type: none;
+}
+
+.nav-sidebar-sort {
+    width: 180px;
+    position: absolute;
+    top: 370px;
+    left: 0px;
+}
+
+.nav-sidebar-header {
+    width: 180px;
+    position: absolute;
+    top: 340px;
+}
+
+.nav-tabs .nav-link,
+.nav-tabs .nav-link:hover {
+    list-style-type: none;
+    cursor: pointer;
+}
+
+.nav-tabs-sort {
+    flex-wrap: nowrap;
+    text-wrap: nowrap;
+}
+
+.nav-tabs .nav-link:not([disabled]):not(.disabled).active,
+.nav-tabs .nav-link:not([disabled]):not(.disabled):active,
+.nav-tabs .nav-link:not([disabled]):not(.disabled):focus,
+.nav-tabs .nav-link:not([disabled]):not(.disabled):hover {
+    background-image: linear-gradient(#44494d, #3a3f44 20%, #215794);
+    filter: none;
+}
+
+
+.nav-bg-danger {
+    background-color: red;
+    background-image: none !important;
+}
+
+.nav-bg-success {
+    background-color: green;
+    background-image: none !important;
+}
+.nav-bg-warning {
+    color: black !important;
+    background-color: yellow  !important;
+    background-image: none !important;
+}
+
+.nav-bg-default
+{
+    list-style-type: none;
+
+    /* background-color: red; */
+    /* background-image: none !important; */
+}
+.nav-dropdown {
+    width: 228px;
+    left: -1px;
+    position: relative;
+    padding: 10px 10px 10px 10px;
+    text-align: start;
+}

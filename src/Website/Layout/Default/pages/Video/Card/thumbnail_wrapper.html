@@ -1,0 +1,13 @@
+<div class="col categories-wrapper" style="max-width:{$width}px;">
+    {$Thumbnail_html}
+    <div class="d-flex flex-row btn-group">
+        {{function=videoPlayer|query?id={$FILE_ID},href=video.php,text={L Play_Video_Text}}}
+        {{function=videoPlayer|query?id={$FILE_ID},query?next={$NEXT_ID},href=videoinfo.php,text={L Video_Info_Text}}}
+        {{function=_videoPlayer|query?id={$FILE_ID},href=testVideo.php,text={L Play_Video_TestText}}}
+    </div>
+
+        <div class="">
+            {{function=showMarkers|id={$FILE_ID},video=false}}
+
+    </div>
+</div>

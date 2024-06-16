@@ -5,40 +5,25 @@
 
 use CWP\Core\Media;
 use CWP\Core\MediaStopWatch;
-use CWP\Template\Rain;
 use Tracy\Debugger;
+use UTMTemplate\Template;
+use UTMTemplate\UtmDevice;
 
-define('__PROJECT_ROOT__', dirname(__FILE__, 3));
-define('__PUBLIC_ROOT__', dirname(__FILE__, 2));
-define('__HTTP_ROOT__', dirname(__FILE__, 1));
-/*
-xdebug_set_filter(
-    XDEBUG_FILTER_TRACING,
-    XDEBUG_PATH_EXCLUDE,
-    [ __PUBLIC_ROOT__ . "/vendor/" ]
-);
+define('__ROOT_DIRECTORY__', dirname(realpath($_SERVER['CONTEXT_DOCUMENT_ROOT']), 1));
 
-xdebug_set_filter(
-    XDEBUG_FILTER_STACK,
-    XDEBUG_PATH_EXCLUDE,
-    [ __PUBLIC_ROOT__ . "/vendor/" ]
- );
- */
-require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
-
+require __ROOT_DIRECTORY__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 // if (__DEBUG__ == 1) {
+Debugger::enable(Debugger::Development);
 
-    Debugger::enable(Debugger::Development);
+// Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
+// Debugger::$logSeverity = \E_WARNING | \E_NOTICE;
+// Debugger::$dumpTheme = 'dark';
+// Debugger::$showBar = true;          // (bool) defaults to true
+// Debugger::$strictMode = ~\E_DEPRECATED & ~\E_USER_DEPRECATED & ~\E_NOTICE;
 
-//     Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
-// Debugger::$logSeverity  = \E_WARNING | \E_NOTICE;
-// Debugger::$dumpTheme    = 'dark';
-// Debugger::$showBar      = true;          // (bool) defaults to true
-// Debugger::$strictMode   = ~\E_DEPRECATED & ~\E_USER_DEPRECATED & ~\E_NOTICE;
-
-//     Debugger::$showLocation = Tracy\Dumper::LOCATION_CLASS | Tracy\Dumper::LOCATION_LINK; // Shows both paths to the classes and link to where the dump() was called
-//     Debugger::$showLocation = false; // Hides additional location information
-//     Debugger::$showLocation = true; // Shows all additional location information
+// Debugger::$showLocation = Tracy\Dumper::LOCATION_CLASS | Tracy\Dumper::LOCATION_LINK; // Shows both paths to the classes and link to where the dump() was called
+// Debugger::$showLocation = false; // Hides additional location information
+// Debugger::$showLocation = true; // Shows all additional location information
 // }
 
 // $boot->definePath('__DATABASE_ROOT__', dirname(__FILE__, 2).\DIRECTORY_SEPARATOR.'database');
@@ -47,14 +32,10 @@ require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 // MediaStopWatch::start();
 
 // MediaStopWatch::dump('Start');
-$boot->definePath('__DATABASE_ROOT__', $boot->Config['db']['path'].\DIRECTORY_SEPARATOR.'database');
-$boot->directory(__DATABASE_ROOT__);
 
-$boot->definePath('__SQL_CONFIG_DIR__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Database');
-$boot->definePath('__SQL_UPDATES_DIR__', __SQL_CONFIG_DIR__.\DIRECTORY_SEPARATOR.'updates');
 
-$boot->definePath('__ASSETS_DIR__', __HTTP_ROOT__.\DIRECTORY_SEPARATOR.'assets');
-$boot->definePath('__INC_CORE_DIR__', __ASSETS_DIR__.\DIRECTORY_SEPARATOR.'core');
+
+
 
 $boot->getDatabase();
 
@@ -62,13 +43,43 @@ define('__TEMP_DIR__', sys_get_temp_dir());
 // define('__TEMP_DIR__', __CWP_SOURCE__.DIRECTORY_SEPARATOR.'var/tmp');
 Media::$Stash->flush();
 
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'path_constants.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'boot.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'auth.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
-require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
+require_once __CWP_CONFIGURATION__.\DIRECTORY_SEPARATOR.'Path'.\DIRECTORY_SEPARATOR.'path_constants.php';
+require_once __CWP_CONFIGURATION__.\DIRECTORY_SEPARATOR.'Path'.\DIRECTORY_SEPARATOR.'url_paths.php';
+
+require_once __CWP_CONFIGURATION__.\DIRECTORY_SEPARATOR.'Language.php';
+require_once __CWP_CONFIGURATION__.\DIRECTORY_SEPARATOR.'boot.php';
+
+
+Template::$registeredCallbacks = [
+    '\CWPDisplay\Template\Callbacks\FunctionCallback::FUNCTION_CALLBACK' => 'callback_parse_function',
+    '\CWPDisplay\Template\Callbacks\FunctionCallback::SCRIPTINCLUDE_CALLBACK' => 'callback_script_include'];
+
+// Template::$registeredFilters = [
+//     '\Plex\Template\Callbacks\URLFilter::parse_urllink' => ['a=href' => ['library' => $_REQUEST['library']]],
+// ];
+Template::$TEMPLATE_COMMENTS      = false;
+
+Template::$USER_TEMPLATE_DIR      = __HTML_TEMPLATE__; // /home/bjorn/www/cwp_www/src/Website/Layout/Default
+Template::$SITE_URL               = __URL_ASSETS__; // http://wslubuntu/cwp/assets
+Template::$ASSETS_URL             = __URL_ASSETS__.\DIRECTORY_SEPARATOR.'Default';
+
+Template::$SITE_PATH              = __PATH_ASSETS__; //'/home/bjorn/www/plex_web/html/assets'
+Template::$ASSETS_PATH            = __PATH_ASSETS__.\DIRECTORY_SEPARATOR.'Default';
+
+Template::$CACHE_DIR              = __TPL_CACHE_DIR__; // '/home/bjorn/www/plex_web/src/var/cache/template/'
+Template::$USE_TEMPLATE_CACHE     = false;
+
+UtmDevice::$DETECT_BROWSER        = false;
+UtmDevice::$USER_DEFAULT_TEMPLATE = __HTML_TEMPLATE__; //'/home/bjorn/www/plex_web/Layout/Default'
+
+// UtmDevice::$USER_MOBILE_TEMPLATE  = __MOBILE_TEMPLATE__; // '/home/bjorn/www/plex_web/Layout/Mobile'
+// UtmDevice::$MOBILE_ASSETS_URL     = __URL_ASSETS__.\DIRECTORY_SEPARATOR.'Mobile';
+// UtmDevice::$MOBILE_ASSETS_PATH    = __LAYOUT_PATH__.\DIRECTORY_SEPARATOR.'Mobile';
+
+$device = new UtmDevice();
+$boot->loadPage();
+$const_keys = array_keys(get_defined_constants(true)['user']);
+define('__TEMPLATE_CONSTANTS__', $const_keys);
 
 if (array_key_exists('flush', $_GET)) {
     Media::$Stash->flush();
@@ -88,8 +99,3 @@ if (!defined('PROCESS')) {
         exit;
     }
 }
-
-$RainTemplate = new Rain();
-$RainTemplate->nav_bar_links = $nav_bar_links;
-$TplTemplate = $RainTemplate->init();
-Media::$Tpl = $TplTemplate;

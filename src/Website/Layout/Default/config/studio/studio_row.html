@@ -1,0 +1,16 @@
+<div class="row m-0 p-0">
+    <div class="col-2">
+        {$STUDIO_NAME}
+    </div>
+    <div class="col-4">
+        <input type="text" onclick="editPlaceholder(this.id)" onfocusout="checkValue(this.id)" name="{$STUDIO_ID}"
+            id="{$STUDIO_ID}" placeholder="{$STUDIO_PH}">
+        <input type="button" id="{$STUDIO_ID}" onclick="setNull(this.id)" value="Clear">
+    </div>
+    <div class="col-4">
+        <input type="text" onclick="editPlaceholder(this.id)" onfocusout="checkValue(this.id)" name="{$PATH_ID}"
+            id="{$PATH_ID}" placeholder="{$PATH_PH}">
+        <input type="button" id="{$PATH_ID}" onclick="setNull(this.id)" value="Clear">
+        <button type="submit">Save</button>
+    </div>
+</div>

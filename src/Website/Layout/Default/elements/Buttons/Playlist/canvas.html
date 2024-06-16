@@ -1,0 +1,21 @@
+<button class="btn btn-primary " type="button" data-bs-toggle="offcanvas"
+data-bs-target="#offcanvasScrolling" aria-controls="offcanvasWithBothOptions">{L Canvas_Playlist_Btn}</button>
+<div class="offcanvas offcanvas-top offcanvas-top-list  " data-content-overlay="false"
+data-bs-scroll="true" data-bs-backdrop="true"
+tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">{L Canvas_Playlist_Btn}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+    </div>
+
+    <div class="offcanvas-body">
+        {$CANVAS_BODY}
+    </div>
+
+</div>
+
+{{javascript=playlist.js}}
+
+

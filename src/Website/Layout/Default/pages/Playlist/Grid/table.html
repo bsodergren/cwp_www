@@ -1,0 +1,52 @@
+<form action="{$FORM_URL}" method="post">
+
+    {$HIDDEN}
+    <div class="  text-bg-primary " style="--bs-bg-opacity: .5;">
+        <div class="row justify-content-center">
+            <div class="col-9  text-center fs-3">
+                {$PLAYLIST_NAME}
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-3   ">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text" id="basic-addon1">Genre</span>
+                    <input type="text" name="playlist_genre" class="form-control" value="{$PLAYLIST_GENRE}" aria-label="playlist_genre" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class="col-3"></div>
+            <div class="col-3   ">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text" id="basic-addon2">Name</span>
+                    <input type="text" name="playlist_name" class="form-control"
+                        aria-label="playlist_name" aria-describedby="basic-addon2" value="{$PLAYLIST_NAME}">
+                </div>
+            </div>
+        </div>
+
+        <div class="row text-left justify-content-center">
+            <div class="col-3  fs-4 ">
+                <button type="submit" name="action" value="savePlaylist">
+                    <span class="btn btn-primary btn-lg rounded-pill text-bg-primary  mx-3">
+
+                        Save </span></button>
+            </div>
+            <div class="col-3 fs-4 ">
+                <button class="btn btn-primary btn-lg rounded-pill text-bg-primary  mx-3" onclick="popup('{$__URL_HOME__}/video.php?playlist_id={$PLAYLIST_ID}', 'video_popup')">Watch</button>
+            </div>
+            <div class="col-3   fs-4 ">
+                <button type="submit" name="action" value="deletePlaylist"><span class="btn btn-primary btn-lg rounded-pill text-bg-primary  mx-3">Delete</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class=" text-center" style="--bs-bg-opacity: .5;">
+        <div class="row">
+            <div class="d-flex flex-sm-wrap text-white">
+                {$CELLS_HTML}
+            </div>
+        </div>
+
+    </div>
+</form>

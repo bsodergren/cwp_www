@@ -12,10 +12,10 @@ namespace CWP\Process;
 use CWP\Core\Media;
 use CWP\Core\MediaQPDF;
 use CWP\Filesystem\MediaFileSystem;
-use CWP\HTML\HTMLDisplay;
+use  CWPDisplay\HTML\HTMLDisplay;
 use CWP\Media\Import\PDFImport;
 use CWP\Media\Mail\EmailDisplay;
-use CWP\Template\Template;
+use  CWPDisplay\Template\Template;
 use CWP\Utils\MediaDevice;
 use Nette\Utils\FileSystem;
 

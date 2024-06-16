@@ -9,4 +9,4 @@ require_once '../.config.inc.php';
 
 $auth->logOut();
 
-echo HTMLDisplay::JavaRefresh('/login/login.php', 0, 'Logged Out');
+echo Elements::JavaRefresh('/login/login.php', 0, 'Logged Out');

@@ -1,0 +1,22 @@
+<div class="playlistData btn-group w-75 btn-primary border border-2 border-dark" role="group" 
+aria-label="Vertical button group">
+    {{function=hiddenSearch}}
+    <input type="hidden" name="submit" value="playlist">
+    <button type="button" class="btn PlaylistButton" id="PlayAll"   
+    data-bs-dismiss="offcanvas" aria-label="Close">{L Canvas_PlayAll_Btn}</button>
+     <button type="button" class="btn PlaylistButton" id="AddPlaylist" 
+     data-bs-dismiss="offcanvas" aria-label="Close">{L Canvas_AddToPlaylist_Btn}</button>
+
+    <span id="playlistTextBox" class="hidden" ></span>
+    <span class="btn PlaylistButton" id="AddAll">{L Canvas_SelectAll_Btn}</span>
+    <button type="button" class="btn PlaylistButton" id="AddToPlaylist" 
+    data-bs-dismiss="offcanvas" aria-label="Close">{L Canvas_AddtoSelected_Btn}</button>
+    <select class="page-link" name="PlaylistID" id="PlaylistSelectID">
+        {$SelectPlaylists}
+    </select>
+    <span class="btn PlaylistButton" id="Clear" data-bs-dismiss="offcanvas" aria-label="Close">{L Canvas_Clear_Btn}</span>
+</div>
+
+
+
+

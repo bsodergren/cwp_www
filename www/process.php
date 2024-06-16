@@ -9,4 +9,5 @@ define('PROCESS', true);
 
 require '.config.inc.php';
 
-MediaProcess::Check($media);
+$process = new MediaProcess($media);
+$process->start($_REQUEST);

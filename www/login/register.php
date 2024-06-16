@@ -17,7 +17,7 @@ define('__AUTH__', false);
 require_once '../.config.inc.php';
 
 if (__USE_REGISTER__ == false) {
-    echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
+    echo Elements::JavaRefresh('/login/login.php', 0, $msg);
     exit;
 }
 
@@ -42,7 +42,7 @@ try {
     $userId = $auth->register($_POST['email'], $_POST['password'], $_POST['username'], function ($selector, $token) use ($mail) {
         $mail->subject('Verification email');
 
-        $params['VERIFY_LINK'] = __URL_HOME__.'/login/verify.php?selector='.urlencode($selector).'&token='.urlencode($token);
+        $params['VERIFY_LINK'] = __URL_ROOT__.'/login/verify.php?selector='.urlencode($selector).'&token='.urlencode($token);
 
         $mail->Body(Template::getHtml('authentication/email/verify', $params));
         $mail->mail();
@@ -58,4 +58,4 @@ try {
 } catch (\Delight\Auth\TooManyRequestsException $e) {
     $msg = 'Too many requests';
 }
- echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
+ echo Elements::JavaRefresh('/login/login.php', 0, $msg);

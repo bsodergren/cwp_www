@@ -31,6 +31,6 @@ if (null === Media::$VersionUpdate) {
 HTMLDisplay::put('All up  to date', 'Red');
 echo HTMLDisplay::ProgressBar($timeout);
 
-echo HTMLDisplay::JavaRefresh('/index.php', $timeout);
+echo Elements::JavaRefresh('/index.php', $timeout);
 
 MediaDevice::getFooter();

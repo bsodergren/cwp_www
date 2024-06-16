@@ -1,0 +1,16 @@
+<div class="row m-0 p-0">
+    <div class="col-2">
+        {$ARTIST_NAME}
+    </div>
+    <div class="col-5">
+        <input type="text" onclick="editPlaceholder(this.id)" onfocusout="checkValue(this.id)" name="{$ARTIST_ID}"
+            id="{$ARTIST_ID}" placeholder="{$ARTIST_REP}">
+        <input type="button" id="{$ARTIST_ID}" onclick="setNull(this.id)" value="Clear">
+    </div>
+    <div class="col-1 form-check form-switch">
+        {$ARTIST_CHECKBOX}
+    </div>
+    <div class="col-1">
+        <button type="submit">Save</button>
+    </div>
+</div>

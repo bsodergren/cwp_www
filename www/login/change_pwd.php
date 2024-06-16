@@ -21,5 +21,5 @@ if (array_key_exists('submit', $_POST) && 'change' == $_POST['submit']) {
     } catch (\Delight\Auth\TooManyRequestsException $e) {
         $msg = 'Too many requests';
     }
-    echo HTMLDisplay::JavaRefresh('/login/userinfo.php', 0, $msg);
+    echo Elements::JavaRefresh('/login/userinfo.php', 0, $msg);
 }

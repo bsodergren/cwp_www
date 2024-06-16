@@ -11,7 +11,7 @@ namespace CWP\Process;
 
 use CWP\Core\Media;
 use CWP\Media\MediaMailer;
-use CWP\Template\Template;
+use  CWPDisplay\Template\Template;
 
 class Mail extends MediaProcess
 {

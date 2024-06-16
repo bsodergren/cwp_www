@@ -42,3 +42,5 @@ src/var/*
 www/cwp/files/**
 .env
 .php-cs-fixer.cache
+var/*
+.env-server

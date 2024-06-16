@@ -12,9 +12,9 @@ namespace CWP\Process;
 use CWP\Utils\Zip;
 use CWP\Core\Bootstrap;
 use CWP\Core\MediaError;
-use CWP\HTML\HTMLDisplay;
+use  CWPDisplay\HTML\HTMLDisplay;
 use CWP\Media\MediaExport;
-use CWP\Template\Template;
+use  CWPDisplay\Template\Template;
 use CWP\Utils\MediaDevice;
 use Nette\Utils\FileSystem;
 use CWP\Core\MediaStopWatch;
@@ -213,7 +213,7 @@ class Index extends MediaProcess
         $msg = FileSystem::delete($olddir);
         //     if ($msg = null === $mediaLoc->rename($this->media->base_dir, $mediaLoc->directory)) {
         $this->media->update_job_number($job_number);
-        echo HTMLDisplay::JavaRefresh('/index.php', 0);
+        echo Elements::JavaRefresh('/index.php', 0);
         // }
         // dd($msg);
         //     }

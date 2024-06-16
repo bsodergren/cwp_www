@@ -1,0 +1,9 @@
+<div class="videoPlaylistDiv form-check-inline">
+    <input type="hidden" id="videoPlaylistId_{$Videoid}" name="pl_id" value="{$playlistId}" />
+    <input type="hidden" id="videoPlaylistVideoId" name="playlist[]" value="{$Videoid}" />
+    <select onchange="videoPlaylistButton({$Videoid},'{$__THIS_PAGE__}')" 
+    class="page-link videoPlaylistButton form-select" name="PlaylistID" id="videoPlaylist_{$Videoid}">
+        {$SelectPlaylists}
+    </select>
+    <label class="text-bg-danger bg-opacity-25" for="videoPlaylist_{$Videoid}" id="VideoPlaylistLabel"></label>
+</div>

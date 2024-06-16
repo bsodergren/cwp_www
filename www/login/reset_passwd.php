@@ -27,7 +27,7 @@ if (array_key_exists('submit', $_POST) && 'reset' == $_POST['submit']) {
     } catch (\Delight\Auth\TooManyRequestsException $e) {
         $msg = 'Too many requests';
     }
-    echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
+    echo Elements::JavaRefresh('/login/login.php', 0, $msg);
 }
 
 if (array_key_exists('token', $_GET)) {

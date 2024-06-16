@@ -31,7 +31,7 @@ $mail->recpt($_POST['email'], '');     // Add a recipient
 try {
     $auth->forgotPassword($_POST['email'], function ($selector, $token) use ($mail) {
         $mail->subject('Reset your password');
-        $params['VERIFY_LINK'] = __URL_HOME__.'/login/reset_passwd.php?selector='.urlencode($selector).'&token='.urlencode($token);
+        $params['VERIFY_LINK'] = __URL_ROOT__.'/login/reset_passwd.php?selector='.urlencode($selector).'&token='.urlencode($token);
         $mail->Body(Template::getHtml('authentication/email/reset', $params));
         $mail->mail();
         $msg = 'Password Recovery email sent';
@@ -45,4 +45,4 @@ try {
 } catch (\Delight\Auth\TooManyRequestsException $e) {
     $msg = 'Too many requests';
 }
- echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
+ echo Elements::JavaRefresh('/login/login.php', 0, $msg);

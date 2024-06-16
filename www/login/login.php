@@ -13,7 +13,7 @@ require_once '../.config.inc.php';
 
 define('TITLE', 'Login');
 
-// echo HTMLDisplay::JavaRefresh('/login/register.php', 0);
+// echo Elements::JavaRefresh('/login/register.php', 0);
 if (array_key_exists('username', $_POST)) {
     if (1 == $_POST['remember']) {
         // keep logged in for one year
@@ -26,7 +26,7 @@ if (array_key_exists('username', $_POST)) {
     try {
         $auth->loginWithUsername($_POST['username'], $_POST['password'], $rememberDuration);
         $msg = 'Logged in';
-        echo HTMLDisplay::JavaRefresh('/index.php', 0, $msg);
+        echo Elements::JavaRefresh('/index.php', 0, $msg);
         exit;
     } catch (\Delight\Auth\InvalidEmailException  $e) {
         $msg = 'Wrong email address';
@@ -38,7 +38,7 @@ if (array_key_exists('username', $_POST)) {
         $msg = 'Too many requests';
     }
 
-    echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
+    echo Elements::JavaRefresh('/login/login.php', 0, $msg);
     exit;
 }
 

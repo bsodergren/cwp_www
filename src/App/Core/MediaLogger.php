@@ -9,10 +9,10 @@ namespace CWP\Core;
  * CWP Media tool
  */
 
-use CWP\HTML\Colors;
-use Nette\Database\Helpers;
 use Nette\IOException;
 use Nette\Utils\DateTime;
+use CWPDisplay\HTML\Colors;
+use Nette\Database\Helpers;
 use Nette\Utils\FileSystem;
 
 class log

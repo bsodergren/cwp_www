@@ -1,0 +1,28 @@
+home:
+    url: index.php
+    text: !php/const NavBar_Text_Home
+    icon: fa-home
+import:
+    url: import.php
+    text: !php/const NavBar_Text_Import
+    icon: fa-home
+extra:
+    text: "Settings"
+    icon: fa-cog
+    dropdown:
+        [
+            { Paper: { url: paper.php, icon: fa-star }
+            },
+            {
+                "Email List": { url: settings/email.php, icon: "" },
+
+            },
+            {
+                Language: { url: settings/language.php, icon: "" },
+                "Local Settings": { url: settings/local.php, icon: "" },
+
+            },
+            {
+                "Update":{ url: updater/update.php, icon: fa-gear },
+            },
+        ]

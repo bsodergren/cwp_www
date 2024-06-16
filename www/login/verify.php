@@ -29,4 +29,4 @@ if (array_key_exists('token', $_GET)) {
     }
 }
 
-echo HTMLDisplay::JavaRefresh('/login/login.php', 0, $msg);
+echo Elements::JavaRefresh('/login/login.php', 0, $msg);

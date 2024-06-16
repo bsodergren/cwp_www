@@ -1,0 +1,31 @@
+<div id="wrapper" name="{$FILE_ID}" class="{$WRAPPER_CLASS}">
+    <div class="row {$FILE_MISSING}">
+        <div
+            class="col bg-primary flex-nowrap bg-gradient fs-5 fw-bold text-bg-primary text-start"
+            style="padding-left: 10px; max-width: {$RATING_WIDTH}px"
+        >
+            <div class="row ">
+                <div class="col {$RatingColWidth}">
+                    {{function=videoRating|id={$FILE_ID},rating={$STAR_RATING}}}
+                </div>
+                <div class="col {$FavTextClass}">
+                    {{function=videoFavorite|id={$FILE_ID}}}
+
+                </div>
+            </div>
+        </div>
+        <div
+            class="col bg-primary bg-gradient fs-5 fw-bold text-bg-primary text-start p-1"
+        >
+            {$VIDEO_TITLE}
+        </div>
+        {$DELETE_BUTTONS}
+    </div>
+
+    <div class="row flex-lg-nowrap">
+        {$VERTICAL_TEXT}
+        {{function=Thumbnail|id={$FILE_ID},next={$NEXT_ID},playlist_id={$PlaylistId}}}
+
+        <div class="col">{$FIELD_ROW_HTML}</div>
+    </div>
+</div>

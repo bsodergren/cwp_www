@@ -22,5 +22,5 @@ foreach (__MYSQL_TRUNC_TABLES__ as $table) {
     $result = Media::$connection->query('TRUNCATE ' . $table);
 }
 
-echo HTMLDisplay::JavaRefresh(__URL_PATH__ . '/index.php', 0);
+echo Elements::JavaRefresh(__URL_PATH__ . '/index.php', 0);
 exit;

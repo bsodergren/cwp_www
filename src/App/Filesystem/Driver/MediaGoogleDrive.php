@@ -6,7 +6,7 @@
 namespace CWP\Filesystem\Driver;
 
 use CWP\Filesystem\MediaFileSystem;
-use CWP\HTML\HTMLDisplay;
+use  CWPDisplay\HTML\HTMLDisplay;
 use CWP\Utils\MediaDevice;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use Nette\Utils\FileSystem;
@@ -257,7 +257,7 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
         $code = $e->getCode();
         $message = $e->getMessage();
 
-        echo HTMLDisplay::JavaRefresh('/error.php', 0, ['type' => 'Dropbox', 'code' => $code, 'message' => $message]);
+        echo Elements::JavaRefresh('/error.php', 0, ['type' => 'Dropbox', 'code' => $code, 'message' => $message]);
         exit;
 
         MediaDevice::getFooter();

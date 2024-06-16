@@ -1,0 +1,16 @@
+<div class="row m-0 p-0">
+    <div class="col-2">
+        {$GENRE_NAME}
+    </div>
+    <div class="col-5">
+        <input type="text" onclick="editPlaceholder(this.id)" onfocusout="checkValue(this.id)" name="{$GENRE_ID}"
+            id="{$GENRE_ID}" placeholder="{$GENRE_REP}">
+        <input type="button" id="{$GENRE_ID}" onclick="setNull(this.id)" value="Clear">
+    </div>
+    <div class="col-1 form-check">
+        {$GENRE_CHECKBOX}
+    </div>
+    <div class="col-1">
+        <button type="submit">Save</button>
+    </div>
+</div>

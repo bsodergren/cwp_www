@@ -1,0 +1,374 @@
+body {
+    margin-bottom: 60px;
+}
+
+.btn {
+    text-transform: initial !important;
+}
+
+.sidenav-pos {
+    position: fixed;
+    top: 60px;
+}
+
+.container-sidenav {
+    position: absolute;
+    left: 140px;
+    top: 60px;
+    width: 90%;
+    z-index: -1;
+    padding-bottom: 35px;
+}
+
+.nav-sidebar {
+    width: 180px;
+    position: absolute;
+    left: -30px;
+}
+
+.nav-sidebar-sort {
+    width: 180px;
+    position: absolute;
+    top: 370px;
+    left: 0px;
+}
+
+.nav-sidebar-header {
+    width: 180px;
+    position: absolute;
+    top: 340px;
+}
+
+.vertical-text {
+    transform-origin: center;
+    transform: rotate(90deg);
+}
+
+.categories-wrapper {
+    position: relative;
+}
+
+.navbar.top-navbar {
+    height: 50px;
+    z-index: 2;
+    border: none;
+}
+
+.navbar.second-navbar {
+    margin-top: 55px;
+    z-index: 1;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.navbar.pagenate-navbar {
+    margin-top: 80px;
+    height: 50px;
+    z-index: 1;
+}
+
+.nav-tabs-sort {
+    flex-wrap: nowrap;
+    text-wrap: nowrap;
+}
+
+.nav-tabs .nav-link {
+    padding: 10px 10px 10px 10px;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0px 0px 0px 0px;
+}
+
+.nav-tabs .nav-link:not([disabled]):not(.disabled).active,
+.nav-tabs .nav-link:not([disabled]):not(.disabled):active,
+.nav-tabs .nav-link:not([disabled]):not(.disabled):focus,
+.nav-tabs .nav-link:not([disabled]):not(.disabled):hover {
+    background-image: linear-gradient(#44494d, #3a3f44 20%, #215794);
+    filter: none;
+}
+
+textarea {
+    /* min-height: 150px; */
+    font-size: 16px;
+}
+
+.verify-message {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+button[type="submit"] {
+    padding: 0;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    color: blue;
+}
+
+.filter-select {
+    text-align-last: center;
+    padding: 0px 20px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 1rem;
+    background-size: 1.5em;
+}
+
+.filter-option {
+    text-align: center;
+    padding: 0px 20px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 1rem;
+    background-size: 1.5em;
+}
+
+.playlist[type="checkbox"] {
+    margin: 4px 0 0;
+    line-height: normal;
+    width: 20px;
+    height: 20px;
+}
+
+.category-input {
+    position: absolute;
+    top: 0;
+    border: 00px solid #f10000;
+    opacity: 0;
+}
+
+.category-input:checked + label {
+    border: 10px solid #f10000;
+    opacity: 1;
+}
+
+.navbar {
+    .breadcrumb {
+        z-index: 100;
+        --mdb-breadcrumb-item-color: rgba(225, 220, 220, 0.781);
+        --mdb-breadcrumb-item-hover-color: rgba(
+            var(--mdb-emphasis-color-rgb),
+            0.7
+        );
+        --mdb-breadcrumb-item-before-color: rgba(
+            var(--mdb-emphasis-color-rgb),
+            0.55
+        );
+        --mdb-breadcrumb-item-transition: color 0.15s ease-in-out;
+        background-color: rgba(0, 0, 0, 0);
+        margin-bottom: 0;
+
+        .breadcrumb-item {
+            a {
+                &:hover,
+                &:focus {
+                }
+            }
+
+            + .breadcrumb-item {
+                &:before {
+                }
+            }
+        }
+    }
+}
+
+.videoBadge {
+    border-radius: 25px;
+
+    position: absolute;
+    height: 25px;
+    background-color: rgb(0, 0, 0);
+    cursor: pointer;
+    bottom: 0px;
+    left: 60px;
+    width: 180px;
+}
+
+#pageRight {
+    position: fixed;
+    top: 25%;
+    right: 20px;
+    font-size: 100px;
+    /* background: rgb(0, 0, 0); */
+    background: rgba(0, 0, 0, 0.7);
+    width: 20px;
+    height: 160px;
+    display: block;
+    text-decoration: none;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    /* display: none; */
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+#pageLeft {
+    position: fixed;
+    top: 25%;
+    left: 160px;
+    font-size: 100px;
+    /* background: rgb(0, 0, 0); */
+    background: rgba(0, 0, 0, 0.7);
+    width: 20px;
+    height: 160px;
+    display: block;
+    text-decoration: none;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    /* display: none; */
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+#myBtn {
+    position: fixed;
+    bottom: 85px;
+    right: 20px;
+    /* background: rgb(0, 0, 0); */
+    /* background: rgba(0, 0, 0, 0.7); */
+    width: 50px;
+    height: 50px;
+    display: block;
+    text-decoration: none;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    display: none;
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+#myBtn:hover {
+    background: rgba(149, 0, 0, 0.9);
+}
+
+.offcanvas.offcanvas-top-list {
+    --bs-offcanvas-zindex: 1045;
+    --bs-offcanvas-width: 400px;
+    --bs-offcanvas-height: 90px;
+    left: 237px;
+    top: 25px;
+
+    --bs-offcanvas-padding-x: 0;
+    --bs-offcanvas-padding-y: 0;
+    --bs-offcanvas-color: var(--bs-body-color);
+    --bs-offcanvas-bg: var(--bs-body-bg);
+    --bs-offcanvas-border-width: var(--bs-border-width);
+    --bs-offcanvas-border-color: var(--bs-border-color-translucent);
+    --bs-offcanvas-box-shadow: var(--bs-box-shadow-sm);
+    --bs-offcanvas-transition: transform 0.3s ease-in-out;
+    --bs-offcanvas-title-line-height: 1.5;
+}
+
+.accordion-body {
+    padding: 0;
+}
+
+.list-group.list-group-studio {
+    --bs-list-group-action-hover-color: ;
+    --bs-list-group-action-hover-bg: ;
+    --bs-list-group-action-active-color: var(--bs-body-color);
+    --bs-list-group-action-active-bg: var(--bs-secondary-bg);
+    --bs-list-group-border-width: 0px;
+    --bs-list-group-border-radius: var(--bs-border-radius);
+}
+
+.dropdown-divider-settings {
+    height: 2px;
+    margin: var(--bs-dropdown-divider-margin-y) 0;
+    overflow: hidden;
+    border-top: 5px solid var(--bs-dropdown-divider-bg);
+    opacity: 1;
+}
+
+.recent-days-link {
+    border-right: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.recent-days-select {
+    border-left: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+.heartButton {
+    background-color: transparent;
+    /* width: 24px; */
+    height: 30px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    margin: 5px;
+    padding-block: 0px;
+    padding-inline: 0px;
+    border-width: 0px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+
+.nav-tabs .nav-link,
+.nav-tabs .nav-link:hover {
+    cursor: pointer;
+}
+
+*,
+::after,
+::before {
+    /* box-sizing: unset !important; */
+}
+
+.VideoCard-img-fluid {
+    width: 100%;
+}
+
+.nav-dropdown {
+    width: 149px;
+    left: -1px;
+    position: relative;
+    padding: 10px 10px 10px 10px;
+    text-align: start;
+}
+
+.nav-dropdown-menu {
+    --bs-dropdown-zindex: 1000;
+    --bs-dropdown-padding-x: 0;
+    --bs-dropdown-padding-y: 0.5rem;
+    --bs-dropdown-spacer: 0.125rem;
+}
+button.btn.playlist-canvas-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+.navbar-breadcrumb {
+    position: absolute;
+    left: 120px;
+    top: 10px;
+}

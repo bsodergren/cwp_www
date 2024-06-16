@@ -1,0 +1,10 @@
+
+<form id="ajaxform" method="post" class="playlistData">
+    <input type="text" name="playlist_name" value="{$playlist_name}">
+    <input type="hidden" name="submit" value="playlist">
+    <input type="hidden" name="refresh" value="playlist">
+   {$playlist_list}
+   <button type="button" class="btn PlaylistButton" data-bs-dismiss="offcanvas" aria-label="Close"
+    id="AddPlaylist">{L Playlist_Queue_Form_Btn}</button>
+</form>
+{{javascript=playlist.js}}

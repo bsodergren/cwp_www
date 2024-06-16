@@ -1,0 +1,27 @@
+{{stylesheet=plyr/section/playlist.css}}
+
+<div class="col-sm-12 right">
+    <div class="filter-menu">
+        <div class="accordion">
+            <div class="accordion-button">All</div>
+            <div class="accordion-content" id="acc-content">
+                <div class="filter-button active" data-category=";all">All</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="playlist-wrapper">
+        <div id="playlist" class="playlist">
+            {$PLYRLISTHTML}
+        </div>
+    </div>
+
+    <div class="search-container">
+        <div class="search-input-wrapper">
+            <div class="search-icon"></div>
+            <input type="text" id="searchInput" placeholder="Search..." />
+        </div>
+    </div>
+</div>
+
+

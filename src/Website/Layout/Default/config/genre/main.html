@@ -1,0 +1,41 @@
+<script type="text/javascript">
+    function editPlaceholder(id) {
+        var x = document.getElementById(id).placeholder;
+        if (x !== "") {
+            document.getElementById(id).value = x;
+        }
+    }
+
+    function checkValue(id) {
+        var ph = document.getElementById(id).placeholder;
+        var n = document.getElementById(id).value;
+        if (ph == n) {
+            document.getElementById(id).value = "";
+        }
+    }
+
+    function setNull(id) {
+
+        const myArray = id.split("_");
+        let name = myArray[0];
+        console.log(name);
+
+        var ph = document.getElementById(id).placeholder;
+        // if(name == "studio") {
+        //     document.getElementById(id).value = "";
+        // } else {
+        document.getElementById(id).value = "null";
+        //  }
+
+    }
+
+
+</script>
+
+<div class="border-3">
+    <div class="container text-center">
+
+        {$GENRE_MAIN_HTML}
+
+    </div>
+</div>

@@ -10,7 +10,7 @@ namespace CWP\Media;
  */
 
 use CWP\Core\MediaLogger;
-use CWP\HTML\HTMLDisplay;
+use  CWPDisplay\HTML\HTMLDisplay;
 use Nette\Utils\Callback;
 use Nette\Utils\FileSystem;
 use Symfony\Component\Process\Process;

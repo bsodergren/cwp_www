@@ -5,8 +5,8 @@
 
 namespace CWP\Media;
 
-use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
+use  CWPDisplay\HTML\HTMLDisplay;
+use  CWPDisplay\Template\Template;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -72,10 +72,10 @@ class MediaMailer
             $this->mail->isHTML(true);                                  // Set email format to HTML
             $this->mail->send();
 
-            echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, 'Email to '.$sendname.' sent');
+            echo Elements::JavaRefresh(HTMLDisplay::$url, HTMLDisplay::$timeout, 'Email to '.$sendname.' sent');
             ob_flush();
         } catch (Exception $e) {
-            echo HTMLDisplay::JavaRefresh(HTMLDisplay::$url, 500, "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}");
+            echo Elements::JavaRefresh(HTMLDisplay::$url, 500, "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}");
         }
     }
 }

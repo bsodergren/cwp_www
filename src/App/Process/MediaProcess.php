@@ -7,7 +7,12 @@ namespace CWP\Process;
 
 use CWP\Core\Media;
 use CWP\Core\MediaError;
-use CWP\HTML\HTMLDisplay;
+use CWP\Process\Traits\Email_process;
+use CWP\Process\Traits\Forms_process;
+use CWP\Process\Traits\XLSX_process;
+use CWP\Process\Traits\Zip_process;
+use UTMTemplate\HTML\Elements;
+use  CWPDisplay\HTML\HTMLDisplay;
 
 class MediaProcess
 {
@@ -22,6 +27,26 @@ class MediaProcess
     public $timeout = '0';
     public $request = [];
 
+    use XLSX_process;
+    use Zip_process;
+    use Email_process;
+    use Forms_process;
+
+    public function start($request)
+    {
+        $method = $request['submit'];
+       $out = $this->$method($request['job_id']);
+       utminfo("Method ".$method."  exist");
+
+        echo $out;
+
+    }
+
+    public function __call($method,$var)
+    {
+        echo $this->$method($var);
+        utminfo("Method ".$method." doesnt exist");
+    }
     public static function Check($media)
     {
         $refer_script = basename(parse_url($_SERVER['HTTP_REFERER'], \PHP_URL_PATH), '.php');
@@ -32,7 +57,7 @@ class MediaProcess
 
         if (null === $refer_script || '' == $refer_script) {
             MediaError::msg('info', 'referer not set', 0);
-            echo HTMLDisplay::JavaRefresh('/index.php', 0);
+            echo Elements::JavaRefresh('/index.php', 0);
         }
 
         define('__FORM_POST__', $refer_script);
@@ -106,6 +131,6 @@ class MediaProcess
 
     public function reload()
     {
-        echo HTMLDisplay::JavaRefresh($this->url, $this->timeout, $this->msg);
+        echo Elements::JavaRefresh($this->url, $this->timeout, $this->msg);
     }
 }

@@ -1,0 +1,22 @@
+<div class="playlist_item"
+ data-title="{$TITLE}"
+  data-artist="{$ARTIST}"
+ data-studio="{$STUDIO}"
+ data-genre="{$GENRE}"
+ data-videoid="{$Videoid}"
+ data-purl="{$VIDEO_URL}" data-video="{$VIDEO_URL}"
+  data-type="video" data-category="{replace='{$GENRE}',',',';'}">
+    <div class="item_wrapper">
+        <div class="item_thumb_container">
+            <img class="item_thumb" src="{$THUMBNAIL}" />
+            <div class="item_thumb_play"></div>
+            <div class="item_thumb_restart"></div>
+        </div>
+        <div class="item_details">
+            <span class="item_title">{$TITLE}</span>
+            <span class="item_genre">{$GENRE}</span>
+            <span class="item_artist">{$ARTIST}</span>
+            <span class="item_studio">{$STUDIO}</span>
+        </div>
+    </div>
+</div>

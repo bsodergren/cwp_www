@@ -17,7 +17,7 @@ if (array_key_exists('actSubmit', $_REQUEST)) {
     }
 
     HTMLDisplay::pushhtml('stream/page_close', []);
-//    echo HTMLDisplay::JavaRefresh('/index.php');
+//    echo Elements::JavaRefresh('/index.php');
     exit;
 }
 

@@ -35,7 +35,7 @@ class MediaError
             Template::echo('error/'.$severity, ['MSG' => $msg]);
         }
 
-        HTMLDisplay::javaRefresh($url, $timeout);
+        Elements::JavaRefresh($url, $timeout);
         exit;
     }
 }

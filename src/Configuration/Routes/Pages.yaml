@@ -1,0 +1,9 @@
+default:
+    PAGE_TITLE: "Default Page"
+    NAVBAR: true
+home:
+    PAGE_TITLE: "Home Page"
+    BOTTOM_NAV: false
+import:
+    PAGE_TITLE: "Favorites Page"
+    BOTTOM_NAV: true

@@ -1,0 +1,75 @@
+
+.styles_triangle {
+    top: 5px;
+    right: -8px;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    transform: rotate(-45deg);
+}
+.ScenePlayerHeaderPlus-ActionTags-Triangle {
+    border-right: 1px solid #B4B4B4;
+    border-bottom: 1px solid #B4B4B4;
+}
+.styles_link_triangle {
+    position: relative;
+    margin: 0 10px 5px 0;
+    height: 23px;
+    user-select: none;
+}
+.ScenePlayerHeaderPlus-ActionTags-ButtonLink {
+    background: rgba(0, 0, 0, 0);
+    color: #B4B4B4;
+    border: none;
+    border-bottom: 1px solid #B4B4B4;
+    font-weight: 400;
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+.ButtonLink {
+    font-family: Hind;
+    /* background: linear-gradient(#000000, #535353); */
+    opacity: .5;
+    /* color: #0a0a0c; */
+    text-decoration: none;
+    /* border: #09c6cd 1px solid; */
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 16px;
+    text-transform: capitalize;
+    padding: .3em .8em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+ .btnContaner .btnHover {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    /* transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%); */
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .btnContaner .btnHover:hover {
+    background-color: black;
+  }
+
+  .btnContaner img {
+    height: auto;
+    width: 180px;
+  }
+  .btnContaner {
+    position: relative;
+    /* width: 50%; */
+  }

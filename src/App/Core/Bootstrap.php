@@ -8,6 +8,8 @@ namespace CWP\Core;
 use Camoo\Config\Config;
 use CWP\Core\MediaSettings;
 use Nette\Utils\FileSystem;
+use Symfony\Component\Yaml\Yaml;
+
 
 class Bootstrap
 {
@@ -32,7 +34,6 @@ class Bootstrap
       //  $this->setFileDriver();
         $this->define('__DEBUG__', $this->isDebugSet());
         $this->definePath('__BIN_DIR__', $this->getUsrBin());
-        $this->define('__URL_PATH__', $this->getURL());
         $this->define('__HOME__', $this->homeDir());
         $this->directory(__ERROR_LOG_DIRECTORY__);
         $this->directory(__STASH_DIR__);
@@ -172,6 +173,26 @@ class Bootstrap
 
         if (true === $exit) {
             dd($this->configkeys, $config);
+        }
+    }
+
+    public function loadPage()
+    {
+        $page_config = Yaml::parseFile(__PAGE_CONFIG__, Yaml::PARSE_CONSTANT);
+        $current_page = [];
+        if (\array_key_exists(__THIS_PAGE__, $page_config)) {
+            $current_page = $page_config[__THIS_PAGE__];
+        }
+        $default = $page_config['default'];
+        foreach ($default as $key => $value) {
+            if (\array_key_exists($key, $current_page)) {
+                $page_setting = $current_page[$key];
+                $defaults[__THIS_PAGE__]['Config'][$key] = $current_page[$key];
+            } else {
+                $page_setting = $default[$key];
+                $defaults[__THIS_PAGE__]['default'][$key] = $default[$key];
+            }
+            \define($key, $page_setting);
         }
     }
 }

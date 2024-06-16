@@ -6,8 +6,8 @@
 namespace CWP\Filesystem\Driver;
 
 use CWP\Core\MediaError;
-use CWP\HTML\HTMLDisplay;
-use CWP\Template\Template;
+use  CWPDisplay\HTML\HTMLDisplay;
+use  CWPDisplay\Template\Template;
 use CWP\Utils\MediaDevice;
 use Kunnu\Dropbox\Dropbox;
 use Nette\Utils\FileSystem;
@@ -238,7 +238,7 @@ class MediaDropbox extends MediaFS implements MediaFileInterface
         // switch ($code) {
         //     case '401':
         // MediaError::msg('info', $code, 0);
-        echo HTMLDisplay::JavaRefresh('/error.php', 0, ['type' => 'Dropbox', 'code' => $code, 'message' => $message]);
+        echo Elements::JavaRefresh('/error.php', 0, ['type' => 'Dropbox', 'code' => $code, 'message' => $message]);
         exit;
         // Template::echo('error/dropbox/'.$code, ['TOKEN' => __DROPBOX_AUTH_TOKEN__]);
         //     break;

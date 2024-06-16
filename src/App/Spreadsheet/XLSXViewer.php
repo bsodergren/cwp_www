@@ -6,9 +6,9 @@
 namespace CWP\Spreadsheet;
 
 use CWP\Core\Media;
-use CWP\HTML\HTMLDisplay;
+use  CWPDisplay\HTML\HTMLDisplay;
 use CWP\Spreadsheet\Media\MediaXLSX;
-use CWP\Template\Pages\View;
+use  CWPDisplay\Template\Pages\View;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class XLSXViewer
@@ -154,6 +154,6 @@ class XLSXViewer
         $media->excelArray($form_number);
         $excel = new MediaXLSX($media, true);
 
-        echo HTMLDisplay::JavaRefresh('/view.php?'.$_SERVER['QUERY_STRING'], 0);
+        echo Elements::JavaRefresh('/view.php?'.$_SERVER['QUERY_STRING'], 0);
     }
 }

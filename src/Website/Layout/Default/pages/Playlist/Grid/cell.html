@@ -1,0 +1,12 @@
+<div style="width:320px" class="border p-2 categories-wrapper ">
+    <div class="flex-shrink-0">
+        <div class="custom-control custom-checkbox image-checkbox">
+            <input type="checkbox" class="category-input custom-control-input" id="prune_playlist{$PLAYLIST_VIDEO_ID}" name="prune_playlist[]" value="{$PLAYLIST_VIDEO_ID}">
+            {$THUMBNAIL}
+        </div>
+        <div class="container text-bg-primary text-start text-wrap" >
+        {{function=videoPlayer|query?id={$VIDEO_ID},query?playlist_id={$PLAYLIST_ID},href=video.php,text={$TITLE}}}
+        
+        </div>
+    </div>
+</div>

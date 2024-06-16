@@ -166,6 +166,6 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
 } else {
     MediaError::msg('warning', 'Excel files are not found, try deleting and recreating');
 
-    echo HTMLDisplay::JavaRefresh('/index.php', 0);
+    echo Elements::JavaRefresh('/index.php', 0);
     exit;
 }

@@ -1,0 +1,30 @@
+<div class="flex-shrink-0 {$FILE_MISSING}">
+    <div class="custom-control custom-checkbox image-checkbox">
+        <input
+            type="checkbox"
+            class="category-input playlist_selector custom-control-input"
+            id="ck1a_{$ROW_ID}"
+            name="playlist[]"
+            value="{$ROW_ID}"
+        />
+        {$THUMBNAIL}
+        <br />
+        {{function=videoPlayer|query?id={$ROW_ID},href=video.php,text={L Play_Video_Text}}}
+        {{function=videoPlayer|query?id={$ROW_ID},href=videoinfo.php,text={L Video_Info_Text}}}
+        <br>
+        {{function=videoPlaylistBtn|query?id={$ROW_ID},query?playlist_id={$PlaylistId},href=video.php}}
+        <br>
+        {{function=videoAddToPlaylist|id={$ROW_ID},pl_id={$PlaylistId},close=0}}
+    </div>
+    <div class="container text-start">{$VIDEO_DATA}</div>
+    <div class="container text-start">
+        <div class="row">
+            <div class="col-1">
+                <span class="position-absolute"> {$FAVRow} </span>
+            </div>
+            <div class="col-9 m-auto">
+                {{function=videoRating|id={$ROW_ID},rating={$STAR_RATING}}}
+            </div>
+        </div>
+    </div>
+</div>

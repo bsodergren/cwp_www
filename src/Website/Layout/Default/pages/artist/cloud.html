@@ -1,0 +1,17 @@
+
+<div class="m-2 p-2 " role="group">
+  <form action="search.php" method="post" id="formId">
+    <input type="hidden" name="grp" value="AND">
+    <input type="hidden" name="field" value="artist">
+    <button class="blueTable-thead blueTable-thead-th" type="submit" name="submit" value="Search">Seach</button>
+    <div class="blueTable-thead blueTable-thead-th badge"><input type="checkbox" name="grp" value="OR">OR</div>
+    <br>
+    <br>
+
+    {$ARTIST_HTML}
+  </form>
+
+</div>
+<div class=" d-flex flex-wrap m-2 p-2 " role="group">
+  {$THUMBNAIL_HTML}
+</div>
