@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags.
+ * CWP Media Load Flag Creator
  */
 
 use CWP\Core\Media;
@@ -28,13 +28,13 @@ require __PUBLIC_ROOT__.\DIRECTORY_SEPARATOR.'bootstrap.php';
 
 // if (__DEBUG__ == 1) {
 
-Debugger::enable();
+    Debugger::enable(Debugger::Development);
 
 //     Debugger::$showLocation = Tracy\Dumper::LOCATION_SOURCE; // Shows path to where the dump() was called
-//     //Debugger::$logSeverity  = \E_WARNING | \E_NOTICE;
-//     Debugger::$dumpTheme    = 'dark';
-//     Debugger::$showBar      = true;          // (bool) defaults to true
-//     //Debugger::$strictMode   = ~\E_DEPRECATED & ~\E_USER_DEPRECATED & ~\E_NOTICE;
+// Debugger::$logSeverity  = \E_WARNING | \E_NOTICE;
+// Debugger::$dumpTheme    = 'dark';
+// Debugger::$showBar      = true;          // (bool) defaults to true
+// Debugger::$strictMode   = ~\E_DEPRECATED & ~\E_USER_DEPRECATED & ~\E_NOTICE;
 
 //     Debugger::$showLocation = Tracy\Dumper::LOCATION_CLASS | Tracy\Dumper::LOCATION_LINK; // Shows both paths to the classes and link to where the dump() was called
 //     Debugger::$showLocation = false; // Hides additional location information
@@ -69,7 +69,6 @@ require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'variables.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'url_paths.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'settings.php';
 require_once __CONFIG_ROOT__.\DIRECTORY_SEPARATOR.'init.php';
-
 
 if (array_key_exists('flush', $_GET)) {
     Media::$Stash->flush();

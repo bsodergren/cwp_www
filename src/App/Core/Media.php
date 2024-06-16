@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator.
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\Core;
@@ -378,7 +378,7 @@ class Media
     public function get_form_configuration($data)
     {
         $config = $data['config'];
-        list($bind_type, $jog, $carton_code) = str_split($data['bind']);
+        [$bind_type, $jog, $carton_code] = str_split($data['bind']);
 
         switch ($bind_type) {
             case 'S':
@@ -429,12 +429,12 @@ class Media
 
     public function delete_job()
     {
-       $this->delete_form();
-       $this->deleteFromDatabase('media_job');
+        $this->delete_form();
+        $this->deleteFromDatabase('media_job');
 
         //   MediaFileSystem::delete($this->pdf_file);
         //   MediaFileSystem::delete($this->pdf_tmp_file);
-        (new MediaFileSystem())->delete( dirname($this->base_dir,1) );
+        (new MediaFileSystem())->delete(\dirname($this->base_dir, 1));
     }
 
     public function delete_form($form_number = '')
@@ -489,7 +489,7 @@ class Media
 
     public function update_job_number($job_number)
     {
-        $parts = explode(DIRECTORY_SEPARATOR, $this->base_dir);
+        $parts = explode(\DIRECTORY_SEPARATOR, $this->base_dir);
 
         // $directory = str_replace($this->base_dir)
 
@@ -498,10 +498,10 @@ class Media
         array_pop($parts);
         $parts[] = $job_number;
         $parts[] = $Close;
-        $directory = implode(DIRECTORY_SEPARATOR, $parts);
+        $directory = implode(\DIRECTORY_SEPARATOR, $parts);
 
         $data = ['job_number' => $job_number,
-        'base_dir' => $directory];
+            'base_dir' => $directory];
 
         self::$explorer->table('media_job')->where('job_id', $this->job_id)->update($data); // UPDATEME
         $this->job_number = $job_number;
@@ -636,7 +636,7 @@ class Media
         return self::$explorer->table('media_forms')->where('job_id', $job_id)->where('updated', 1); // UPDATEME
     }
 
-    public static function get($name, $timeout = 5, $closure)
+    public static function get($name, $timeout, $closure)
     {
         return self::$Stash->remember($name, $timeout, $closure);
     }

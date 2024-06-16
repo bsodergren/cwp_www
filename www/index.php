@@ -1,14 +1,13 @@
 <?php
 /**
- * CWP Media Load Flag Creator.
+ * CWP Media Load Flag Creator
  */
 
 use CWP\Core\Media;
-use CWP\Core\Bootstrap;
-use CWP\HTML\HTMLDisplay;
 use CWP\Core\MediaSettings;
-use CWP\Template\Pages\Index;
 use CWP\Filesystem\MediaFileSystem;
+use CWP\HTML\HTMLDisplay;
+use CWP\Template\Pages\Index;
 
 require_once '.config.inc.php';
 
@@ -42,7 +41,9 @@ foreach ($results as $k => $row) {
         $customJob = true;
     }
 
-    $pdf_url = HTMLDisplay::getPdfLink($row['base_dir'].'/pdf/'.$row['pdf_file']);
+    //    dump($row);
+    //    $pdf_url = HTMLDisplay::getPdfLink($row['base_dir'].'/pdf/'.$row['pdf_file']);
+    $pdf_url = HTMLDisplay::getPdfLink($row['pdf_file']);
 
     $text_job = $row['job_number'];
     $form = new Formr\Formr('', 'hush');
@@ -54,8 +55,6 @@ foreach ($results as $k => $row) {
     $delete_js = ' onclick="window.open(\'about:blank\',\'delete_popup\',\'width=400,height=400\');" formtarget="delete_popup" ';
 
     $replacement['FORM_HTML_START'] = $form->open('', '', __PROCESS_FORM__, 'post', '', $hidden);
-
-
 
     $num_of_forms = $media->number_of_forms();
     $updates = $media->updatedForms();
@@ -95,7 +94,6 @@ foreach ($results as $k => $row) {
 
     $xlsr_exists = Media::get_exists('xlsx', $row['job_id']);
 
-
     if (true == $xlsr_exists && true == is_dir($xlsx_dir)) {
         $rowdisabled = '';
     }
@@ -104,19 +102,16 @@ foreach ($results as $k => $row) {
     $firstGroup .= Index::firstGroupLink($url, 'Edit Media Drop', $pdisabled);
 
     if (false === $run_refresh) {
-
-        if (true == $xlsr_exists )
-        {
+        if (true == $xlsr_exists) {
             $firstGroup .= Index::firstGroup('view_xlsx', '', '', '', $tooltip.'view_xlsx"');
 
-            if(MediaSettings::GoogleAvail())
-            {
-                $secondGroup.= Index::secondGroup('upload', '', 'Export to Google', '', $tooltip.'Google"');
-                $secondGroup.= Index::firstGroupLink('#', 'Open Google Drive', '', 'onclick="OpenNewWindow(\''.__GOOGLE_SHARE_URL__.'\')"');
+            if (MediaSettings::GoogleAvail()) {
+                $secondGroup .= Index::secondGroup('upload', '', 'Export to Google', '', $tooltip.'Google"');
+                $secondGroup .= Index::firstGroupLink('#', 'Open Google Drive', '', 'onclick="OpenNewWindow(\''.__GOOGLE_SHARE_URL__.'\')"');
             }
 
             if (0 < $updates) {
-                $secondGroup .= Index::secondGroup('update_xlsx','','','update_xlsx_'.$row['job_id'],$js.$pdisabled.$tooltip.'update_xlsx"');
+                $secondGroup .= Index::secondGroup('update_xlsx', '', '', 'update_xlsx_'.$row['job_id'], $js.$pdisabled.$tooltip.'update_xlsx"');
             }
 
             if (__SHOW_ZIP__ == true) {
@@ -126,13 +121,12 @@ foreach ($results as $k => $row) {
                         $firstGroup .= Index::firstGroup('email_zip', '', '', '', $tooltip.'email_zip"');
                     }
                 }
-
             }
 
-            $secondGroup.= Index::secondGroup('create_zip', '', '', '', $tooltip.'create_zip"');
+            $secondGroup .= Index::secondGroup('create_zip', '', '', '', $tooltip.'create_zip"');
             $deleteGroup .= Index::deleteGroup('delete_xlsx', '', '', '', $tooltip.'delete_xlsx"');
         } else {
-            $firstGroup .= Index::firstGroup('create_xlsx','','','create_xlsx_'.$row['job_id'],$js.$pdisabled.$tooltip.'create_xlsx"');
+            $firstGroup .= Index::firstGroup('create_xlsx', '', '', 'create_xlsx_'.$row['job_id'], $js.$pdisabled.$tooltip.'create_xlsx"');
         }
     }
 
@@ -143,7 +137,7 @@ foreach ($results as $k => $row) {
     }
 
     if (false === $run_refresh) {
-        $deleteGroup .= Index::secondGroup('export', '', '' , '', $tooltip.'export_job"');
+        $deleteGroup .= Index::secondGroup('export', '', '', '', $tooltip.'export_job"');
     }
 
     $deleteGroup .= Index::deleteGroup('delete_job', '', '', '', $delete_js.$tooltip.'delete_job"');

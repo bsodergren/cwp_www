@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media tool for load flags.
+ * CWP Media Load Flag Creator
  */
 
 namespace CWP\Media\Import;
@@ -117,17 +117,21 @@ class PDFImport extends MediaImport
                 unset($page_text[$n]);
                 continue;
             }
-
             if (str_contains($row, "','")) {
                 $text = "'".trim($row)."'";
+
 
                 preg_match('/(.*)\'([a-zA-Z ]+)?([0-9 ,]+) ([ a-zA-Z]+)\'/', $text, $output_array);
                 if (true == $output_array[2]) {
                     $output_array[2] = "'".$output_array[2]."',";
                 }
+
                 $text = $output_array[1].$output_array[2]."'".$output_array[3]."','".$output_array[4]."'";
+
                 // $text = preg_replace('/\'([0-9]+),?([0-9]+)\s(.*)\'/', "'$1$2','$3'", $text);
-                $text = preg_replace('/\'([a-zA-Z ]+), ([a-zA-Z ]+)\'/', "'$1','$2'", $text);
+               // $text = preg_replace('/\'([a-zA-Z]+), ([a-zA-Z ]+)\'/', "'$1','$2'", $text);
+                    // dump($text);
+
 
                 $formRow[$letter][] = $text;
                 unset($page_text[$n]);
@@ -210,7 +214,8 @@ class PDFImport extends MediaImport
     public function rowDdata($form_row)
     {
         foreach ($form_row as $i => $rowData) {
-            list($market, $pub, $count, $ship, $tip) = str_getcsv($rowData, ',', "'");
+            [$market, $pub, $count, $ship, $tip] =
+            str_getcsv($rowData, ',', "'");
             $rows[$i] = [
                 'original' => $rowData,
                 'market' => trim($market, "'"),
