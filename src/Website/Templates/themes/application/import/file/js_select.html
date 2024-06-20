@@ -11,7 +11,7 @@ $(document).ready(function()
     $("#pdfFilename").change(function() {
         var val = $(this).val();
         val = basename(val);
-        %%JS_SELECT_STATEMENTS%%
+        {$JS_SELECT_STATEMENTS}
     });
 });
 

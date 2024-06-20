@@ -1,35 +1,35 @@
-<form action="%%__PROCESS_FORM__%%" method="post">
+<form action="{$__PROCESS_FORM__}" method="post">
 
     <div class="container table table-dark">
         <div class="row">
             <div class="fs-3 row">
-                <div class="text-center nowrap col">%%NAME%%</div>
+                <div class="text-center nowrap col">{$NAME}</div>
             </div>
             <div class="row">
                 <div class="text-center nowrap co  w-100 l">
                     <div class="btn-group d-flex w-100 flex-wrap">
-                        %%FORM_LIST_HTML%%
+                        {$FORM_LIST_HTML}
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="text-center nowrap col">
                     <div class="btn-group">
-                        %%FORM_BUTTONS%%
+                        {$FORM_BUTTONS}
                     </div>
                 </div>
             </div>
         </div>
         <div class="table table-success row p-0 m-0 w-100">
             <div class="col">
-                %%FORM_BODY_HTML%%
+                {$FORM_BODY_HTML}
             </div>
         </div>
     </div>
 
-    <input type="hidden" name="form_number" value="%%NEXT_FORM_NUMBER%%">
-    <input type="hidden" name="prev_form_number" value="%%PREV_FORM_NUMBER%%">
+    <input type="hidden" name="form_number" value="{$NEXT_FORM_NUMBER}">
+    <input type="hidden" name="prev_form_number" value="{$PREV_FORM_NUMBER}">
 
-    <input type="hidden" name="job_id" value="%%JOB_ID%%">
-    <input type="hidden" name="view" value="%%NEXT_VIEW%%">
+    <input type="hidden" name="job_id" value="{$JOB_ID}">
+    <input type="hidden" name="view" value="{$NEXT_VIEW}">
 </form>

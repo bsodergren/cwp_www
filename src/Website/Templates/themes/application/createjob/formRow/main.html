@@ -1,9 +1,9 @@
 <div class="container table table-dark">
     <div class="table table-success  aligns-items-center mx-auto p-2 justify-content-center  w-100 row p-2 m-3 rounded bg-success">
-        <div class="text-center nowrap col fw-bold">%%NAME%%</div>
+        <div class="text-center nowrap col fw-bold">{$NAME}</div>
     </div>
 
-    %%ADDROW%%
+    {$ADDROW}
 
     <div class="table table-success w-100  row d-flex aligns-items-center mx-auto p-2 justify-content-center rounded bg-success">
         <div class="col">
@@ -14,8 +14,8 @@
                 <div class="card-body bg-success" style="--bs-bg-opacity: .2;">
                     <div class="text-start nowrap col">
 
-                        %%ROWS%%
-                        <a href="%%BUTTON_URL%%" class="btn btn-success w-100" style="--bs-bg-opacity: .2;" tabindex="-1" role="button" aria-disabled="true">Done</a>
+                        {$ROWS}
+                        <a href="{$BUTTON_URL}" class="btn btn-success w-100" style="--bs-bg-opacity: .2;" tabindex="-1" role="button" aria-disabled="true">Done</a>
 
 
                     </div>

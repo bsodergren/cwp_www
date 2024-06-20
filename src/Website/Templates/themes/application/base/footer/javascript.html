@@ -1,4 +1,4 @@
-<!-- <script src="%%__URL_LAYOUT__%%/js/jquery-3.4.1.min.js"></script> -->
+<!-- <script src="{$__URL_LAYOUT__}/js/jquery-3.4.1.min.js"></script> -->
 <script type="text/javascript">
     const writeLog = function (msg) {
         let date = new Date();
@@ -6,9 +6,9 @@
     };
     $(function () {
         setInterval(function () {
-            $('.auto_refresh').load('%%__UPDATER_VERSION__%%');
+            $('.auto_refresh').load('{$__UPDATER_VERSION__}');
             writeLog("checking updates");
-        },%%__UPDATER_REFRESH__%%);
+        },{$__UPDATER_REFRESH__});
     });
 
     document.querySelectorAll("#job_number").forEach(function (node) {

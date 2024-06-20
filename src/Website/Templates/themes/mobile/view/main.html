@@ -32,19 +32,19 @@ function copy(elem){
 <div class="container-fluid align-content-center" style="width:700px;">
     <div class="row text-center">
         <span>Excel files are located in the following directory</span>
-        <span class="btn rounded-pill bg-secondary" onclick="copy(this)">%%EXCEL_DIRECTORY%%</span>
+        <span class="btn rounded-pill bg-secondary" onclick="copy(this)">{$EXCEL_DIRECTORY}</span>
         <span class="fs-4 rounded-pill bg-danger"></span>
     </div>
 
     <div class="row">
-        %%FORM_LIST_HTML%%
+        {$FORM_LIST_HTML}
     </div>
     <div class="row">
         <p></p>
     </div>
 
     <div class="row">
-        %%EXCEL_LINK%%
+        {$EXCEL_LINK}
     </div>
     <div class="row">
         <p></p>
@@ -56,7 +56,7 @@ function copy(elem){
     </div>
 -->
     <div class="row">
-        %%SHEET_LIST_HTML%%
+        {$SHEET_LIST_HTML}
     </div>
     <div class="row">
         <p></p>
@@ -64,7 +64,7 @@ function copy(elem){
     <div class="row">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="group">
-                %%SHEET_LINKS%%
+                {$SHEET_LINKS}
             </div>
         </div>
     </div>
@@ -72,6 +72,6 @@ function copy(elem){
         <p></p>
     </div>
     <div class="row" id="printableArea">
-        %%MESSAGE%%
+        {$MESSAGE}
     </div>
 </div>

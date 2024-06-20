@@ -18,7 +18,7 @@ class Layout
         Render::echo('base/header/header', $params);
 
         if (OptionIsTrue(NAVBAR)) {
-            $crumbs ='';// (new Functions())->createBreadcrumbs();
+            $crumbs = (new Functions())->createBreadcrumbs();
             \define('BREADCRUMB', $crumbs);
             self::Navbar($params);
         }

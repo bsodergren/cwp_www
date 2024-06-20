@@ -1,7 +1,7 @@
 <div class="input-group mb-3">
-    <label class="input-group-text col-4 col-form-label" for="%%SELECT_ID%%">%%SELECT_DESC%%</label>
-    <select name="%%SELECT_NAME%%" class="form-select col-8" id="%%SELECT_ID%%">
+    <label class="input-group-text col-4 col-form-label" for="{$SELECT_ID}">{$SELECT_DESC}</label>
+    <select name="{$SELECT_NAME}" class="form-select col-8" id="{$SELECT_ID}">
         <option value="">-- select one -- </option>
-        %%SELECT_OPTIONS%%
+        {$SELECT_OPTIONS}
     </select>
 </div>

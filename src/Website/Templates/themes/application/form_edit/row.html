@@ -1,23 +1,23 @@
 <tr>
     <td align="center" valign="middle">
-        %%DELETE_CHECKBOX%%
+        {$DELETE_CHECKBOX}
     </td>
     <td align="center" valign="middle">
-        %%SPLIT_CHECKBOX%%
+        {$SPLIT_CHECKBOX}
     </td>
     <td width="80">
-        <input class="formbox w-100" type="text" name="%%ROW_ID%%_formletter" id="%%ROW_ID%%_formletter"  placeholder="%%ROW_LETTER%%" value=""  onclick="editPlaceholder(this.id)" 
+        <input class="formbox w-100" type="text" name="{$ROW_ID}_formletter" id="{$ROW_ID}_formletter"  placeholder="{$ROW_LETTER}" value=""  onclick="editPlaceholder(this.id)"
         onfocusout="checkValue(this.id)">
     </td>
     <td nowrap>
-        <span class="text-capitalize f-6">%%ROW_DESC%%</span>
+        <span class="text-capitalize f-6">{$ROW_DESC}</span>
     </td>
     <td nowrap width="100">
-        <input class="formbox  w-100" type="text" name="%%ROW_ID%%_pcscount" placeholder="%%PCS_COUNT%%" value="" onclick="editPlaceholder(this.id)" onfocusout="checkValue(this.id)">
+        <input class="formbox  w-100" type="text" name="{$ROW_ID}_pcscount" placeholder="{$PCS_COUNT}" value="" onclick="editPlaceholder(this.id)" onfocusout="checkValue(this.id)">
     </td>
     <td nowrap>
-        %%RADIO_BTNS%%
+        {$RADIO_BTNS}
     </td>
-    <td nowrap>%%FT_VALUE%%
+    <td nowrap>{$FT_VALUE}
     </td>
 </tr>

@@ -6,29 +6,29 @@
     <meta name="viewport"
       content="user-scalable=no,width=device-width" />
 
-    <meta name="description" content="%%APP_DESCRIPTION%%">
-    <meta name="author" content="%%APP_OWNER%%">
-    <title>%%APP_NAME%% | %%TITLE%%</title>
+    <meta name="description" content="{$APP_DESCRIPTION}">
+    <meta name="author" content="{$APP_OWNER}">
+    <title>{$APP_NAME} | {$TITLE}</title>
 
-    <link rel="icon" type="image/png" href="%%FAV_ICON%%">
+    <link rel="icon" type="image/png" href="{$FAV_ICON}">
     <!-- Custom styles -->
 
 
-    %%BOOTSTRAP%%
-    %%DEFAULT_CSS%%
-    %%JS_SRC%%
-    %%CSS_SRC%%
+    {$BOOTSTRAP}
+    {$DEFAULT_CSS}
+    {$JS_SRC}
+    {$CSS_SRC}
 
-    %%CUSTOM_CSS%%
-    %%__CUSTOM_JS__%%
+    {$CUSTOM_CSS}
+    {$__CUSTOM_JS__}
 
 </head>
 
-<body %%__ONLOAD__%%>
+<body {$__ONLOAD__}>
 
-    %%__NAVBAR__%%
+    {$__NAVBAR__}
 
-    %%__MSG__%%
+    {$__MSG__}
 
     <main role="main" class="container mt-1">
         <!-- end of header.php -->

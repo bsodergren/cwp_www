@@ -1,11 +1,11 @@
-<form action="%%__PROCESS_FORM__%%" method="POST">
-    <input type="hidden" name="job_id" value="%%JOB_ID%%">
-    <input type="hidden" name="form_number" value="%%FORM_NUMBER%%">
+<form action="{$__PROCESS_FORM__}" method="POST">
+    <input type="hidden" name="job_id" value="{$JOB_ID}">
+    <input type="hidden" name="form_number" value="{$FORM_NUMBER}">
     <table class="table table-success table-striped">
 
-        %%TABLE_HEADER%%
+        {$TABLE_HEADER}
 
-        %%TABLE_BODY%%
+        {$TABLE_BODY}
 
     </table>
 </form>

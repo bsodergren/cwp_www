@@ -1,8 +1,8 @@
-<form action="%%__PROCESS_FORM__%%" method="post" class="w-50  rounded bg-success p-2" style="--bs-bg-opacity: .5;">
-    <input type="hidden" name="job_id" value="%%JOB_ID%%">
+<form action="{$__PROCESS_FORM__}" method="post" class="w-50  rounded bg-success p-2" style="--bs-bg-opacity: .5;">
+    <input type="hidden" name="job_id" value="{$JOB_ID}">
     <input type="hidden" name="send_mail" value="send">
-    %%FORM_HIDDEN%%
-    %%DROPDOWN_EMAILS%%
+    {$FORM_HIDDEN}
+    {$DROPDOWN_EMAILS}
 
     <div class="row gy-2 gx-3 mb-2">
         <div class="col-auto">

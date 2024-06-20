@@ -1,12 +1,12 @@
 <div class="row gy-1 gx-3 mb-1">
     <div class="col-5">
-        <input type="hidden" name="id%%NAME_ID%%" value="%%EMAIL_ID%%">
-        <input type="text" class="form-control" id="autoSizingInput" placeholder="%%EMAIL_NAME%%" value="" onclick="editPlaceholder(this.id)" name="name%%NAME_ID%%">
+        <input type="hidden" name="id{$NAME_ID}" value="{$EMAIL_ID}">
+        <input type="text" class="form-control" id="autoSizingInput" placeholder="{$EMAIL_NAME}" value="" onclick="editPlaceholder(this.id)" name="name{$NAME_ID}">
     </div>
     <div class="col-5 ">
         <div class="input-group">
-            <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="%%EMAIL%%" value="" onclick="editPlaceholder(this.id)" name="email%%NAME_ID%%">
+            <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="{$EMAIL}" value="" onclick="editPlaceholder(this.id)" name="email{$NAME_ID}">
         </div>
     </div>
-    %%DELETE_BOX%%
+    {$DELETE_BOX}
 </div>

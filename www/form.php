@@ -1,16 +1,27 @@
 <?php
-/**
- * CWP Media Load Flag Creator.
- */
 
 use CWP\Core\Media;
 use CWP\Core\MediaSettings;
-use CWP\HTML\HTMLDisplay;
-use CWP\Process\Form;
-use CWP\Template\Template;
-use CWP\Utils\MediaDevice;
+use Nette\Utils\FileSystem;
+use UTMTemplate\HTML\Elements;
+use  CWPDisplay\Template\Render;
+use CWPDisplay\Template\Display;
+use CWPDisplay\Template\HTML\Elements as MediaElements;
+/**
+ * CWP Media Load Flag Creator
+ */
+
 
 require_once '.config.inc.php';
+
+ $form_number = $_REQUEST['form_number'];
+
+$job_id=$_REQUEST['job_id'];
+
+$media = new Media();
+$media->job_id = $job_id;
+
+
 // array:2 [▼
 //   "job_id" => "1"
 //   "form_number" => "2"
@@ -29,19 +40,14 @@ if (count($_POST) > 0) {
         $form->reload();
     }
 }
-define('TITLE', 'Form Editor');
-$display = new HTMLDisplay();
-// $media = new Media();
-// $template = new Template();
 
-MediaDevice::getHeader();
 
 $row_html = '';
+$template = '';
 $letter_html = '';
 $page_form_html = '';
 $dropdown_links = '';
 $next_view = 'Next';
-$media->job_id = $_REQUEST['job_id'];
 
 $max_forms = $media->get_max_drop_forms();
 $first_form = $media->get_first_form();
@@ -95,12 +101,12 @@ foreach ($new_forms as $form_number => $parts) {
     $next_button = 'Next';
 
     if ($current_form_number != $first_form) {
-        $dropdown_links .= template::GetHTML('/form/page_form_submit', [
+        $dropdown_links .= Render::html('/pages/form/page_form_submit', [
             'PAGE_CLASS' => ' btn-info',
             'BUTTON_VALUE' => 'Previous',
         ]);
 
-        // $dropdown_links .= template::GetHTML('/form/page_links', [
+        // $dropdown_links .= Render::html('/form/page_links', [
         //     'PAGE_CLASS'       => ' btn-info',
         //     'PAGE_FORM_URL'    => __URL_PATH__.'/form.php?job_id='.$media->job_id.'&form_number='.$prev_form_number,
         //     'PAGE_FORM_NUMBER' => 'Previous',
@@ -118,26 +124,26 @@ foreach ($new_forms as $form_number => $parts) {
         $page_form_number = $list_form_number->form_number;
         if ($current_form_number == $page_form_number) {
             // if (true == Media::get_exists('xlsx', $row['job_id'])) {
-            //     $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
+            //     $dropdown_links .= Render::html('/form/dropdown/dropdown_link', [
             //         'PAGE_CLASS'       => ' btn-success',
             //         'PAGE_FORM_URL'    => __URL_PATH__.'/view.php?job_id='.$media->job_id.'&form_number='.$page_form_number,
             //         'PAGE_FORM_NUMBER' => 'View',
             //     ]);
             // }
             $edit_url = __URL_PATH__.'/form_edit.php?job_id='.$media->job_id.'&form_number='.$page_form_number;
-            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
+            $dropdown_links .= Render::html('/pages/form/dropdown/dropdown_link', [
                 'PAGE_CLASS' => ' btn-danger',
                 'PAGE_JS' => ' onClick="OpenNewWindow(\''.$edit_url.'\')" ',
                 // 'PAGE_FORM_URL' => $edit_url,
                 'PAGE_FORM_NUMBER' => 'Edit',
-            ], false, false);
-            $dropdown_links .= template::GetHTML('/form/dropdown/dropdown_link', [
+            ]);
+            $dropdown_links .= Render::html('/pages/form/dropdown/dropdown_link', [
                 'PAGE_CLASS' => ' btn-warning',
                 'PAGE_FORM_URL' => __URL_PATH__.'/update.php?job_id='.$media->job_id.'&form_number='.$page_form_number,
                 'PAGE_FORM_NUMBER' => 'Update',
-            ], false, false);
+            ]);
 
-            //  $page_form_html .= template::GetHTML('/form/dropdown/dropdown', ['DROPDOWN_LINKS'=>$dropdown_links,'DROPDOWN_TEXT_FORM' => $page_form_number ]);
+            //  $page_form_html .= Render::html('/form/dropdown/dropdown', ['DROPDOWN_LINKS'=>$dropdown_links,'DROPDOWN_TEXT_FORM' => $page_form_number ]);
             $page_html_params = [
                 'PAGE_CLASS' => ' btn-primary',
                 'PAGE_FORM_URL' => __URL_PATH__.'/form.php?job_id='.$media->job_id.$form_part,
@@ -150,7 +156,7 @@ foreach ($new_forms as $form_number => $parts) {
                 'PAGE_FORM_NUMBER' => $page_form_number,
             ];
         }
-        $page_form_html .= template::GetHTML('/form/page_links', $page_html_params, false, false);
+        $page_form_html .= Render::html('/pages/form/page_links', $page_html_params);
     }
 
     $form_btn_class = ' btn-info';
@@ -161,17 +167,17 @@ foreach ($new_forms as $form_number => $parts) {
         // $previous_form_html =' ';
         $next_form_number = $current_form_number;
     } else {
-        $page_form_html .= template::GetHTML('/form/page_form_submit', [
+        $page_form_html .= Render::html('/pages/form/page_form_submit', [
             'PAGE_CLASS' => ' btn-success',
             'BUTTON_VALUE' => 'Save Form',
         ]);
-        // $page_form_html .= Template::GetHTML('/form/page_links', [
+        // $page_form_html .= Render::html('/form/page_links', [
         //     'PAGE_CLASS'       => ' btn-warning',
         //     'PAGE_FORM_URL'    => __URL_PATH__.'/update.php?job_id='.$media->job_id,
         //     'PAGE_FORM_NUMBER' => 'Update',
         // ]);
     }
-    $dropdown_links .= template::GetHTML('/form/page_form_submit', [
+    $dropdown_links .= Render::html('/pages/form/page_form_submit', [
         'PAGE_CLASS' => $form_btn_class,
         'BUTTON_VALUE' => $next_button,
     ]);
@@ -179,7 +185,7 @@ foreach ($new_forms as $form_number => $parts) {
     $form_html['FORM_URL'] = __URL_PATH__.'/form.php';
     $form_html['NAME'] = $form_array['job_number'].' - Form Number '.$form_number.' of '.$max_forms.' - '.$config[$form_number]['config'].' - '.$config[$form_number]['bind'];
     $form_html['CHECKBOX_PARTS'] = '';
-
+    $form_html['CHECKBOX_JAVA'] = '';
     $columns = 12 / count($parts);
     $ColClass = 'col-'.$columns;
 
@@ -225,19 +231,19 @@ foreach ($new_forms as $form_number => $parts) {
         ];
 
         // dump([$radio_check_array]);
-        $form_html['CHECKBOX_PARTS'] .= Template::GetHTML('form/quickselect/letter_select', $radio_check_array, false, false);
-        $form_html['CHECKBOX_JAVA'] .= Template::GetHTML('form/quickselect/javascript', $radio_check_array, false, false);
+        $form_html['CHECKBOX_PARTS'] .= Render::html('/pages/form/quickselect/letter_select', $radio_check_array );
+        $form_html['CHECKBOX_JAVA'] .= Render::html('/pages/form/quickselect/javascript', $radio_check_array);
         // $form_html['CHECKBOX_PARTS'] .= $display->draw_checkbox('quickselect['.$form_letter.'_'.$list.']', 'Front', $form_letter, 'form/checkbox');
-        $row_html = $display->display_table_rows($form_data, $form_letter);
+        $row_html = MediaElements::display_table_rows($form_data, $form_letter);
         $nobindery = MediaSettings::skipTrimmers($form_data);
-        $checkbox = $display->draw_checkbox('nobindery_'.$form_number, $nobindery, 'No Trimmers', 'form/checkbox');
-        $template->template('form/header', ['NUMBER' => $form_number, 'LETTER' => $form_letter, 'TRIMMERS' => $checkbox,
-            'ROWS' => $row_html], false, false);
+        $checkbox = MediaElements::draw_checkbox('nobindery_'.$form_number, $nobindery, 'No Trimmers', 'form/checkbox');
+        $template .= Render::html('/pages/form/header', ['NUMBER' => $form_number, 'LETTER' => $form_letter, 'TRIMMERS' => $checkbox,
+            'ROWS' => $row_html]);
 
         // $template->clear();
     }
-    $letter_html .= $template->return();
-    $template->clear();
+    $letter_html .= $template;
+
 }
 
 $form_html['FORM_NUMBER'] = $form_number;
@@ -250,9 +256,5 @@ $form_html['FORM_BODY_HTML'] = "\n<!-- --------------------- -->\n".$letter_html
 $form_html['FORM_BUTTONS'] = $dropdown_links;
 $form_html['FORM_LIST_HTML'] = $page_form_html;
 
-$template->clear();
-
-$template->template('form/main', $form_html, false, false);
-$template->render();
-
-MediaDevice::getFooter();
+$html = Render::html('pages/form/main',$form_html);
+Render::Display($html);

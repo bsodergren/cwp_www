@@ -5,7 +5,7 @@
         </tr>
     </thead>
     <tbody>
-        %%MEDIA_JOB_ROW%%
+        {$MEDIA_JOB_ROW}
     </tbody>
 </table>
 <script type="text/javascript">
@@ -28,7 +28,7 @@
 
         $.ajax({
             type: "post",
-            url: "%%__PROCESS_FORM__%%",
+            url: "{$__PROCESS_FORM__}",
             data:
             {
                 'divClass': divClass,

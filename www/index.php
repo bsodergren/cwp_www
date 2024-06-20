@@ -5,20 +5,21 @@
 
 use CWP\Core\Media;
 use CWP\Core\MediaSettings;
-use CWP\Filesystem\MediaFileSystem;
-use  CWPDisplay\HTML\HTMLDisplay;
-use  CWPDisplay\Template\Pages\Index;
-
-use  CWPDisplay\Template\Display\Display;
-use  CWPDisplay\Template\Render;
 use Nette\Utils\FileSystem;
 use UTMTemplate\HTML\Elements;
+use  CWPDisplay\Template\Render;
+
+use CWPDisplay\Template\Display;
+use  CWPDisplay\HTML\HTMLDisplay;
+use CWP\Filesystem\MediaFileSystem;
+use  CWPDisplay\Template\Pages\Index;
 
 require_once '.config.inc.php';
 
 
 
 
+// Display::$CrubURL['grid'] = 'grid.php';
 
 
 // utmdump($results);
@@ -148,7 +149,7 @@ require_once '.config.inc.php';
 // //     $jobArray[] = $replacement;
 // }
 
-$html = Render::html('pages/index/body', ['TextBlocks' => $groups]);
+$html = Render::html('pages/index/body');
 // $html = Render::html('editor/main', [ 'WordMap' => $text]);
 
 Render::Display($html);

@@ -1,11 +1,11 @@
 <div class="table table-success w-100  row d-flex aligns-items-center rounded mx-auto p-2 justify-content-center  bg-success">
     <div class="col">
-        <form action="%%__PROCESS_FORM__%%" method="post" class="rounded">
-            %%HIDDEN_FIELDS%%
+        <form action="{$__PROCESS_FORM__}" method="post" class="rounded">
+            {$HIDDEN_FIELDS}
 
             <div class="card w-100   bg-success" style="--bs-bg-opacity: .5;">
                 <div class="card-header bg-success  text-black fw-bold">
-                    Form %%FORM_NUMBER%% Details
+                    Form {$FORM_NUMBER} Details
 
                 </div>
 
@@ -25,8 +25,8 @@
                         <div class="row ">
                             <input type="hidden" name="FORM_PROCESS" value="createJob">
                             <input type="hidden" name="action" value="addRow">
-                            <input type="hidden" name="job_id" value="%%JOB_ID%%">
-                            <input type="hidden" name="form_number" value="%%FORM_NUMBER%%">
+                            <input type="hidden" name="job_id" value="{$JOB_ID}">
+                            <input type="hidden" name="form_number" value="{$FORM_NUMBER}">
                             <div class="col-1">
                                 <input type="text" name="letter" class="form-control" id="rowLetter" />
                             </div>
@@ -61,5 +61,5 @@
 </div>
 
 <script>
-    %%AUTOCOMPLETE_JS%%
+    {$AUTOCOMPLETE_JS}
 </script>

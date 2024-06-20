@@ -14,10 +14,24 @@ use UTMTemplate\HTML\Elements;
 
 trait JobMenu
 {
+    private static $ACTION_URLS = [
+        'edit_form' => 'form.php',
+        'view_xlsx' => 'view.php',
+        'create_xlsx' => 'process.php',
+        'create_zip' => 'process.php',
+        'email' => 'mail.php',
+        'export_google' => 'process.php',
+        'delete_job' => 'delete_job.php',
+        'delete_xlsx' => 'process.php',
+        'delete_zip' => 'process.php',
+    ];
     private static $PageSortDir = 'elements/JobMenu';
+
+    public static $jobMenu = [];
 
     public static function displayJobMenus()
     {
+        $jobBlocks = '';
         $table = Media::$explorer->table('media_job'); // UPDATEME
         $results = $table->fetchAssoc('job_id');
         $cnt = $table->count('*');
@@ -25,11 +39,10 @@ trait JobMenu
             echo Elements::JavaRefresh('/import.php', 0);
             exit;
         }
-        utmdump($results);
 
         $postOptions = ['view XLS' => 'view'];
         foreach ($results as $k => $row) {
-            $accordian = [];
+            self::$jobMenu = ['ACCORDIAN_LINKS' => ''];
 
             $media = new Media($row);
             $mediaDir = new MediaFileSystem($media->pdf_file, $media->job_number);
@@ -38,48 +51,55 @@ trait JobMenu
             $xlsx_dir = $media->xlsx_directory;
             $xlsr_exists = Media::get_exists('xlsx', $row['job_id']);
 
-            $accordian['ACCORDIAN_ID'] = Display::RandomId('accordian_');
-            $accordian['ACCORDIAN_HEADER'] = $row['job_number'] . ' '.$row['close'];
+            self::$jobMenu['ACCORDIAN_ID'] = Display::RandomId('accordian_');
+            self::$jobMenu['ACCORDIAN_HEADER'] = $row['job_number'].' '.$row['close'];
 
-            $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'edit_form', 'Edit Form');
+            self::getUrl($row['job_id'], 'edit_form', 'Edit Form');
 
             if (true == $xlsr_exists) {
-                $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'view_xlsx', 'View XLSX');
+                self::getUrl($row['job_id'], 'view_xlsx', 'View XLSX');
             } else {
-                $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'view_xlsx', 'Create XLSX','warning');
-
+                self::getUrl($row['job_id'], 'create_xlsx', 'Create XLSX', 'success');
             }
             if (MediaSettings::GoogleAvail()) {
-                $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'export_google', 'export to google','success');
-                $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'open_google', 'Open  Google drive');
+                self::getUrl($row['job_id'], 'export_google', 'export to google', 'success');
+                self::getUrl($row['job_id'], 'open_google', 'Open  Google drive');
             }
             if (__SHOW_ZIP__ == true) {
                 if ($mediaDir->exists($zip_file)) {
-                    $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'view_xlsx', 'Delete zip','danger');
+                    self::getUrl($row['job_id'], 'delete_zip', 'Delete zip', 'danger');
 
                     if (__SHOW_MAIL__ == true) {
-                        $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'view_xlsx', 'Email zip');
+                        self::getUrl($row['job_id'], 'email', 'Email zip');
                     }
                 } else {
-                    $accordian['ACCORDIAN_LINKS'] .= self::getUrl($row['job_id'], 'view_xlsx', 'Create zip','warning');
+                    self::getUrl($row['job_id'], 'create_zip', 'Create zip', 'warning');
                 }
             }
 
             // $accordian['ACCORDIAN_LINKS'].= getUrl($row['job_id'],$action,$text);
 
-            $jobBlocks .= Render::html(self::$PageSortDir.'/jobList', $accordian);
+            $jobBlocks .= Render::html(self::$PageSortDir.'/jobList', self::$jobMenu);
         }
 
-        return Render::html(self::$PageSortDir.'/sort', ['SORT_HTML' => $jobBlocks]);
+        return $jobBlocks;
     }
 
-    private static function getUrl($jobid, $action, $text,$class='default')
+    private static function getUrl($jobid, $action, $text, $class = 'default')
     {
-        return Render::html(self::$PageSortDir.'/jobItem', [
+        $url = self::geturlfromAction($action) ."?job_id=".$jobid."&action=".$action;
+
+        self::$jobMenu['ACCORDIAN_LINKS'] .= Render::html(self::$PageSortDir.'/jobItem', [
             'jobId' => $jobid,
             'action' => $action,
             'NAME' => $text,
-            'class' => 'nav-bg-'.$class,
+            //  'class' => 'nav-bg-'.$class,
+            'url' => $url,
         ]);
+    }
+
+    private static function geturlfromAction($action)
+    {
+        return __URL_ROOT__.'/'.self::$ACTION_URLS[$action];
     }
 }

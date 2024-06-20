@@ -1,9 +1,11 @@
 <?php
+/**
+ * CWP Media Load Flag Creator
+ */
 
-namespace  CWPDisplay\Template\Functions\Traits;
+namespace CWPDisplay\Template\Functions\Traits;
 
-use  CWPDisplay\Template\Functions\Functions;
-use  CWPDisplay\Template\Render;
+use CWPDisplay\Template\Render;
 use Symfony\Component\Yaml\Yaml;
 use UTMTemplate\Template;
 
@@ -82,35 +84,30 @@ trait Navbar
         ]);
     }
 
-    public static function navbar_leftlinks(){
-        $library_links  = '';
+    public static function navbar_leftlinks()
+    {
+        $library_links = '';
         $links = [
-            ['name' => 'home','url' => 'home.php'],
-            ['name' => 'home3','url' => 'home.php'],
-            ['name' => 'home4','url' => 'home.php'],
-
+            ['name' => 'home', 'url' => 'home.php'],
+            ['name' => 'home3', 'url' => 'home.php'],
+            ['name' => 'home4', 'url' => 'home.php'],
         ];
-        foreach($links as $row){
-        $library_links .= Render::html('base/navbar/library_links', [
+        foreach ($links as $row) {
+            $library_links .= Render::html('base/navbar/library_links', [
+                'MENULINK_TEXT' => $row['name'],
+                'DROPDOWN_URL' => $row['url'],
+            ]);
+        }
 
-            'MENULINK_TEXT' => $row['name'],
-            'DROPDOWN_URL' => $row['url'],
-        ]);
+        return $library_links;
     }
-        return  $library_links ;
 
-
-
-    }
     public static function navbar_links()
     {
         $html = '';
         global $_REQUEST;
 
         $navigation_link_array = Yaml::parseFile(__ROUTE_NAV__, Yaml::PARSE_CONSTANT);
-        if (\defined('PLAYLIST_DROPDOWN')) {
-            $navigation_link_array['playlist']['dropdown'] = PLAYLIST_DROPDOWN;
-        }
 
         foreach ($navigation_link_array as $name => $link_array) {
             $is_active = '';
@@ -118,43 +115,24 @@ trait Navbar
                 $html .= self::dropdown($link_array);
                 continue;
             }
-            if (true == $link_array['studio']) {
-                if (@$_REQUEST['studio']) {
-                    $link_array['url'] = $link_array['url'].'?studio='.$_REQUEST['studio'];
-                }
-                if (@$_REQUEST['substudio']) {
-                    $link_array['url'] = $link_array['url'].'?substudio='.$_REQUEST['substudio'];
-                }
-            }
 
             if (__THIS_PAGE__ == basename($link_array['url'], '.php')) {
                 $is_active = ' active';
             }
 
-            if (\array_key_exists('days', $link_array)) {
-                if (__THIS_PAGE__ == 'recent') {
-                    $is_active .= ' recent-days-link';
-                }
-            }
             $favPopup = '';
             $template = 'menu_link';
-            if (\array_key_exists('js', $link_array)) {
-                $favPopup = ' onclick="popup(\''.__URL_ROOT__.'/video.php?favorites=true\', \'video_popup\')" ';
-                $link_array['url'] = null;
-                $template = 'menu_popup';
-            }
 
             $array = [
                 'MENULINK_URL' => $link_array['url'],
                 'MENULINK_JS' => $favPopup,
                 'MENULINK_TEXT' => $link_array['text'],
                 'Icon_Class' => self::navbarIcon($link_array),
-               // '' => ' fa-home',
+                // '' => ' fa-home',
                 'ACTIVE' => $is_active,
             ];
 
             $url_text = Render::html('base/navbar/'.$template, $array);
-
 
             $html = $html.$url_text."\n";
         } // end foreach
