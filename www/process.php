@@ -9,4 +9,5 @@ define('PROCESS', true);
 
 require '.config.inc.php';
 
+utmdump($_REQUEST);
 MediaProcess::Check($media);

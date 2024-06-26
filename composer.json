@@ -46,10 +46,11 @@
         "phlak/stash": "^7.0",
         "symfony/stopwatch": "^6.3",
         "bsodergren/raintpl": "dev-master",
-        "symfony/console": "^7.0",
+        "symfony/console": "^6.3",
         "doctrine/orm": "^2.17",
         "doctrine/migrations": "^3.7",
-        "nesbot/carbon": "^2.72"
+        "nesbot/carbon": "^2.72",
+        "bsodergren/utm": "dev-main"
 
 
     }
