@@ -44,6 +44,7 @@ define('__TPL_CACHE_DIR__', __CACHE_DIR__.\DIRECTORY_SEPARATOR.'template');
 
 // define('__CMD_ROOT__', __CWP_SOURCE__.\DIRECTORY_SEPARATOR.'Cmd');
 // define('__CMD_CONFIG__', __CMD_ROOT__.\DIRECTORY_SEPARATOR.'Config');
+Utm::LoadEnv();
 
 $boot = new Bootstrap(new Config(__ROOT_DIRECTORY__.\DIRECTORY_SEPARATOR.'config.ini'));
 
@@ -58,8 +59,6 @@ Utm::$SHOW_HTML_DUMP = true;
 
 register_shutdown_function('utmddump');
 utminfo('---- START OF PAGE VIEW '.__SCRIPT_NAME__);
-
-EnvLoader::LoadEnv(__ROOT_DIRECTORY__)->load();
 
 ini_set('max_execution_time', '600');
 // register_shutdown_function([MediaStopWatch::class, 'flushLogs']);
