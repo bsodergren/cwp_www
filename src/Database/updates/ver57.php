@@ -5,6 +5,6 @@
 
 $drop_column = [
     'form_data' => [
-        'no_bindery','test'
+        'no_bindery'
     ],
 ];

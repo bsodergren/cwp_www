@@ -130,6 +130,9 @@ class Template
         if (\is_array($params)) {
             foreach ($params as $key => $value) {
                 $key = '%%'.strtoupper($key).'%%';
+                if($value === null){
+                    $value = '';
+                }
                 $text = str_replace($key, $value, $text);
             }
 

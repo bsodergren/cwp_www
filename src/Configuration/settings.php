@@ -62,8 +62,8 @@ Bootstrap::setFileDriver();
 
 
 if (Media::$Google || Media::$Dropbox) {
-//    define('__FILES_DIR__', '');
-    define('__FILES_DIR__', __HTTP_ROOT__.Bootstrap::$CONFIG['server']['media_files']);
+   define('__FILES_DIR__', '');
+    // define('__FILES_DIR__', __HTTP_ROOT__.Bootstrap::$CONFIG['server']['media_files']);
 
 } else {
     if (array_key_exists('media_files', Bootstrap::$CONFIG['server'])) {

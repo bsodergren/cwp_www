@@ -61,7 +61,7 @@ class Calculator
             $package = 'full';
         }
 
-        if($form_details['no_bindery'] == 0) {
+        if($form_details['no_trimmers'] == 0) {
         if ('back' == $delivery) {
             if ($pcs <= $max_half) {
                 $package = 'half';

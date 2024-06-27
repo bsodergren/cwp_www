@@ -1,6 +1,6 @@
 <?php
 /**
- * CWP Media Load Flag Creator.
+ * CWP Media Load Flag Creator
  */
 
 require_once '.config.inc.php';
@@ -14,31 +14,36 @@ use CWP\Spreadsheet\XLSXViewer;
 use CWP\Template\Pages\View;
 use CWP\Template\Template;
 use CWP\Utils\MediaDevice;
+$page_form_html = '';
+$viewer = null;
+$params = ['FORM_LIST_HTML'=>''];
 
-if ('email' == $_REQUEST['action']) {
-    define('TITLE', 'Email excel zip file');
+if (array_key_exists('action', $_REQUEST)) {
+    if ('email' == $_REQUEST['action']) {
+        define('TITLE', 'Email excel zip file');
 
-    $table = Media::$explorer->table('email_list'); // UPDATEME
-    $table->select('id,name,email');
-    foreach ($table as $id => $row) {
-        $optionArray[$row->name] = $row->email;
+        $table = Media::$explorer->table('email_list'); // UPDATEME
+        $table->select('id,name,email');
+        foreach ($table as $id => $row) {
+            $optionArray[$row->name] = $row->email;
+        }
+
+        $select_html = HTMLForms::draw_select('email', 'Bind Style', $optionArray, $null_style, '');
+
+        MediaDevice::getHeader();
+
+        if (isset($_REQUEST['job_id'])) {
+            $template->render('mail/main', [
+                'FORM_HIDDEN' => HTMLForms::draw_hidden('form_number', $_REQUEST['form_number']).
+                HTMLForms::draw_hidden('action', 'send'),
+
+                'JOB_ID' => $_REQUEST['job_id'],
+                'DROPDOWN_EMAILS' => $select_html]);
+        }
+
+        MediaDevice::getFooter();
+        exit;
     }
-
-    $select_html = HTMLForms::draw_select('email', 'Bind Style', $optionArray, $null_style, '');
-
-    MediaDevice::getHeader();
-
-    if (isset($_REQUEST['job_id'])) {
-        $template->render('mail/main', [
-                    'FORM_HIDDEN' => HTMLForms::draw_hidden('form_number', $_REQUEST['form_number']).
-                    HTMLForms::draw_hidden('action', 'send'),
-
-            'JOB_ID' => $_REQUEST['job_id'],
-             'DROPDOWN_EMAILS' => $select_html]);
-    }
-
-    MediaDevice::getFooter();
-    exit;
 }
 
 define('TITLE', 'View Form');
@@ -105,9 +110,9 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
             $class
         );
 
-         if (0 == $idx % 9 && $idx > 0) {
+        if (0 == $idx % 9 && $idx > 0) {
             $params['FORM_LIST_HTML'] .= View::FormButtonList($page_form_html);
-           $page_form_html = '';
+            $page_form_html = '';
         }
         ++$idx;
     }
@@ -158,9 +163,10 @@ if (true == $finder->dirExists($media->xlsx_directory)) {
         }
 
         $params['MESSAGE'] = $viewer->getExcelPage();
+           $TplTemplate->assign('custom_css', $viewer->custom_css);
     }
 
-    $TplTemplate->assign('custom_css', $viewer->custom_css);
+
     $TplTemplate->assign('Array', $params);
     $TplTemplate->draw('body');
 } else {

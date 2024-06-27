@@ -59,10 +59,12 @@ if (1 == __IMAP_ENABLE__) {
 $pdfArray = [];
 $dirs = $locations->getDirectory('upload', false);
 $results = $locations->getContents($dirs);
+if(count($results) > 0){
 foreach ($results as $key => $pdf_file) {
     if (!in_array($pdf_file, $files)) {
         $pdfArray[] = ['name' => basename($pdf_file), 'filename' => $pdf_file];
     }
+}
 }
 
 if (count($pdfArray) > 0) {

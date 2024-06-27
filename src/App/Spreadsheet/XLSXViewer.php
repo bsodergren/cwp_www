@@ -21,12 +21,12 @@ class XLSXViewer
 
     public $file_id;
 
-    public $params;
+    public $params = ['SHEET_LIST_HTML'=>'','SHEET_LINKS' =>'','EXCEL_LINK'=>''];
     public $PageLinks;
     public $QuickSheet;
     // public $QuickSheet;
     // public $QuickSheet;
-    public $custom_css;
+    public $custom_css = '';
 
     public $reader;
     public $spreadsheet;
@@ -97,7 +97,13 @@ class XLSXViewer
                 $class = 'disabled';
             }
 
-            [$name,$_] = explode(' ', $sheet_name);
+
+            utmdump($sheet_name);
+            if(str_contains($sheet_name,' ')){
+                [$name,$_] = explode(' ', $sheet_name);
+            } else {
+                $name = $sheet_name;
+            }
             [$sheetName,$former] = explode('_', $name);
             if (!isset($last)) {
                 $last = '';

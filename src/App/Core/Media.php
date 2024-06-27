@@ -205,7 +205,7 @@ class Media
                     $combinded = [];
                     $count = 0;
                     foreach ($parts as $idx => $row) {
-                        if (0 == $row['no_bindery']) {
+                        if (0 == $row['no_trimmers']) {
                             $count = $row['count'] + $count;
                             $combinded[0] = $row;
                             $combinded[0]['count'] = $count;
@@ -372,7 +372,7 @@ class Media
         }
 
         $sql = 'SELECT f.id,f.job_id,f.form_number,f.form_letter,f.market,f.pub,f.count,f.ship,f.former,f.face_trim,
-        m.no_bindery,j.job_number, j.pdf_file FROM form_data f, media_job j,  media_forms m
+        m.no_trimmers,j.job_number, j.pdf_file FROM form_data f, media_job j,  media_forms m
         WHERE ( f.job_id = '.$this->job_id.' and j.job_id = '.$this->job_id.$FORM_SEQ.' and m.job_id = f.job_id) '.$sort_query;
         return self::$connection->fetchAll($sql);
     }

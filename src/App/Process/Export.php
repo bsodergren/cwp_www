@@ -51,7 +51,8 @@ class Export extends MediaProcess
             $backup['job_number'] = $row['job_number'];
             $forms = $this->explorer->table('media_forms')->where('job_id', $id);
             foreach ($forms as $form) {
-                $backup['forms'][$form->form_number] = ['bind' => $form->bind, 'count' => $form->count, 'config' => $form->config];
+                $backup['forms'][$form->form_number] = ['bind' => $form->bind, 'count' => $form->count, 'config' => $form->config,
+                'no_trimmers' => $form->no_trimmers];
                 $form_data = $this->explorer->table('form_data')->where('job_id', $id)->where('form_number', $form->form_number)->fetchAll();
                 foreach ($form_data as $form_row) {
                     $backup['forms'][$form->form_number]['data'][] = [
@@ -63,7 +64,6 @@ class Export extends MediaProcess
                         'ship' => $form_row->ship,
                         'former' => $form_row->former,
                         'face_trim' => $form_row->face_trim,
-                        'no_bindery' => $form_row->no_bindery,
                     ];
                 }
                 // dd($form_data);

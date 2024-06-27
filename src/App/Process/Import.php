@@ -180,6 +180,7 @@ class Import extends MediaProcess
             'count' => $values['count'],
             'product' => $array['close'],
             'job_id' => $this->job_id,
+            'no_trimmers' => $values['no_trimmers'],
             'form_number' => $form_number, ];
             $res[] = Media::$explorer->table('media_forms')->insert($form);
             foreach ($values['data'] as $k => $form_values) {

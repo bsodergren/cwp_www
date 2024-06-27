@@ -171,7 +171,7 @@ class MediaGoogleDrive extends MediaFS implements MediaFileInterface
     public function getContents($path, $recursive = false)
     {
         $path = $this->path($path);
-
+        $files = [];
         if ($this->dirExists($path)) {
             $contents = $this->google->listContents($path, $recursive /* is_recursive */);
             // Fetch Items (Returns an instance of ModelCollection)

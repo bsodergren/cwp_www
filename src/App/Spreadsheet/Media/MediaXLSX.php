@@ -172,7 +172,7 @@ class MediaXLSX extends Media
         $delivery = strtolower($this->form_details['former']);
 
         if ('back' == $delivery || 1 == $this->form_details['face_trim']) {
-            if (1 != $this->form_details['no_bindery']) {
+            if (1 != $this->form_details['no_trimmers']) {
                 // $this->form_details['market'] = "";
                 $ship_value = __LANG_BINDERY;
                 if (1 == $this->form_details['face_trim']) {
@@ -204,7 +204,7 @@ class MediaXLSX extends Media
         $form['head_trim'] = $head_trim;
         $form['foot_trim'] = $foot_trim;
         $form['del_size'] = $del_size;
-        $form['no_trimmers'] = $this->form_details['no_bindery'];
+        $form['no_trimmers'] = $this->form_details['no_trimmers'];
 
         $form['page_conf'] = $this->media->form_configuration['configuration'].' '.$this->media->form_configuration['paper_wieght'].'#';
 

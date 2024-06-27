@@ -14,6 +14,7 @@ use Nette\Utils\FileSystem;
 class MediaFinder
 {
     public $fileDriver;
+    public $media;
 
     public function __construct($media = '')
     {

@@ -18,7 +18,6 @@ class Form extends MediaProcess
         $method = str_replace(' ', '', $req['submit']);
 
         if($method != 'Previous') {
-            utmdump($method);
             $this->updateForm($req);
         }
         // CheckMethod:
@@ -62,7 +61,7 @@ class Form extends MediaProcess
                 $count = Media::$explorer->table('media_forms')
                 ->where('form_number', $id)
                 ->where('job_id', $job_id )
-                ->update(['no_bindery' => $value]);
+                ->update(['no_trimmers' => $value]);
                 if ($count > 0) {
                     $updated = true;
                 }

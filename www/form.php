@@ -87,7 +87,7 @@ foreach ($result as $idx => $form_array) {
         'bind' => $config[$form_number]['bind'],
         'former' => $form_array['former'],
         'facetrim' => $form_array['face_trim'],
-        'nobindery' => $form_array['no_bindery'],
+        'nobindery' => $form_array['no_trimmers'],
         'job_number' => $form_array['job_number'],
     ];
 }

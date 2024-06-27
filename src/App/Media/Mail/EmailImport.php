@@ -16,6 +16,9 @@ class EmailImport extends EmailDisplay
 
     public $imap;
 
+    public $fs;
+    public $pdf_directory;
+
     public $mailId       = 0;
 
     public $upload_directory;
