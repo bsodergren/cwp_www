@@ -16,9 +16,9 @@ class Creator
 
     public static function jsList($table)
     {
-        if(Media::$Stash->has($table)) {
-            return Media::$Stash->get($table);
-        }
+        // if(Media::$Stash->has($table)) {
+        //     return Media::$Stash->get($table);
+        // }
 
         $market_table = Media::$explorer->table($table); // UPDATEME
         foreach($market_table as $row) {

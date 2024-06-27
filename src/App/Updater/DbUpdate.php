@@ -32,6 +32,7 @@ class DbUpdate extends MediaUpdate
         $delete_data   = [];
         $change_column = [];
         $alter_table = [];
+        $drop_column = [];
         $test          = false;
         $inactive      = false;
 
@@ -47,6 +48,7 @@ class DbUpdate extends MediaUpdate
             'renameColumns' => $rename_column,
             'changeColumn'  => $change_column,
             'newColumn'     => $new_column,
+            'dropColumn'    => $drop_column,
             'newData'       => $new_data,
             'updateData'    => $update_data,
             'deleteData'    => $delete_data,
@@ -112,7 +114,10 @@ class DbUpdate extends MediaUpdate
     {
         $this->dbClassObj->create_column($table, $field, $type);
     }
-
+    public function drop_column($table, $field)
+    {
+        $this->dbClassObj->drop_column($table, $field);
+    }
     public function create_table($table_name)
     {
         $sql_file = FileSystem::normalizePath(__DEFAULT_TABLES_DIR__.'/cwp_table_'.$table_name.'.sql');
@@ -182,7 +187,21 @@ class DbUpdate extends MediaUpdate
             }
         }
     }
-
+    public function dropColumn($new_column)
+    {
+        if (\is_array($new_column))
+        {
+            foreach ($new_column as $table_name => $column) {
+                $this->set($table_name);
+                foreach ($column as $field) {
+                    if ($this->dbClassObj->check_columnExists($table_name, $field)) {
+                        $this->dbClassObj->drop_column($table_name, $field);
+                        $this->refresh = true;
+                    }
+                }
+            }
+        }
+    }
     public function resettable($reset_table)
     {
         if (\is_array($reset_table)) {

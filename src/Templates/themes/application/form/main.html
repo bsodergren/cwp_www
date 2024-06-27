@@ -1,17 +1,14 @@
-<div class="modal fade" id="thankyouModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Thank you for pre-registering!</h4>
-        </div>
-        <div class="modal-body">
-            <p>Thanks for getting in touch!</p>
-        </div>
-      </div>
-    </div>
-  </div>
 
+<div class="offcanvas offcanvas-start canvas-layout" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+  <!-- <div class="offcanvas-header"> -->
+    <!-- <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5> -->
+    <!-- <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> -->
+  <!-- </div> -->
+  <div class="offcanvas-body">
+    %%LAYOUT_HTML%%
+  </div>
+</div>
 <form action="%%__PROCESS_FORM__%%" method="post">
 
     <div class="container table table-dark">
@@ -30,6 +27,8 @@
                 <div class="text-center nowrap col">
                     <div class="btn-group">
                         %%FORM_BUTTONS%%
+
+
                     </div>
                 </div>
             </div>
@@ -40,10 +39,14 @@
                     <div class="table-group-divider row">
                         <div class="bg-secondary text-center fs-4 col-12">
                             Form Quick Select
+                            <button class="btn btn-primary" type="button" id="layoutButton"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+                             aria-controls="offcanvasScrolling">Show Layouts</button>
                         </div>
                     </div>
-                    <div class="row fs-4 text-center">
+                    <div class="row fs-4 text-center justify-content-center">
                         %%CHECKBOX_PARTS%%
+
                         <script type="text/javascript">
                                 %%CHECKBOX_JAVA%%
                         </script>

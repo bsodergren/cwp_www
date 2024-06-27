@@ -29,7 +29,7 @@ class Calculator
     {
 
 
-        
+
     }
 
     public function calculateBox($form_details)
@@ -61,6 +61,7 @@ class Calculator
             $package = 'full';
         }
 
+        if($form_details['no_bindery'] == 0) {
         if ('back' == $delivery) {
             if ($pcs <= $max_half) {
                 $package = 'half';
@@ -68,6 +69,7 @@ class Calculator
                 $package = 'full';
             }
         }
+    }
 
         $max_skid_var = 'max_'.$package;
         $max_skid = $$max_skid_var;

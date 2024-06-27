@@ -17,7 +17,7 @@ class HTMLForms
         return Template::GetHTML($template.'/input', $params);
     }
 
-    public static function draw_select($name, $text, $options = [], $style = null, $NoOption = false)
+    public static function draw_select($name, $text, $options = [], $style = null, $NoOption = false,$class = '')
     {
         $option_html = '';
         if (false !== $NoOption) {
@@ -35,10 +35,11 @@ class HTMLForms
             $style = 'style="'.$style.'"';
         }
 
-        return Template::GetHTML('elements/select/select', ['SELECT_NAME' => $name, 'SELECT_LABEL' => $text, 'SELECT_STYLE' => $style, 'SELECT_OPTIONS' => $option_html]);
+        return Template::GetHTML('elements/select/select', ['SELECT_NAME' => $name, 'SELECT_LABEL' => $text, 'SELECT_STYLE' => $style,
+        'SELECT_OPTIONS' => $option_html, 'CLASS' => $class]);
     }
 
-    public static function draw_checkbox($name, $value, $text = 'Face Trim', $template = 'elements/checkbox')
+    public static function draw_checkbox($name, $value, $text = 'Face Trim', $template = 'elements/checkbox', $extra=[])
     {
         global $pub_keywords;
 
@@ -56,7 +57,7 @@ class HTMLForms
             'CHECKED' => $checked,
             'VALUE' => $value,
         ];
-
+        $params = array_merge($params,$extra);
         return self::formInput($template, $params);
     }
 

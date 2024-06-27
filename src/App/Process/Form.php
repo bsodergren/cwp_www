@@ -16,8 +16,11 @@ class Form extends MediaProcess
     {
         $this->form_number = $req['form_number'];
         $method = str_replace(' ', '', $req['submit']);
-        $this->updateForm($req);
 
+        if($method != 'Previous') {
+            utmdump($method);
+            $this->updateForm($req);
+        }
         // CheckMethod:
         if (!method_exists($this, $method)) {
             dd('missing Method', $method);
@@ -56,8 +59,9 @@ class Form extends MediaProcess
                 list($_, $id, $letters) = explode('_', $key);
                 $form_number = $id;
 
-                $count = Media::$explorer->table('form_data')
-                ->where('id', $id)
+                $count = Media::$explorer->table('media_forms')
+                ->where('form_number', $id)
+                ->where('job_id', $job_id )
                 ->update(['no_bindery' => $value]);
                 if ($count > 0) {
                     $updated = true;

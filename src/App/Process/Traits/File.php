@@ -37,7 +37,7 @@ trait File
         $mediaLoc->getDirectory();
         $excelDir = $mediaLoc->directory.DIRECTORY_SEPARATOR.'xlsx';
         $basePath = dirname($mediaLoc->directory, 2);
-        $filePath = $pathPrefix.str_replace($basePath, '', $mediaLoc->directory()); // . DIRECTORY_SEPARATOR . "xlsx";
+        $filePath = $pathPrefix.str_replace($basePath, '/', $mediaLoc->directory()); // . DIRECTORY_SEPARATOR . "xlsx";
         $google->createFolder($filePath);
         HTMLDisplay::pushhtml('stream/excel/msg', ['TEXT' => 'Created DIR '.$filePath]);
 
@@ -48,6 +48,8 @@ trait File
         } else {
             $files = $mediaLoc->getContents($excelDir, '*.xlsx');
         }
+
+        utmdump( $files);
         foreach ($files as $filename) {
             $remoteFilename = basename($filename);
             HTMLDisplay::pushhtml('stream/excel/file_msg', ['TEXT' => 'Uploading '.$remoteFilename]);

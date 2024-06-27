@@ -13,3 +13,66 @@ body {
     height: 100%;
     margin-top: 0px;
 }
+.vertical-text {
+    transform-origin: center;
+    transform: rotate(90deg);
+}
+
+
+.tg {
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    table-layout: fixed;
+    width: 144px;
+}
+
+.tg td {
+    border-style: solid;
+    border-width: 2px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    /* overflow: hidden; */
+    padding: 10px 5px;
+    word-break: normal;
+}
+
+.tg th {
+    border-style: solid;
+    border-width: 0px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    /* overflow: show; */
+    padding: 10px 5px;
+    word-break: normal;
+}
+
+.tg .tg-mnhx {
+    text-align: center;
+    vertical-align: top
+}
+
+.tg .tg-9wq8 {
+    border-color: inherit;
+    text-align: center;
+    vertical-align: middle
+}
+
+.tg .tg-operator {
+    border-color: transparent;
+    border-right-color: inherit;
+    text-align: left;
+}
+
+.tg .tg-gear {
+    border-color: transparent;
+    border-left-color: inherit;
+
+    text-align: left;
+}
+
+.canvas-layout{
+    width: 300px !important;
+    background-color: #bcd0c7;
+}

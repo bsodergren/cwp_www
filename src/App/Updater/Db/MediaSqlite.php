@@ -86,13 +86,18 @@ class MediaSqlite extends MediaDb implements MediaDbAbstract
         return $this->alter($query);
     }
 
+    public function drop_Column($table, $column)
+    {
+        $query = 'ALTER TABLE '.$table.' DROP '.$column.';';
+
+        return $this->alter($query);
+    }
     public function create_Column($table, $column, $type)
     {
         $query = 'ALTER TABLE '.$table.' ADD '.$column.' '.$type.';';
 
         return $this->alter($query);
     }
-
     public function reset_table($table_name)
     {
         $this->delete('DELETE FROM '.$table_name.'; UPDATE sqlite_sequence SET seq = 0 WHERE name="'.$table_name.'"');

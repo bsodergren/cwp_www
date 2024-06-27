@@ -150,9 +150,9 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
         self::put($var);
     }
 
-    public function draw_checkbox($name, $value, $text = 'Face Trim', $template = 'elements/checkbox')
+    public function draw_checkbox($name, $value, $text = 'Face Trim', $template = 'elements/checkbox',$extra=[])
     {
-        return HTMLForms::draw_checkbox($name, $value, $text, $template);
+        return HTMLForms::draw_checkbox($name, $value, $text, $template,$extra);
     }
 
     public function draw_radio($name, $value)
@@ -262,6 +262,63 @@ style="width: 10rem; height: 10rem; border-width: 2rem;"
 
         // }
 
+        return $row_template->return();
+    }
+
+
+
+    public static function showlayouts(){
+        $row_template = new Template();
+
+        $array =[
+        [
+            'LAYOUT_NUMBER' => 'Layout 401',
+            'FRONT_TOP' => 'C',
+            'BACK_TOP' => 'D',
+            'FRONT_BOTTOM' => 'B',
+            'BACK_BOTTOM' => 'A',
+            'WIDTH' => '50px',
+        ]
+        ,[
+            'LAYOUT_NUMBER' => 'Layout 405',
+            'FRONT_TOP' => 'D',
+            'BACK_TOP' => 'C',
+            'FRONT_BOTTOM' => 'A',
+            'BACK_BOTTOM' => 'B',
+            'WIDTH' => '50px',
+        ] ,[
+            'LAYOUT_NUMBER' => 'Layout 406',
+            'FRONT_TOP' => 'B',
+            'BACK_TOP' => 'D',
+            'FRONT_BOTTOM' => 'A',
+            'BACK_BOTTOM' => 'C',
+            'WIDTH' => '50px',
+        ] ,[
+            'LAYOUT_NUMBER' => 'Layout 415',
+            'FRONT_TOP' => 'C',
+            'BACK_TOP' => 'D',
+            'FRONT_BOTTOM' => 'B',
+            'BACK_BOTTOM' => 'A',
+            'WIDTH' => '50px',
+        ],[
+            'LAYOUT_NUMBER' => 'Layout 438',
+            'FRONT_TOP' => 'C',
+            'BACK_TOP' => 'D',
+            'FRONT_BOTTOM' => 'B',
+            'BACK_BOTTOM' => 'A',
+            'WIDTH' => '50px',
+        ]
+        ,[
+            'LAYOUT_NUMBER' => 'Layout 461',
+            'FRONT_TOP' => 'C',
+            'BACK_TOP' => 'D',
+            'FRONT_BOTTOM' => 'B',
+            'BACK_BOTTOM' => 'A',
+            'WIDTH' => '50px',
+        ]];
+        foreach($array as $layout) {
+        $row_template->template('elements/layouts/401', $layout);
+        }
         return $row_template->return();
     }
 }

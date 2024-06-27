@@ -22,7 +22,7 @@ interface MediaDbAbstract
     public function create_column($table, $column, $type);
 
     public function change_column($table_name, $name, $type);
-
+    public function drop_column($table_name, $name);
     public function reset_table($table);
     public function tableAlterADD($table, $action, $column);
 }

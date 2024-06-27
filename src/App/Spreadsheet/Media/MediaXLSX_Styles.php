@@ -193,6 +193,8 @@ class MediaXLSX_Styles extends Styles
             $deliveryInst[$trim_cell] = ['text' => 'Head Trim', 'value' => $form['head_trim']];
         }
 
+
+
         if (isset($deliveryInst) && \is_array($deliveryInst)) {
             $this->setBorder(['cell' => Styles::row('A', 24) . ':' . Styles::row('D', 26),  'border' => 'outline']);
 
@@ -226,6 +228,18 @@ class MediaXLSX_Styles extends Styles
             $this->setCellText(Styles::row('A', 24), $form['ship_value']);
             //            $this->setCellText(Styles::row('A', 25), $form['ship_value']);
             //            $this->setCellText(Styles::row('A', 26), $form['ship_value']);
+        }
+
+
+        if (1 == $form['no_trimmers']) {
+            $row  = 24;
+
+            $cell = Styles::row('A', $row) . ':' . Styles::row('D', $row);
+            $this->setMerge($cell);
+
+            // $this->setBorder(['cell' => Styles::row('A', 24).':'.Styles::row('D', 24),  'border' => 'outline']);
+
+            $this->setCellText(Styles::row('A', 24), "No Trimmers");
         }
     }
 

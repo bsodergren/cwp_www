@@ -48,5 +48,20 @@
     });
 
 
+    var btn = document.getElementById("layoutButton");
+
+    btn.addEventListener("click", displayDate);
+
+function displayDate()
+{
+    const canvas = document.getElementById('offcanvasScrolling');
+    const pageContent = document.getElementById('cwp_content');
+    if (canvas.classList.contains("showing") == true) {
+        pageContent.style.marginLeft = "300px";
+    }
+    if (canvas.classList.contains("showing") == false) {
+        pageContent.style.marginLeft = "auto";
+    }
+}
 
 </script>

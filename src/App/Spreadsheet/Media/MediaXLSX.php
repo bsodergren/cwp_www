@@ -77,6 +77,7 @@ class MediaXLSX extends Media
                 if ('Front' == $former || 'Back' == $former) {
                     foreach ($result_array as $form_letter => $form_details_array) {
                         foreach ($form_details_array as $key => $this->form_details) {
+
                             $this->form_details['job_number'] = $this->job_number;
                             $this->box = $calc->calculateBox($this->form_details);
                             $this->addFormBoxData();
@@ -203,6 +204,7 @@ class MediaXLSX extends Media
         $form['head_trim'] = $head_trim;
         $form['foot_trim'] = $foot_trim;
         $form['del_size'] = $del_size;
+        $form['no_trimmers'] = $this->form_details['no_bindery'];
 
         $form['page_conf'] = $this->media->form_configuration['configuration'].' '.$this->media->form_configuration['paper_wieght'].'#';
 

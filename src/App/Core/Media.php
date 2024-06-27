@@ -193,6 +193,7 @@ class Media
 
     private function combineBack()
     {
+
         foreach ($this->MediaArray as $form_number => $form_details) {
             $combinded = [];
             $replace = [];
@@ -286,14 +287,14 @@ class Media
 
     public function get_form_list()
     {
-        $sql = 'SELECT form_number FROM media_forms WHERE `job_id` = '.$this->job_id;
+        $sql = 'SELECT form_number FROM media_forms WHERE job_id = '.$this->job_id;
 
         return self::$connection->fetchAll($sql);
     }
 
     public function get_max_drop_forms()
     {
-        $sql = 'SELECT DISTINCT(`form_number`) as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.'  ORDER BY `max` DESC limit 1';
+        $sql = 'SELECT DISTINCT(form_number) as max FROM media_forms WHERE job_id = '.$this->job_id.'  ORDER BY max DESC limit 1';
         $result = self::$connection->fetch($sql);
 
         return $result['max'];
@@ -301,7 +302,7 @@ class Media
 
     public function get_first_form()
     {
-        $sql = 'SELECT `form_number` as max FROM `media_forms` WHERE `job_id` = '.$this->job_id.' ORDER BY `max` ASC limit 1';
+        $sql = 'SELECT form_number as max FROM media_forms WHERE job_id = '.$this->job_id.' ORDER BY max ASC limit 1';
         $result = self::$connection->fetch($sql);
 
         return $result['max'];
@@ -312,10 +313,10 @@ class Media
         $form = '';
 
         if (true == $form_number) {
-            $form = ' and `form_number`= '.$form_number;
+            $form = ' and form_number= '.$form_number;
         }
 
-        $sql = 'SELECT * FROM `media_forms` WHERE `job_id` = '.$this->job_id.$form;
+        $sql = 'SELECT * FROM media_forms WHERE job_id = '.$this->job_id.$form;
 
         $result = self::$connection->query($sql);
 
@@ -347,7 +348,7 @@ class Media
                 $add = $sort_query.', ';
             }
 
-            $sort_query = $add.' `f`.`'.$field.'` '.$sort[$key];
+            $sort_query = $add.' f.'.$field.' '.$sort[$key];
         }
 
         return $sort_query;
@@ -356,7 +357,7 @@ class Media
     public function getFormDrops($form_number = '', $sort = [])
     {
         if (true == $form_number) {
-            $FORM_SEQ = ' and `f`.`form_number` = '.$form_number;
+            $FORM_SEQ = ' and f.form_number = '.$form_number . ' and m.form_number = '.$form_number;
         }
 
         $sort_query = $this->sortFormDrops('form_letter', 'SORT_LETTER', $sort);
@@ -370,8 +371,9 @@ class Media
             $sort_query = '';
         }
 
-        $sql = 'SELECT `f`.`id`,`f`.`job_id`,`f`.`form_number`,`f`.`form_letter`,`f`.`market`,`f`.`pub`,`f`.`count`,`f`.`ship`,`f`.`former`,`f`.`face_trim`,`f`.`no_bindery`,`m`.`job_number`, `m`.`pdf_file` FROM `form_data` f, `media_job` m WHERE ( `f`.`job_id` = '.$this->job_id.' and `m`.`job_id` = '.$this->job_id.$FORM_SEQ.' ) '.$sort_query;
-
+        $sql = 'SELECT f.id,f.job_id,f.form_number,f.form_letter,f.market,f.pub,f.count,f.ship,f.former,f.face_trim,
+        m.no_bindery,j.job_number, j.pdf_file FROM form_data f, media_job j,  media_forms m
+        WHERE ( f.job_id = '.$this->job_id.' and j.job_id = '.$this->job_id.$FORM_SEQ.' and m.job_id = f.job_id) '.$sort_query;
         return self::$connection->fetchAll($sql);
     }
 
@@ -575,7 +577,7 @@ class Media
         // $base_dir = \dirname($pdf_filename, 2);
         // $pdf_filename = basename($pdf_filename);
 
-        $query = 'INSERT INTO `media_job` ?';
+        $query = 'INSERT INTO media_job ?';
 
         self::$connection->query($query, [
             'job_number' => $job_number,
