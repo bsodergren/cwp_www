@@ -1,0 +1,1 @@
+<?php if(!class_exists('Rain\Tpl')){exit;}?><a <?php echo $params["CLASS"]; ?>  href="<?php echo $params["URL"]; ?>" <?php echo $params["JAVA"]; ?>  role="button"><?php echo $params["TEXT"]; ?></a>
