@@ -5,48 +5,25 @@
 
 use CWP\HTML\HTMLForms;
 use CWP\Template\Template;
+use CWP\Utils\MediaDevice;
+
 
 require_once '.config.inc.php';
 define('TITLE', 'Paper Editor');
-use CWP\Utils\MediaDevice;
 
+$row_header_html = '';
 MediaDevice::getHeader();
-
-/*
-function display_array_as_row($array)
-{
-    $html=process_template("form_letter_header",array("NUMBER" => "Paper Editor"))."\n";
-
-    foreach($array as $row => $values)
-    {
-        $html .= "\t<tr>"."\n";
-        foreach($values as $k => $v)
-        {
-
-            if($k == "id") {
-                $html .= "\t\t<td><a href=\"".__FORM_URL__."?edit&id=".$v."\"> edit </a></td>"."\n";
-                if(TITLE != "Paper Editor"){  $html .= "\t\t".'<td><a href="'.__FORM_URL__.'?delete&id='.$v.'">Delete</a></td>'."\n";}
-            } elseif($k != "trim" ) {
-                $html .= "\t\t<td>".$v."</td>\n";
-            }
-        }
-        $html .=  "\t</tr>"."\n";
-    }
-
-  $html .= "\t".'<tr><td colspan=2><a href="'.__FORM_URL__.'?add"> Add new data </a></td></tr>'."\n";
-
-    return $html;
-}
-*/
 
 $paper_type = $explorer->table('paper_type'); // UPDATEME
 // $paper_type->limit(4);
 foreach ($paper_type as $paper) {
-    $header_param['PAPER_INFO'] = $paper->paper_wieght.' '.$paper->paper_size.' '.$paper->pages;
+    $header_param = [];
+
+    $header_param['PAPER_INFO'] = $paper->paper_wieght . '# ' . $paper->paper_size . ' ' . $paper->pages . 'pgs';
 
     foreach ($paper->related('paper_count', 'paper_id') as $paper_details) {
         $row_params = [];
-        $header_param['ROWS'] = '';
+        $header_param['CLASS'] = 'm-0 p-0 gy-1 gx-2'; // border-1 border-bottom border-dark';
         $row_html = '';
         $i = 0;
         foreach ($paper_details as $key => $val) {
@@ -60,40 +37,32 @@ foreach ($paper_type as $paper) {
             }
             ++$i;
 
-            if (6 == $paper->pages || 8 == $paper->pages) {
-                if (str_contains($key, 'back')) {
+            $form_section = 'GENERAL';
+            if (str_contains($key, 'back')) {
+                if (6 == $paper->pages || 8 == $paper->pages) {
                     continue;
                 }
+                $form_section = 'BACK';
+            } elseif (str_contains($key, 'front')) {
+                $form_section = 'FRONT';
             }
 
             $bg_class = ' bg-warning-subtle ';
-            if ('' == $val) {
+            if ('0' == $val) {
                 $bg_class = ' bg-danger-subtle ';
             }
 
             $text_params = [
                 'FORM_VALUE_CLASS' => $bg_class,
-                'FORM_LABEL' => 'label_'.$key,
+                'FORM_LABEL' => 'label_' . $key,
                 'FORM_TEXT' => ucwords(str_replace('_', ' ', $key)),
-                'FORM_NAME' => $row_id.'['.$key.']',
+                'FORM_NAME' => $row_id . '[' . $key . ']',
                 'FORM_VALUE' => $val,
             ];
 
-            if (str_contains($key, 'carton')) {
-                $carton_params[strtoupper($key)] = Template::GetHTML('paper/text_row', $text_params);
-            }
 
-            $header_param['ROWS'] .= Template::GetHTML('paper/text_row', $text_params);
-            /*
-                        $row_params[strtoupper($key)]=HTMLForms::draw_text($row_id."[".$key."]",
-                        [
-                            'label' => $key,
-                            'placeholder' => $key ." ".$row_id,
+            $header_param[$form_section] .= Template::GetHTML('paper/text_row', $text_params);
 
-                            'value' => $val ,
-                            'class' => 'form-control',
-                        ]);
-                        */
         }
 
         $row_header_html .= Template::GetHTML('paper/paper_header', $header_param);
@@ -104,8 +73,6 @@ echo Template::GetHTML('paper/main', [
     'PAPER_BODY_HTML' => $row_header_html,
     'FORM_BUTTON' => Template::GetHTML('trim/form/submit', ['BUTTON_TEXT' => 'Update publications']),
 ]);
-// $results        = $paper_type->fetchAll();
 
-// dd($results);
 
 MediaDevice::getFooter();
